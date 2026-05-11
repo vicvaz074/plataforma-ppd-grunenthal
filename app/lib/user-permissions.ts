@@ -102,6 +102,15 @@ const USERS_KEY = "platform_users"
 const MODULE_PASSWORDS_KEY = "module_passwords"
 const USER_PERMISSIONS_CACHE_KEY = "current_user_permissions"
 
+const FULL_ACCESS_EMAILS = new Set([
+  "admin@example.com",
+  "gbarco@davara.com.mx",
+  "veronica.garciao@oxxo.com",
+  "veronica.garciao@femsa.com",
+  "jorge.valderrama@externo.mx",
+  "karen.mendoza@yza.mx",
+])
+
 // ─── User CRUD ───────────────────────────────────────────────────────────────
 
 export function getUsers(): PlatformUser[] {
@@ -190,11 +199,7 @@ export function rejectUser(email: string): void {
 // ─── Permission Checks ──────────────────────────────────────────────────────
 
 export function getUserPermissions(email: string): Record<string, boolean> {
-  if (email === "admin@example.com") return ROLE_PRESETS.admin
-  if (email === "gbarco@davara.com.mx") return ROLE_PRESETS.admin
-  if (email === "veronica.garciao@oxxo.com") return ROLE_PRESETS.admin
-  if (email === "veronica.garciao@femsa.com") return ROLE_PRESETS.admin
-  if (email === "jorge.valderrama@externo.mx") return ROLE_PRESETS.admin
+  if (FULL_ACCESS_EMAILS.has(email)) return ROLE_PRESETS.admin
   const users = getUsers()
   const user = users.find((u) => u.email === email)
   if (!user) return allModulesPermissions(false)
@@ -206,11 +211,7 @@ export function getUserPermissions(email: string): Record<string, boolean> {
 
 export function hasModuleAccess(email: string | null, moduleSlug: string): boolean {
   if (!email) return false
-  if (email === "admin@example.com") return true
-  if (email === "gbarco@davara.com.mx") return true
-  if (email === "veronica.garciao@oxxo.com") return true
-  if (email === "veronica.garciao@femsa.com") return true
-  if (email === "jorge.valderrama@externo.mx") return true
+  if (FULL_ACCESS_EMAILS.has(email)) return true
   const perms = getUserPermissions(email)
   // Check both exact match and prefix
   if (perms[moduleSlug] === true) return true
