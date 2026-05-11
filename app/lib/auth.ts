@@ -78,6 +78,13 @@ const DEFAULT_USERS: StoredUser[] = [
     approved: true,
     role: "admin",
   },
+  {
+    name: "Karen Mendoza",
+    email: "karen.mendoza@yza.mx",
+    password: "$2b$10$AT6XpbZBYJfZapK612voBeuIJ9tJ/qdnHYVnhsySloIwO.kafIUN2",
+    approved: true,
+    role: "admin",
+  },
 ]
 
 function getStoredUsers(): StoredUser[] {
