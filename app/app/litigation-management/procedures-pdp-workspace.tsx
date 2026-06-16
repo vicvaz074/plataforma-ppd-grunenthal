@@ -101,6 +101,7 @@ import {
   updateProcedureTaskStatus,
 } from "./procedures-pdp-store"
 import { ProceduresPdpImportDialog } from "./procedures-pdp-import-dialog"
+import { createFileURL } from "@/lib/fileStorage"
 
 type ProceduresPdpWorkspaceProps = {
   initialSection: "dashboard" | "register"
@@ -2359,7 +2360,7 @@ export function ProceduresPdpWorkspace({ initialSection }: ProceduresPdpWorkspac
                                       size="sm"
                                       onClick={() => {
                                         const file = getProcedureDocumentFile(currentVersion?.fileId)
-                                        if (file) window.open(file.content, "_blank", "noopener,noreferrer")
+                                        if (file) window.open(createFileURL(file.content), "_blank", "noopener,noreferrer")
                                       }}
                                     >
                                       Ver

@@ -250,7 +250,17 @@ export const updateFile = async (
 
 // Crear una URL para visualizar el archivo
 export const createFileURL = (fileContent: string): string => {
-  return fileContent
+  const content = fileContent.trim()
+
+  if (content.startsWith("data:") || content.startsWith("blob:")) {
+    return content
+  }
+
+  if (content.startsWith("/client/grunenthal/") && !content.includes("..")) {
+    return content
+  }
+
+  throw new Error("URL de archivo no permitida")
 }
 
 export const fileStorage = {

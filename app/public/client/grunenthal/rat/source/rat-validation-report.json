@@ -1,0 +1,606 @@
+{
+  "generatedAt": "2026-06-16T00:00:00.000Z",
+  "sourceJson": "inventarios-rat-2025-11-20T00-19-05-360Z (2).json",
+  "canonicalInventoryCount": 15,
+  "canonicalSubInventoryCount": 37,
+  "pdfInventoryCount": 33,
+  "mappedPdfCount": 33,
+  "missingPdfCount": 4,
+  "unmatchedPdfCount": 0,
+  "fieldMismatchCount": 4,
+  "missingPdfs": [
+    {
+      "inventoryId": "1750895863497",
+      "inventoryName": "Comex",
+      "subInventoryId": "1762986727606",
+      "subInventoryName": "Reporte de Médicos INEFAM"
+    },
+    {
+      "inventoryId": "1750895863497",
+      "inventoryName": "Comex",
+      "subInventoryId": "1762986966172",
+      "subInventoryName": "Registro de Médicos en Veeva"
+    },
+    {
+      "inventoryId": "1750895863497",
+      "inventoryName": "Comex",
+      "subInventoryId": "1762987001991",
+      "subInventoryName": "Reporte de Visita Médicos Opoides"
+    },
+    {
+      "inventoryId": "1759281310180",
+      "inventoryName": "Medical Information",
+      "subInventoryId": "1759788913240",
+      "subInventoryName": "Encuesta de Satisfacción al Cliente"
+    }
+  ],
+  "unmatchedPdfs": [],
+  "fieldMismatches": [
+    {
+      "assetId": "grunenthal-rat-inventario-comex-ranking-de-efectividad",
+      "subInventoryId": "1759248265959",
+      "subInventoryName": "Ranking de Efectividad de Representantes",
+      "fields": [
+        "databaseName"
+      ]
+    },
+    {
+      "assetId": "grunenthal-rat-inventario-compras-base-de-datos-de-titulares-sin-tarjeta-corporativa",
+      "subInventoryId": "1759952519687",
+      "subInventoryName": "Base de datos de titulares sin tarjeta corporativa.",
+      "fields": [
+        "environment"
+      ]
+    },
+    {
+      "assetId": "grunenthal-rat-inventario-direccion-general-listado-de-tallas-core-team",
+      "subInventoryId": "1760640691096",
+      "subInventoryName": "Listado Tallas Core Team",
+      "fields": [
+        "databaseName"
+      ]
+    },
+    {
+      "assetId": "grunenthal-rat-inventario-direccion-general-rooming-general",
+      "subInventoryId": "1760640746677",
+      "subInventoryName": "ROOMING GENERAL",
+      "fields": [
+        "environment"
+      ]
+    }
+  ],
+  "items": [
+    {
+      "assetId": "grunenthal-rat-inventario-comex-comunicacion-opioddisclaimer-hcps-davara",
+      "pdfName": "inventario_COMEX_-_Comunicación_OpiodDisclaimer_HCPs_ davara .pdf",
+      "inventoryName": "Comex",
+      "subInventoryName": "Comunicación OpiodDisclaimer HCPs",
+      "status": "verificado",
+      "matchScore": 0.96,
+      "validatedFields": [
+        "databaseName",
+        "responsible",
+        "holdersVolume",
+        "accessibility",
+        "environment",
+        "riskLevel"
+      ],
+      "mismatchedFields": []
+    },
+    {
+      "assetId": "grunenthal-rat-inventario-comex-ranking-de-efectividad",
+      "pdfName": "inventario_COMEX_-_Ranking_de_efectividad.pdf",
+      "inventoryName": "Comex",
+      "subInventoryName": "Ranking de Efectividad de Representantes",
+      "status": "requiere-revision",
+      "matchScore": 1.0,
+      "validatedFields": [
+        "responsible",
+        "riskLevel"
+      ],
+      "mismatchedFields": [
+        "databaseName"
+      ]
+    },
+    {
+      "assetId": "grunenthal-rat-inventario-comex-directorio-de-ventas",
+      "pdfName": "inventario_Comex_-_Directorio_de_Ventas.pdf",
+      "inventoryName": "Comex",
+      "subInventoryName": "Directorio de Ventas",
+      "status": "verificado",
+      "matchScore": 0.96,
+      "validatedFields": [
+        "databaseName",
+        "responsible",
+        "holdersVolume",
+        "accessibility",
+        "environment",
+        "riskLevel"
+      ],
+      "mismatchedFields": []
+    },
+    {
+      "assetId": "grunenthal-rat-inventario-compras-base-de-datos-de-titulares-sin-tarjeta-corporativa",
+      "pdfName": "inventario_Compras_-_Base_de_datos_de_titulares_sin_tarjeta_corporativa.pdf",
+      "inventoryName": "Compras",
+      "subInventoryName": "Base de datos de titulares sin tarjeta corporativa.",
+      "status": "requiere-revision",
+      "matchScore": 0.96,
+      "validatedFields": [
+        "databaseName",
+        "responsible",
+        "holdersVolume",
+        "accessibility"
+      ],
+      "mismatchedFields": [
+        "environment"
+      ]
+    },
+    {
+      "assetId": "grunenthal-rat-inventario-compras-concur",
+      "pdfName": "inventario_Compras_-_Concur.pdf",
+      "inventoryName": "Compras",
+      "subInventoryName": "Concur",
+      "status": "verificado",
+      "matchScore": 0.96,
+      "validatedFields": [
+        "databaseName",
+        "responsible",
+        "holdersVolume",
+        "accessibility",
+        "environment"
+      ],
+      "mismatchedFields": []
+    },
+    {
+      "assetId": "grunenthal-rat-inventario-compras-sistema-oro",
+      "pdfName": "inventario_Compras_-_Sistema_Oro.pdf",
+      "inventoryName": "Compras",
+      "subInventoryName": "Sistema Oro",
+      "status": "verificado",
+      "matchScore": 0.96,
+      "validatedFields": [
+        "databaseName",
+        "responsible",
+        "holdersVolume",
+        "accessibility",
+        "environment"
+      ],
+      "mismatchedFields": []
+    },
+    {
+      "assetId": "grunenthal-rat-inventario-digital-registro-beyond",
+      "pdfName": "inventario_Digital_-_Registro_Beyond.pdf",
+      "inventoryName": "Digital",
+      "subInventoryName": "Registro- Beyond",
+      "status": "verificado",
+      "matchScore": 1.0,
+      "validatedFields": [
+        "databaseName",
+        "responsible",
+        "holdersVolume",
+        "accessibility",
+        "environment"
+      ],
+      "mismatchedFields": []
+    },
+    {
+      "assetId": "grunenthal-rat-inventario-digital-salesforce-marketing-davara",
+      "pdfName": "inventario_Digital_-_Salesforce_Marketing davara .pdf",
+      "inventoryName": "Digital",
+      "subInventoryName": "Salesforce Marketing Cloud",
+      "status": "verificado",
+      "matchScore": 1.0,
+      "validatedFields": [
+        "databaseName",
+        "responsible",
+        "holdersVolume",
+        "accessibility",
+        "environment"
+      ],
+      "mismatchedFields": []
+    },
+    {
+      "assetId": "grunenthal-rat-inventario-direccion-general-conave-mexico",
+      "pdfName": "inventario_Dirección_General_-_Conave_México.pdf",
+      "inventoryName": "Dirección General",
+      "subInventoryName": "Conave México",
+      "status": "verificado",
+      "matchScore": 0.96,
+      "validatedFields": [
+        "databaseName",
+        "responsible",
+        "holdersVolume",
+        "accessibility",
+        "environment"
+      ],
+      "mismatchedFields": []
+    },
+    {
+      "assetId": "grunenthal-rat-inventario-direccion-general-listado-de-tallas-core-team",
+      "pdfName": "inventario_Dirección_General_-_Listado_de_Tallas_Core_Team.pdf",
+      "inventoryName": "Dirección General",
+      "subInventoryName": "Listado Tallas Core Team",
+      "status": "requiere-revision",
+      "matchScore": 0.696,
+      "validatedFields": [
+        "responsible",
+        "holdersVolume",
+        "accessibility",
+        "environment"
+      ],
+      "mismatchedFields": [
+        "databaseName"
+      ]
+    },
+    {
+      "assetId": "grunenthal-rat-inventario-direccion-general-rooming-general",
+      "pdfName": "inventario_Dirección_General_-_Rooming_General.pdf",
+      "inventoryName": "Dirección General",
+      "subInventoryName": "ROOMING GENERAL",
+      "status": "requiere-revision",
+      "matchScore": 0.96,
+      "validatedFields": [
+        "databaseName",
+        "responsible",
+        "holdersVolume",
+        "accessibility"
+      ],
+      "mismatchedFields": [
+        "environment"
+      ]
+    },
+    {
+      "assetId": "grunenthal-rat-inventario-dolor-listado-de-medicos-ametd",
+      "pdfName": "inventario_Dolor_-_Listado_de_Médicos_AMETD.pdf",
+      "inventoryName": "Dolor",
+      "subInventoryName": "Listado de Médicos AMETD",
+      "status": "verificado",
+      "matchScore": 0.96,
+      "validatedFields": [
+        "databaseName",
+        "responsible",
+        "holdersVolume",
+        "accessibility",
+        "environment"
+      ],
+      "mismatchedFields": []
+    },
+    {
+      "assetId": "grunenthal-rat-inventario-dolor-perfil-de-medico-salesforce",
+      "pdfName": "inventario_Dolor_-_Perfil_de_Médico_Salesforce_.pdf",
+      "inventoryName": "Dolor",
+      "subInventoryName": "Perfil de Médico Salesforce",
+      "status": "verificado",
+      "matchScore": 0.96,
+      "validatedFields": [
+        "databaseName",
+        "responsible",
+        "holdersVolume",
+        "accessibility",
+        "environment"
+      ],
+      "mismatchedFields": []
+    },
+    {
+      "assetId": "grunenthal-rat-inventario-entrenamiento-master-evaluaciones",
+      "pdfName": "inventario_Entrenamiento_-_Master_Evaluaciones.pdf",
+      "inventoryName": "Entrenamiento - Master Evaluaciones",
+      "subInventoryName": "Master Evaluaciones",
+      "status": "verificado",
+      "matchScore": 0.96,
+      "validatedFields": [
+        "databaseName",
+        "responsible",
+        "holdersVolume",
+        "accessibility",
+        "environment"
+      ],
+      "mismatchedFields": []
+    },
+    {
+      "assetId": "grunenthal-rat-inventario-flotilla-carta-responsiva-de-automovil",
+      "pdfName": "inventario_Flotilla_-_Carta_Responsiva_de_Automóvil.pdf",
+      "inventoryName": "Flotilla",
+      "subInventoryName": "Carte Responsiva de Automovil",
+      "status": "verificado",
+      "matchScore": 0.836,
+      "validatedFields": [
+        "databaseName",
+        "responsible",
+        "holdersVolume",
+        "accessibility",
+        "environment"
+      ],
+      "mismatchedFields": []
+    },
+    {
+      "assetId": "grunenthal-rat-inventario-flotilla-informacion-solicitada-a-empleado-por-correo",
+      "pdfName": "inventario_Flotilla_-_Información_solicitada_a_empleado_por_Correo.pdf",
+      "inventoryName": "Flotilla",
+      "subInventoryName": "Información Solicitada a Empleado por Correo",
+      "status": "verificado",
+      "matchScore": 0.96,
+      "validatedFields": [
+        "databaseName",
+        "responsible",
+        "holdersVolume",
+        "accessibility",
+        "environment"
+      ],
+      "mismatchedFields": []
+    },
+    {
+      "assetId": "grunenthal-rat-inventario-flotilla-solicitud-de-fondo-de-garantia-de-auto",
+      "pdfName": "inventario_Flotilla_-_Solicitud_de_Fondo_de_Garantía_de_Auto_.pdf",
+      "inventoryName": "Flotilla",
+      "subInventoryName": "Solicitud de Fondo de Garantía de Auto",
+      "status": "verificado",
+      "matchScore": 0.96,
+      "validatedFields": [
+        "databaseName",
+        "responsible",
+        "holdersVolume",
+        "accessibility",
+        "environment"
+      ],
+      "mismatchedFields": []
+    },
+    {
+      "assetId": "grunenthal-rat-inventario-human-resources-bacher-zoppi-catalogo-de-empleados",
+      "pdfName": "inventario_Human_Resources_-_Bacher_Zoppi_(Catálogo_de_Empleados)_.pdf",
+      "inventoryName": "Human Resources",
+      "subInventoryName": "Bacher Zoppi - Catálogo de Empleados",
+      "status": "verificado",
+      "matchScore": 1.0,
+      "validatedFields": [
+        "databaseName",
+        "responsible",
+        "holdersVolume",
+        "accessibility",
+        "environment"
+      ],
+      "mismatchedFields": []
+    },
+    {
+      "assetId": "grunenthal-rat-inventario-human-resources-formato-de-alta-proveedor",
+      "pdfName": "inventario_Human_Resources_-_Formato_de_alta_proveedor.pdf",
+      "inventoryName": "Human Resources",
+      "subInventoryName": "Formato de alta proveedor",
+      "status": "verificado",
+      "matchScore": 0.96,
+      "validatedFields": [
+        "databaseName",
+        "responsible",
+        "holdersVolume",
+        "accessibility",
+        "environment"
+      ],
+      "mismatchedFields": []
+    },
+    {
+      "assetId": "grunenthal-rat-inventario-human-resources-cedula-de-datos",
+      "pdfName": "inventario_Human_resources_-_Cédula_de_Datos.pdf",
+      "inventoryName": "Human Resources",
+      "subInventoryName": "Cédula de Datos",
+      "status": "verificado",
+      "matchScore": 1.0,
+      "validatedFields": [
+        "databaseName",
+        "responsible",
+        "holdersVolume",
+        "accessibility",
+        "environment"
+      ],
+      "mismatchedFields": []
+    },
+    {
+      "assetId": "grunenthal-rat-inventario-human-resources-checklist-de-documentacion",
+      "pdfName": "inventario_Human_resources_-_Checklist_de_documentación.pdf",
+      "inventoryName": "Human Resources",
+      "subInventoryName": "Checklist de documentación",
+      "status": "verificado",
+      "matchScore": 1.0,
+      "validatedFields": [
+        "databaseName",
+        "responsible",
+        "holdersVolume",
+        "accessibility",
+        "environment"
+      ],
+      "mismatchedFields": []
+    },
+    {
+      "assetId": "grunenthal-rat-inventario-it-sistema-azure-1",
+      "pdfName": "inventario_IT_-_Sistema_Azure (1).pdf",
+      "inventoryName": "IT - Sistema Azure",
+      "subInventoryName": "Sistema Azure",
+      "status": "verificado",
+      "matchScore": 0.96,
+      "validatedFields": [
+        "databaseName",
+        "responsible",
+        "holdersVolume",
+        "accessibility",
+        "environment"
+      ],
+      "mismatchedFields": []
+    },
+    {
+      "assetId": "grunenthal-rat-inventario-investigacion-de-mercados-sinefarma",
+      "pdfName": "inventario_Investigación_de_Mercados_-_Sinefarma.pdf",
+      "inventoryName": "Investigación de Mercados - Sinefarma",
+      "subInventoryName": "Sinefarma",
+      "status": "verificado",
+      "matchScore": 0.96,
+      "validatedFields": [
+        "databaseName",
+        "responsible",
+        "holdersVolume",
+        "accessibility",
+        "environment"
+      ],
+      "mismatchedFields": []
+    },
+    {
+      "assetId": "grunenthal-rat-inventario-medical-information-base-de-datos-de-tracker-y-correos-electronicos-1",
+      "pdfName": "inventario_Medical_Information_-_Base_de_datos_de_Tracker_y_Correos_Electrónicos (1).pdf",
+      "inventoryName": "Medical Information",
+      "subInventoryName": "Base de datos de Tracker y Correos Electrónicos",
+      "status": "verificado",
+      "matchScore": 0.96,
+      "validatedFields": [
+        "databaseName",
+        "responsible",
+        "holdersVolume",
+        "accessibility",
+        "environment"
+      ],
+      "mismatchedFields": []
+    },
+    {
+      "assetId": "grunenthal-rat-inventario-medical-lista-de-requerimientos-hcp-profesional-de-salud-nacional",
+      "pdfName": "inventario_Medical_-_Lista_de_requerimientos_HCP_(Profesional_de_salud_nacional)_.pdf",
+      "inventoryName": "Medical",
+      "subInventoryName": "Lista de requerimientos HCP (Profesional de salud nacional)",
+      "status": "verificado",
+      "matchScore": 0.96,
+      "validatedFields": [
+        "databaseName",
+        "responsible",
+        "holdersVolume",
+        "accessibility",
+        "environment"
+      ],
+      "mismatchedFields": []
+    },
+    {
+      "assetId": "grunenthal-rat-inventario-medical-lista-de-requerimientos-hcp-profesionales-de-la-salud-extranjero",
+      "pdfName": "inventario_Medical_-_Lista_de_requerimientos_HCP_(Profesionales_de_la_salud_extranjero).pdf",
+      "inventoryName": "Medical",
+      "subInventoryName": "Lista de requerimientos HCP (Profesional de la salud extranjero)",
+      "status": "verificado",
+      "matchScore": 0.925,
+      "validatedFields": [
+        "databaseName",
+        "responsible",
+        "holdersVolume",
+        "accessibility",
+        "environment"
+      ],
+      "mismatchedFields": []
+    },
+    {
+      "assetId": "grunenthal-rat-inventario-medical-lista-de-requerimientos-donaciones",
+      "pdfName": "inventario_Medical_lista_de_requerimientos_donaciones.pdf",
+      "inventoryName": "Medical",
+      "subInventoryName": "Lista de requerimientos donaciones",
+      "status": "verificado",
+      "matchScore": 1.0,
+      "validatedFields": [
+        "databaseName",
+        "responsible",
+        "holdersVolume",
+        "accessibility",
+        "environment"
+      ],
+      "mismatchedFields": []
+    },
+    {
+      "assetId": "grunenthal-rat-inventario-primary-care-beyond-inscripcion-de-medicos",
+      "pdfName": "inventario_Primary_Care_-_Beyond__Inscripción_de_médicos..pdf",
+      "inventoryName": "Primary Care",
+      "subInventoryName": "Beyond: Inscripción de médicos.",
+      "status": "verificado",
+      "matchScore": 0.96,
+      "validatedFields": [
+        "databaseName",
+        "responsible",
+        "holdersVolume",
+        "accessibility",
+        "environment"
+      ],
+      "mismatchedFields": []
+    },
+    {
+      "assetId": "grunenthal-rat-inventario-primary-care-carta-invitacion-de-medicos",
+      "pdfName": "inventario_Primary_Care_-_Carta_Invitación_de_médicos.pdf",
+      "inventoryName": "Primary Care",
+      "subInventoryName": "Carta Invitación de médicos",
+      "status": "verificado",
+      "matchScore": 0.96,
+      "validatedFields": [
+        "databaseName",
+        "responsible",
+        "holdersVolume",
+        "accessibility",
+        "environment"
+      ],
+      "mismatchedFields": []
+    },
+    {
+      "assetId": "grunenthal-rat-inventario-primary-care-registro-de-medicos-para-invitaciones-o-becas-a-congresos",
+      "pdfName": "inventario_Primary_Care_-_Registro_de_médicos_para_invitaciones_o_becas_a_congresos.pdf",
+      "inventoryName": "Primary Care",
+      "subInventoryName": "Registro de médicos para invitaciones o becas a congresos.",
+      "status": "verificado",
+      "matchScore": 0.96,
+      "validatedFields": [
+        "databaseName",
+        "responsible",
+        "holdersVolume",
+        "accessibility",
+        "environment"
+      ],
+      "mismatchedFields": []
+    },
+    {
+      "assetId": "grunenthal-rat-inventario-primary-care-solicitud-de-congreso-internacional",
+      "pdfName": "inventario_Primary_Care_-_Solicitud_de_Congreso_internacional.pdf",
+      "inventoryName": "Primary Care",
+      "subInventoryName": "Solicitud de Congreso Internacional",
+      "status": "verificado",
+      "matchScore": 0.96,
+      "validatedFields": [
+        "databaseName",
+        "responsible",
+        "holdersVolume",
+        "accessibility",
+        "environment"
+      ],
+      "mismatchedFields": []
+    },
+    {
+      "assetId": "grunenthal-rat-inventario-regulatorio-base-de-datos-para-registro-ante-autoridad-sanitaria",
+      "pdfName": "inventario_Regulatorio_-_Base_de_datos_para_registro_ante_autoridad_sanitaria._.pdf",
+      "inventoryName": "Regulatorio - Base de datos para registro ante autoridad sanitaria.",
+      "subInventoryName": "Base de datos para registro ante autoridad sanitaria.",
+      "status": "verificado",
+      "matchScore": 0.96,
+      "validatedFields": [
+        "databaseName",
+        "responsible",
+        "holdersVolume",
+        "accessibility",
+        "environment"
+      ],
+      "mismatchedFields": []
+    },
+    {
+      "assetId": "grunenthal-rat-inventario-ventas-internas-informacion-sell-out",
+      "pdfName": "inventario_Ventas_Internas_-_Información_Sell-out.pdf",
+      "inventoryName": "Ventas Internas - Información Sell-out",
+      "subInventoryName": "Información Sell-out",
+      "status": "verificado",
+      "matchScore": 0.96,
+      "validatedFields": [
+        "databaseName",
+        "responsible",
+        "holdersVolume",
+        "accessibility",
+        "environment"
+      ],
+      "mismatchedFields": []
+    }
+  ]
+}

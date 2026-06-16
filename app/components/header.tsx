@@ -36,6 +36,7 @@ import {
   type PlatformNotification,
 } from "@/lib/notification-engine"
 import { DAVARA_STORAGE_EVENT, ensureBrowserStorageEvents } from "@/lib/browser-storage-events"
+import { CLIENT_BRANDING } from "@/lib/client-branding"
 
 export function Header({ withSidebar = false }: { withSidebar?: boolean }) {
   const { theme, setTheme } = useTheme()
@@ -171,10 +172,14 @@ export function Header({ withSidebar = false }: { withSidebar?: boolean }) {
           >
             <Link href="/" className="flex items-center">
               <img
-                src="/images/logo_davaragovernance.png"
-                alt="Davara Governance"
+                src={CLIENT_BRANDING.productLogoBlackPath}
+                alt={CLIENT_BRANDING.productName}
                 width={150}
-                style={{ objectFit: "contain", width: "150px", height: "auto" }}
+                style={{
+                  objectFit: "contain",
+                  width: "150px",
+                  height: "auto",
+                }}
               />
             </Link>
           </div>
@@ -184,6 +189,22 @@ export function Header({ withSidebar = false }: { withSidebar?: boolean }) {
               {t.welcomeMessage}
             </h1>
           </div>
+
+          {collapsed && (
+            <div className="hidden lg:flex items-center border-l pl-4">
+              <img
+                src={CLIENT_BRANDING.clientLogoPath}
+                alt={CLIENT_BRANDING.clientName}
+                width={CLIENT_BRANDING.clientLogoWidths.header}
+                style={{
+                  objectFit: "contain",
+                  width: `${CLIENT_BRANDING.clientLogoWidths.header}px`,
+                  height: "auto",
+                  filter: CLIENT_BRANDING.clientLogoBlackFilter,
+                }}
+              />
+            </div>
+          )}
         </div>
 
         {/* Controles a la derecha */}

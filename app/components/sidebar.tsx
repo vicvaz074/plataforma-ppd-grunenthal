@@ -28,6 +28,7 @@ import {
   Lock,
 } from "lucide-react"
 import { hasModuleAccess } from "@/lib/user-permissions"
+import { CLIENT_BRANDING } from "@/lib/client-branding"
 
 type RouteKey =
   | "/rat"
@@ -155,10 +156,14 @@ export function Sidebar() {
         >
           <Link href="/" className="flex items-center">
             <img
-              src="/images/logo_davaragovernance.png"
-              alt="Davara Governance"
+              src={CLIENT_BRANDING.productLogoWhitePath}
+              alt={CLIENT_BRANDING.productName}
               width={180}
-              style={{ objectFit: "contain", width: "180px", height: "auto", filter: "invert(1) brightness(100%) contrast(100%)" }}
+              style={{
+                objectFit: "contain",
+                width: "180px",
+                height: "auto",
+              }}
             />
           </Link>
         </div>
@@ -170,6 +175,24 @@ export function Sidebar() {
           {collapsed ? <ChevronRight className="w-5 h-5 text-white" /> : <ChevronLeft className="w-5 h-5 text-white" />}
         </button>
       </div>
+
+      {!collapsed && (
+        <div className="px-3 pb-2">
+          <div className="flex items-center justify-center border-t border-white/10 pt-2">
+            <img
+              src={CLIENT_BRANDING.clientLogoPath}
+              alt={CLIENT_BRANDING.clientName}
+              width={CLIENT_BRANDING.clientLogoWidths.sidebar}
+              style={{
+                objectFit: "contain",
+                width: `${CLIENT_BRANDING.clientLogoWidths.sidebar}px`,
+                height: "auto",
+                filter: CLIENT_BRANDING.clientLogoWhiteFilter,
+              }}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Navigation links */}
       <nav className="sidebar-nav flex-1 flex flex-col justify-evenly overflow-hidden px-2 py-1">

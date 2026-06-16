@@ -11,6 +11,7 @@ import "@/lib/zod-config"
 import { Sidebar } from "@/components/sidebar"
 import { Header } from "@/components/header"
 import { isSessionValid, startInactivityMonitor, onSessionExpired, destroySession } from "@/lib/session"
+import { seedGrunenthalDemoData } from "@/lib/grunenthal-seed"
 
 function AppShell({ authed, children }: { authed: boolean; children: React.ReactNode }) {
   const { collapsed, isMobile } = useSidebar()
@@ -46,6 +47,10 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     setHydrated(true)
+    seedGrunenthalDemoData().catch((error) => {
+      console.error("No se pudo inicializar la demo Grünenthal:", error)
+    })
+
     const authenticated = localStorage.getItem("isAuthenticated") === "true"
     // Verificar también la sesión (timeout por inactividad y expiración)
     const sessionOk = isSessionValid()

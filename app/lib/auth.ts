@@ -4,6 +4,7 @@ import {
   getUsers,
   initializeDefaultUsers,
   ensureDemoUser,
+  ensureGrunenthalAdminUser,
   getUserPermissions,
   ROLE_PRESETS,
   type PlatformUser,
@@ -161,6 +162,7 @@ export async function authenticateUser(
   // Initialize permissions system
   initializeDefaultUsers()
   await ensureDemoUser()
+  ensureGrunenthalAdminUser()
 
   // Admin via environment variable or fallback hardcoded (for backward compatibility)
   const adminEmail = (typeof process !== "undefined" && process.env?.ADMIN_EMAIL) || "admin@example.com"
