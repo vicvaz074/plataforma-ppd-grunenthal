@@ -45,6 +45,8 @@ describe("production security headers", () => {
     assert.ok(csp.includes("frame-ancestors 'none'"))
     assert.ok(csp.includes("object-src 'none'"))
     assert.ok(csp.includes("default-src 'self'"))
+    assert.ok(csp.includes("frame-src 'none'"), "CSP should keep frame embedding disabled")
+    assert.ok(csp.includes("worker-src 'self' blob:"), "CSP should allow the constrained PDF.js worker")
 
     assert.ok(csp.includes("script-src 'self' 'unsafe-inline'"), "CSP should explicitly allow inline scripts required by Next.js runtime")
     assert.ok(!csp.includes("'unsafe-eval'"), "Production CSP should not allow unsafe-eval")

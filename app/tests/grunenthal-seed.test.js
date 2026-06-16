@@ -109,16 +109,36 @@ describe("personalización Grünenthal", () => {
 
     for (const asset of wordAssets) {
       const storedFile = storedFiles.find((file) => file.id === `grunenthal-file-${asset.id}`)
-      const expectedPreviewPath = asset.path.replace(/\.(docx|docm)$/i, "-preview.html")
+      const expectedPreviewPath = asset.path.replace(/\.(docx|docm)$/i, "-preview.pdf")
 
       assert.ok(storedFile, `debe existir el archivo precargado ${asset.id}`)
-      assert.equal(storedFile.metadata.previewPath, expectedPreviewPath)
+      assert.equal(storedFile.metadata.previewPdfPath, expectedPreviewPath)
+      assert.equal(storedFile.metadata.previewMimeType, "application/pdf")
       assert.equal(
         fs.existsSync(path.join(publicDir, expectedPreviewPath)),
         true,
-        `debe existir el preview HTML de ${asset.name}`,
+        `debe existir el preview PDF de ${asset.name}`,
       )
     }
+
+    const arcoTemplateAsset = assets.GRUNENTHAL_DOCUMENT_MANIFEST.find((asset) =>
+      asset.id === "grunenthal-arco-rights-matriz-de-control-y-seguimiento-del-ejercicio-de-derechos-arco"
+    )
+    assert.ok(arcoTemplateAsset, "debe existir la plantilla Excel de control ARCO")
+
+    const arcoTemplateFile = storedFiles.find((file) => file.id === `grunenthal-file-${arcoTemplateAsset.id}`)
+    const expectedArcoTemplatePreviewPath = arcoTemplateAsset.path.replace(/\.xlsx$/i, "-preview.pdf")
+
+    assert.ok(arcoTemplateFile, "debe precargarse la plantilla Excel ARCO en storedFiles")
+    assert.equal(arcoTemplateFile.metadata.isTemplate, true)
+    assert.equal(arcoTemplateFile.metadata.templateModule, "arco-rights")
+    assert.equal(arcoTemplateFile.metadata.previewPdfPath, expectedArcoTemplatePreviewPath)
+    assert.equal(arcoTemplateFile.metadata.previewMimeType, "application/pdf")
+    assert.equal(
+      fs.existsSync(path.join(publicDir, expectedArcoTemplatePreviewPath)),
+      true,
+      "debe existir el preview PDF de la plantilla Excel ARCO",
+    )
 
     const ratPdfs = storedFiles.filter((file) => file.category === "rat-inventory")
     assert.equal(ratPdfs.length, 33)

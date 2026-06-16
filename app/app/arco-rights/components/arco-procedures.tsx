@@ -5,7 +5,10 @@ import { useEffect, useMemo, useState } from "react"
 import {
   AlertTriangle,
   CheckCircle2,
+  Download,
+  Eye,
   ExternalLink,
+  FileSpreadsheet,
   FileText,
   Link2,
   ShieldAlert,
@@ -14,6 +17,7 @@ import {
   Upload,
 } from "lucide-react"
 
+import { FilePreviewDialog } from "@/components/file-preview-dialog"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -23,7 +27,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/components/ui/use-toast"
 import { ensureBrowserStorageEvents } from "@/lib/browser-storage-events"
-import { createFileURL, deleteFile, getFileById, saveFile } from "@/lib/fileStorage"
+import { canOfferFilePreview } from "@/lib/file-preview"
+import { createFileURL, deleteFile, getFileById, saveFile, type StoredFile } from "@/lib/fileStorage"
+import { GRUNENTHAL_DOCUMENT_MANIFEST } from "@/lib/grunenthal-assets"
 import {
   getPolicyStatusLabel,
   getPublishedPoliciesForModule,
@@ -40,9 +46,57 @@ import {
 } from "../utils/arco-procedure-policy"
 import { ArcoTimelines } from "./arco-timelines"
 
+const ARCO_TEMPLATE_ASSET_ID = "grunenthal-arco-rights-matriz-de-control-y-seguimiento-del-ejercicio-de-derechos-arco"
+const ARCO_TEMPLATE_STORED_FILE_ID = `grunenthal-file-${ARCO_TEMPLATE_ASSET_ID}`
+const ARCO_TEMPLATE_ASSET = GRUNENTHAL_DOCUMENT_MANIFEST.find((asset) => asset.id === ARCO_TEMPLATE_ASSET_ID)
+
 function getActor() {
   if (typeof window === "undefined") return "Sistema"
   return window.localStorage.getItem("userName")?.trim() || "Sistema"
+}
+
+function buildArcoTemplateFallbackFile(): StoredFile | null {
+  if (!ARCO_TEMPLATE_ASSET) return null
+
+  return {
+    id: ARCO_TEMPLATE_STORED_FILE_ID,
+    name: ARCO_TEMPLATE_ASSET.name,
+    type: ARCO_TEMPLATE_ASSET.type,
+    size: ARCO_TEMPLATE_ASSET.size,
+    content: ARCO_TEMPLATE_ASSET.path,
+    uploadDate: "2026-01-01T00:00:00.000Z",
+    category: ARCO_TEMPLATE_ASSET.category,
+    metadata: {
+      title: ARCO_TEMPLATE_ASSET.displayName,
+      module: ARCO_TEMPLATE_ASSET.module,
+      publicPath: ARCO_TEMPLATE_ASSET.path,
+      sourceRelativePath: ARCO_TEMPLATE_ASSET.sourceRelativePath,
+      previewPdfPath: ARCO_TEMPLATE_ASSET.path.replace(/\.xlsx$/i, "-preview.pdf"),
+      previewMimeType: "application/pdf",
+      isTemplate: true,
+      templateModule: "arco-rights",
+      templateLabel: "Plantilla operativa ARCO",
+      createdBy: "Admin",
+    },
+  }
+}
+
+function resolveArcoTemplateFile() {
+  if (typeof window !== "undefined") {
+    const stored = getFileById(ARCO_TEMPLATE_STORED_FILE_ID)
+    if (stored) return stored
+  }
+
+  return buildArcoTemplateFallbackFile()
+}
+
+function canPreviewStoredFile(file: StoredFile | null) {
+  if (!file) return false
+  try {
+    return canOfferFilePreview(file)
+  } catch {
+    return false
+  }
 }
 
 function formatDateLabel(value?: string) {
@@ -158,6 +212,7 @@ export function ArcoProcedures() {
   const [evidenceTitle, setEvidenceTitle] = useState("")
   const [evidenceDescription, setEvidenceDescription] = useState("")
   const [evidenceFile, setEvidenceFile] = useState<File | null>(null)
+  const [previewTemplateFile, setPreviewTemplateFile] = useState<StoredFile | null>(null)
   const [savingLink, setSavingLink] = useState(false)
   const [uploadingEvidence, setUploadingEvidence] = useState(false)
 
@@ -199,6 +254,8 @@ export function ArcoProcedures() {
 
   const linkHealth = useMemo(() => getLinkHealth(state, linkedPolicy), [linkedPolicy, state])
   const linkedPolicyHasEvidence = linkedPolicy ? policyHasMinimumEvidence(linkedPolicy) : false
+  const arcoTemplateFile = resolveArcoTemplateFile()
+  const canPreviewArcoTemplate = canPreviewStoredFile(arcoTemplateFile)
 
   useEffect(() => {
     if (publishedArcoPolicies.length === 0) {
@@ -377,6 +434,24 @@ export function ArcoProcedures() {
     window.open(createFileURL(file.content), "_blank", "noopener,noreferrer")
   }
 
+  const downloadTemplate = () => {
+    if (!arcoTemplateFile) {
+      toast({
+        title: "Plantilla no disponible",
+        description: "No se encontró la matriz de control ARCO en la biblioteca del cliente.",
+        variant: "destructive",
+      })
+      return
+    }
+
+    const link = document.createElement("a")
+    link.href = createFileURL(arcoTemplateFile.content)
+    link.download = arcoTemplateFile.name
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
   return (
     <div className="space-y-6">
       <div className="grid gap-6 lg:grid-cols-[1.1fr,0.9fr]">
@@ -540,89 +615,140 @@ export function ArcoProcedures() {
           </CardContent>
         </Card>
 
-        <Card className="rounded-[28px] border-slate-200">
-          <CardHeader className="pb-4">
-            <CardTitle className="flex items-center gap-2 text-slate-900">
-              <FileText className="h-5 w-5 text-primary" />
-              Evidencia suplementaria
-            </CardTitle>
-            <CardDescription>
-              Solo registre soporte operativo específico de ARCO, por ejemplo constancias de difusión, guías internas o instructivos propios.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-5">
-            <div className="space-y-2">
-              <Label htmlFor="arco-evidence-title">Título</Label>
-              <Input
-                id="arco-evidence-title"
-                value={evidenceTitle}
-                onChange={(event) => setEvidenceTitle(event.target.value)}
-                placeholder="Ej. Instructivo interno para atención de rectificación"
-                className="rounded-2xl"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="arco-evidence-description">Descripción</Label>
-              <Textarea
-                id="arco-evidence-description"
-                value={evidenceDescription}
-                onChange={(event) => setEvidenceDescription(event.target.value)}
-                placeholder="Detalle qué cubre esta evidencia y cómo complementa la PGDP."
-                className="min-h-[96px] rounded-2xl"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="arco-evidence-file">Archivo</Label>
-              <Input
-                id="arco-evidence-file"
-                type="file"
-                className="rounded-2xl"
-                onChange={(event) => setEvidenceFile(event.target.files?.[0] || null)}
-              />
-            </div>
-
-            <Button
-              onClick={handleUploadEvidence}
-              disabled={uploadingEvidence || !state.linkedPolicyId}
-              className="w-full rounded-2xl"
-            >
-              <Upload className="mr-2 h-4 w-4" />
-              {uploadingEvidence ? "Guardando..." : "Registrar evidencia suplementaria"}
-            </Button>
-
-            <div className="space-y-3">
-              {state.supplementaryEvidence.length === 0 ? (
-                <div className="rounded-3xl border border-dashed border-slate-300 bg-slate-50 px-4 py-6 text-sm text-slate-600">
-                  La evidencia suplementaria aparecerá aquí. No se replica la PGDP; solo se conserva soporte adicional del procedimiento ARCO.
+        <div className="space-y-6">
+          <Card className="overflow-hidden rounded-[28px] border-blue-200 bg-gradient-to-br from-blue-50 via-white to-slate-50">
+            <CardHeader className="pb-4">
+              <CardTitle className="flex items-center gap-2 text-slate-900">
+                <FileSpreadsheet className="h-5 w-5 text-[#0a4abf]" />
+                Plantilla operativa ARCO
+              </CardTitle>
+              <CardDescription>
+                Matriz de control y seguimiento para registrar solicitudes ARCO, listado de exclusión y quejas.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="rounded-3xl border border-blue-100 bg-white/80 px-4 py-4 shadow-sm">
+                <div className="flex flex-wrap items-center gap-2">
+                  <Badge className="border-blue-200 bg-blue-50 text-blue-700" variant="outline">XLSX</Badge>
+                  <Badge className="border-slate-200 bg-slate-50 text-slate-700" variant="outline">Editable</Badge>
                 </div>
-              ) : (
-                state.supplementaryEvidence.map((evidence) => (
-                  <div key={evidence.id} className="rounded-3xl border border-slate-200 px-4 py-4">
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="min-w-0">
-                        <p className="text-sm font-semibold text-slate-900">{evidence.title}</p>
-                        <p className="mt-1 text-sm text-slate-600">{evidence.description || "Sin descripción adicional."}</p>
-                        <p className="mt-2 text-xs text-slate-500">
-                          {evidence.fileName} · {evidence.createdBy} · {formatDateLabel(evidence.createdAt)}
-                        </p>
-                      </div>
-                      <div className="flex shrink-0 gap-2">
-                        <Button variant="outline" size="sm" onClick={() => openEvidence(evidence.fileId)}>
-                          Abrir
-                        </Button>
-                        <Button variant="outline" size="sm" onClick={() => handleDeleteEvidence(evidence.id)}>
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
+                <p className="mt-3 text-base font-semibold text-slate-900">
+                  Matriz de Control y seguimiento del Ejercicio de Derechos ARCO
+                </p>
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  Úsala como template oficial para el seguimiento operativo. La previsualización es PDF para consulta; la descarga conserva el Excel original.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+                {arcoTemplateFile && canPreviewArcoTemplate ? (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="rounded-2xl bg-white"
+                    onClick={() => setPreviewTemplateFile(arcoTemplateFile)}
+                  >
+                    <Eye className="mr-2 h-4 w-4" />
+                    Observar
+                  </Button>
+                ) : null}
+                <Button
+                  type="button"
+                  className="rounded-2xl"
+                  disabled={!arcoTemplateFile}
+                  onClick={downloadTemplate}
+                >
+                  <Download className="mr-2 h-4 w-4" />
+                  Descargar plantilla
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="rounded-[28px] border-slate-200">
+            <CardHeader className="pb-4">
+              <CardTitle className="flex items-center gap-2 text-slate-900">
+                <FileText className="h-5 w-5 text-primary" />
+                Evidencia suplementaria
+              </CardTitle>
+              <CardDescription>
+                Solo registre soporte operativo específico de ARCO, por ejemplo constancias de difusión, guías internas o instructivos propios.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-5">
+              <div className="space-y-2">
+                <Label htmlFor="arco-evidence-title">Título</Label>
+                <Input
+                  id="arco-evidence-title"
+                  value={evidenceTitle}
+                  onChange={(event) => setEvidenceTitle(event.target.value)}
+                  placeholder="Ej. Instructivo interno para atención de rectificación"
+                  className="rounded-2xl"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="arco-evidence-description">Descripción</Label>
+                <Textarea
+                  id="arco-evidence-description"
+                  value={evidenceDescription}
+                  onChange={(event) => setEvidenceDescription(event.target.value)}
+                  placeholder="Detalle qué cubre esta evidencia y cómo complementa la PGDP."
+                  className="min-h-[96px] rounded-2xl"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="arco-evidence-file">Archivo</Label>
+                <Input
+                  id="arco-evidence-file"
+                  type="file"
+                  className="rounded-2xl"
+                  onChange={(event) => setEvidenceFile(event.target.files?.[0] || null)}
+                />
+              </div>
+
+              <Button
+                onClick={handleUploadEvidence}
+                disabled={uploadingEvidence || !state.linkedPolicyId}
+                className="w-full rounded-2xl"
+              >
+                <Upload className="mr-2 h-4 w-4" />
+                {uploadingEvidence ? "Guardando..." : "Registrar evidencia suplementaria"}
+              </Button>
+
+              <div className="space-y-3">
+                {state.supplementaryEvidence.length === 0 ? (
+                  <div className="rounded-3xl border border-dashed border-slate-300 bg-slate-50 px-4 py-6 text-sm text-slate-600">
+                    La evidencia suplementaria aparecerá aquí. No se replica la PGDP; solo se conserva soporte adicional del procedimiento ARCO.
+                  </div>
+                ) : (
+                  state.supplementaryEvidence.map((evidence) => (
+                    <div key={evidence.id} className="rounded-3xl border border-slate-200 px-4 py-4">
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="min-w-0">
+                          <p className="text-sm font-semibold text-slate-900">{evidence.title}</p>
+                          <p className="mt-1 text-sm text-slate-600">{evidence.description || "Sin descripción adicional."}</p>
+                          <p className="mt-2 text-xs text-slate-500">
+                            {evidence.fileName} · {evidence.createdBy} · {formatDateLabel(evidence.createdAt)}
+                          </p>
+                        </div>
+                        <div className="flex shrink-0 gap-2">
+                          <Button variant="outline" size="sm" onClick={() => openEvidence(evidence.fileId)}>
+                            Abrir
+                          </Button>
+                          <Button variant="outline" size="sm" onClick={() => handleDeleteEvidence(evidence.id)}>
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))
-              )}
-            </div>
-          </CardContent>
-        </Card>
+                  ))
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
 
       <Card className="rounded-[28px] border-slate-200">
@@ -674,6 +800,13 @@ export function ArcoProcedures() {
           </div>
         </CardContent>
       </Card>
+      <FilePreviewDialog
+        file={previewTemplateFile}
+        open={Boolean(previewTemplateFile)}
+        onOpenChange={(open) => {
+          if (!open) setPreviewTemplateFile(null)
+        }}
+      />
     </div>
   )
 }

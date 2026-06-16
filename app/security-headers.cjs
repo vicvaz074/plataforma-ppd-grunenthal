@@ -32,6 +32,7 @@ function buildContentSecurityPolicy({ isDev = false } = {}) {
     "font-src 'self' data: https://cdn.jsdelivr.net https://fonts.cdnfonts.com",
     `connect-src ${connectSrc.join(" ")}`,
     "media-src 'self' blob: data:",
+    "worker-src 'self' blob:",
     "frame-src 'none'",
     "frame-ancestors 'none'",
     "form-action 'self'",

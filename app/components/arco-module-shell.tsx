@@ -3,8 +3,9 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { type CSSProperties, type ReactNode, useEffect, useMemo, useRef, useState } from "react"
-import { ChevronLeft, FileArchive, FileJson, Menu, Share2, type LucideIcon } from "lucide-react"
+import { ChevronLeft, Download, Eye, FileArchive, FileJson, Menu, Share2, type LucideIcon } from "lucide-react"
 
+import { FilePreviewDialog } from "@/components/file-preview-dialog"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -18,7 +19,8 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { cn } from "@/lib/utils"
-import { createFileURL, getAllFiles } from "@/lib/fileStorage"
+import { createFileURL, getAllFiles, type StoredFile } from "@/lib/fileStorage"
+import { canOfferFilePreview } from "@/lib/file-preview"
 import {
   buildModuleExportData,
   getCurrentModuleExportDefinition,
@@ -108,6 +110,14 @@ function downloadAsJson(filename: string, payload: unknown) {
   link.click()
   link.remove()
   URL.revokeObjectURL(url)
+}
+
+function canPreviewExportStoredFile(file: StoredFile) {
+  try {
+    return canOfferFilePreview(file)
+  } catch {
+    return false
+  }
 }
 
 export const MODULE_COLOR_PALETTES = {
@@ -390,6 +400,7 @@ export function ModuleWorkspaceShell({
   const pathname = usePathname()
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const [exportOpen, setExportOpen] = useState(false)
+  const [previewExportFile, setPreviewExportFile] = useState<StoredFile | null>(null)
   const shellSurfaceRef = useRef<HTMLDivElement | null>(null)
   const [desktopSidebarFrame, setDesktopSidebarFrame] = useState<DesktopSidebarFrame | null>(null)
   const moduleExportDefinition = useMemo(() => getCurrentModuleExportDefinition(pathname), [pathname])
@@ -423,6 +434,15 @@ export function ModuleWorkspaceShell({
         filename: file.name || `documento-${index + 1}`,
       })),
     )
+  }
+
+  const handleDownloadDocument = (file: StoredFile, index: number) => {
+    triggerDataUrlDownloads([
+      {
+        href: createFileURL(file.content),
+        filename: file.name || `documento-${index + 1}`,
+      },
+    ])
   }
 
   const resolvedItems = useMemo<ResolvedNavItem[]>(() => {
@@ -715,6 +735,53 @@ export function ModuleWorkspaceShell({
                                 Descargar documentos
                               </Button>
                             </div>
+                            {moduleExportData.files.length > 0 ? (
+                              <div className="max-h-72 space-y-2 overflow-y-auto rounded-xl border border-slate-200 bg-white p-2">
+                                {moduleExportData.files.map((file, index) => {
+                                  const canPreview = canPreviewExportStoredFile(file)
+
+                                  return (
+                                    <div
+                                      key={file.id || `${file.name}-${index}`}
+                                      className="flex min-w-0 flex-col gap-2 rounded-lg border border-slate-100 bg-slate-50/70 p-3 sm:flex-row sm:items-center sm:justify-between"
+                                    >
+                                      <div className="min-w-0">
+                                        <p className="break-words text-sm font-semibold text-slate-800">
+                                          {file.name || `Documento ${index + 1}`}
+                                        </p>
+                                        <p className="mt-0.5 text-xs text-slate-500">
+                                          {file.category || "documento"} · {file.type || "archivo"}
+                                        </p>
+                                      </div>
+                                      <div className="flex shrink-0 flex-wrap gap-1.5">
+                                        {canPreview ? (
+                                          <Button
+                                            type="button"
+                                            variant="outline"
+                                            size="sm"
+                                            className="h-8 gap-1.5"
+                                            onClick={() => setPreviewExportFile(file)}
+                                          >
+                                            <Eye className="h-3.5 w-3.5" />
+                                            Observar
+                                          </Button>
+                                        ) : null}
+                                        <Button
+                                          type="button"
+                                          variant="ghost"
+                                          size="sm"
+                                          className="h-8 gap-1.5"
+                                          onClick={() => handleDownloadDocument(file, index)}
+                                        >
+                                          <Download className="h-3.5 w-3.5" />
+                                          Descargar
+                                        </Button>
+                                      </div>
+                                    </div>
+                                  )
+                                })}
+                              </div>
+                            ) : null}
                             <p className="text-xs text-slate-500">
                               Nota: los documentos se descargan de forma individual con su nombre original.
                             </p>
@@ -734,6 +801,13 @@ export function ModuleWorkspaceShell({
           </div>
         </div>
       </div>
+      <FilePreviewDialog
+        file={previewExportFile}
+        open={Boolean(previewExportFile)}
+        onOpenChange={(open) => {
+          if (!open) setPreviewExportFile(null)
+        }}
+      />
     </div>
   )
 }

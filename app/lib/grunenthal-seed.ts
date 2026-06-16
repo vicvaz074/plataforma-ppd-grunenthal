@@ -34,7 +34,8 @@ const RAT_VALIDATION_STORAGE_KEY = "grunenthal_rat_validation_report_v1"
 
 const SEEDED_AT = "2026-01-01T00:00:00.000Z"
 const TRAINING_PROGRAM_ID = "grunenthal-training-privacy-2026"
-const STATIC_PREVIEW_EXTENSIONS = new Set(["docx", "docm"])
+const ARCO_TEMPLATE_ASSET_ID = "grunenthal-arco-rights-matriz-de-control-y-seguimiento-del-ejercicio-de-derechos-arco"
+const STATIC_PREVIEW_EXTENSIONS = new Set(["docx", "docm", "xlsx"])
 
 type JsonRecord = Record<string, unknown>
 type RatPdfLink = (typeof GRUNENTHAL_RAT_PDF_LINKS)[number]
@@ -81,11 +82,12 @@ function seededFileId(assetId: string) {
 
 function staticPreviewPathForAsset(asset: GrunenthalAsset) {
   if (!STATIC_PREVIEW_EXTENSIONS.has(asset.extension)) return undefined
-  return asset.path.replace(/\.(docx|docm)$/i, "-preview.html")
+  return asset.path.replace(/\.(docx|docm|xlsx)$/i, "-preview.pdf")
 }
 
 function buildStoredFile(asset: GrunenthalAsset): StoredFile {
   const previewPath = staticPreviewPathForAsset(asset)
+  const isArcoTemplate = asset.id === ARCO_TEMPLATE_ASSET_ID
 
   return {
     id: seededFileId(asset.id),
@@ -103,7 +105,14 @@ function buildStoredFile(asset: GrunenthalAsset): StoredFile {
       module: asset.module,
       publicPath: asset.path,
       sourceRelativePath: asset.sourceRelativePath,
-      ...(previewPath ? { previewPath } : {}),
+      ...(previewPath ? { previewPdfPath: previewPath, previewMimeType: "application/pdf" } : {}),
+      ...(isArcoTemplate
+        ? {
+            isTemplate: true,
+            templateModule: "arco-rights",
+            templateLabel: "Plantilla operativa ARCO",
+          }
+        : {}),
       folder: asset.folder,
       extension: asset.extension,
       title: asset.displayName,

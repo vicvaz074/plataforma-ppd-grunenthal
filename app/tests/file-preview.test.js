@@ -17,7 +17,7 @@ describe("visor de archivos", () => {
     filePreview = await importModule("lib/file-preview.ts")
   })
 
-  it("usa el preview HTML seguro para un aviso DOCX público", () => {
+  it("usa un PDF seguro como preview para un aviso DOCX público y conserva la descarga original", () => {
     const descriptor = filePreview.buildFilePreviewDescriptor({
       id: "grunenthal-privacy-notices-manualap-grunentha-davara-v3",
       name: "ManualAP_Grünentha Davara v3.docx",
@@ -29,22 +29,42 @@ describe("visor de archivos", () => {
       metadata: {
         title: "ManualAP_Grünentha Davara v3",
         module: "privacy-notices",
-        previewPath: "/client/grunenthal/privacy-notices/manualap-grunentha-davara-v3-preview.html",
+        previewPdfPath: "/client/grunenthal/privacy-notices/manualap-grunentha-davara-v3-preview.pdf",
       },
     })
 
     assert.equal(descriptor.kind, "office")
+    assert.equal(descriptor.previewKind, "pdf")
     assert.equal(
       descriptor.fileUrl,
       "/client/grunenthal/privacy-notices/manualap-grunentha-davara-v3.docx",
     )
     assert.equal(
       descriptor.previewUrl,
-      "/client/grunenthal/privacy-notices/manualap-grunentha-davara-v3-preview.html",
+      "/client/grunenthal/privacy-notices/manualap-grunentha-davara-v3-preview.pdf",
     )
     assert.equal(descriptor.canEmbed, true)
     assert.equal(descriptor.extension, "DOCX")
+    assert.equal(descriptor.downloadName, "ManualAP_Grünentha Davara v3.docx")
     assert.equal(descriptor.title, "ManualAP_Grünentha Davara v3")
+  })
+
+  it("no ofrece vista previa para JSON aunque conserve la descarga segura", () => {
+    const descriptor = filePreview.buildFilePreviewDescriptor({
+      id: "export-json",
+      name: "inventarios.json",
+      type: "application/json",
+      size: 42,
+      content: "data:application/json;base64,e30=",
+      uploadDate: "2026-01-01T00:00:00.000Z",
+      category: "export",
+      metadata: {},
+    })
+
+    assert.equal(descriptor.kind, "json")
+    assert.equal(descriptor.previewKind, "json")
+    assert.equal(descriptor.canEmbed, false)
+    assert.equal(filePreview.canOfferFilePreview(descriptor), false)
   })
 
   it("incrusta PDFs públicos directamente", () => {
