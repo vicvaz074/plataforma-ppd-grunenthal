@@ -4,6 +4,7 @@
 import { secureRandomId } from "@/lib/secure-random"
 import { setEncrypted, getEncrypted } from "@/lib/encrypted-storage"
 import { logAuditEvent } from "@/lib/audit-log"
+import { canGenerateOfficePdfPreview, createOfficePdfPreviewDataUrl } from "@/lib/office-preview"
 
 export interface StoredFile {
   id: string
@@ -29,6 +30,27 @@ type StoredFileInput = {
 
 const STORAGE_KEY = "storedFiles"
 
+async function withGeneratedPreviewMetadata(file: File, metadata: Record<string, any>) {
+  if (
+    metadata.previewPdfPath ||
+    metadata.previewPdfDataUrl ||
+    metadata.previewPath ||
+    !canGenerateOfficePdfPreview(file)
+  ) {
+    return metadata
+  }
+
+  const previewPdfDataUrl = await createOfficePdfPreviewDataUrl(file)
+  if (!previewPdfDataUrl) return metadata
+
+  return {
+    ...metadata,
+    previewPdfDataUrl,
+    previewMimeType: "application/pdf",
+    previewGeneratedFrom: "office-to-pdf",
+  }
+}
+
 // Convertir un archivo a base64
 export const fileToBase64 = (file: File): Promise<string> => {
   return new Promise((resolve, reject) => {
@@ -49,6 +71,7 @@ export const saveFileEncrypted = async (
   category = "default",
 ): Promise<StoredFile> => {
   const content = await fileToBase64(file)
+  const finalMetadata = await withGeneratedPreviewMetadata(file, metadata)
   const storedFile: StoredFile = {
     id: secureRandomId("stored-file"),
     name: file.name,
@@ -57,14 +80,14 @@ export const saveFileEncrypted = async (
     content,
     uploadDate: new Date().toISOString(),
     category,
-    metadata,
+    metadata: finalMetadata,
   }
 
   const existingFiles = await getEncrypted<StoredFile[]>(STORAGE_KEY, dek, [])
   existingFiles.push(storedFile)
   await setEncrypted(STORAGE_KEY, existingFiles, dek)
 
-  logAuditEvent("FILE_UPLOADED", metadata.userEmail || "unknown", `Archivo subido: ${file.name} (${category})`)
+  logAuditEvent("FILE_UPLOADED", finalMetadata.userEmail || "unknown", `Archivo subido: ${file.name} (${category})`)
   return storedFile
 }
 
@@ -97,6 +120,7 @@ export const saveFile = async (
 ): Promise<StoredFile> => {
   try {
     const content = await fileToBase64(file)
+    const finalMetadata = await withGeneratedPreviewMetadata(file, metadata)
     const storedFile: StoredFile = {
       id: secureRandomId("stored-file"),
       name: file.name,
@@ -105,14 +129,14 @@ export const saveFile = async (
       content,
       uploadDate: new Date().toISOString(),
       category: category,
-      metadata: metadata,
+      metadata: finalMetadata,
     }
 
     const existingFiles: StoredFile[] = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]")
     existingFiles.push(storedFile)
     writeAllFiles(existingFiles)
 
-    logAuditEvent("FILE_UPLOADED", metadata.userEmail || "unknown", `Archivo subido: ${file.name} (${category})`)
+    logAuditEvent("FILE_UPLOADED", finalMetadata.userEmail || "unknown", `Archivo subido: ${file.name} (${category})`)
     return storedFile
   } catch (error) {
     console.error("Error al guardar el archivo:", error)
@@ -226,6 +250,10 @@ export const updateFile = async (
     }
 
     const content = await fileToBase64(file)
+    const finalMetadata = await withGeneratedPreviewMetadata(file, {
+      ...allFiles[fileIndex].metadata,
+      ...metadata,
+    })
 
     const updatedFile: StoredFile = {
       ...allFiles[fileIndex],
@@ -233,10 +261,7 @@ export const updateFile = async (
       type: file.type,
       size: file.size,
       content,
-      metadata: {
-        ...allFiles[fileIndex].metadata,
-        ...metadata,
-      },
+      metadata: finalMetadata,
     }
 
     allFiles[fileIndex] = updatedFile

@@ -1,0 +1,4281 @@
+%PDF-1.3
+%ºß¬à
+3 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 612. 792.]
+/Contents 4 0 R
+>>
+endobj
+4 0 obj
+<<
+/Length 3241
+>>
+stream
+0.200025 w
+0 G
+BT
+/F2 14 Tf
+16.0999999999999979 TL
+0 g
+54. 738. Td
+(grt-proc-003162-davara-v1) Tj
+ET
+BT
+/F1 9 Tf
+10.3499999999999996 TL
+0 g
+54. 720. Td
+(policies/global/grt-proc-003162-davara-v1.docx) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 696. Td
+(Objetivo) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 677. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 658. Td
+(El objetivo de este documento es garantizar que las violaciones de datos personales en términos del art. 4, n.º 12) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 644. Td
+(del RGPD se traten de manera oportuna y adecuada, con el fin de minimizar el impacto potencial sobre los) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 630. Td
+(derechos y libertades de las personas afectadas y garantizar el cumplimiento de las leyes de protección de datos.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 611. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 592. Td
+(Ámbito) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 573. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 554. Td
+(Este procedimiento se aplica a todos los empleados de Grünenthal en la sede central de Grünenthal y en las) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 540. Td
+(filiales alemanas. También establece los principios y normas para todos los procedimientos operativos estándar) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 526. Td
+(locales de las filiales de Grünenthal, de conformidad con todas las leyes de protección de datos aplicables.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 507. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 488. Td
+(Responsabilidad) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 469. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 450. Td
+(En esta sección se proporciona información sobre las funciones implicadas en el proceso descrito.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 431. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 412. Td
+(Función) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 393. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 374. Td
+(Responsabilidad) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 355. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 336. Td
+(Empleados) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 317. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 298. Td
+(Están alertas ante cualquier sospecha de violación de datos personales en su área y reportan cualquier sospecha) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 284. Td
+(de inmediato al responsable global de protección de datos y al responsable alemán de protección de datos) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 270. Td
+(\(ambos a través dedataprivacy.de@grunenthal.com \) y al departamento global de TI \(it-incident@grunenthal.com\).) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 251. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 232. Td
+(TI global) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 213. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 194. Td
+(Evalúa la gravedad de los incidentes de seguridad informática y coordina la respuesta general de TI.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 175. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 156. Td
+(Delegado de Protección de Datos local) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 137. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 118. Td
+(Es el responsable de protección de datos designado para la filial de Grünenthal afectada por la violación de datos) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 104. Td
+(personales.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 85. Td
+( ) Tj
+ET
+endstream
+endobj
+5 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 612. 792.]
+/Contents 6 0 R
+>>
+endobj
+6 0 obj
+<<
+/Length 3547
+>>
+stream
+0.200025 w
+0 G
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 738. Td
+(Notifica las violaciones de datos personales a las autoridades locales y a las personas afectadas, en consonancia) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 724. Td
+(con el departamento jurídico y de cumplimiento normativo local y el director general correspondiente.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 705. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 686. Td
+(Delegado de protección de datos alemán \(externo\)) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 667. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 648. Td
+(Es el responsable de protección de datos designado externamente para la sede central y las entidades alemanas) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 634. Td
+(de Grünenthal.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 615. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 596. Td
+(Evalúa las presuntas violaciones de datos personales junto con el responsable global de protección de datos y, si) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 582. Td
+(es necesario, con el departamento global de TI, y emite un dictamen sobre si se debe informar a la autoridad) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 568. Td
+(supervisora y a las personas afectadas.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 549. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 530. Td
+(Notifica las violaciones de datos personales a todas las autoridades y personas afectadas, en consonancia con el) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 516. Td
+(responsable global de protección de datos.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 497. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 478. Td
+(Función) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 459. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 440. Td
+(Responsabilidad) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 421. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 402. Td
+(y tras la aprobación del responsable global de cumplimiento normativo, el asesor jurídico y la dirección ejecutiva) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 388. Td
+(de GRT.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 369. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 350. Td
+(Mantiene y actualiza el registro de presuntas violaciones de datos personales junto con el responsable global de) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 336. Td
+(protección de datos.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 317. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 298. Td
+(El responsable global de protección de datos/GDPO como representante del responsable global de cumplimiento) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 279. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 260. Td
+(Dirige y coordina la ejecución de todas las medidas necesarias para la gestión de las violaciones de datos) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 246. Td
+(personales.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 227. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 208. Td
+(Evalúa las presuntas violaciones de datos personales junto con el responsable alemán de protección de datos y,) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 194. Td
+(si es necesario, con el departamento global de TI, y emite un dictamen sobre si se debe informar a la autoridad de) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 180. Td
+(control y a las personas afectadas.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 161. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 142. Td
+(Mantiene y actualiza el registro de presuntas violaciones de datos personales junto con el responsable alemán de) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 128. Td
+(protección de datos.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 109. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 90. Td
+(Coordinadores de Protección de Datos) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 71. Td
+( ) Tj
+ET
+endstream
+endobj
+7 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 612. 792.]
+/Contents 8 0 R
+>>
+endobj
+8 0 obj
+<<
+/Length 3348
+>>
+stream
+0.200025 w
+0 G
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 738. Td
+(Responsables de coordinar todas las acciones necesarias para gestionar la violación de datos personales en su) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 724. Td
+(área.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 705. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 686. Td
+(Responsable de cumplimiento global) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 667. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 648. Td
+(Aprueba las notificaciones a las autoridades de control y las comunicaciones a las personas afectadas, en) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 634. Td
+(coordinación con el asesor jurídico y el miembro del Consejo de Administración responsable del área afectada por) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 620. Td
+(la violación de datos personales.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 601. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 582. Td
+(Consejero general) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 563. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 544. Td
+(Aprueba las notificaciones a las autoridades supervisoras y las comunicaciones a las personas afectadas, en) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 530. Td
+(coordinación con el responsable de cumplimiento normativo global y el miembro del Consejo Ejecutivo) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 516. Td
+(responsable del área afectada por la violación de datos personales.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 497. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 478. Td
+(Miembro del Consejo Ejecutivo responsable del área afectada por la violación de datos personales) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 459. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 440. Td
+(Aprueba las notificaciones a las autoridades supervisoras y las comunicaciones a las personas afectadas, en) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 426. Td
+(coordinación con el responsable global de cumplimiento normativo y el consejero general.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 407. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 388. Td
+(Términos y definiciones) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 369. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 350. Td
+(Términos) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 331. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 312. Td
+(Definición/Explicación) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 293. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 274. Td
+(Incidente de seguridad) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 255. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 236. Td
+(Tema general relativo al manejo de malware o vulnerabilidades que pueden tener un impacto grave en los datos o) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 222. Td
+(los sistemas \(por ejemplo, denegación de servicio\). Un incidente de seguridad puede, aunque no necesariamente,) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 208. Td
+(dar lugar a una violación de datos personales.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 189. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 170. Td
+(.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 151. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 132. Td
+(Violación de datos personales) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 113. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 94. Td
+(Se refiere a una violación de la seguridad que da lugar a la destrucción, pérdida, alteración, divulgación no) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 80. Td
+(autorizada o acceso accidental o ilícito a datos personales transmitidos, almacenados o tratados de otro modo, de) Tj
+ET
+endstream
+endobj
+9 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 612. 792.]
+/Contents 10 0 R
+>>
+endobj
+10 0 obj
+<<
+/Length 3585
+>>
+stream
+0.200025 w
+0 G
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 738. Td
+(conformidad con el artículo 4, apartado 12, del RGPD.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 719. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 700. Td
+(con el art. 4 n.º 12 del RGPD.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 681. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 662. Td
+(Datos personales) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 643. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 624. Td
+(Se refiere a cualquier información relacionada con una persona física identificada o identificable \(«el interesado»\).) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 610. Td
+(El término «cualquier información» se refiere a cualquier tipo de dato que pueda atribuirse, directa o) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 596. Td
+(indirectamente, a una persona física, como el nombre, la edad, la profesión, el cargo en la empresa, los datos de) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 582. Td
+(contacto personales o profesionales,) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 563. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 544. Td
+(datos relativos a la salud, etc.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 525. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 506. Td
+(Datos        afectado        \(persona afectada\)) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 487. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 468. Td
+(Persona física que puede ser identificada, directa o indirectamente, en particular mediante referencia a un) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 454. Td
+(identificador, como un nombre, un número de identificación, datos de localización, un identificador en línea o uno) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 440. Td
+(o varios factores específicos de la identidad física, fisiológica, genética, mental, económica, cultural o social de) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 426. Td
+(dicha) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 407. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 388. Td
+(persona física.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 369. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 350. Td
+(Datos personales seudonimizados) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 331. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 312. Td
+(Datos personales que ya no pueden atribuirse a un interesado específico sin el uso de información adicional,) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 298. Td
+(siempre que dicha información adicional se mantenga por separado y esté sujeta a medidas técnicas y) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 284. Td
+(organizativas para garantizar que los datos personales no se atribuyan a una persona física identificada o) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 270. Td
+(identificable. Los datos seudonimizados) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 251. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 232. Td
+(no son datos anonimizados.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 213. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 194. Td
+(Tratamiento de datos) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 175. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 156. Td
+(Cualquier operación o conjunto de operaciones que se realice sobre datos personales o conjuntos de datos) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 142. Td
+(personales, ya sea por medios automatizados o no, como la recopilación, el registro, la organización, la) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 128. Td
+(estructuración, el almacenamiento, la adaptación o la modificación, la recuperación, la consulta, el uso   , la) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 114. Td
+(divulgación   , la comunicación   , la transmisión   o la difusión.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 95. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 76. Td
+(difusión   o   puesta a disposición   de   ,) Tj
+ET
+endstream
+endobj
+11 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 612. 792.]
+/Contents 12 0 R
+>>
+endobj
+12 0 obj
+<<
+/Length 2580
+>>
+stream
+0.200025 w
+0 G
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 738. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 719. Td
+(Términos) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 700. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 681. Td
+(Definición/Explicación) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 662. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 643. Td
+(alineación o combinación, restricción, borrado o) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 624. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 605. Td
+(destrucción.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 586. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 567. Td
+(Encargado del tratamiento) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 548. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 529. Td
+(Se refiere a una persona física o jurídica, autoridad pública, agencia u otro organismo que procesa datos) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 515. Td
+(personales en nombre de GRT \(por ejemplo, empresas de nóminas o proveedores de servicios en la nube) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 496. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 477. Td
+(\).) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 458. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 439. Td
+(RGPD) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 420. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 401. Td
+(El Reglamento General de Protección de Datos 2016/679 establece las normas para la protección de datos) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 387. Td
+(personales en la Unión Europea y el Espacio Económico Europeo) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 368. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 349. Td
+(.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 330. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 311. Td
+(Sistema Ivanti) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 292. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 273. Td
+(Sistema de tickets de TI en el que se gestionan las incidencias relacionadas con las tecnologías de la) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 259. Td
+(información.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 240. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 221. Td
+(gestionan.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 202. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 183. Td
+(Herramienta de protección de datos de 2B Advice que sirve como registro) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 164. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 145. Td
+(Herramienta de protección de datos que sirve como Registro de Actividades de Tratamiento.        actividades) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 126. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 107. Td
+(\(http://2bsecure.grtgroup.com/\).) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 88. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 69. Td
+(Proceso) Tj
+ET
+endstream
+endobj
+13 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 612. 792.]
+/Contents 14 0 R
+>>
+endobj
+14 0 obj
+<<
+/Length 4102
+>>
+stream
+0.200025 w
+0 G
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 738. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 719. Td
+(Identificación de una posible violación de datos personales) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 700. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 681. Td
+(Ser capaz de reconocer las violaciones de datos personales es de suma importancia para minimizar sus posibles) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 667. Td
+(efectos y cumplir con las disposiciones establecidas en los artículos 33 y 34 del RGPD. Las violaciones de datos) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 653. Td
+(personales pueden provocar daños físicos, materiales o inmateriales a las personas afectadas, como la pérdida) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 639. Td
+(de control sobre sus datos personales, la limitación de sus derechos como interesados, la discriminación, el robo) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 625. Td
+(de identidad o el fraude, pérdidas económicas, la reversión no autorizada de la seudonimización, daños a la) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 611. Td
+(reputación y la pérdida de confidencialidad de los datos personales protegidos por el secreto profesional.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 597. Td
+(Además, las violaciones de datos personales también pueden acarrear sanciones importantes para GRT.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 578. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 559. Td
+(Las violaciones de datos personales comprenden tanto las violaciones no autorizadas como las accidentales y) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 545. Td
+(abarcan los siguientes casos, siempre que se vean afectados datos personales:) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 526. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 507. Td
+(Las violaciones de la disponibilidad se refieren a los casos en los que se produce una pérdida o destrucción) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 493. Td
+(accidental o no autorizada de datos personales.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 474. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 455. Td
+(Las violaciones de la confidencialidad se producen cuando se produce una divulgación o un acceso no autorizado) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 441. Td
+(o accidental a datos personales que deben permanecer confidenciales.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 422. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 403. Td
+(Las violaciones de la integridad se refieren a los casos en los que se produce una alteración no autorizada o) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 389. Td
+(accidental de los datos personales.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 370. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 351. Td
+(Algunos ejemplos de violaciones de datos son:) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 332. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 313. Td
+(Se pierde o se roba un dispositivo que contiene datos personales, como una computadora portátil, una memoria) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 299. Td
+(USB, un disco duro externo o un teléfono móvil.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 280. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 261. Td
+(Se pierde o se roba la clave de descifrado de un dispositivo cifrado.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 242. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 223. Td
+(Los datos personales se comparten o se envían a un destinatario no deseado, incluso cuando ese destinatario es) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 209. Td
+(un empleado de GRT \(por ejemplo, correos electrónicos, cartas o faxes enviados al destinatario equivocado) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 190. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 171. Td
+(o un archivo que contiene datos personales almacenado en la unidad compartida equivocada\).) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 152. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 133. Td
+(Se pierde o se roba una lista con datos personales, como nombres o datos de contacto de clientes o empleados,) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 119. Td
+(ya sea almacenada digital o físicamente.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 100. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 81. Td
+(Un sistema o red en el que se almacenan o comparten datos personales es pirateado.) Tj
+ET
+endstream
+endobj
+15 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 612. 792.]
+/Contents 16 0 R
+>>
+endobj
+16 0 obj
+<<
+/Length 4438
+>>
+stream
+0.200025 w
+0 G
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 738. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 719. Td
+(Un corte de energía que dura varios minutos y que hace que los datos personales no estén disponibles) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 705. Td
+(temporalmente.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 686. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 667. Td
+(Un fallo del sistema permite a todos los empleados o terceros acceder a datos personales de otras personas que) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 653. Td
+(deben permanecer confidenciales.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 634. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 615. Td
+(Un correo electrónico enviado a un profesional sanitario que incluye por error los nombres de otros profesionales) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 601. Td
+(sanitarios que también han recibido el mismo correo electrónico \(por ejemplo, con fines de marketing\).) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 582. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 563. Td
+(fines de marketing\).) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 544. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 525. Td
+(Una empresa que procesa datos personales en nombre de GRT \(por ejemplo, empresas de nóminas, agencias de) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 511. Td
+(viajes, agencias de marketing, proveedores de servicios en la nube, etc.\) experimenta) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 492. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 473. Td
+(una de las situaciones descritas anteriormente.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 454. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 435. Td
+(Las violaciones de datos personales pueden no ser fácilmente reconocibles, por lo que cualquier empleado que) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 421. Td
+(sospeche o dude de que un incidente de seguridad pueda dar lugar a una violación de datos personales debe) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 407. Td
+(informar inmediatamente al responsable global de protección de datos, al responsable alemán de protección de) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 393. Td
+(datos y al departamento global de TI. Esto último se aplica incluso si se desconoce si los datos personales se han) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 379. Td
+(visto afectados.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 360. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 341. Td
+(Notificación de la sospecha de violación de datos al responsable global de protección de datos, al responsable) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 327. Td
+(alemán de protección de datos y al departamento global de TI) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 308. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 289. Td
+(Las leyes de protección de datos y, en particular, el RGPD exigen que las violaciones de datos personales se) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 275. Td
+(notifiquen a las autoridades de control competentes en un plazo máximo de 72 horas desde que GRT tenga) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 261. Td
+(conocimiento de la violación, a menos que sea improbable que la violación de datos personales suponga un) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 247. Td
+(riesgo para los derechos y libertades de las personas físicas.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 228. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 209. Td
+(Por lo tanto, todas las sospechas de violaciones de datos deben notificarse inmediatamente, sin demoras) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 195. Td
+(indebidas, al responsable global de protección de datos y al responsable alemán de protección de datos \(ambos a) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 181. Td
+(través dedataprivacy.de@grunenthal.com \) y al departamento de TI global \(it-incident@grunenthal.com \).) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 162. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 143. Td
+(Al mismo tiempo, toda la documentación relacionada también debe remitirse al responsable global de protección) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 129. Td
+(de datos, al responsable alemán de protección de datos y a TI global. Además, el responsable global de) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 115. Td
+(protección de datos, el responsable alemán de protección de datos y/o TI global pueden solicitar información) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 101. Td
+(adicional para comprender mejor las características de la violación de datos personales en un plazo breve, con el) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 87. Td
+(fin de poder cumplir con los plazos requeridos.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 68. Td
+( ) Tj
+ET
+endstream
+endobj
+17 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 612. 792.]
+/Contents 18 0 R
+>>
+endobj
+18 0 obj
+<<
+/Length 4574
+>>
+stream
+0.200025 w
+0 G
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 738. Td
+(Preferiblemente, el coordinador de protección de datos responsable del área en la que se ha producido la) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 724. Td
+(violación de datos personales coordinará todas las acciones necesarias para satisfacer las solicitudes del) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 710. Td
+(responsable global de protección de datos, el responsable alemán de protección de datos y/o el departamento de) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 696. Td
+(TI global.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 677. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 658. Td
+(Evaluación de la sospecha de violación de datos) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 639. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 620. Td
+(Se debe realizar lo antes posible, y en cualquier caso en las primeras 72 horas tras tener conocimiento de ella,) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 606. Td
+(una evaluación para determinar si la sospecha de violación de datos personales debe ser comunicada a las) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 592. Td
+(autoridades.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 573. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 554. Td
+(La evaluación debe ser realizada por el responsable global de protección de datos, el responsable alemán de) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 540. Td
+(protección de datos y, si es necesario, el departamento global de TI.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 521. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 502. Td
+(Tras analizar el caso, el responsable global de protección de datos, el responsable alemán de protección de datos) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 488. Td
+(y, si es necesario, el departamento global de TI, formarán y compartirán su opinión sobre si la violación de datos) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 474. Td
+(personales debe ser notificada a las autoridades y a las personas afectadas con el responsable global de) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 460. Td
+(cumplimiento normativo y el asesor jurídico. Si se considera necesario, el responsable global de protección de) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 446. Td
+(datos y el responsable alemán de protección de datos también asesorarán sobre si deben participar otros) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 432. Td
+(responsables locales de protección de datos o equipos jurídicos, en caso de que la violación de datos personales) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 418. Td
+(afecte a otras entidades de GRT.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 399. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 380. Td
+(Notificación y comunicación de la violación) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 361. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 342. Td
+(La transparencia permite a las personas afectadas reaccionar y proteger sus propios intereses cuando se produce) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 328. Td
+(una violación de datos personales. Además, ayuda a comprender los factores subyacentes que causaron la) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 314. Td
+(violación de datos personales y proporciona a los reguladores la información que necesitan para desempeñar sus) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 300. Td
+(funciones de supervisión.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 281. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 262. Td
+(Notificación a una autoridad supervisora) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 243. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 224. Td
+(El responsable global de protección de datos, el responsable alemán de protección de datos y, si es necesario, el) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 210. Td
+(departamento global de TI, emitirán un dictamen sobre si la violación de datos personales debe notificarse a las) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 196. Td
+(autoridades.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 177. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 158. Td
+(Cuando el responsable global de protección de datos y el responsable alemán de protección de datos \(si es) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 144. Td
+(necesario, en coordinación con el departamento global de TI\) concluyan que la violación de datos personales) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 130. Td
+(debe ser notificada a las autoridades, dicha opinión se compartirá con el responsable global de cumplimiento y el) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 116. Td
+(consejero general, quienes decidirán en última instancia sobre dicha notificación en coordinación con el miembro) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 102. Td
+(del Consejo Ejecutivo responsable del área afectada por la violación de datos personales.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 83. Td
+( ) Tj
+ET
+endstream
+endobj
+19 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 612. 792.]
+/Contents 20 0 R
+>>
+endobj
+20 0 obj
+<<
+/Length 4659
+>>
+stream
+0.200025 w
+0 G
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 738. Td
+(La notificación a las autoridades será realizada por el responsable de protección de datos alemán o local, según) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 724. Td
+(corresponda. Además, si la violación de datos personales debe notificarse a una autoridad supervisora no) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 710. Td
+(alemana, la notificación se realizará en coordinación con el departamento jurídico y de cumplimiento normativo) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 696. Td
+(local y el director general correspondiente.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 677. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 658. Td
+(Comunicación de la violación de datos personales al interesado) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 639. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 620. Td
+(El responsable global de protección de datos, el responsable alemán de protección de datos y, si es necesario, el) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 606. Td
+(departamento global de TI, deben emitir un dictamen sobre si la violación de datos personales también debe) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 592. Td
+(comunicarse a las personas afectadas. Esta comunicación tiene por objeto ayudar a las personas afectadas a) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 578. Td
+(tomar las medidas necesarias para protegerse.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 559. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 540. Td
+(En cualquier caso, la decisión final sobre la comunicación de una violación de datos personales a las personas) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 526. Td
+(afectadas la tomarán el responsable global de cumplimiento normativo y el consejero general, en coordinación) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 512. Td
+(con el miembro del Consejo de Administración responsable del área afectada por la violación de datos) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 498. Td
+(personales.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 479. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 460. Td
+(La comunicación a las personas afectadas correrá a cargo del responsable alemán o local de protección de datos,) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 446. Td
+(según corresponda. Además, cuando la violación de datos personales afecte a una filial de GRT, la comunicación) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 432. Td
+(se llevará a cabo en coordinación con el departamento jurídico y de cumplimiento normativo local y el director) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 418. Td
+(general correspondiente.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 399. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 380. Td
+(Mantenimiento de un registro de violaciones de datos personales) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 361. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 342. Td
+(El responsable global de protección de datos y el responsable alemán de protección de datos llevarán un registro) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 328. Td
+(de todas las sospechas de violaciones de datos personales, ya sean confirmadas o no.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 309. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 290. Td
+(Además, si la violación de datos personales está relacionada con un incidente de seguridad informática, deberá) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 276. Td
+(ser registrada en la herramienta Ivanti por el departamento de TI global.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 257. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 238. Td
+(Violaciones de datos personales por parte de terceros \(procesadores de datos\) que tratan datos personales en) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 224. Td
+(nombre de GRT) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 205. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 186. Td
+(GRT es responsable de las violaciones de datos personales de las actividades de terceros \(es decir,) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 172. Td
+(procesadores de datos\) que están contratados para procesar datos personales en su nombre \(es decir,) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 158. Td
+(proveedores que prestan servicios en la nube o de nómina, etc.\).) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 139. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 120. Td
+(Dichas relaciones comerciales deben regirse siempre por un contrato que estipule que el encargado del) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 106. Td
+(tratamiento de datos ayudará a GRT a garantizar el cumplimiento de las leyes de privacidad de datos, incluida la) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 92. Td
+(obligación de informar a GRT sin demora injustificada de las sospechas de violaciones de datos personales. Si el) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 78. Td
+(encargado del tratamiento de datos descubre otros detalles relacionados con la violación de datos personales,) Tj
+ET
+endstream
+endobj
+21 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 612. 792.]
+/Contents 22 0 R
+>>
+endobj
+22 0 obj
+<<
+/Length 3958
+>>
+stream
+0.200025 w
+0 G
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 738. Td
+(deberá comunicarlos a GRT tan pronto como estén disponibles.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 719. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 700. Td
+(Como regla general, las actividades descritas en esta política \(es decir, evaluar la violación de datos personales,) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 686. Td
+(decidir si la violación de datos personales debe notificarse a las autoridades o comunicarse a las personas) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 672. Td
+(afectadas, etc.\) siempre serán realizadas por GRT y no por un procesador de datos. Cualquier desviación de esta) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 658. Td
+(regla siempre deberá ser aprobada previamente por el Director de Cumplimiento Global y el Asesor Jurídico.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 639. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 620. Td
+(Prevención de violaciones de datos personales) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 601. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 582. Td
+(GRT está siempre expuesta a violaciones de datos personales, incluso si se han adoptado las medidas técnicas y) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 568. Td
+(organizativas adecuadas. Sin embargo, la probabilidad de que se produzcan violaciones de datos personales) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 554. Td
+(puede minimizarse si se toman ciertas medidas de protección. Además, el impacto de una violación de datos) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 540. Td
+(personales en los derechos y libertades de las personas afectadas también puede reducirse en caso de que el) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 526. Td
+(riesgo se materialice.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 507. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 488. Td
+(La probabilidad de que se produzca una violación de datos personales y el impacto de la misma pueden) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 474. Td
+(minimizarse si, por ejemplo:) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 455. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 436. Td
+(Se identifican de antemano los procesos y flujos de datos en los que intervienen datos personales.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 417. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 398. Td
+(Se identifican las ubicaciones \(ya sean físicas o digitales\) donde se almacenan los datos personales.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 379. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 360. Td
+(Se aplican las medidas técnicas y organizativas adecuadas para proteger los datos personales \(es decir, cifrado,) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 346. Td
+(seguridad y controles de acceso\) y estas han sido evaluadas por las áreas pertinentes, como la de TI.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 327. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 308. Td
+(evaluadas por los departamentos pertinentes, como el de TI.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 289. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 270. Td
+(Los datos personales altamente sensibles o confidenciales se marcan como tales y se protegen en consecuencia.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 251. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 232. Td
+(Se han aplicado técnicas de seudonimización o anonimización a los datos personales siempre que ha sido) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 218. Td
+(posible.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 199. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 180. Td
+(Usted comprende los principales riesgos para los datos personales en su área y los controles establecidos para) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 166. Td
+(mitigarlos.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 147. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 128. Td
+(Las actividades de tratamiento que afectan a los datos personales se registran y se mantienen actualizadas en el) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 114. Td
+(registro de 2B Advice.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 95. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 76. Td
+(GRT elige terceros fiables para el tratamiento de datos personales.) Tj
+ET
+endstream
+endobj
+23 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 612. 792.]
+/Contents 24 0 R
+>>
+endobj
+24 0 obj
+<<
+/Length 2829
+>>
+stream
+0.200025 w
+0 G
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 738. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 719. Td
+(Los terceros que tratan datos personales en nombre de GRT están obligados contractualmente a ayudar a GRT a) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 705. Td
+(cumplir los requisitos legales en materia de protección de datos.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 686. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 667. Td
+(Plantillas y formularios necesarios para el proceso) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 648. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 629. Td
+(Plantilla para comunicar las violaciones de datos personales a las personas afectadas.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 610. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 591. Td
+(Referencias) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 572. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 553. Td
+(Procedimiento operativo estándar sobre la gestión de incidentes de seguridad.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 534. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 515. Td
+(Índice histórico) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 496. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 477. Td
+(n/a) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 458. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 439. Td
+(Revisión/n.º de documento) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 420. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 401. Td
+(Descripción de los cambios) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 382. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 363. Td
+(01) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 344. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 325. Td
+(Nuevo documento) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 306. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 287. Td
+(8. Apéndice 1: México ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 268. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 249. Td
+(8.1. Objetivo) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 230. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 211. Td
+(El presente Apéndice tiene por objeto adaptar la Política Global para vulneraciones de seguridad de Grünenthal a) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 197. Td
+(la normativa mexicana en materia de protección de datos personales.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 178. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 159. Td
+(8.2 Ámbito ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 140. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 121. Td
+(El presente Apéndice y los procedimientos que en él se establecen serán aplicables cuando ocurra una) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 107. Td
+(vulneración de datos personales y, por motivo del territorio de origen de los datos, los efectos del tratamiento o) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 93. Td
+(cualquier otro criterio previsto en la legislación aplicable o en el derecho internacional, resulte aplicable la) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 79. Td
+(normativa mexicana en materia de protección de datos personales.) Tj
+ET
+endstream
+endobj
+25 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 612. 792.]
+/Contents 26 0 R
+>>
+endobj
+26 0 obj
+<<
+/Length 3750
+>>
+stream
+0.200025 w
+0 G
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 738. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 719. Td
+(Este Apéndice deberá de ser complementado con las políticas locales en materia vulneraciones de seguridad o) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 705. Td
+(de datos personales adoptadas por las filiales de GRT, en particular por Grünenthal de México, S.A. de C.V., las) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 691. Td
+(cuales desarrollan con mayor detalle los roles, procedimientos y metodologías necesarios para garantizar el) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 677. Td
+(cumplimiento de la normativa mexicana. ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 658. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 639. Td
+(8.3 Responsabilidad) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 620. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 601. Td
+(El segmento 3, Responsabilidades, de la Política Global de GRT se mantendrá con las siguientes modificaciones:) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 568. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 549. Td
+(Empleados: se sustituye la obligación de notificar al responsable alemán de protección de datos personales; en) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 535. Td
+(su lugar, deberán notificar al Equipo de Protección de Datos correspondiente a la filial. En caso de ser la filiar en) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 521. Td
+(México \(Datos.PersonalesMX@grunenthal.com\).) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 502. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 483. Td
+(TI Global: sin adecuaciones.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 464. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 445. Td
+(Equipo de Protección de Datos de la Filial \(denominado en México como Departamento de Datos Personales\): se) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 431. Td
+(elimina la obligación de notificar la vulneración a las autoridades correspondientes al no ser un requisito legal en) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 417. Td
+(México. ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 398. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 379. Td
+(Delegado de Protección de Datos Mexicano \(externo\): se elimina la obligación de crear un dictamen para evaluar) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 365. Td
+(la necesidad de notificar a las autoridades correspondientes, al no ser esta notificación una obligación legal. ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 346. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 327. Td
+(Responsable Global de Protección de Datos Personales \(GDPO\), como representante del Responsable Global de) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 313. Td
+(Cumplimiento: sin adecuaciones.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 294. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 275. Td
+(Coordinadores de Protección de Datos: sin adecuaciones.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 256. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 237. Td
+(Responsable Global de Cumplimiento: se elimina su obligación de aprobar las notificaciones a la autoridad a las) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 223. Td
+(autoridades correspondientes, al no ser dicha notificación una obligación legal.  ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 204. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 185. Td
+(Consejero General: se elimina su obligación de aprobar las notificaciones a la autoridad, al no ser dicha) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 171. Td
+(notificación una obligación legal.  ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 152. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 133. Td
+(Miembro del Consejo Ejecutivo responsable del área afectada: se elimina su obligación de aprobar las) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 119. Td
+(notificaciones a la autoridad, al no ser dicha notificación una obligación legal.  ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 100. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 81. Td
+(8.5.  Proceso. ) Tj
+ET
+endstream
+endobj
+27 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 612. 792.]
+/Contents 28 0 R
+>>
+endobj
+28 0 obj
+<<
+/Length 4176
+>>
+stream
+0.200025 w
+0 G
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 738. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 719. Td
+(8.5.1. Identificación de una posible violación de datos personales ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 700. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 681. Td
+(El proceso establecido en el segmento 5.1 Identificación de una posible violación de datos personales sigue) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 667. Td
+(siendo válido para su aplicación en México. ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 648. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 629. Td
+(8.5.2. Notificación de la sospecha de violación de datos al responsable global de protección de datos, al Equipo) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 615. Td
+(de Protección de Datos y al departamento global de TI. ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 596. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 577. Td
+(El proceso establecido en el segmento 5.2. Notificación de la sospecha de violación de datos al responsable) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 563. Td
+(alemán de protección de datos y al departamento global de TI de la política global de GRT sigue siendo válido,) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 549. Td
+(solo con las siguientes modificaciones: ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 530. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 511. Td
+(No existe una obligación de notificar a las autoridades en la legislación mexicana, aunque en caso de que la) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 497. Td
+(información pueda afectar de forma significativa los derechos patrimoniales o morales de las personas titulares,) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 483. Td
+(se deberá de notificar de manera inmediata a los titulares. ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 464. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 445. Td
+(Se reemplaza la obligación de notificar una posible violación de datos y remitir toda la documentación) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 431. Td
+(correspondiente al responsable alemán de protección de datos personales; dicha notificación y entrega de) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 417. Td
+(información deberá realizarse al Equipo de Protección de Datos de la filial correspondiente. En el caso de la filial) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 403. Td
+(de GRT en México \(Datos.PersonalesMX@grunenthal.com\).) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 384. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 365. Td
+(El coordinador de protección de datos responsable deberá cumplir con las solicitudes del Equipo de Protección de) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 351. Td
+(Datos de la filial correspondiente: ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 332. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 313. Td
+(8.5.3. Evaluación de sospecha de violación de datos. ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 294. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 275. Td
+(El proceso establecido en el segmento 5.3 Evaluación de la sospecha de violación de datos de la política global) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 261. Td
+(de GRT se mantiene vigente; sin embargo, en lugar de centrarse en la necesidad de notificar a la autoridad) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 247. Td
+(correspondiente, se enfocará en la evaluación de la necesidad de notificar a los titulares cuyos datos hayan sido) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 233. Td
+(vulnerados.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 214. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 195. Td
+(La evaluación deberá realizarse conjuntamente por el responsable global de protección de datos, el equipo de) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 181. Td
+(protección de datos de la filial correspondiente y, de ser necesario, el departamento global de TI. Dicho análisis) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 167. Td
+(deberá determinar si los datos afectados comprometen de manera significativa los derechos morales o) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 153. Td
+(patrimoniales de los titulares.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 134. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 115. Td
+(Esta evaluación deberá de realizar se manera escrita y documentada. ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 96. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 77. Td
+(8.5.4 Notificación y comunicación de la violación. ) Tj
+ET
+endstream
+endobj
+29 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 612. 792.]
+/Contents 30 0 R
+>>
+endobj
+30 0 obj
+<<
+/Length 3447
+>>
+stream
+0.200025 w
+0 G
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 738. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 719. Td
+(8.5.4.1. Notificación a una autoridad supervisora. ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 700. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 681. Td
+(El subsegmento 5.4.1 Notificación a una autoridad supervisora de la política global de GRT no es aplicable en) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 667. Td
+(México al no existir una obligación legal. ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 648. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 629. Td
+(8.5.4.2. Comunicación de la violación de datos personales al interesado. ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 610. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 591. Td
+(La subsección 5.4.2 Comunicación de la violación de datos personales al interesado se mantiene vigente, con las) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 577. Td
+(siguientes modificaciones: ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 558. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 539. Td
+(Se sustituye al responsable alemán como la entidad corresponsable de emitir el dictamen sobre la necesidad de) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 525. Td
+(notificar a los interesados y de realizar dicha comunicación, estableciendo en su lugar al Equipo de Protección de) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 511. Td
+(Datos de la filial correspondiente.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 492. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 473. Td
+(8.5.5. Mantenimiento de un registro de violaciones de datos personales. ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 454. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 435. Td
+(Se mantiene el proceso establecido en la sección 5.5 de las políticas globales de GRT, solo se modifica a la) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 421. Td
+(entidad encargada de dicho que será el Equipo de Protección de Datos de GRT de la filial correspondiente. ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 402. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 383. Td
+(8.5.6. Violación de datos personales por parte de terceros \(procesadores de datos ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 364. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 345. Td
+(Se mantiene el proceso establecido en el segmento 5.6 Violaciones de datos Personales por parte de terceros) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 331. Td
+(\(procesadores de datos\) que tratan datos personales en nombre de GRT. ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 312. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 293. Td
+(8.5.7. Prevención de violaciones de datos personales. ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 274. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 255. Td
+(El proceso establecido en el segmento 5.7 Prevención de violaciones de datos personales de GRT se sigue) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 241. Td
+(aplicando de manera íntegra en México. ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 222. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 203. Td
+(8.5.8.  Plantilla y formularios necesarios para el proceso. ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 184. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 165. Td
+(Se agrega los siguientes documentos que funcionan como complementos a los procesos previamente) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 151. Td
+(establecidos. ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 132. Td
+( ) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 113. Td
+(Política de atención a vulneraciones de seguridad de datos personales de Grünenthal de México, S.A. de C.V,) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0 g
+54. 99. Td
+(filial de GRT en la región.) Tj
+ET
+endstream
+endobj
+1 0 obj
+<</Type /Pages
+/Kids [3 0 R 5 0 R 7 0 R 9 0 R 11 0 R 13 0 R 15 0 R 17 0 R 19 0 R 21 0 R 23 0 R 25 0 R 27 0 R 29 0 R ]
+/Count 14
+>>
+endobj
+31 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+32 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+33 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-Oblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+34 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-BoldOblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+35 0 obj
+<<
+/Type /Font
+/BaseFont /Courier
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+36 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+37 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-Oblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+38 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-BoldOblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+39 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Roman
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+40 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+41 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Italic
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+42 0 obj
+<<
+/Type /Font
+/BaseFont /Times-BoldItalic
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+43 0 obj
+<<
+/Type /Font
+/BaseFont /ZapfDingbats
+/Subtype /Type1
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+44 0 obj
+<<
+/Type /Font
+/BaseFont /Symbol
+/Subtype /Type1
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+2 0 obj
+<<
+/ProcSet [/PDF /Text /ImageB /ImageC /ImageI]
+/Font <<
+/F1 31 0 R
+/F2 32 0 R
+/F3 33 0 R
+/F4 34 0 R
+/F5 35 0 R
+/F6 36 0 R
+/F7 37 0 R
+/F8 38 0 R
+/F9 39 0 R
+/F10 40 0 R
+/F11 41 0 R
+/F12 42 0 R
+/F13 43 0 R
+/F14 44 0 R
+>>
+/XObject <<
+>>
+>>
+endobj
+45 0 obj
+<<
+/Producer (jsPDF 4.2.1)
+/CreationDate (D:20260616122105-06'00')
+>>
+endobj
+46 0 obj
+<<
+/Type /Catalog
+/Pages 1 0 R
+/OpenAction [3 0 R /FitH null]
+/PageLayout /OneColumn
+>>
+endobj
+xref
+0 47
+0000000000 65535 f 
+0000054479 00000 n 
+0000056390 00000 n 
+0000000015 00000 n 
+0000000120 00000 n 
+0000003413 00000 n 
+0000003518 00000 n 
+0000007117 00000 n 
+0000007222 00000 n 
+0000010622 00000 n 
+0000010728 00000 n 
+0000014366 00000 n 
+0000014473 00000 n 
+0000017106 00000 n 
+0000017213 00000 n 
+0000021368 00000 n 
+0000021475 00000 n 
+0000025966 00000 n 
+0000026073 00000 n 
+0000030700 00000 n 
+0000030807 00000 n 
+0000035519 00000 n 
+0000035626 00000 n 
+0000039637 00000 n 
+0000039744 00000 n 
+0000042626 00000 n 
+0000042733 00000 n 
+0000046536 00000 n 
+0000046643 00000 n 
+0000050872 00000 n 
+0000050979 00000 n 
+0000054625 00000 n 
+0000054751 00000 n 
+0000054882 00000 n 
+0000055016 00000 n 
+0000055154 00000 n 
+0000055278 00000 n 
+0000055407 00000 n 
+0000055539 00000 n 
+0000055675 00000 n 
+0000055803 00000 n 
+0000055930 00000 n 
+0000056059 00000 n 
+0000056192 00000 n 
+0000056294 00000 n 
+0000056643 00000 n 
+0000056729 00000 n 
+trailer
+<<
+/Size 47
+/Root 46 0 R
+/Info 45 0 R
+/ID [ <27262DE78DFCC9CCE943C44925713A36> <27262DE78DFCC9CCE943C44925713A36> ]
+>>
+startxref
+56833
+%%EOF

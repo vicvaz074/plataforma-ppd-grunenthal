@@ -42,11 +42,11 @@ export default function TrainingModulePage() {
       <div className="bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <div className="bg-emerald-50 p-3 rounded-2xl border border-emerald-100">
-                <GraduationCap className="h-7 w-7 text-emerald-600" />
+            <div className="flex min-w-0 items-center gap-4">
+              <div className="bg-blue-50 p-3 rounded-2xl border border-blue-100">
+                <GraduationCap className="h-7 w-7 text-blue-600" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <h1 className="text-2xl font-black tracking-tight text-slate-900">Módulo de Capacitación</h1>
                 <p className="text-sm text-slate-500 mt-0.5">
                   Programa de Capacitación, Actualización y Concientización · SGSDP
@@ -64,8 +64,8 @@ export default function TrainingModulePage() {
 
       {/* Tabs — clean, padded, cohesive design with sliding pill background */}
       <div className="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-          <div className="flex overflow-x-auto scrollbar-hide items-center gap-1.5 p-1 bg-slate-100/80 rounded-2xl border border-slate-200/50 w-full md:w-fit">
+        <div className="mx-auto min-w-0 max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
+          <div className="flex min-w-0 max-w-full items-center gap-1.5 overflow-x-auto rounded-2xl border border-slate-200/50 bg-slate-100/80 p-1 scrollbar-hide md:w-fit">
             {TABS.map(tab => {
               const isActive = activeTab === tab.key
               return (
@@ -87,7 +87,7 @@ export default function TrainingModulePage() {
                   )}
                   
                   <span className="relative z-10 flex items-center gap-2.5">
-                    <span className={`transition-colors duration-300 ${isActive ? "text-emerald-600" : ""}`}>{tab.icon}</span>
+                    <span className={`transition-colors duration-300 ${isActive ? "text-blue-600" : ""}`}>{tab.icon}</span>
                     <span className="hidden sm:inline">{tab.label}</span>
                     <span className="sm:hidden">{tab.shortLabel}</span>
                   </span>
@@ -99,7 +99,7 @@ export default function TrainingModulePage() {
       </div>
 
       {/* Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="mx-auto min-w-0 max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <motion.div key={activeTab} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
           {activeTab === "dashboard" && <DashboardReportes />}
           {activeTab === "catalogo" && <CatalogoProgramas />}
