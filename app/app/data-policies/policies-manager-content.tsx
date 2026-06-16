@@ -43,7 +43,7 @@ import { useToast } from "@/components/ui/use-toast"
 import { ArcoModuleShell } from "@/components/arco-module-shell"
 import { DATA_POLICIES_META, DATA_POLICIES_NAV } from "@/components/arco-module-config"
 import { ensureBrowserStorageEvents } from "@/lib/browser-storage-events"
-import { getFileById } from "@/lib/fileStorage"
+import { createFileURL, getFileById } from "@/lib/fileStorage"
 import { cn } from "@/lib/utils"
 import {
   POLICY_TEMPLATE_SECTIONS,
@@ -620,7 +620,7 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
       })
       return
     }
-    window.open(file.content, "_blank", "noopener,noreferrer")
+    window.open(createFileURL(file.content), "_blank", "noopener,noreferrer")
   }
 
   const exportPolicyToWord = async (record: PolicyRecord) => {

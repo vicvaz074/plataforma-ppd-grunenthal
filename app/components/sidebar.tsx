@@ -28,6 +28,7 @@ import {
   Lock,
 } from "lucide-react"
 import { hasModuleAccess } from "@/lib/user-permissions"
+import { GRUNENTHAL_LOGO } from "@/lib/grunenthal-assets"
 
 type RouteKey =
   | "/rat"
@@ -155,10 +156,10 @@ export function Sidebar() {
         >
           <Link href="/" className="flex items-center">
             <img
-              src="/images/logo_davaragovernance.png"
-              alt="Davara Governance"
+              src={GRUNENTHAL_LOGO.path}
+              alt="Grünenthal"
               width={180}
-              style={{ objectFit: "contain", width: "180px", height: "auto", filter: "invert(1) brightness(100%) contrast(100%)" }}
+              style={{ objectFit: "contain", width: "180px", height: "auto", filter: GRUNENTHAL_LOGO.whiteFilter }}
             />
           </Link>
         </div>

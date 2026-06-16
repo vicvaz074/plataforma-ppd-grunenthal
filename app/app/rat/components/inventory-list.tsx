@@ -34,7 +34,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useToast } from "@/components/ui/use-toast"
 import type { Inventory, SubInventory } from "../types"
-import { getAllFiles, getFileById } from "@/lib/fileStorage"
+import { createFileURL, getAllFiles, getFileById } from "@/lib/fileStorage"
 import {
   ChevronDown,
   Eye,
@@ -238,16 +238,15 @@ export function InventoryList({
       toast({ title: "Error", description: "No se pudo abrir el archivo.", variant: "destructive" })
       return
     }
-    if (!file.content.startsWith("data:") && !file.content.startsWith("blob:")) {
-      toast({ title: "Error", description: "El formato del archivo no es válido.", variant: "destructive" })
-      return
-    }
-
     const anchor = document.createElement("a")
-    anchor.href = file.content
-    anchor.target = "_blank"
-    anchor.rel = "noopener noreferrer"
-    anchor.click()
+    try {
+      anchor.href = createFileURL(file.content)
+      anchor.target = "_blank"
+      anchor.rel = "noopener noreferrer"
+      anchor.click()
+    } catch {
+      toast({ title: "Error", description: "El formato del archivo no es válido.", variant: "destructive" })
+    }
   }
 
 const generatePDF = (inventory: Inventory) => {

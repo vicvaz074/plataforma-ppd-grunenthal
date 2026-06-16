@@ -23,6 +23,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import Image from "next/image"
 import { useTheme } from "next-themes"
+import { GRUNENTHAL_LOGO } from "@/lib/grunenthal-assets"
 
 export default function LoginPage() {
   const { language, setLanguage } = useLanguage()
@@ -163,10 +164,11 @@ export default function LoginPage() {
           <div className="flex justify-center mb-4">
 
             <Image
-              src={theme === "dark" ? "/images/davara_logo.png" : "/images/davara_login.png"}
-              alt="Davara Abogados"
+              src={GRUNENTHAL_LOGO.path}
+              alt="Grünenthal"
               width={theme === "dark" ? 180 : 252}
-              height={theme === "dark" ? 60 : 84}
+              height={theme === "dark" ? 92 : 129}
+              style={{ objectFit: "contain", filter: theme === "dark" ? GRUNENTHAL_LOGO.whiteFilter : GRUNENTHAL_LOGO.blackFilter }}
               unoptimized // 👈 importante para que no intente usar /_next/image
             />
 

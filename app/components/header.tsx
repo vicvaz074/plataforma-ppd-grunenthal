@@ -36,6 +36,7 @@ import {
   type PlatformNotification,
 } from "@/lib/notification-engine"
 import { DAVARA_STORAGE_EVENT, ensureBrowserStorageEvents } from "@/lib/browser-storage-events"
+import { GRUNENTHAL_LOGO } from "@/lib/grunenthal-assets"
 
 export function Header({ withSidebar = false }: { withSidebar?: boolean }) {
   const { theme, setTheme } = useTheme()
@@ -171,10 +172,10 @@ export function Header({ withSidebar = false }: { withSidebar?: boolean }) {
           >
             <Link href="/" className="flex items-center">
               <img
-                src="/images/logo_davaragovernance.png"
-                alt="Davara Governance"
+                src={GRUNENTHAL_LOGO.path}
+                alt="Grünenthal"
                 width={150}
-                style={{ objectFit: "contain", width: "150px", height: "auto" }}
+                style={{ objectFit: "contain", width: "150px", height: "auto", filter: GRUNENTHAL_LOGO.blackFilter }}
               />
             </Link>
           </div>

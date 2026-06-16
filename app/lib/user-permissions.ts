@@ -96,6 +96,10 @@ const DEMO_USER_PERMISSIONS: Record<string, boolean> = (() => {
   return perms
 })()
 
+export const GRUNENTHAL_ADMIN_EMAIL = "sofia.jaimes@grunenthal.com"
+export const GRUNENTHAL_ADMIN_NAME = "Sofia Jaimes"
+const GRUNENTHAL_ADMIN_PASSWORD_HASH = "$2b$10$QHkdAHpW2GrOdg1CqIUeLuLaSzXHpGUGQYAyHBkrbTdHcFrpmg2UO"
+
 // ─── Storage Keys ────────────────────────────────────────────────────────────
 
 const USERS_KEY = "platform_users"
@@ -109,6 +113,7 @@ const FULL_ACCESS_EMAILS = new Set([
   "veronica.garciao@femsa.com",
   "jorge.valderrama@externo.mx",
   "karen.mendoza@yza.mx",
+  GRUNENTHAL_ADMIN_EMAIL,
 ])
 
 // ─── User CRUD ───────────────────────────────────────────────────────────────
@@ -165,6 +170,28 @@ export async function ensureDemoUser(): Promise<void> {
     })
     saveUsers(users)
   }
+}
+
+export function ensureGrunenthalAdminUser(): void {
+  const users = getUsers()
+  const idx = users.findIndex((u) => u.email === GRUNENTHAL_ADMIN_EMAIL)
+  const user: PlatformUser = {
+    name: GRUNENTHAL_ADMIN_NAME,
+    email: GRUNENTHAL_ADMIN_EMAIL,
+    password: idx >= 0 ? users[idx].password || GRUNENTHAL_ADMIN_PASSWORD_HASH : GRUNENTHAL_ADMIN_PASSWORD_HASH,
+    role: "admin",
+    approved: true,
+    modulePermissions: { ...ROLE_PRESETS.admin },
+    createdAt: idx >= 0 ? users[idx].createdAt : new Date().toISOString(),
+  }
+
+  if (idx >= 0) {
+    users[idx] = { ...users[idx], ...user }
+  } else {
+    users.push(user)
+  }
+
+  saveUsers(users)
 }
 
 export function addUser(user: Omit<PlatformUser, "createdAt">): boolean {

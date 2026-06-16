@@ -817,6 +817,8 @@ export default function DocumentsAndClausesPage() {
       const title = (metadata.title as string) || file.name
       const typeLabel = normalizeType(file.type || file.name)
 
+      const fileUrl = createFileURL(file.content)
+
       return {
         id: file.id,
         title,
@@ -824,8 +826,8 @@ export default function DocumentsAndClausesPage() {
         type: typeLabel,
         category,
         tags,
-        content: file.content,
-        downloadUrl: file.content,
+        content: fileUrl,
+        downloadUrl: fileUrl,
         source: "custom" as const,
         uploadedAt: file.uploadDate,
         metadata,

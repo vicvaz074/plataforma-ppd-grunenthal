@@ -18,7 +18,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { cn } from "@/lib/utils"
-import { getAllFiles } from "@/lib/fileStorage"
+import { createFileURL, getAllFiles } from "@/lib/fileStorage"
 import {
   buildModuleExportData,
   getCurrentModuleExportDefinition,
@@ -419,7 +419,7 @@ export function ModuleWorkspaceShell({
 
     triggerDataUrlDownloads(
       moduleExportData.files.map((file, index) => ({
-        href: file.content,
+        href: createFileURL(file.content),
         filename: file.name || `documento-${index + 1}`,
       })),
     )
