@@ -34,6 +34,7 @@ const RAT_VALIDATION_STORAGE_KEY = "grunenthal_rat_validation_report_v1"
 
 const SEEDED_AT = "2026-01-01T00:00:00.000Z"
 const TRAINING_PROGRAM_ID = "grunenthal-training-privacy-2026"
+const STATIC_PREVIEW_EXTENSIONS = new Set(["docx", "docm"])
 
 type JsonRecord = Record<string, unknown>
 type RatPdfLink = (typeof GRUNENTHAL_RAT_PDF_LINKS)[number]
@@ -78,7 +79,14 @@ function seededFileId(assetId: string) {
   return `grunenthal-file-${assetId}`
 }
 
+function staticPreviewPathForAsset(asset: GrunenthalAsset) {
+  if (!STATIC_PREVIEW_EXTENSIONS.has(asset.extension)) return undefined
+  return asset.path.replace(/\.(docx|docm)$/i, "-preview.html")
+}
+
 function buildStoredFile(asset: GrunenthalAsset): StoredFile {
+  const previewPath = staticPreviewPathForAsset(asset)
+
   return {
     id: seededFileId(asset.id),
     name: asset.name,
@@ -95,9 +103,14 @@ function buildStoredFile(asset: GrunenthalAsset): StoredFile {
       module: asset.module,
       publicPath: asset.path,
       sourceRelativePath: asset.sourceRelativePath,
+      ...(previewPath ? { previewPath } : {}),
       folder: asset.folder,
       extension: asset.extension,
       title: asset.displayName,
+      createdAt: SEEDED_AT,
+      createdBy: "Admin",
+      lastUpdated: SEEDED_AT,
+      lastUpdatedBy: "Admin",
       ...(asset.ratAreaFolder ? { ratAreaFolder: asset.ratAreaFolder } : {}),
       ...(asset.ratPdfTitle ? { ratPdfTitle: asset.ratPdfTitle } : {}),
     },

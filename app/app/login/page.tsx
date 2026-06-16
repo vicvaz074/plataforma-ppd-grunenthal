@@ -23,7 +23,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import Image from "next/image"
 import { useTheme } from "next-themes"
-import { GRUNENTHAL_LOGO } from "@/lib/grunenthal-assets"
+import { CLIENT_BRANDING } from "@/lib/client-branding"
 
 export default function LoginPage() {
   const { language, setLanguage } = useLanguage()
@@ -164,14 +164,30 @@ export default function LoginPage() {
           <div className="flex justify-center mb-4">
 
             <Image
-              src={GRUNENTHAL_LOGO.path}
-              alt="Grünenthal"
-              width={theme === "dark" ? 180 : 252}
-              height={theme === "dark" ? 92 : 129}
-              style={{ objectFit: "contain", filter: theme === "dark" ? GRUNENTHAL_LOGO.whiteFilter : GRUNENTHAL_LOGO.blackFilter }}
+              src={theme === "dark" ? CLIENT_BRANDING.loginDarkLogoPath : CLIENT_BRANDING.loginLightLogoPath}
+              alt={CLIENT_BRANDING.productName}
+              width={252}
+              height={59}
+              style={{ objectFit: "contain" }}
               unoptimized // 👈 importante para que no intente usar /_next/image
             />
 
+          </div>
+          <div className="mb-12 mt-1 flex items-center justify-center border-t pt-6">
+            <img
+              src={CLIENT_BRANDING.clientLogoPath}
+              alt={CLIENT_BRANDING.clientName}
+              width={CLIENT_BRANDING.clientLogoWidths.login}
+              style={{
+                objectFit: "contain",
+                width: `${CLIENT_BRANDING.clientLogoWidths.login}px`,
+                height: "auto",
+                filter:
+                  theme === "dark"
+                    ? CLIENT_BRANDING.clientLogoWhiteFilter
+                    : CLIENT_BRANDING.clientLogoBlackFilter,
+              }}
+            />
           </div>
           <CardTitle className="text-2xl font-bold text-center">{isLogin ? t.loginTitle : t.registerTitle}</CardTitle>
           <CardDescription className="text-center">

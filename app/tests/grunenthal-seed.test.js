@@ -96,6 +96,29 @@ describe("personalización Grünenthal", () => {
     )
     assert.equal(storedFiles.length, 63)
     assert.equal(new Set(storedFiles.map((file) => file.id)).size, 63)
+    assert.equal(
+      storedFiles.every((file) => file.metadata.createdBy === "Admin"),
+      true,
+      "los archivos precargados sin autor deben aparecer como creados por Admin",
+    )
+
+    const wordAssets = assets.GRUNENTHAL_DOCUMENT_MANIFEST.filter((asset) =>
+      ["docx", "docm"].includes(asset.extension),
+    )
+    assert.equal(wordAssets.length, 22)
+
+    for (const asset of wordAssets) {
+      const storedFile = storedFiles.find((file) => file.id === `grunenthal-file-${asset.id}`)
+      const expectedPreviewPath = asset.path.replace(/\.(docx|docm)$/i, "-preview.html")
+
+      assert.ok(storedFile, `debe existir el archivo precargado ${asset.id}`)
+      assert.equal(storedFile.metadata.previewPath, expectedPreviewPath)
+      assert.equal(
+        fs.existsSync(path.join(publicDir, expectedPreviewPath)),
+        true,
+        `debe existir el preview HTML de ${asset.name}`,
+      )
+    }
 
     const ratPdfs = storedFiles.filter((file) => file.category === "rat-inventory")
     assert.equal(ratPdfs.length, 33)

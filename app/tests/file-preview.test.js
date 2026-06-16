@@ -1,0 +1,87 @@
+const { before, describe, it } = require("node:test")
+const assert = require("node:assert/strict")
+const path = require("node:path")
+const { pathToFileURL } = require("node:url")
+
+const appDir = path.join(__dirname, "..")
+
+async function importModule(relativePath) {
+  const imported = await import(pathToFileURL(path.join(appDir, relativePath)).href)
+  return imported.default ? { ...imported.default, ...imported } : imported
+}
+
+describe("visor de archivos", () => {
+  let filePreview
+
+  before(async () => {
+    filePreview = await importModule("lib/file-preview.ts")
+  })
+
+  it("usa el preview HTML seguro para un aviso DOCX público", () => {
+    const descriptor = filePreview.buildFilePreviewDescriptor({
+      id: "grunenthal-privacy-notices-manualap-grunentha-davara-v3",
+      name: "ManualAP_Grünentha Davara v3.docx",
+      type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      size: 209007,
+      content: "/client/grunenthal/privacy-notices/manualap-grunentha-davara-v3.docx",
+      uploadDate: "2026-01-01T00:00:00.000Z",
+      category: "privacy-notice",
+      metadata: {
+        title: "ManualAP_Grünentha Davara v3",
+        module: "privacy-notices",
+        previewPath: "/client/grunenthal/privacy-notices/manualap-grunentha-davara-v3-preview.html",
+      },
+    })
+
+    assert.equal(descriptor.kind, "office")
+    assert.equal(
+      descriptor.fileUrl,
+      "/client/grunenthal/privacy-notices/manualap-grunentha-davara-v3.docx",
+    )
+    assert.equal(
+      descriptor.previewUrl,
+      "/client/grunenthal/privacy-notices/manualap-grunentha-davara-v3-preview.html",
+    )
+    assert.equal(descriptor.canEmbed, true)
+    assert.equal(descriptor.extension, "DOCX")
+    assert.equal(descriptor.title, "ManualAP_Grünentha Davara v3")
+  })
+
+  it("incrusta PDFs públicos directamente", () => {
+    const descriptor = filePreview.buildFilePreviewDescriptor({
+      id: "rat-pdf",
+      name: "Inventario.pdf",
+      type: "application/pdf",
+      size: 1234,
+      content: "/client/grunenthal/rat/comex/comex-ranking-de-efectividad.pdf",
+      uploadDate: "2026-01-01T00:00:00.000Z",
+      category: "rat-inventory",
+      metadata: {},
+    })
+
+    assert.equal(descriptor.kind, "pdf")
+    assert.equal(
+      descriptor.previewUrl,
+      "/client/grunenthal/rat/comex/comex-ranking-de-efectividad.pdf",
+    )
+    assert.equal(descriptor.canEmbed, true)
+    assert.equal(descriptor.extension, "PDF")
+  })
+
+  it("rechaza rutas inseguras antes de construir el preview", () => {
+    assert.throws(
+      () =>
+        filePreview.buildFilePreviewDescriptor({
+          id: "unsafe",
+          name: "unsafe.pdf",
+          type: "application/pdf",
+          size: 1,
+          content: "https://example.com/unsafe.pdf",
+          uploadDate: "2026-01-01T00:00:00.000Z",
+          category: "privacy-notice",
+          metadata: {},
+        }),
+      /URL de archivo no permitida/,
+    )
+  })
+})

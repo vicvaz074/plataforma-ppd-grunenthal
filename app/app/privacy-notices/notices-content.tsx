@@ -27,7 +27,7 @@ import {
   updateFile,
   updateFileMetadata,
 } from "@/lib/fileStorage";
-import { FileCheck2, FilePlus2, Files, ShieldCheck, Trash2 } from "lucide-react";
+import { Eye, FileCheck2, FilePlus2, Files, ShieldCheck, Trash2 } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
@@ -35,6 +35,7 @@ import {
   ArcoModuleShell,
   ModuleMetricCard,
 } from "@/components/arco-module-shell";
+import { FilePreviewDialog } from "@/components/file-preview-dialog";
 import {
   PRIVACY_NOTICES_META,
   PRIVACY_NOTICES_NAV,
@@ -347,6 +348,7 @@ export function PrivacyNoticesContent({ section }: PrivacyNoticesContentProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedDocument, setSelectedDocument] = useState<StoredFile | null>(null);
   const itemsPerPage = 10;
 
   const form = useForm<FormValues>({
@@ -418,23 +420,6 @@ export function PrivacyNoticesContent({ section }: PrivacyNoticesContentProps) {
     }
   };
 
-  const openFile = (fileContent: string) => {
-    if (!fileContent.startsWith("data:") && !fileContent.startsWith("blob:")) {
-      toast({
-        title: "Error",
-        description: "El formato del documento no es válido.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    const anchor = document.createElement("a");
-    anchor.href = fileContent;
-    anchor.target = "_blank";
-    anchor.rel = "noopener noreferrer";
-    anchor.click();
-  };
-
   const handleViewDocument = (notice: StoredFile) => {
     if (!notice.content) {
       toast({
@@ -444,19 +429,7 @@ export function PrivacyNoticesContent({ section }: PrivacyNoticesContentProps) {
       return;
     }
 
-    const shouldDownload = confirm(
-      "¿Desea descargar este documento? Presione Cancelar para verlo con un visor.",
-    );
-    if (shouldDownload) {
-      const link = document.createElement("a");
-      link.href = notice.content;
-      link.download = notice.name || "documento";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } else {
-      openFile(notice.content);
-    }
+    setSelectedDocument(notice);
   };
 
   const onSubmit = async (values: FormValues) => {
@@ -754,6 +727,7 @@ export function PrivacyNoticesContent({ section }: PrivacyNoticesContentProps) {
   });
 
   return (
+    <>
     <ArcoModuleShell
       moduleLabel={PRIVACY_NOTICES_META.moduleLabel}
       moduleTitle={PRIVACY_NOTICES_META.moduleTitle}
@@ -1233,7 +1207,7 @@ export function PrivacyNoticesContent({ section }: PrivacyNoticesContentProps) {
               <h2 className="text-xl font-semibold mb-4">
                 Avisos de Privacidad Registrados
               </h2>
-              <div className="flex flex-col md:flex-row md:items-center md:space-x-4 mb-4 space-y-2 md:space-y-0">
+              <div className="mb-4 grid gap-3 lg:grid-cols-[minmax(0,1fr)_minmax(220px,360px)]">
                 <Input
                   placeholder="Buscar por nombre"
                   value={searchTerm}
@@ -1241,10 +1215,10 @@ export function PrivacyNoticesContent({ section }: PrivacyNoticesContentProps) {
                     setSearchTerm(event.target.value);
                     setCurrentPage(1);
                   }}
-                  className="md:w-1/3"
+                  className="w-full min-w-0"
                 />
-                <div className="flex items-center space-x-2 md:w-1/3">
-                  <Label className="whitespace-nowrap text-sm">
+                <div className="grid min-w-0 gap-1.5 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center">
+                  <Label className="text-sm sm:whitespace-nowrap">
                     Filtrar por titulares
                   </Label>
                   <select
@@ -1253,7 +1227,7 @@ export function PrivacyNoticesContent({ section }: PrivacyNoticesContentProps) {
                       setCategoryFilter(event.target.value);
                       setCurrentPage(1);
                     }}
-                    className="flex-1 rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    className="w-full min-w-0 max-w-full truncate rounded-md border border-input bg-background px-3 py-2 text-sm"
                   >
                     <option value="all">Todas las categorías</option>
                     {HOLDER_CATEGORY_OPTIONS.map((option) => (
@@ -1343,6 +1317,7 @@ export function PrivacyNoticesContent({ section }: PrivacyNoticesContentProps) {
                                 size="sm"
                                 onClick={() => handleViewDocument(notice)}
                               >
+                                <Eye className="mr-2 h-4 w-4" />
                                 Ver documento
                               </Button>
                               <Button
@@ -1395,5 +1370,13 @@ export function PrivacyNoticesContent({ section }: PrivacyNoticesContentProps) {
       )}
       </div>
     </ArcoModuleShell>
+    <FilePreviewDialog
+      file={selectedDocument}
+      open={Boolean(selectedDocument)}
+      onOpenChange={(open) => {
+        if (!open) setSelectedDocument(null);
+      }}
+    />
+    </>
   );
 }
