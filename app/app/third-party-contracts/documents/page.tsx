@@ -26,6 +26,7 @@ import {
 import {
   Copy,
   Download,
+  Eye,
   FileText,
   Shield,
   Search,
@@ -37,6 +38,7 @@ import {
   ListChecks,
 } from "lucide-react"
 import { useToast } from "@/components/ui/use-toast"
+import { FilePreviewDialog } from "@/components/file-preview-dialog"
 import {
   deleteFile,
   getFilesByCategory,
@@ -45,6 +47,7 @@ import {
   createFileURL,
   type StoredFile,
 } from "@/lib/fileStorage"
+import { canOfferFilePreview } from "@/lib/file-preview"
 import { ArcoModuleShell } from "@/components/arco-module-shell"
 import {
   THIRD_PARTY_CONTRACTS_META,
@@ -366,6 +369,7 @@ export default function DocumentsAndClausesPage() {
   const [isTemplateFillDialogOpen, setIsTemplateFillDialogOpen] = useState(false)
   const [activeTemplate, setActiveTemplate] = useState<TemplateRepositoryItem | null>(null)
   const [templatePlaceholderValues, setTemplatePlaceholderValues] = useState<Record<string, string>>({})
+  const [previewContractFile, setPreviewContractFile] = useState<StoredFile | null>(null)
 
   const filledTemplateText = useMemo(() => {
     if (!activeTemplate?.baseTemplate) return ""
@@ -745,23 +749,36 @@ export default function DocumentsAndClausesPage() {
     return date.toLocaleDateString()
   }
 
-  const openStoredContract = (contract: StoredFile) => {
+  const previewStoredContract = (contract: StoredFile) => {
+    if (!canOfferFilePreview(contract)) {
+      toast({
+        title: "Vista previa no disponible",
+        description: "Puedes descargar el contrato original desde esta misma tarjeta.",
+        variant: "destructive",
+      })
+      return
+    }
+
+    setPreviewContractFile(contract)
+  }
+
+  const downloadStoredContract = (contract: StoredFile) => {
     const link = document.createElement("a")
-    link.href = contract.content
+    link.href = createFileURL(contract.content)
     link.download = contract.name
     link.target = "_blank"
     link.rel = "noopener"
     link.click()
   }
 
-  const openContractAttachment = (attachment: ContractMeta["attachments"][number]) => {
+  const resolveContractAttachment = (attachment: ContractMeta["attachments"][number]) => {
     if (!attachment.storageId) {
       toast({
         title: "Documento no disponible",
         description: "El archivo no se encontró en el almacenamiento local.",
         variant: "destructive",
       })
-      return
+      return null
     }
     const stored = getFileById(attachment.storageId)
     if (!stored) {
@@ -770,8 +787,31 @@ export default function DocumentsAndClausesPage() {
         description: "El archivo no se encontró en el almacenamiento local.",
         variant: "destructive",
       })
+      return null
+    }
+    return stored
+  }
+
+  const previewContractAttachment = (attachment: ContractMeta["attachments"][number]) => {
+    const stored = resolveContractAttachment(attachment)
+    if (!stored) return
+
+    if (!canOfferFilePreview(stored)) {
+      toast({
+        title: "Vista previa no disponible",
+        description: "Puedes descargar el documento original desde este mismo registro.",
+        variant: "destructive",
+      })
       return
     }
+
+    setPreviewContractFile(stored)
+  }
+
+  const downloadContractAttachment = (attachment: ContractMeta["attachments"][number]) => {
+    const stored = resolveContractAttachment(attachment)
+    if (!stored) return
+
     const link = document.createElement("a")
     link.href = createFileURL(stored.content)
     link.download = stored.name
@@ -1687,14 +1727,24 @@ export default function DocumentsAndClausesPage() {
                           {contract.attachments.length > 0 ? (
                             <div className="grid gap-2 md:grid-cols-2">
                               {contract.attachments.map((attachment) => (
-                                <div key={`${contract.id}-${attachment.storageId ?? attachment.fileName}`} className="flex items-center justify-between rounded-md border p-2">
-                                  <div>
-                                    <p className="font-medium text-sm">{attachment.fileName}</p>
+                                <div
+                                  key={`${contract.id}-${attachment.storageId ?? attachment.fileName}`}
+                                  className="flex flex-wrap items-center justify-between gap-3 rounded-md border p-2"
+                                >
+                                  <div className="min-w-0">
+                                    <p className="break-words text-sm font-medium">{attachment.fileName}</p>
                                     <p className="text-xs text-muted-foreground">{attachment.definition}</p>
                                   </div>
-                                  <Button size="sm" variant="outline" onClick={() => openContractAttachment(attachment)}>
-                                    Ver
-                                  </Button>
+                                  <div className="flex shrink-0 flex-wrap gap-2">
+                                    <Button size="sm" variant="outline" onClick={() => previewContractAttachment(attachment)}>
+                                      <Eye className="mr-2 h-4 w-4" />
+                                      Ver
+                                    </Button>
+                                    <Button size="sm" variant="outline" onClick={() => downloadContractAttachment(attachment)}>
+                                      <Download className="mr-2 h-4 w-4" />
+                                      Descargar
+                                    </Button>
+                                  </div>
                                 </div>
                               ))}
                             </div>
@@ -1784,10 +1834,14 @@ export default function DocumentsAndClausesPage() {
                             </p>
                           )}
                         </CardContent>
-                        <CardFooter className="flex justify-end gap-2 p-4 pt-0">
-                          <Button variant="outline" size="sm" onClick={() => openStoredContract(contract)}>
-                            <FileText className="mr-2 h-4 w-4" />
+                        <CardFooter className="flex flex-wrap justify-end gap-2 p-4 pt-0">
+                          <Button variant="outline" size="sm" onClick={() => previewStoredContract(contract)}>
+                            <Eye className="mr-2 h-4 w-4" />
                             Ver documento
+                          </Button>
+                          <Button variant="outline" size="sm" onClick={() => downloadStoredContract(contract)}>
+                            <Download className="mr-2 h-4 w-4" />
+                            Descargar
                           </Button>
                         </CardFooter>
                       </Card>
@@ -1803,6 +1857,13 @@ export default function DocumentsAndClausesPage() {
           </Card>
         </TabsContent>
       </Tabs>
+      <FilePreviewDialog
+        file={previewContractFile}
+        open={Boolean(previewContractFile)}
+        onOpenChange={(open) => {
+          if (!open) setPreviewContractFile(null)
+        }}
+      />
     </ArcoModuleShell>
   )
 }

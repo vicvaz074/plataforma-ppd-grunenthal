@@ -25,6 +25,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Eye, FileDown, FileText, Plus, Search, Trash2 } from "lucide-react";
+import { FilePreviewDialog } from "@/components/file-preview-dialog";
 import { ArcoModuleShell } from "@/components/arco-module-shell";
 import {
   THIRD_PARTY_CONTRACTS_META,
@@ -36,7 +37,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 // @ts-ignore
 import jsPDF from "jspdf";
-import { createFileURL, getFileById, saveFile } from "@/lib/fileStorage";
+import { createFileURL, getFileById, saveFile, type StoredFile } from "@/lib/fileStorage";
+import { canOfferFilePreview } from "@/lib/file-preview";
 import type { AttachmentDefinition, AttachmentMeta, ContractMeta } from "../types";
 
 const INTERNAL_AREAS_BASE = [
@@ -448,6 +450,7 @@ export default function ContractRegistrationPage() {
   const [riskFilter, setRiskFilter] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedContract, setSelectedContract] = useState<ContractMeta | null>(null);
+  const [previewAttachmentFile, setPreviewAttachmentFile] = useState<StoredFile | null>(null);
   const [isHistoryDialogOpen, setIsHistoryDialogOpen] = useState(false);
 
   const persistContractsHistory = (history: ContractMeta[]) => {
@@ -571,8 +574,15 @@ export default function ContractRegistrationPage() {
     setIsHistoryDialogOpen(true);
   };
 
-  const handleOpenStoredFile = (attachment: AttachmentMeta) => {
-    if (!attachment.storageId) return;
+  const resolveAttachmentFile = (attachment: AttachmentMeta) => {
+    if (!attachment.storageId) {
+      toast({
+        title: "Archivo no disponible",
+        description: "Este contrato no tiene un archivo asociado para consultar.",
+        variant: "destructive",
+      });
+      return null;
+    }
     const stored = getFileById(attachment.storageId);
     if (!stored) {
       toast({
@@ -580,8 +590,32 @@ export default function ContractRegistrationPage() {
         description: "No pudimos encontrar el documento en tu almacenamiento local.",
         variant: "destructive",
       });
+      return null;
+    }
+
+    return stored;
+  };
+
+  const previewContractAttachment = (attachment: AttachmentMeta) => {
+    const stored = resolveAttachmentFile(attachment);
+    if (!stored) return;
+
+    if (!canOfferFilePreview(stored)) {
+      toast({
+        title: "Vista previa no disponible",
+        description: "Puedes descargar el documento original desde este mismo registro.",
+        variant: "destructive",
+      });
       return;
     }
+
+    setPreviewAttachmentFile(stored);
+  };
+
+  const downloadContractAttachment = (attachment: AttachmentMeta) => {
+    const stored = resolveAttachmentFile(attachment);
+    if (!stored) return;
+
     const url = createFileURL(stored.content);
     const link = document.createElement("a");
     link.href = url;
@@ -1917,14 +1951,24 @@ export default function ContractRegistrationPage() {
                   <p className="font-medium">Documentos asociados</p>
                   <ul className="space-y-2">
                     {selectedContract.attachments.map((attachment, index) => (
-                      <li key={`${attachment.storageId ?? attachment.fileName}-${index}`} className="flex items-center justify-between gap-2 rounded-md border p-2">
-                        <div>
-                          <p className="font-medium">{attachment.fileName}</p>
+                      <li
+                        key={`${attachment.storageId ?? attachment.fileName}-${index}`}
+                        className="flex flex-wrap items-center justify-between gap-3 rounded-md border p-2"
+                      >
+                        <div className="min-w-0">
+                          <p className="break-words font-medium">{attachment.fileName}</p>
                           <p className="text-xs text-muted-foreground">{attachment.definition}</p>
                         </div>
-                        <Button size="sm" variant="outline" onClick={() => handleOpenStoredFile(attachment)}>
-                          Ver
-                        </Button>
+                        <div className="flex shrink-0 flex-wrap gap-2">
+                          <Button size="sm" variant="outline" onClick={() => previewContractAttachment(attachment)}>
+                            <Eye className="mr-2 h-4 w-4" />
+                            Ver
+                          </Button>
+                          <Button size="sm" variant="outline" onClick={() => downloadContractAttachment(attachment)}>
+                            <FileDown className="mr-2 h-4 w-4" />
+                            Descargar
+                          </Button>
+                        </div>
                       </li>
                     ))}
                   </ul>
@@ -1941,6 +1985,13 @@ export default function ContractRegistrationPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      <FilePreviewDialog
+        file={previewAttachmentFile}
+        open={Boolean(previewAttachmentFile)}
+        onOpenChange={(open) => {
+          if (!open) setPreviewAttachmentFile(null);
+        }}
+      />
     </ArcoModuleShell>
   );
 }
