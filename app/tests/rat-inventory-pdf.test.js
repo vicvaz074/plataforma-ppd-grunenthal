@@ -60,4 +60,17 @@ describe("generación PDF de inventarios RAT", () => {
       )
     }
   })
+
+  it("pinta las líneas preenvueltas de portada sin pedir ajuste de ancho al renderizador", () => {
+    const source = fs.readFileSync(
+      path.join(appDir, "app/rat/utils/inventory-pdf.ts"),
+      "utf8",
+    )
+
+    assert.doesNotMatch(
+      source,
+      /maxWidth:\s*coverInfoMaxWidth/,
+      "La portada ya divide el texto antes de pintar; pasar maxWidth a doc.text puede deformar el espaciado",
+    )
+  })
 })

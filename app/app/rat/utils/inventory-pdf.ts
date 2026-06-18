@@ -70,6 +70,14 @@ const getContrastingTextColor = (rgb: RGB): [number, number, number] => {
 
 const rgbArray = (rgb: RGB): [number, number, number] => [rgb.r, rgb.g, rgb.b];
 
+const resetCharacterSpacing = (doc: jsPDF) => {
+  const maybeSetCharSpace = (doc as unknown as { setCharSpace?: (value: number) => void })
+    .setCharSpace;
+  if (typeof maybeSetCharSpace === "function") {
+    maybeSetCharSpace.call(doc, 0);
+  }
+};
+
 const getImageFormatFromDataUrl = (dataUrl?: string | null): SupportedImageFormat => {
   if (!dataUrl) return "PNG";
   const lower = dataUrl.slice(0, 32).toLowerCase();
@@ -932,6 +940,7 @@ export const generateInventoryPDF = (
 
   doc.setFontSize(titleFontSize);
   doc.setTextColor(...rgbArray(accentRgb));
+  resetCharacterSpacing(doc);
   doc.text(titleText, pageWidth / 2, titleY, {
     align: "center",
   });
@@ -942,10 +951,10 @@ export const generateInventoryPDF = (
 
   coverInfoRows.forEach((row) => {
     row.lines.forEach((line) => {
-      (doc as any).text(line, pageWidth / 2, currentY, {
+      resetCharacterSpacing(doc);
+      doc.text(line, pageWidth / 2, currentY, {
         align: "center",
         charSpace: 0,
-        maxWidth: coverInfoMaxWidth,
       });
       currentY += infoLineHeight;
     });
