@@ -24,9 +24,10 @@ export const THIRD_PARTY_CONTRACTS_META = {
 }
 
 export const DPO_META = {
-  moduleLabel: "Módulo Oficial de Protección de Datos",
-  moduleTitle: "Oficial de Protección de Datos",
-  moduleDescription: "Acreditación, evaluación funcional, proyectos, evidencias, actas e informes del programa DPO.",
+  moduleLabel: "Módulo Miembros del Departamento de Datos Personales",
+  moduleTitle: "Miembros del Departamento de Datos Personales",
+  moduleDescription:
+    "Designación, evaluación funcional, proyectos, evidencias, actas e informes del Departamento de Datos Personales.",
 }
 
 export const EIPD_META = {
@@ -62,9 +63,9 @@ export const THIRD_PARTY_CONTRACTS_NAV: ArcoModuleNavItem[] = [
 ]
 
 export const DPO_NAV: ArcoModuleNavItem[] = [
-  { href: "/dpo", label: "Panorama", shortLabel: "Inicio", mobileLabel: "Panorama del OPD", icon: LayoutDashboard },
-  { href: "/dpo/registro", label: "Registro", shortLabel: "Registro", mobileLabel: "Registro del OPD", icon: FilePlus2, activePaths: ["/dpo/registro"] },
-  { href: "/dpo/compliance", label: "Cumplimiento", shortLabel: "Cumpl.", mobileLabel: "Cumplimiento del OPD", icon: ClipboardCheck, activePaths: ["/dpo/compliance"] },
+  { href: "/dpo", label: "Panorama", shortLabel: "Inicio", mobileLabel: "Panorama del departamento", icon: LayoutDashboard },
+  { href: "/dpo/registro", label: "Registro", shortLabel: "Registro", mobileLabel: "Registro del departamento", icon: FilePlus2, activePaths: ["/dpo/registro"] },
+  { href: "/dpo/compliance", label: "Cumplimiento", shortLabel: "Cumpl.", mobileLabel: "Cumplimiento del departamento", icon: ClipboardCheck, activePaths: ["/dpo/compliance"] },
   { href: "/dpo/reports", label: "Informes", shortLabel: "Informes", mobileLabel: "Informes y actas", icon: FileText, activePaths: ["/dpo/reports"] },
 ]
 

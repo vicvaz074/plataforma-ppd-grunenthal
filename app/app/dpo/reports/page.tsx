@@ -103,7 +103,7 @@ const PLANTILLAS_ACTAS: Omit<ActaInforme, "id" | "title" | "createdAt" | "update
     lugar: "Oficinas centrales",
     horaInicio: "10:00",
     horaFin: "11:30",
-    asistentes: ["Oficial de Protección de Datos", "Director General", "Responsable de Seguridad"],
+    asistentes: ["Miembros del Departamento de Datos Personales", "Director General", "Responsable de Seguridad"],
     orden: [
       "Revisión de actividades de tratamiento",
       "Evaluación de medidas de seguridad",
@@ -145,7 +145,7 @@ const PLANTILLAS_ACTAS: Omit<ActaInforme, "id" | "title" | "createdAt" | "update
     lugar: "Videoconferencia",
     horaInicio: "09:00",
     horaFin: "10:00",
-    asistentes: ["Oficial de Protección de Datos", "Comité de Privacidad"],
+    asistentes: ["Miembros del Departamento de Datos Personales", "Comité de Privacidad"],
     orden: ["Revisión de consultas recibidas", "Actualización de normativa", "Seguimiento de acciones pendientes"],
     desarrollo:
       "Se revisaron las consultas recibidas durante el último mes y se discutieron las implicaciones de las últimas actualizaciones normativas. Se realizó un seguimiento de las acciones pendientes identificadas en reuniones anteriores.",
@@ -157,7 +157,7 @@ const PLANTILLAS_ACTAS: Omit<ActaInforme, "id" | "title" | "createdAt" | "update
     acciones: [
       {
         descripcion: "Actualizar procedimientos internos",
-        responsable: "Oficial de Protección de Datos",
+        responsable: "Departamento de Datos Personales",
         fecha: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
       },
       {
@@ -173,7 +173,7 @@ const PLANTILLAS_ACTAS: Omit<ActaInforme, "id" | "title" | "createdAt" | "update
     lugar: "Sala de reuniones principal",
     horaInicio: "15:00",
     horaFin: "17:00",
-    asistentes: ["Oficial de Protección de Datos", "Dirección", "Responsables de Departamento"],
+    asistentes: ["Miembros del Departamento de Datos Personales", "Dirección", "Responsables de Departamento"],
     orden: ["Presentación del informe anual", "Revisión de objetivos", "Planificación del próximo año"],
     desarrollo:
       "Se presentó el informe anual de protección de datos, destacando los logros y desafíos del año. Se revisaron los objetivos establecidos y se discutió la planificación para el próximo año, incluyendo nuevas iniciativas y proyectos.",
@@ -185,7 +185,7 @@ const PLANTILLAS_ACTAS: Omit<ActaInforme, "id" | "title" | "createdAt" | "update
     acciones: [
       {
         descripcion: "Elaborar propuesta de recursos adicionales",
-        responsable: "Oficial de Protección de Datos",
+        responsable: "Departamento de Datos Personales",
         fecha: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
       },
       {
@@ -232,7 +232,7 @@ export default function DPOReportsPage() {
     lugar: "Oficinas centrales",
     horaInicio: "10:00",
     horaFin: "11:30",
-    asistentes: ["Oficial de Protección de Datos", "Director General", "Responsable de Seguridad"],
+    asistentes: ["Miembros del Departamento de Datos Personales", "Director General", "Responsable de Seguridad"],
     orden: [
       "Revisión de actividades de tratamiento",
       "Evaluación de medidas de seguridad",
@@ -370,7 +370,7 @@ export default function DPOReportsPage() {
 
       // Título
       doc.setFontSize(18)
-      doc.text("Informe del Oficial de Protección de Datos", 14, 20)
+      doc.text("Informe del Departamento de Datos Personales", 14, 20)
 
       // Metadatos
       doc.setFontSize(12)
@@ -617,7 +617,7 @@ export default function DPOReportsPage() {
       lugar: "Oficinas centrales",
       horaInicio: "10:00",
       horaFin: "11:30",
-      asistentes: ["Oficial de Protección de Datos", "Director General", "Responsable de Seguridad"],
+      asistentes: ["Miembros del Departamento de Datos Personales", "Director General", "Responsable de Seguridad"],
       orden: [
         "Revisión de actividades de tratamiento",
         "Evaluación de medidas de seguridad",
@@ -931,7 +931,7 @@ export default function DPOReportsPage() {
               new Paragraph({
                 children: [
                   new TextRun({
-                    text: "Firma del Oficial de Protección de Datos",
+                    text: "Firma del Departamento de Datos Personales",
                     underline: {
                       type: UnderlineType.SINGLE,
                     },
@@ -1151,7 +1151,7 @@ export default function DPOReportsPage() {
       moduleTitle={DPO_META.moduleTitle}
       moduleDescription={DPO_META.moduleDescription}
       pageLabel="Informes"
-      pageTitle="Actas e informes del DPO"
+      pageTitle="Actas e informes del Departamento de Datos Personales"
       pageDescription="Actas e informes con trazabilidad documental."
       navItems={navItems}
       headerBadges={[
@@ -1670,7 +1670,7 @@ export default function DPOReportsPage() {
                       <div className="mt-12 border-t pt-8 grid grid-cols-2 gap-8">
                         <div className="flex flex-col items-center">
                           <div className="w-48 border-b border-dashed border-muted-foreground mb-2" />
-                          <p className="text-sm text-muted-foreground">Oficial de Protección de Datos</p>
+                          <p className="text-sm text-muted-foreground">Departamento de Datos Personales</p>
                         </div>
                         <div className="flex flex-col items-center">
                           <div className="w-48 border-b border-dashed border-muted-foreground mb-2" />

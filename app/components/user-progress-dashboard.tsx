@@ -139,8 +139,8 @@ const initialSections: Section[] = [
   },
   {
     id: "oficial-proteccion",
-    title: "Oficial de Protección de Datos",
-    description: "Documenta la designación y actividades periódicas del DPD ante la Alta Dirección.",
+    title: "Miembros del Departamento de Datos Personales",
+    description: "Documenta la designación y actividades periódicas del Departamento de Datos Personales ante la Alta Dirección.",
     path: "/dpo",
     progress: 0,
     status: "no-iniciado",
@@ -148,7 +148,7 @@ const initialSections: Section[] = [
     category: "cumplimiento",
     priority: 2,
     tasks: [
-      { id: "dpd-1", title: "Designar al DPD", completed: false },
+      { id: "dpd-1", title: "Designar a los miembros del departamento", completed: false },
       { id: "dpd-2", title: "Documentar actividades periódicas", completed: false },
       { id: "dpd-3", title: "Establecer canal de comunicación", completed: false },
     ],
