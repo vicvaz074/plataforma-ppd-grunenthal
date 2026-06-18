@@ -211,17 +211,30 @@ describe("personalización Grünenthal", () => {
 
     const grtContractFiles = storedFiles.filter((file) => file.metadata?.individualRecordType === "third-party-grt-contract")
     const grtHistoryContracts = contracts.filter((contract) => contract.metadata?.sourceFolder === "Contratos GRt")
-    assert.equal(grtContracts.GRUNENTHAL_GRT_CONTRACT_DOCUMENTS.length, 40)
-    assert.equal(grtContractFiles.length, 40)
-    assert.equal(grtHistoryContracts.length, 40)
+    assert.equal(grtContracts.GRUNENTHAL_GRT_CONTRACT_DOCUMENTS.length, 38)
+    assert.equal(grtContractFiles.length, 38)
+    assert.equal(grtHistoryContracts.length, 38)
     assert.equal(
       grtContractFiles.every((file) => {
         const publicPath = file.content.startsWith("/") ? file.content.slice(1) : file.content
-        const previewPath = String(file.metadata?.previewPdfPath || "").replace(/^\//, "")
-        return fs.existsSync(path.join(publicDir, publicPath)) && fs.existsSync(path.join(publicDir, previewPath))
+        return fs.existsSync(path.join(publicDir, publicPath))
       }),
       true,
-      "cada contrato de Contratos GRt debe tener original público y preview PDF",
+      "cada contrato de Contratos GRt debe tener original público",
+    )
+    assert.equal(
+      grtContractFiles
+        .filter((file) => file.type === "application/pdf")
+        .every((file) => !file.metadata?.previewPdfPath && file.metadata?.documentViewMode === "original"),
+      true,
+      "los PDF de Contratos GRt deben abrir el documento original, no un preview duplicado",
+    )
+    assert.equal(
+      grtContractFiles
+        .filter((file) => file.type !== "application/pdf")
+        .every((file) => file.metadata?.previewPdfPath && file.metadata?.documentViewMode === "pdf-preview"),
+      true,
+      "solo los DOCX deben conservar PDF generado para visualización",
     )
     assert.equal(
       grtHistoryContracts.every((contract) =>
@@ -230,7 +243,12 @@ describe("personalización Grünenthal", () => {
         ),
       ),
       true,
-      "cada contrato de Contratos GRt debe enlazar su archivo original con preview",
+      "cada contrato de Contratos GRt debe enlazar su archivo original",
+    )
+    assert.equal(
+      grtHistoryContracts.filter((contract) => contract.providerIdentity?.includes("BACHER ZOPPI")).length,
+      1,
+      "BACHER no debe quedar duplicado por copias exactas del PDF",
     )
     assert.ok(
       grtHistoryContracts.some((contract) =>

@@ -68,7 +68,7 @@ function PdfCanvasPreview({ src, title }: { src: string; title: string }) {
           const canvas = document.createElement("canvas")
           const context = canvas.getContext("2d")
 
-          if (!context) throw new Error("No se pudo crear el lienzo de vista previa.")
+          if (!context) throw new Error("No se pudo crear el lienzo del documento.")
 
           canvas.width = Math.floor(viewport.width * outputScale)
           canvas.height = Math.floor(viewport.height * outputScale)
@@ -114,7 +114,7 @@ function PdfCanvasPreview({ src, title }: { src: string; title: string }) {
     <div className="relative overflow-hidden rounded-[18px] border border-slate-200 bg-muted/20 shadow-inner">
       {state.status === "loading" ? (
         <div className="absolute inset-x-0 top-0 z-10 border-b bg-background/95 px-4 py-2 text-xs font-medium text-muted-foreground">
-          Preparando vista previa...
+          Preparando documento...
         </div>
       ) : null}
       {state.status === "error" ? (
@@ -153,7 +153,7 @@ function TextPreview({ src }: { src: string }) {
         if (cancelled) return
         setState({
           status: "error",
-          message: error instanceof Error ? error.message : "No se pudo cargar la vista previa.",
+          message: error instanceof Error ? error.message : "No se pudo cargar el documento.",
         })
       })
 
@@ -165,7 +165,7 @@ function TextPreview({ src }: { src: string }) {
   if (state.status === "loading") {
     return (
       <div className="flex min-h-[360px] items-center justify-center rounded-md border bg-muted/20 text-sm text-muted-foreground">
-        Preparando vista previa...
+        Preparando documento...
       </div>
     )
   }
@@ -235,7 +235,7 @@ export function FilePreviewDialog({ file, open, onOpenChange }: FilePreviewDialo
       return (
         <div className="flex min-h-[360px] flex-col items-center justify-center rounded-md border bg-muted/30 p-8 text-center">
           <FileText className="mb-3 h-10 w-10 text-muted-foreground" />
-          <p className="text-sm font-medium">Vista previa no disponible para este formato.</p>
+          <p className="text-sm font-medium">Visualización no disponible para este formato.</p>
           <p className="mt-1 max-w-md text-sm text-muted-foreground">
             El archivo queda accesible desde esta ventana y puede abrirse en una pestaña nueva.
           </p>
@@ -266,7 +266,7 @@ export function FilePreviewDialog({ file, open, onOpenChange }: FilePreviewDialo
     return (
       <div className="flex min-h-[360px] flex-col items-center justify-center rounded-md border bg-muted/30 p-8 text-center">
         <FileText className="mb-3 h-10 w-10 text-muted-foreground" />
-        <p className="text-sm font-medium">Vista previa no disponible para este formato.</p>
+          <p className="text-sm font-medium">Visualización no disponible para este formato.</p>
       </div>
     )
   }
@@ -297,7 +297,7 @@ export function FilePreviewDialog({ file, open, onOpenChange }: FilePreviewDialo
             </Button>
             <Button type="button" onClick={openInNewTab}>
               <ExternalLink className="mr-2 h-4 w-4" />
-              Abrir vista previa
+              Abrir documento
             </Button>
           </DialogFooter>
         )}
