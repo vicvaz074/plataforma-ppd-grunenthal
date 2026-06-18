@@ -18,10 +18,13 @@ import {
   ArrowRight,
   CheckCircle2,
   Download,
+  Eye,
   FileDown,
   FileText,
+  FolderSearch,
   PlusCircle,
   RefreshCw,
+  Search,
   ShieldCheck,
   Upload,
 } from "lucide-react"
@@ -42,8 +45,15 @@ import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/components/ui/use-toast"
 import { ArcoModuleShell } from "@/components/arco-module-shell"
 import { DATA_POLICIES_META, DATA_POLICIES_NAV } from "@/components/arco-module-config"
+import { FilePreviewDialog } from "@/components/file-preview-dialog"
 import { ensureBrowserStorageEvents } from "@/lib/browser-storage-events"
-import { createFileURL, getFileById } from "@/lib/fileStorage"
+import { createFileURL, getAllFiles, getFileById, type StoredFile } from "@/lib/fileStorage"
+import { canOfferFilePreview } from "@/lib/file-preview"
+import {
+  buildGrunenthalRepositoryDocuments,
+  type GrunenthalRepositoryDocumentWithFile,
+  type GrunenthalRepositoryModule,
+} from "@/lib/grunenthal-repository"
 import { cn } from "@/lib/utils"
 import {
   POLICY_TEMPLATE_SECTIONS,
@@ -104,7 +114,15 @@ const POLICY_DEFINITIONS = [
 ] as const
 
 type PoliciesManagerProps = {
-  initialSection?: "registro" | "consulta"
+  initialSection?: PoliciesManagerSection
+}
+
+type PoliciesManagerSection = "registro" | "consulta" | "repositorio"
+
+const REPOSITORY_MODULE_LABELS: Record<GrunenthalRepositoryModule, string> = {
+  "data-policies": "Políticas",
+  "privacy-notices": "Avisos",
+  "third-party-contracts": "Contratos",
 }
 
 function splitLines(value: string) {
@@ -116,6 +134,37 @@ function splitLines(value: string) {
 
 function joinLines(values: string[]) {
   return values.join("\n")
+}
+
+function normalizeSearchValue(value: string) {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+}
+
+function repositoryDocumentSearchText(document: GrunenthalRepositoryDocumentWithFile) {
+  return normalizeSearchValue(
+    [
+      document.title,
+      document.area,
+      document.type,
+      document.category,
+      document.sourceLabel,
+      document.downloadName,
+      document.storedFile.name,
+      document.tags.join(" "),
+      document.storedFile.metadata?.providerIdentity,
+      document.storedFile.metadata?.noticeName,
+      document.storedFile.metadata?.thirdPartyName,
+    ]
+      .filter(Boolean)
+      .join(" "),
+  )
+}
+
+function repositoryModuleLabel(module: GrunenthalRepositoryModule) {
+  return REPOSITORY_MODULE_LABELS[module] || module
 }
 
 function addMonthsToDate(dateValue: string, months: number) {
@@ -197,10 +246,16 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
   const searchParams = useSearchParams()
 
   const [policies, setPolicies] = useState<PolicyRecord[]>([])
-  const [activeSection, setActiveSection] = useState<"registro" | "consulta">(initialSection)
+  const [repositoryFiles, setRepositoryFiles] = useState<StoredFile[]>([])
+  const [activeSection, setActiveSection] = useState<PoliciesManagerSection>(initialSection)
   const [wizardStep, setWizardStep] = useState<number>(1)
   const [draft, setDraft] = useState<PolicyRecord>(() => createEmptyPolicyRecord())
   const [selectedPolicyId, setSelectedPolicyId] = useState<string | null>(null)
+  const [repositorySearch, setRepositorySearch] = useState("")
+  const [repositoryModuleFilter, setRepositoryModuleFilter] = useState<"all" | GrunenthalRepositoryModule>("all")
+  const [repositoryTypeFilter, setRepositoryTypeFilter] = useState("all")
+  const [repositoryAreaFilter, setRepositoryAreaFilter] = useState("all")
+  const [repositoryPreviewFile, setRepositoryPreviewFile] = useState<StoredFile | null>(null)
   const [builderErrors, setBuilderErrors] = useState<string[]>([])
   const [submissionComment, setSubmissionComment] = useState("")
   const [publishComment, setPublishComment] = useState("")
@@ -218,6 +273,7 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
     const refresh = () => {
       const nextPolicies = loadPolicyRecords()
       setPolicies(nextPolicies)
+      setRepositoryFiles(getAllFiles())
       if (!selectedPolicyId && nextPolicies.length > 0) {
         setSelectedPolicyId(nextPolicies[0].id)
       }
@@ -249,19 +305,67 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
   const donutData = useMemo(() => getPolicyDimensionDonut(primaryPolicy), [primaryPolicy])
   const previewDraft = useMemo(() => normalizePolicyRecord(draft), [draft])
   const previewRows = useMemo(() => getPolicyDimensionRows(previewDraft), [previewDraft])
+  const repositoryDocuments = useMemo(
+    () => buildGrunenthalRepositoryDocuments(repositoryFiles),
+    [repositoryFiles],
+  )
+  const repositoryTypes = useMemo(
+    () => Array.from(new Set(repositoryDocuments.map((document) => document.type))).sort((left, right) => left.localeCompare(right, "es")),
+    [repositoryDocuments],
+  )
+  const repositoryAreas = useMemo(
+    () => Array.from(new Set(repositoryDocuments.map((document) => document.area))).sort((left, right) => left.localeCompare(right, "es")),
+    [repositoryDocuments],
+  )
+  const filteredRepositoryDocuments = useMemo(() => {
+    const query = normalizeSearchValue(repositorySearch)
+
+    return repositoryDocuments.filter((document) => {
+      const matchesSearch = !query || repositoryDocumentSearchText(document).includes(query)
+      const matchesModule = repositoryModuleFilter === "all" || document.module === repositoryModuleFilter
+      const matchesType = repositoryTypeFilter === "all" || document.type === repositoryTypeFilter
+      const matchesArea = repositoryAreaFilter === "all" || document.area === repositoryAreaFilter
+      return matchesSearch && matchesModule && matchesType && matchesArea
+    })
+  }, [repositoryAreaFilter, repositoryDocuments, repositoryModuleFilter, repositorySearch, repositoryTypeFilter])
+  const repositoryStats = useMemo(
+    () =>
+      repositoryDocuments.reduce(
+        (acc, document) => {
+          acc[document.module] += 1
+          return acc
+        },
+        {
+          "data-policies": 0,
+          "privacy-notices": 0,
+          "third-party-contracts": 0,
+        } as Record<GrunenthalRepositoryModule, number>,
+      ),
+    [repositoryDocuments],
+  )
   const navItems = useMemo(
     () =>
-      DATA_POLICIES_NAV.map((item) => {
+      [
+        ...DATA_POLICIES_NAV.map((item) => {
         if (item.href === "/data-policies/consulta") return { ...item, badge: sortedPolicies.length }
         if (item.href === "/data-policies/registro") return { ...item, badge: snapshot.underReview }
         return item
-      }),
-    [snapshot.underReview, sortedPolicies.length],
+        }),
+        {
+          href: "/data-policies?section=repositorio",
+          label: "Repositorio",
+          shortLabel: "Repositorio",
+          mobileLabel: "Repositorio documental",
+          icon: FolderSearch,
+          badge: repositoryDocuments.length,
+        },
+      ],
+    [repositoryDocuments.length, snapshot.underReview, sortedPolicies.length],
   )
 
   useEffect(() => {
     const requestedSection = searchParams.get("section")
-    if (requestedSection === "registro" || requestedSection === "consulta") {
+    if (requestedSection === "registro" || requestedSection === "consulta" || requestedSection === "repositorio") {
       setActiveSection(requestedSection)
     }
   }, [searchParams])
@@ -623,6 +727,27 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
     window.open(createFileURL(file.content), "_blank", "noopener,noreferrer")
   }
 
+  const openRepositoryDocument = (document: GrunenthalRepositoryDocumentWithFile) => {
+    if (!canOfferFilePreview(document.storedFile)) {
+      toast({
+        title: "Vista previa no disponible",
+        description: "Este recurso puede descargarse, pero no tiene una vista previa compatible.",
+        variant: "destructive",
+      })
+      return
+    }
+    setRepositoryPreviewFile(document.storedFile)
+  }
+
+  const downloadRepositoryDocument = (document: GrunenthalRepositoryDocumentWithFile) => {
+    const link = window.document.createElement("a")
+    link.href = createFileURL(document.storedFile.content)
+    link.download = document.downloadName || document.storedFile.name
+    window.document.body.appendChild(link)
+    link.click()
+    window.document.body.removeChild(link)
+  }
+
   const exportPolicyToWord = async (record: PolicyRecord) => {
     const narrative = [
       new Paragraph({
@@ -708,23 +833,33 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
 
   const canSaveDraft = draft.status !== "PUBLISHED"
   const expiringDays = selectedPolicy ? diffDays(selectedPolicy.expiryDate || selectedPolicy.nextReviewDate) : null
+  const pageCopy =
+    activeSection === "registro"
+      ? {
+          label: "Registro",
+          title: "Builder operativo PGDP",
+          description: "Configura políticas, vigencia y workflow de aprobación.",
+        }
+      : activeSection === "repositorio"
+        ? {
+            label: "Repositorio",
+            title: "Repositorio documental Grünenthal",
+            description: "Consulta, filtra, previsualiza y descarga políticas, avisos y contratos desde un solo lugar.",
+          }
+        : {
+            label: "Consulta",
+            title: "Tablero y expediente PGDP",
+            description: "Consulta madurez, evidencia y seguimiento documental.",
+          }
 
   return (
     <ArcoModuleShell
       moduleLabel={DATA_POLICIES_META.moduleLabel}
       moduleTitle={DATA_POLICIES_META.moduleTitle}
       moduleDescription={DATA_POLICIES_META.moduleDescription}
-      pageLabel={activeSection === "registro" ? "Registro" : "Consulta"}
-      pageTitle={
-        activeSection === "registro"
-          ? "Builder operativo PGDP"
-          : "Tablero y expediente PGDP"
-      }
-      pageDescription={
-        activeSection === "registro"
-          ? "Configura políticas, vigencia y workflow de aprobación."
-          : "Consulta madurez, evidencia y seguimiento documental."
-      }
+      pageLabel={pageCopy.label}
+      pageTitle={pageCopy.title}
+      pageDescription={pageCopy.description}
       navItems={navItems}
       headerBadges={[
         { label: `${snapshot.total} políticas`, tone: "neutral" },
@@ -740,10 +875,10 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
         </Button>
       }
     >
-      <div className="mx-auto flex w-full max-w-[1460px] flex-col gap-6">
+      <div className="mx-auto flex min-w-0 w-full max-w-[1600px] flex-col gap-6">
         <Card className="overflow-hidden border-slate-200 shadow-sm">
-        <CardContent className="grid gap-6 p-6 xl:grid-cols-[1.5fr_1fr] lg:p-8">
-          <div className="space-y-4">
+        <CardContent className="grid min-w-0 gap-6 p-6 xl:grid-cols-[1.5fr_1fr] lg:p-8">
+          <div className="min-w-0 space-y-4">
             <div className="flex flex-wrap items-center gap-2">
               <Badge variant="outline" className="border-primary/20 bg-primary/5 text-primary">
                 Políticas de Protección de Datos · PGDP
@@ -779,13 +914,16 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
               <Button variant="outline" onClick={() => setActiveSection("consulta")}>
                 Ver tablero y expediente
               </Button>
+              <Button variant="outline" onClick={() => setActiveSection("repositorio")}>
+                Abrir repositorio
+              </Button>
               <Button asChild variant="outline">
                 <Link href="/audit-alarms">Abrir recordatorios y alertas</Link>
               </Button>
             </div>
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+          <div className="grid min-w-0 gap-3 sm:grid-cols-2 lg:grid-cols-1">
             <div className="rounded-[24px] border border-slate-200 bg-slate-50/90 p-5">
               <div className="flex items-center justify-between">
                 <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Madurez del programa</p>
@@ -829,12 +967,15 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
         </CardContent>
         </Card>
 
-        <div className="flex flex-wrap gap-3">
+        <div className="flex min-w-0 flex-wrap gap-3 overflow-x-auto pb-1">
           <Button variant={activeSection === "registro" ? "default" : "outline"} onClick={() => setActiveSection("registro")}>
             Registro guiado
           </Button>
           <Button variant={activeSection === "consulta" ? "default" : "outline"} onClick={() => setActiveSection("consulta")}>
             Consulta y expediente
+          </Button>
+          <Button variant={activeSection === "repositorio" ? "default" : "outline"} onClick={() => setActiveSection("repositorio")}>
+            Repositorio documental
           </Button>
         </div>
 
@@ -1618,15 +1759,205 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
             </Card>
           </div>
         </div>
+      ) : activeSection === "repositorio" ? (
+        <div className="min-w-0 space-y-6">
+          <div className="grid min-w-0 gap-4 md:grid-cols-3">
+            <Card className="min-w-0 border-slate-200 shadow-sm">
+              <CardContent className="p-5">
+                <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Políticas</p>
+                <p className="mt-3 text-4xl text-slate-950">{repositoryStats["data-policies"]}</p>
+                <p className="mt-2 text-sm text-slate-500">Documentos base, evidencias y referencias de PGDP.</p>
+              </CardContent>
+            </Card>
+            <Card className="min-w-0 border-slate-200 shadow-sm">
+              <CardContent className="p-5">
+                <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Avisos</p>
+                <p className="mt-3 text-4xl text-slate-950">{repositoryStats["privacy-notices"]}</p>
+                <p className="mt-2 text-sm text-slate-500">Compilado fuente y avisos individuales generados.</p>
+              </CardContent>
+            </Card>
+            <Card className="min-w-0 border-slate-200 shadow-sm">
+              <CardContent className="p-5">
+                <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Contratos</p>
+                <p className="mt-3 text-4xl text-slate-950">{repositoryStats["third-party-contracts"]}</p>
+                <p className="mt-2 text-sm text-slate-500">Análisis, plantillas y registros individuales de terceros.</p>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="grid min-w-0 gap-6 2xl:grid-cols-[minmax(280px,360px)_minmax(0,1fr)]">
+            <Card className="min-w-0 border-slate-200 shadow-sm">
+              <CardHeader className="border-b border-slate-100">
+                <CardTitle className="flex items-center gap-2 text-xl text-slate-950">
+                  <FolderSearch className="h-5 w-5 text-primary" />
+                  Repositorio documental
+                </CardTitle>
+                <CardDescription>Búsqueda y filtros para políticas, avisos y contratos cargados.</CardDescription>
+              </CardHeader>
+              <CardContent className="min-w-0 space-y-4 p-5">
+                <div className="min-w-0">
+                  <Label>Búsqueda</Label>
+                  <div className="relative mt-1">
+                    <Search className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                    <Input
+                      value={repositorySearch}
+                      onChange={(event) => setRepositorySearch(event.target.value)}
+                      placeholder="Título, área, tercero, aviso o fuente"
+                      className="pl-9"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid min-w-0 gap-4 sm:grid-cols-2 2xl:grid-cols-1">
+                  <div className="min-w-0">
+                    <Label>Módulo</Label>
+                    <Select
+                      value={repositoryModuleFilter}
+                      onValueChange={(value) => setRepositoryModuleFilter(value as "all" | GrunenthalRepositoryModule)}
+                    >
+                      <SelectTrigger className="mt-1">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">Todos</SelectItem>
+                        <SelectItem value="data-policies">Políticas</SelectItem>
+                        <SelectItem value="privacy-notices">Avisos</SelectItem>
+                        <SelectItem value="third-party-contracts">Contratos</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="min-w-0">
+                    <Label>Tipo</Label>
+                    <Select value={repositoryTypeFilter} onValueChange={setRepositoryTypeFilter}>
+                      <SelectTrigger className="mt-1">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">Todos</SelectItem>
+                        {repositoryTypes.map((type) => (
+                          <SelectItem key={type} value={type}>
+                            {type}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="min-w-0">
+                    <Label>Área</Label>
+                    <Select value={repositoryAreaFilter} onValueChange={setRepositoryAreaFilter}>
+                      <SelectTrigger className="mt-1">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">Todas</SelectItem>
+                        {repositoryAreas.map((area) => (
+                          <SelectItem key={area} value={area}>
+                            {area}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => {
+                    setRepositorySearch("")
+                    setRepositoryModuleFilter("all")
+                    setRepositoryTypeFilter("all")
+                    setRepositoryAreaFilter("all")
+                  }}
+                >
+                  Limpiar filtros
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="min-w-0 overflow-hidden border-slate-200 shadow-sm">
+              <CardHeader className="min-w-0 border-b border-slate-100">
+                <div className="flex min-w-0 flex-wrap items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <CardTitle className="text-2xl text-slate-950">Documentos disponibles</CardTitle>
+                    <CardDescription>
+                      {filteredRepositoryDocuments.length} de {repositoryDocuments.length} recursos listos para consulta.
+                    </CardDescription>
+                  </div>
+                  <Badge variant="outline" className="border-primary/20 bg-primary/5 text-primary">
+                    Sin RAT ni JSON
+                  </Badge>
+                </div>
+              </CardHeader>
+              <CardContent className="min-w-0 space-y-3 p-4 sm:p-6">
+                {filteredRepositoryDocuments.length === 0 ? (
+                  <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-4 py-12 text-center text-sm text-slate-500">
+                    No hay documentos que coincidan con los filtros actuales.
+                  </div>
+                ) : (
+                  <div className="min-w-0 space-y-3">
+                    {filteredRepositoryDocuments.map((document) => {
+                      const canPreview = canOfferFilePreview(document.storedFile)
+                      return (
+                        <div
+                          key={document.id}
+                          className="grid min-w-0 gap-4 rounded-[24px] border border-slate-200 bg-white p-4 shadow-sm xl:grid-cols-[minmax(0,1fr)_auto]"
+                        >
+                          <div className="min-w-0 space-y-3">
+                            <div className="flex min-w-0 flex-wrap items-center gap-2">
+                              <Badge variant="outline" className="border-slate-200 text-slate-600">
+                                {repositoryModuleLabel(document.module)}
+                              </Badge>
+                              <Badge variant="secondary">{document.type}</Badge>
+                              <Badge variant="outline" className="border-slate-200 text-slate-600">
+                                {document.area}
+                              </Badge>
+                            </div>
+                            <div className="min-w-0">
+                              <h3 className="break-words text-lg font-medium text-slate-950">{document.title}</h3>
+                              <p className="mt-1 break-words text-sm text-slate-500">
+                                {document.sourceLabel}
+                                {document.sourceLineRange ? ` · líneas ${document.sourceLineRange}` : ""}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="flex min-w-0 flex-wrap items-center gap-2 xl:justify-end">
+                            <Button
+                              type="button"
+                              variant="outline"
+                              onClick={() => openRepositoryDocument(document)}
+                              disabled={!canPreview}
+                            >
+                              <Eye className="mr-2 h-4 w-4" />
+                              Ver
+                            </Button>
+                            <Button type="button" variant="outline" onClick={() => downloadRepositoryDocument(document)}>
+                              <Download className="mr-2 h-4 w-4" />
+                              Descargar
+                            </Button>
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       ) : (
-        <div className="space-y-6">
-          <div className="grid gap-6 xl:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)]">
+        <div className="min-w-0 space-y-6">
+          <div className="grid min-w-0 gap-6 2xl:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)]">
             <Card className="overflow-hidden border-slate-200 shadow-sm">
               <CardHeader className="border-b border-slate-100">
                 <CardTitle className="text-2xl text-slate-950">Cobertura del programa</CardTitle>
                 <CardDescription>Donut de cumplimiento y barras por dimensión, con lógica real de expediente.</CardDescription>
               </CardHeader>
-              <CardContent className="grid gap-6 p-6 xl:grid-cols-[minmax(0,280px)_minmax(0,1fr)]">
+              <CardContent className="grid min-w-0 gap-6 p-6 2xl:grid-cols-[minmax(0,280px)_minmax(0,1fr)]">
                 <div className="rounded-[28px] border border-slate-200 bg-slate-50/70 p-5">
                   <div className="h-[220px]">
                     <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={220}>
@@ -1653,7 +1984,7 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
                   </div>
                 </div>
 
-                <div className="space-y-4">
+                <div className="min-w-0 space-y-4">
                   <div className="rounded-[28px] border border-slate-200 bg-white p-5">
                     <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Programa principal</p>
                     <div className="mt-4 flex items-end gap-3">
@@ -1689,7 +2020,7 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
               </CardContent>
             </Card>
 
-            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-1">
+            <div className="grid min-w-0 gap-4 sm:grid-cols-2 2xl:grid-cols-1">
               <Card className="border-slate-200 shadow-sm">
                 <CardContent className="p-5">
                   <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Vigentes</p>
@@ -1721,7 +2052,7 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
             </div>
           </div>
 
-          <div className="grid gap-6 xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+          <div className="grid min-w-0 gap-6 2xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
             <Card className="border-slate-200 shadow-sm">
               <CardHeader className="border-b border-slate-100">
                 <CardTitle className="text-2xl text-slate-950">Inventario de políticas</CardTitle>
@@ -1787,7 +2118,7 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
 
             {selectedPolicy ? (
               <div className="space-y-6">
-                <div className="grid gap-6 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.1fr)_minmax(0,0.9fr)]">
+                <div className="grid min-w-0 gap-6 2xl:grid-cols-[minmax(0,0.8fr)_minmax(0,1.1fr)_minmax(0,0.9fr)]">
                   <Card className="border-slate-200 shadow-sm">
                     <CardHeader className="border-b border-slate-100">
                       <CardTitle className="text-xl text-slate-950">Metadatos y acciones</CardTitle>
@@ -2158,6 +2489,13 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
           </div>
         </DialogContent>
       </Dialog>
+      <FilePreviewDialog
+        file={repositoryPreviewFile}
+        open={Boolean(repositoryPreviewFile)}
+        onOpenChange={(open) => {
+          if (!open) setRepositoryPreviewFile(null)
+        }}
+      />
       </div>
     </ArcoModuleShell>
   )

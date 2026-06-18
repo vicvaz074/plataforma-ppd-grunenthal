@@ -44,11 +44,13 @@ class LocalStorageMock {
 
 describe("personalización Grünenthal", () => {
   let assets
+  let repository
   let seed
   let fileStorage
 
   before(async () => {
     assets = await importModule("lib/grunenthal-assets.ts")
+    repository = await importModule("lib/grunenthal-repository.ts")
     seed = await importModule("lib/grunenthal-seed.ts")
     fileStorage = await importModule("lib/fileStorage.ts")
   })
@@ -88,14 +90,19 @@ describe("personalización Grünenthal", () => {
     const inventories = JSON.parse(global.localStorage.getItem("inventories") || "[]")
     const storedFiles = JSON.parse(global.localStorage.getItem("storedFiles") || "[]")
     const users = JSON.parse(global.localStorage.getItem("platform_users") || "[]")
+    const contracts = JSON.parse(global.localStorage.getItem("contractsHistory") || "[]")
+    const individualDocumentCount =
+      repository.GRUNENTHAL_INDIVIDUAL_PRIVACY_NOTICE_RECORDS.length +
+      repository.GRUNENTHAL_INDIVIDUAL_THIRD_PARTY_RECORDS.length +
+      repository.GRUNENTHAL_LABOR_POLICY_REPOSITORY_DOCUMENTS.length
 
     assert.equal(inventories.length, 15)
     assert.equal(
       inventories.reduce((total, inventory) => total + inventory.subInventories.length, 0),
       37,
     )
-    assert.equal(storedFiles.length, 63)
-    assert.equal(new Set(storedFiles.map((file) => file.id)).size, 63)
+    assert.equal(storedFiles.length, assets.GRUNENTHAL_DOCUMENT_MANIFEST.length + individualDocumentCount)
+    assert.equal(new Set(storedFiles.map((file) => file.id)).size, storedFiles.length)
     assert.equal(
       storedFiles.every((file) => file.metadata.createdBy === "Admin"),
       true,
@@ -120,6 +127,20 @@ describe("personalización Grünenthal", () => {
         `debe existir el preview PDF de ${asset.name}`,
       )
     }
+
+    const individualNotices = storedFiles.filter((file) => file.metadata?.individualRecordType === "privacy-notice")
+    assert.equal(individualNotices.length, 10)
+    assert.equal(individualNotices.every((file) => file.category === "privacy-notice"), true)
+    assert.equal(
+      individualNotices.every((file) => file.metadata?.previewPdfPath && file.metadata?.sourceCompiledAssetId),
+      true,
+      "cada aviso individual debe descargar DOCX y previsualizar PDF",
+    )
+
+    const compiledPrivacyManual = storedFiles.find(
+      (file) => file.metadata?.grunenthalAssetId === "grunenthal-privacy-notices-manualap-grunentha-davara-v3",
+    )
+    assert.equal(compiledPrivacyManual?.category, "privacy-policy")
 
     const arcoTemplateAsset = assets.GRUNENTHAL_DOCUMENT_MANIFEST.find((asset) =>
       asset.id === "grunenthal-arco-rights-matriz-de-control-y-seguimiento-del-ejercicio-de-derechos-arco"
@@ -146,6 +167,24 @@ describe("personalización Grünenthal", () => {
       ratPdfs.every((file) => file.metadata?.client === "Grünenthal" && file.metadata?.module === "rat"),
       true,
     )
+
+    const individualContractFiles = storedFiles.filter((file) => file.metadata?.individualRecordType === "third-party-contract")
+    const individualContracts = contracts.filter((contract) => contract.metadata?.sourceCompiledAssetId === "grunenthal-third-party-contracts-analisisderelacionesgrunenthal")
+    assert.equal(individualContractFiles.length, 32)
+    assert.equal(individualContracts.length, 32)
+    assert.equal(
+      individualContracts.every((contract) =>
+        contract.attachments?.some((attachment) =>
+          individualContractFiles.some((file) => file.id === attachment.storageId && file.metadata?.individualRecordId === contract.metadata?.individualRecordId),
+        ),
+      ),
+      true,
+      "cada contrato individual debe enlazar su DOCX original con preview PDF",
+    )
+
+    const laborPolicyFiles = storedFiles.filter((file) => file.metadata?.individualRecordType === "labor-policy-reference")
+    assert.equal(laborPolicyFiles.length, 2)
+    assert.equal(laborPolicyFiles.every((file) => file.category === "data-policy-evidence"), true)
 
     const sofia = users.find((user) => user.email === "sofia.jaimes@grunenthal.com")
     assert.ok(sofia, "debe existir el usuario demo de Sofia")
