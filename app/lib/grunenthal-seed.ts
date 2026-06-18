@@ -30,10 +30,14 @@ import {
   GRUNENTHAL_GRT_CONTRACT_DOCUMENTS,
   type GrunenthalGrtContractDocument,
 } from "@/lib/grunenthal-contracts-grt"
+import {
+  findGrunenthalContractAnalysisLink,
+  GRUNENTHAL_THIRD_PARTY_ANALYSIS_SOURCE_ASSET_ID as THIRD_PARTY_ANALYSIS_SOURCE_ASSET_ID,
+} from "@/lib/grunenthal-contract-analysis-linking"
 import type { StoredFile } from "@/lib/fileStorage"
 import type { Inventory } from "@/app/rat/types"
 
-export const GRUNENTHAL_SEED_VERSION = "2026.2.0"
+export const GRUNENTHAL_SEED_VERSION = "2026.2.1"
 export const GRUNENTHAL_SEED_STATE_KEY = "grunenthal_seed_state_v1"
 
 const STORED_FILES_KEY = "storedFiles"
@@ -50,7 +54,6 @@ const RAT_VALIDATION_STORAGE_KEY = "grunenthal_rat_validation_report_v1"
 const SEEDED_AT = "2026-01-01T00:00:00.000Z"
 const TRAINING_PROGRAM_ID = "grunenthal-training-privacy-2026"
 const ARCO_TEMPLATE_ASSET_ID = "grunenthal-arco-rights-matriz-de-control-y-seguimiento-del-ejercicio-de-derechos-arco"
-const THIRD_PARTY_ANALYSIS_SOURCE_ASSET_ID = "grunenthal-third-party-contracts-analisisderelacionesgrunenthal"
 const STATIC_PREVIEW_EXTENSIONS = new Set(["docx", "docm", "xlsx"])
 const LEGACY_SEEDED_FILE_IDS = new Set([
   "grunenthal-file-grunenthal-privacy-notices-manualap-grunentha-davara-v3",
@@ -657,7 +660,7 @@ function clauseRegulationFor(record: GrunenthalThirdPartyContractSeed) {
     return "Resultado del análisis de cláusulas: requiere revisión por contradicción entre columnas del documento fuente."
   }
 
-  return "Resultado del análisis de cláusulas: no cumple con la LFPDPPP o su Reglamento, conforme al documento fuente."
+  return "Resultado del análisis de cláusulas: no cumple con la LFPDPPP, conforme al documento fuente."
 }
 
 function riskNotesFor(record: GrunenthalThirdPartyContractSeed) {
@@ -793,6 +796,34 @@ function buildIndividualThirdPartyContract(record: GrunenthalThirdPartyContractS
 
 function buildGrtThirdPartyContract(record: GrunenthalGrtContractDocument, index: number) {
   const usesGeneratedPdfPreview = record.extension !== "pdf"
+  const analysisLink = findGrunenthalContractAnalysisLink(record)
+  const analysisRecord = analysisLink.analysisRecord
+  const matrixRow = analysisLink.matrixRow
+  const attachments = [
+    {
+      fileName: record.sourceName,
+      definition: "principal",
+      storageId: seededFileId(record.id),
+      category: "third-party-contract",
+    },
+  ]
+
+  if (analysisRecord) {
+    attachments.push(
+      {
+        fileName: analysisRecord.downloadName,
+        definition: "evidencia",
+        storageId: getGrunenthalRepositoryFileId(analysisRecord.id),
+        category: analysisRecord.category,
+      },
+      {
+        fileName: "AnálisisDeRelacionesGrünenthal .docx",
+        definition: "evidencia",
+        storageId: seededFileId(THIRD_PARTY_ANALYSIS_SOURCE_ASSET_ID),
+        category: "third-party-contract",
+      },
+    )
+  }
 
   return {
     id: `contract-${record.id}`,
@@ -830,8 +861,10 @@ function buildGrtThirdPartyContract(record: GrunenthalGrtContractDocument, index
     clauseComplianceLabel: record.clauseComplianceLabel,
     clauseComplianceNotes: record.analysisSummary,
     complianceNeeds: record.recommendation,
-    evidenceAvailable: ["contrato", "analisis"],
-    evidenceNotes: `Contrato cargado desde la carpeta Contratos GRt: ${record.sourceName}.`,
+    evidenceAvailable: analysisRecord ? ["contrato", "analisis", "extracto_individual"] : ["contrato"],
+    evidenceNotes: analysisRecord
+      ? `Contrato físico cargado desde Contratos GRt y vinculado al análisis de relaciones, líneas ${analysisRecord.sourceLineRange}.`
+      : `Contrato cargado desde la carpeta Contratos GRt: ${record.sourceName}.`,
     responsibleName: GRUNENTHAL_ADMIN_NAME,
     responsibleRole: "Administrador demo",
     lastReview: SEEDED_AT.slice(0, 10),
@@ -842,20 +875,21 @@ function buildGrtThirdPartyContract(record: GrunenthalGrtContractDocument, index
     riskNotes: riskNotesForGrt(record),
     versioningNotes: "Carga directa desde carpeta Contratos GRt con documento original y análisis en modal.",
     reviewLog: "Creado por Admin para demo Grünenthal 2026.",
-    attachments: [
-      {
-        fileName: record.sourceName,
-        definition: "principal",
-        storageId: seededFileId(record.id),
-        category: "third-party-contract",
-      },
-    ],
+    attachments,
     metadata: {
       sourceFolder: "Contratos GRt",
       sourceRelativePath: `Contratos GRt/${record.sourceName}`,
       individualRecordId: record.id,
       grtContractId: record.id,
       originalPublicPath: record.path,
+      ...(analysisRecord
+        ? {
+            analysisRecordId: analysisRecord.id,
+            analysisSourceLineRange: analysisRecord.sourceLineRange,
+            sourceCompiledAssetId: analysisRecord.sourceCompiledAssetId,
+          }
+        : {}),
+      ...(matrixRow ? { analysisMatrixRowId: matrixRow.id } : {}),
       documentViewMode: usesGeneratedPdfPreview ? "pdf-preview" : "original",
       ...(usesGeneratedPdfPreview ? { previewPdfPath: record.previewPdfPath } : {}),
       analysisInModal: true,
@@ -866,68 +900,20 @@ function buildGrtThirdPartyContract(record: GrunenthalGrtContractDocument, index
 }
 
 function seedThirdPartyContracts() {
-  const thirdPartyAssets = assetsForModule("third-party-contracts")
   const current = readJson<Array<JsonRecord & { id: string }>>(CONTRACTS_STORAGE_KEY, [])
-  const record = {
-    id: "grunenthal-third-party-framework-2026",
-    created: SEEDED_AT,
-    contractMode: "marco",
-    contractTitle: "Expediente de relaciones con terceros Grünenthal 2026",
-    internalCode: "GRT-TER-2026",
-    contractType: "Manual / análisis / cuestionario",
-    contractStatus: "vigente",
-    contractorType: "proveedor",
-    providerIdentity: "Terceros y proveedores Grünenthal",
-    thirdPartyTypes: ["encargado", "proveedor"],
-    thirdPartyName: "Expediente general de terceros",
-    areas: ["Compras", "Departamento de Datos Personales"],
-    serviceTypes: ["servicios_profesionales"],
-    treatmentPurpose: "Evaluar y documentar relaciones con terceros que tratan o acceden a datos personales.",
-    dataCategories: ["identificacion", "contacto", "laboral"],
-    dataVolume: "Variable",
-    relationType: "encargado",
-    instrumentTypes: ["contrato", "dpa", "cuestionario"],
-    formalized: "si",
-    baseLegal: ["relacion_juridica"],
-    guarantees: ["clausulas_contractuales", "cuestionario"],
-    contractValidity: "indefinida",
-    startDate: SEEDED_AT.slice(0, 10),
-    expirationDate: "2026-12-31",
-    durationType: "anual",
-    reviewFrequency: "anual",
-    terminationClause: true,
-    communicationType: "remision",
-    clauseRegulation: "Incluye obligaciones de confidencialidad, seguridad y tratamiento conforme a instrucciones.",
-    evidenceAvailable: ["manual", "cuestionario", "analisis"],
-    responsibleName: GRUNENTHAL_ADMIN_NAME,
-    responsibleRole: "Administrador demo",
-    lastReview: SEEDED_AT.slice(0, 10),
-    nextReview: "2026-12-31",
-    reminders: [],
-    linkedInventories: "RAT Grünenthal 2026",
-    riskLevel: "medio",
-    riskNotes: "Registro semilla creado a partir del expediente documental de terceros.",
-    versioningNotes: "Carga inicial demo 2026.",
-    reviewLog: "Documentos cargados y disponibles como anexos.",
-    attachments: thirdPartyAssets.map((asset) => ({
-      fileName: asset.name,
-      definition: "evidencia",
-      storageId: seededFileId(asset.id),
-      category: asset.category,
-    })),
-  }
-
-  const individualRecords = GRUNENTHAL_INDIVIDUAL_THIRD_PARTY_RECORDS.map(buildIndividualThirdPartyContract)
   const grtContractRecords = GRUNENTHAL_GRT_CONTRACT_DOCUMENTS.map(buildGrtThirdPartyContract)
   const grtContractIds = new Set(grtContractRecords.map((contract) => contract.id))
   const cleanedCurrent = current.filter((contract) => {
     const metadata = contract.metadata as JsonRecord | undefined
     if (LEGACY_GRT_DUPLICATE_CONTRACT_IDS.has(contract.id)) return false
+    if (contract.id === "grunenthal-third-party-framework-2026") return false
+    if (String(contract.id).startsWith("contract-grunenthal-third-party-contract-")) return false
+    if (metadata?.sourceCompiledAssetId === THIRD_PARTY_ANALYSIS_SOURCE_ASSET_ID && metadata?.sourceFolder !== "Contratos GRt") return false
     if (metadata?.sourceFolder === "Contratos GRt" && !grtContractIds.has(contract.id)) return false
     return true
   })
 
-  writeJson(CONTRACTS_STORAGE_KEY, upsertById(cleanedCurrent, [record, ...individualRecords, ...grtContractRecords]))
+  writeJson(CONTRACTS_STORAGE_KEY, upsertById(cleanedCurrent, grtContractRecords))
 }
 
 function seedDpoAccreditation() {

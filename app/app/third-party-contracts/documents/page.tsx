@@ -8,6 +8,8 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import {
   Select,
   SelectContent,
@@ -36,6 +38,8 @@ import {
   FilePlus,
   Layers,
   ListChecks,
+  Info,
+  Bell,
 } from "lucide-react"
 import { useToast } from "@/components/ui/use-toast"
 import { FilePreviewDialog } from "@/components/file-preview-dialog"
@@ -58,6 +62,13 @@ import {
   GRUNENTHAL_THIRD_PARTY_ANALYSIS_MATRIX_SOURCE,
   type GrunenthalThirdPartyAnalysisMatrixRow,
 } from "@/lib/grunenthal-third-party-analysis-matrix"
+import { normalizeGrunenthalContractParty } from "@/lib/grunenthal-contract-analysis-linking"
+import {
+  getAuditReminderByReferenceKey,
+  upsertAuditReminderByReferenceKey,
+  type AuditReminderRecurrenceInterval,
+} from "@/lib/audit-alarms"
+import { generateAllNotifications } from "@/lib/notification-engine"
 import { SafeLink } from "@/components/SafeLink"
 import type { ContractMeta } from "../types"
 
@@ -349,15 +360,7 @@ const triggerTextDownload = (content: string, fileName: string) => {
 const GRT_CONTRACT_SOURCE_FOLDER = "Contratos GRt"
 const COMPILED_THIRD_PARTY_SOURCE_ID = "grunenthal-third-party-contracts-analisisderelacionesgrunenthal"
 
-const normalizeContractText = (value: string) =>
-  value
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, " ")
-    .replace(/\b(s a de c v|sapi de cv|s de rl de cv|sc|sa de cv|s c|s a p i de c v)\b/g, "")
-    .replace(/\s+/g, " ")
-    .trim()
+const normalizeContractText = normalizeGrunenthalContractParty
 
 const contractPartyKey = (contract: Pick<ContractMeta, "providerIdentity" | "thirdPartyName" | "contractorType">) =>
   normalizeContractText(contract.providerIdentity || contract.thirdPartyName || contract.contractorType || "")
@@ -376,6 +379,23 @@ const communicationTypeLabels: Record<GrunenthalThirdPartyAnalysisMatrixRow["com
   "sin-comunicacion": "Sin comunicación",
   "no-aplica": "N/A",
   otro: "Otro",
+}
+
+const updateReminderOptions: Array<{ value: AuditReminderRecurrenceInterval; label: string; months: number }> = [
+  { value: "monthly", label: "Mensual", months: 1 },
+  { value: "quarterly", label: "Trimestral", months: 3 },
+  { value: "semiannual", label: "Semestral", months: 6 },
+  { value: "annual", label: "Anual", months: 12 },
+]
+
+const contractUpdateReminderReferenceKey = (contractId: string) => `third-party-contract:update:${contractId}`
+
+const getNextContractUpdateDate = (interval: AuditReminderRecurrenceInterval) => {
+  const months = updateReminderOptions.find((option) => option.value === interval)?.months ?? 12
+  const dueDate = new Date()
+  dueDate.setHours(9, 0, 0, 0)
+  dueDate.setMonth(dueDate.getMonth() + months)
+  return dueDate
 }
 
 export default function DocumentsAndClausesPage() {
@@ -411,6 +431,9 @@ export default function DocumentsAndClausesPage() {
   const [templatePlaceholderValues, setTemplatePlaceholderValues] = useState<Record<string, string>>({})
   const [previewContractFile, setPreviewContractFile] = useState<StoredFile | null>(null)
   const [analysisContract, setAnalysisContract] = useState<ContractMeta | null>(null)
+  const [scheduleUpdateReminder, setScheduleUpdateReminder] = useState(false)
+  const [updateReminderInterval, setUpdateReminderInterval] =
+    useState<AuditReminderRecurrenceInterval>("annual")
 
   const filledTemplateText = useMemo(() => {
     if (!activeTemplate?.baseTemplate) return ""
@@ -525,6 +548,24 @@ export default function DocumentsAndClausesPage() {
       window.removeEventListener("contractsHistoryUpdated", handleStorageChange)
     }
   }, [])
+
+  useEffect(() => {
+    if (!analysisContract) {
+      setScheduleUpdateReminder(false)
+      setUpdateReminderInterval("annual")
+      return
+    }
+
+    const existingReminder = getAuditReminderByReferenceKey(contractUpdateReminderReferenceKey(analysisContract.id))
+    if (existingReminder?.recurrence?.sourceModule === "third-party-contracts") {
+      setScheduleUpdateReminder(true)
+      setUpdateReminderInterval(existingReminder.recurrence.interval)
+      return
+    }
+
+    setScheduleUpdateReminder(false)
+    setUpdateReminderInterval("annual")
+  }, [analysisContract])
 
   useEffect(() => {
     if (!customClausesLoaded) return
@@ -860,6 +901,43 @@ export default function DocumentsAndClausesPage() {
     link.target = "_blank"
     link.rel = "noopener"
     link.click()
+  }
+
+  const scheduleContractUpdateReminder = () => {
+    if (!analysisContract) return
+
+    const referenceKey = contractUpdateReminderReferenceKey(analysisContract.id)
+    const existingReminder = getAuditReminderByReferenceKey(referenceKey)
+    const responsible = analysisContract.responsibleName || "Admin"
+    const title =
+      analysisContract.contractTitle || analysisContract.providerIdentity || analysisContract.thirdPartyName || "Contrato"
+    const priority = analysisContract.riskLevel === "alto" ? "alta" : analysisContract.riskLevel === "medio" ? "media" : "baja"
+
+    upsertAuditReminderByReferenceKey(referenceKey, {
+      title: `Actualizar contrato: ${title}`,
+      description:
+        "Revisar vigencia, cláusulas, anexos y evidencia del contrato con tercero conforme al periodo seleccionado.",
+      dueDate: getNextContractUpdateDate(updateReminderInterval),
+      priority,
+      status: existingReminder?.status === "en-progreso" ? "en-progreso" : "pendiente",
+      assignedTo: [responsible],
+      category: "Contratos con terceros",
+      moduleId: "contratos-terceros",
+      documents: analysisContract.attachments.map((attachment) => attachment.fileName),
+      notes: `Contrato ${analysisContract.internalCode || analysisContract.id}`,
+      referenceKey,
+      recurrence: {
+        interval: updateReminderInterval,
+        sourceModule: "third-party-contracts",
+        sourceRecordId: analysisContract.id,
+      },
+    })
+    generateAllNotifications()
+
+    toast({
+      title: "Recordatorio programado",
+      description: "La revisión recurrente del contrato ya está conectada a notificaciones.",
+    })
   }
 
   const statusLabels: Record<ContractMeta["contractStatus"], string> = {
@@ -2306,6 +2384,66 @@ export default function DocumentsAndClausesPage() {
                         <strong>Riesgo:</strong> {analysisContract.riskNotes}
                       </p>
                     )}
+                    <div className="space-y-3 rounded-lg border bg-muted/20 p-3">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex items-center gap-2">
+                          <Checkbox
+                            id="contract-update-reminder"
+                            checked={scheduleUpdateReminder}
+                            onCheckedChange={setScheduleUpdateReminder}
+                          />
+                          <Label htmlFor="contract-update-reminder" className="text-sm font-medium">
+                            Actualizar
+                          </Label>
+                        </div>
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                type="button"
+                                size="icon"
+                                variant="ghost"
+                                className="h-7 w-7"
+                                aria-label="Información de actualización"
+                              >
+                                <Info className="h-4 w-4" />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent className="max-w-xs">
+                              Programa revisiones recurrentes del contrato y sincroniza el aviso con Recordatorios.
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </div>
+                      <Select
+                        value={updateReminderInterval}
+                        onValueChange={(value) =>
+                          setUpdateReminderInterval(value as AuditReminderRecurrenceInterval)
+                        }
+                        disabled={!scheduleUpdateReminder}
+                      >
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Periodo de actualización" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {updateReminderOptions.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <Button
+                        type="button"
+                        size="sm"
+                        className="w-full"
+                        disabled={!scheduleUpdateReminder}
+                        onClick={scheduleContractUpdateReminder}
+                      >
+                        <Bell className="mr-2 h-4 w-4" />
+                        Programar recordatorio
+                      </Button>
+                    </div>
                   </aside>
                 </div>
               </div>

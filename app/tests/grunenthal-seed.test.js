@@ -178,42 +178,23 @@ describe("personalización Grünenthal", () => {
     )
 
     const individualContractFiles = storedFiles.filter((file) => file.metadata?.individualRecordType === "third-party-contract")
-    const individualContracts = contracts.filter((contract) => contract.metadata?.sourceCompiledAssetId === "grunenthal-third-party-contracts-analisisderelacionesgrunenthal")
+    const individualContracts = contracts.filter((contract) =>
+      String(contract.id).startsWith("contract-grunenthal-third-party-contract-"),
+    )
     assert.equal(individualContractFiles.length, 32)
-    assert.equal(individualContracts.length, 32)
+    assert.equal(individualContracts.length, 0)
     assert.equal(
-      individualContracts.every((contract) =>
-        contract.attachments?.some((attachment) =>
-          individualContractFiles.some((file) => file.id === attachment.storageId && file.metadata?.individualRecordId === contract.metadata?.individualRecordId),
-        ),
-      ),
-      true,
-      "cada contrato individual debe enlazar su DOCX original con preview PDF",
+      contracts.some((contract) => contract.id === "grunenthal-third-party-framework-2026"),
+      false,
+      "el expediente general del análisis no debe aparecer como contrato del historial",
     )
-
-    const coradContract = individualContracts.find((contract) =>
-      contract.providerIdentity.includes("CORAD MEETING PLANNER"),
-    )
-    assert.ok(coradContract, "debe sembrarse el contrato individual de CORAD")
-    assert.equal(coradContract.clauseComplianceStatus, "no_aplica")
-    assert.equal(coradContract.clauseComplianceLabel, "N/A")
-    assert.match(coradContract.clauseRegulation, /N\/A/)
-    assert.equal(coradContract.metadata?.clauseComplianceStatus, "no-aplica")
-
-    const upsContract = individualContracts.find((contract) =>
-      contract.providerIdentity.includes("UPS SCS"),
-    )
-    assert.ok(upsContract, "debe sembrarse el contrato individual de UPS")
-    assert.equal(upsContract.clauseComplianceStatus, "requiere_revision")
-    assert.equal(upsContract.clauseComplianceLabel, "Sí cumple")
-    assert.equal(upsContract.riskLevel, "medio")
-    assert.match(upsContract.clauseComplianceNotes, /contradicción/i)
 
     const grtContractFiles = storedFiles.filter((file) => file.metadata?.individualRecordType === "third-party-grt-contract")
     const grtHistoryContracts = contracts.filter((contract) => contract.metadata?.sourceFolder === "Contratos GRt")
     assert.equal(grtContracts.GRUNENTHAL_GRT_CONTRACT_DOCUMENTS.length, 38)
     assert.equal(grtContractFiles.length, 38)
     assert.equal(grtHistoryContracts.length, 38)
+    assert.equal(contracts.length, 38)
     assert.equal(
       grtContractFiles.every((file) => {
         const publicPath = file.content.startsWith("/") ? file.content.slice(1) : file.content
@@ -246,6 +227,20 @@ describe("personalización Grünenthal", () => {
       "cada contrato de Contratos GRt debe enlazar su archivo original",
     )
     assert.equal(
+      grtHistoryContracts.filter((contract) => contract.metadata?.analysisRecordId).length,
+      34,
+      "los contratos físicos con contraparte en el análisis deben quedar enriquecidos con el registro fuente",
+    )
+    const haysContract = grtHistoryContracts.find((contract) => contract.providerIdentity?.includes("HAYS"))
+    assert.ok(haysContract, "debe sembrarse HAYS como contrato físico")
+    assert.equal(haysContract.metadata?.analysisSourceLineRange, "408-417")
+    assert.equal(haysContract.metadata?.sourceCompiledAssetId, "grunenthal-third-party-contracts-analisisderelacionesgrunenthal")
+    assert.ok(haysContract.metadata?.analysisMatrixRowId, "debe enlazar la fila de la matriz del análisis")
+    assert.ok(
+      haysContract.attachments?.some((attachment) => attachment.storageId === "grunenthal-file-grunenthal-third-party-contract-013"),
+      "debe anexar el extracto individual del análisis junto al contrato físico",
+    )
+    assert.equal(
       grtHistoryContracts.filter((contract) => contract.providerIdentity?.includes("BACHER ZOPPI")).length,
       1,
       "BACHER no debe quedar duplicado por copias exactas del PDF",
@@ -254,9 +249,16 @@ describe("personalización Grünenthal", () => {
       grtHistoryContracts.some((contract) =>
         contract.providerIdentity?.includes("BACHER ZOPPI") &&
         contract.clauseComplianceStatus === "no_cumple" &&
-        contract.attachments?.length === 1,
+        contract.attachments?.length >= 2,
       ),
       "debe sembrarse BACHER ZOPPI con análisis de incumplimiento y contrato enlazado",
+    )
+
+    const seedSource = fs.readFileSync(path.join(appDir, "lib", "grunenthal-seed.ts"), "utf8")
+    assert.equal(
+      seedSource.includes("no cumple con la LFPDPPP o su Reglamento, conforme al documento fuente."),
+      false,
+      "el texto generado de incumplimiento no debe mencionar 'o su Reglamento'",
     )
 
     const laborPolicyFiles = storedFiles.filter((file) => file.metadata?.individualRecordType === "labor-policy-reference")

@@ -1,6 +1,13 @@
 // Tipos para los recordatorios de auditoría
 export type AuditPriority = "alta" | "media" | "baja"
 export type AuditStatus = "pendiente" | "en-progreso" | "completada" | "vencida"
+export type AuditReminderRecurrenceInterval = "monthly" | "quarterly" | "semiannual" | "annual"
+
+export interface AuditReminderRecurrence {
+  interval: AuditReminderRecurrenceInterval
+  sourceModule: "third-party-contracts"
+  sourceRecordId: string
+}
 
 export interface AuditModule {
   id: string
@@ -26,6 +33,7 @@ export interface AuditReminder {
   notes?: string
   completedAt?: Date
   referenceKey?: string
+  recurrence?: AuditReminderRecurrence
 }
 
 export const auditModules: AuditModule[] = [
@@ -295,7 +303,41 @@ export function deleteAuditReminder(id: string) {
   return null
 }
 
+const RECURRENCE_MONTHS: Record<AuditReminderRecurrenceInterval, number> = {
+  monthly: 1,
+  quarterly: 3,
+  semiannual: 6,
+  annual: 12,
+}
+
+export function getNextRecurringDueDate(
+  dueDate: Date,
+  interval: AuditReminderRecurrenceInterval,
+  now: Date = new Date(),
+) {
+  const months = RECURRENCE_MONTHS[interval]
+  let next = new Date(dueDate.getTime())
+  next.setUTCMonth(next.getUTCMonth() + months)
+
+  while (next <= now) {
+    next = new Date(next.getTime())
+    next.setUTCMonth(next.getUTCMonth() + months)
+  }
+
+  return next
+}
+
 export function completeAuditReminder(id: string) {
+  const existing = getAuditReminders().find((reminder) => reminder.id === id)
+
+  if (existing?.recurrence) {
+    return updateAuditReminder(id, {
+      status: "pendiente",
+      dueDate: getNextRecurringDueDate(existing.dueDate, existing.recurrence.interval),
+      completedAt: undefined,
+    })
+  }
+
   return updateAuditReminder(id, {
     status: "completada",
     completedAt: new Date(),
