@@ -47,12 +47,14 @@ describe("personalización Grünenthal", () => {
   let repository
   let seed
   let fileStorage
+  let ratData
 
   before(async () => {
     assets = await importModule("lib/grunenthal-assets.ts")
     repository = await importModule("lib/grunenthal-repository.ts")
     seed = await importModule("lib/grunenthal-seed.ts")
     fileStorage = await importModule("lib/fileStorage.ts")
+    ratData = await importModule("lib/grunenthal-rat-data.ts")
   })
 
   beforeEach(() => {
@@ -99,7 +101,7 @@ describe("personalización Grünenthal", () => {
     assert.equal(inventories.length, 15)
     assert.equal(
       inventories.reduce((total, inventory) => total + inventory.subInventories.length, 0),
-      37,
+      33,
     )
     assert.equal(storedFiles.length, assets.GRUNENTHAL_DOCUMENT_MANIFEST.length + individualDocumentCount)
     assert.equal(new Set(storedFiles.map((file) => file.id)).size, storedFiles.length)
@@ -216,17 +218,58 @@ describe("personalización Grünenthal", () => {
     assert.equal(Object.values(sofia.modulePermissions).every(Boolean), true)
   })
 
-  it("mapea los PDFs RAT disponibles a subinventarios y conserva faltantes como revisión", async () => {
+  it("mapea cada PDF RAT fuente a un subinventario verificado", async () => {
     await seed.seedGrunenthalDemoData()
     const inventories = JSON.parse(global.localStorage.getItem("inventories") || "[]")
     const subInventories = inventories.flatMap((inventory) => inventory.subInventories)
     const withSourcePdf = subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfFileId)
     const withoutSourcePdf = subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfStatus === "sin-pdf")
+    const validationReport = ratData.GRUNENTHAL_RAT_VALIDATION_REPORT
 
     assert.equal(withSourcePdf.length, 33)
-    assert.equal(withoutSourcePdf.length, 4)
+    assert.equal(withoutSourcePdf.length, 0)
+    assert.equal(validationReport.canonicalInventoryCount, 15)
+    assert.equal(validationReport.canonicalSubInventoryCount, 33)
+    assert.equal(validationReport.missingPdfCount, 0)
+    assert.equal(validationReport.unmatchedPdfCount, 0)
+    assert.equal(validationReport.fieldMismatchCount, 0)
     assert.equal(
-      subInventories.some((subInventory) => subInventory.databaseName === "Ranking de Efectividad de Representantes"),
+      subInventories.every((subInventory) => subInventory.grunenthalValidationStatus === "verificado"),
+      true,
+    )
+    assert.equal(
+      subInventories.some((subInventory) => subInventory.databaseName === "Ranking de efectividad"),
+      true,
+    )
+  })
+
+  it("reemplaza inventarios locales viejos y limpia progreso RAT al migrar la versión", async () => {
+    global.localStorage.setItem(
+      "inventories",
+      JSON.stringify([
+        {
+          id: "inventario-viejo",
+          databaseName: "Inventario anterior",
+          subInventories: [{ id: "sub-viejo", databaseName: "Mezcla previa" }],
+        },
+      ]),
+    )
+    global.localStorage.setItem(
+      "inventories_progress",
+      JSON.stringify({ id: "progreso-viejo", databaseName: "Borrador anterior" }),
+    )
+
+    await seed.seedGrunenthalDemoData()
+
+    const inventories = JSON.parse(global.localStorage.getItem("inventories") || "[]")
+    const subInventories = inventories.flatMap((inventory) => inventory.subInventories)
+
+    assert.equal(inventories.length, 15)
+    assert.equal(subInventories.length, 33)
+    assert.equal(inventories.some((inventory) => inventory.id === "inventario-viejo"), false)
+    assert.equal(global.localStorage.getItem("inventories_progress"), null)
+    assert.equal(
+      subInventories.every((subInventory) => subInventory.grunenthalSourcePdfStatus === "vinculado"),
       true,
     )
   })

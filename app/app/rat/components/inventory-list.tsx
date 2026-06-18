@@ -53,6 +53,7 @@ import { SafeLink } from "@/components/SafeLink"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { generateInventoryPDF } from "../utils/inventory-pdf"
 import { Input } from "@/components/ui/input"
+import { normalizeInventoryForForm } from "../utils/inventory-normalization"
 
 interface InventoryListProps {
   inventories: Inventory[]
@@ -193,7 +194,7 @@ export function InventoryList({
   }, [getHolderTypes, getResponsibleAreas, searchTerm, sortedInventories])
 
   const handleEdit = (inventory: Inventory) => {
-    setFormData(inventory)
+    setFormData(normalizeInventoryForForm(inventory))
     setEditingInventoryId(inventory.id)
     setMode("create")
   }
@@ -379,7 +380,7 @@ const generatePDF = (inventory: Inventory) => {
         }
 
         const now = new Date().toISOString()
-        const normalizedInventories = validInventories.map(inv => ({
+        const normalizedInventories = validInventories.map(inv => normalizeInventoryForForm({
           ...inv,
           createdAt: inv.createdAt || now,
           updatedAt: inv.updatedAt || now,
