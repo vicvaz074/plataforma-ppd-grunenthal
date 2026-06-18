@@ -22,7 +22,11 @@ import { StepperNav } from "./stepper-nav"
 import { saveFile } from "@/lib/fileStorage"
 import { parseRatExcel } from "../utils/parseRatExcel"
 import { parseExcelOrCsvManual } from "../utils/fileParserManual"
-import { normalizeInventoryForForm } from "../utils/inventory-normalization"
+import {
+  DEFAULT_REPORT_ACCENT_COLOR,
+  createDefaultInventory,
+  normalizeInventoryForForm,
+} from "../utils/inventory-normalization"
 
 const normalizePurposeDisplay = (value: unknown): string | null => {
   if (typeof value !== "string") return null
@@ -341,23 +345,7 @@ const defaultSubInventory = (): SubInventory => ({
   personalData: [],
 })
 
-const defaultInventory = (): Inventory => ({
-  id: Date.now().toString(),
-  databaseName: "",
-  responsible: "",
-  companyLogoDataUrl: undefined,
-  companyLogoFileName: undefined,
-  reportAccentColor: "#1E3A8A",
-  subInventories: [
-    { ...defaultSubInventory() }
-  ],
-  riskLevel: "",
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
-  createdBy: "",
-  updatedBy: "",
-  status: "pendiente",
-})
+const defaultInventory = (): Inventory => createDefaultInventory()
 
 export function InventoryForm({
   formData,
@@ -398,6 +386,7 @@ export function InventoryForm({
         ...prev,
         companyLogoDataUrl: undefined,
         companyLogoFileName: undefined,
+        companyLogoPublicPath: undefined,
       }))
       return
     }
@@ -411,6 +400,7 @@ export function InventoryForm({
         ...prev,
         companyLogoDataUrl: reader.result as string,
         companyLogoFileName: file.name,
+        companyLogoPublicPath: undefined,
       }))
     }
     reader.readAsDataURL(file)
@@ -418,7 +408,7 @@ export function InventoryForm({
 
   const handleAccentColorChange = (value: string) => {
     if (!value) {
-      setFormData((prev) => ({ ...prev, reportAccentColor: "#1E3A8A" }))
+      setFormData((prev) => ({ ...prev, reportAccentColor: DEFAULT_REPORT_ACCENT_COLOR }))
       return
     }
     const normalized = value.startsWith("#") ? value : `#${value}`
@@ -509,16 +499,16 @@ export function InventoryForm({
           ...f,
           subInventories: subs,
           databaseName,
-          responsible: f.responsible || "",
+          responsible: f.responsible || defaultInventory().responsible,
         }))
         setStep(13)
       } else {
         const newInv: Inventory = {
+          ...defaultInventory(),
           id: Date.now().toString(),
           subInventories: subs,
           createdAt: new Date().toISOString(),
           databaseName,
-          responsible: "",
         }
         setInventories((all) => [...all, newInv])
         setMode("view")
@@ -1452,9 +1442,9 @@ export function InventoryForm({
                   <div className="flex flex-col gap-4 rounded-lg border border-dashed border-muted-foreground/40 p-4 sm:flex-row sm:items-center sm:justify-between">
                     <div className="flex items-center gap-4">
                       <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-md border bg-muted/30">
-                        {formData.companyLogoDataUrl ? (
+                        {formData.companyLogoDataUrl || formData.companyLogoPublicPath ? (
                           <img
-                            src={formData.companyLogoDataUrl}
+                            src={formData.companyLogoDataUrl || formData.companyLogoPublicPath}
                             alt="Logo de la empresa responsable"
                             className="h-full w-full object-contain"
                           />
@@ -1497,11 +1487,11 @@ export function InventoryForm({
                         variant="outline"
                         onClick={() => companyLogoInputRef.current?.click()}
                       >
-                        {formData.companyLogoDataUrl
+                        {formData.companyLogoDataUrl || formData.companyLogoPublicPath
                           ? "Actualizar logo"
                           : "Subir logo"}
                       </Button>
-                      {formData.companyLogoDataUrl && (
+                      {(formData.companyLogoDataUrl || formData.companyLogoPublicPath) && (
                         <Button
                           type="button"
                           variant="ghost"
@@ -1524,7 +1514,7 @@ export function InventoryForm({
                     <div className="flex items-center gap-3">
                       <input
                         type="color"
-                        value={formData.reportAccentColor || "#1E3A8A"}
+                        value={formData.reportAccentColor || DEFAULT_REPORT_ACCENT_COLOR}
                         onChange={(event) =>
                           handleAccentColorChange(event.target.value)
                         }
@@ -1538,7 +1528,7 @@ export function InventoryForm({
                     </div>
                     <div className="flex items-center gap-2 sm:justify-end">
                       <Input
-                        value={formData.reportAccentColor || "#1E3A8A"}
+                        value={formData.reportAccentColor || DEFAULT_REPORT_ACCENT_COLOR}
                         onChange={(event) =>
                           handleAccentColorChange(event.target.value)
                         }
@@ -1547,7 +1537,7 @@ export function InventoryForm({
                       <Button
                         type="button"
                         variant="ghost"
-                        onClick={() => handleAccentColorChange("#1E3A8A")}
+                        onClick={() => handleAccentColorChange(DEFAULT_REPORT_ACCENT_COLOR)}
                       >
                         Restablecer
                       </Button>

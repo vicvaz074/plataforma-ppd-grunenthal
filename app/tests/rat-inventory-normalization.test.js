@@ -11,6 +11,18 @@ async function importModule(relativePath) {
 }
 
 describe("normalización de inventarios RAT para edición", () => {
+  it("crea inventarios nuevos con la identidad de reporte de Grünenthal", async () => {
+    const { createDefaultInventory } = await importModule("app/rat/utils/inventory-normalization.ts")
+
+    const defaults = createDefaultInventory()
+
+    assert.equal(defaults.responsible, "Grünenthal")
+    assert.equal(defaults.reportAccentColor, "#40BB6A")
+    assert.equal(defaults.companyLogoFileName, "Grünenthal_logo_green.png")
+    assert.equal(defaults.companyLogoPublicPath, "/client/grunenthal/brand/grunenthal-logo-green.png")
+    assert.match(defaults.companyLogoDataUrl, /^data:image\/png;base64,/)
+  })
+
   it("precarga inventarios sembrados con estructuras compatibles con el formulario", async () => {
     const { normalizeInventoryForForm } = await importModule("app/rat/utils/inventory-normalization.ts")
 
