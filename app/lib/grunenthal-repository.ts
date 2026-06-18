@@ -64,7 +64,11 @@ export type GrunenthalThirdPartyContractSeed = IndividualDocumentBase & {
   communicationType: "remision" | "transferencia" | "mixta" | "sin-comunicacion"
   relationType: "encargado" | "tercero" | "mixta" | "sin-comunicacion"
   contractorType: string
-  complianceStatus: "cumple" | "no-cumple" | "no-aplica"
+  complianceStatus: "cumple" | "no-cumple" | "no-aplica" | "requiere-revision"
+  sourceClauseType: string
+  sourceComplianceLabel: string
+  sourceRecommendation: string
+  sourceComplianceNotes?: string
   recommendedInstrument: string
   riskLevel: "bajo" | "medio" | "alto"
 }
@@ -127,6 +131,192 @@ function moduleArea(module: GrunenthalRepositoryModule) {
 function individualPath(folder: string, slug: string, extension: "docx" | "pdf") {
   const suffix = extension === "pdf" ? "-preview.pdf" : ".docx"
   return `/client/grunenthal/${folder}/individual/${slug}${suffix}`
+}
+
+type ThirdPartyClauseAnalysis = {
+  clauseType: string
+  complianceLabel: string
+  recommendation: string
+  notes?: string
+}
+
+const THIRD_PARTY_CLAUSE_ANALYSIS_BY_INDEX: Record<number, ThirdPartyClauseAnalysis> = {
+  1: {
+    clauseType: "(1) Vigésima Primera. Protección de Datos Personales",
+    complianceLabel: "No cumple",
+    recommendation:
+      "La cláusula no cumple con los requisitos de la LFPDPPP. Se sugiere emplear la cláusula C2 del Manual de Relaciones con Terceros y/o los apéndices CM-2 o C-2.",
+  },
+  2: {
+    clauseType: "(1) Vigésima. Protección de Datos Personales",
+    complianceLabel: "No cumple",
+    recommendation:
+      "Las cláusulas no cumplen con los requisitos de la LFPDPPP y su Reglamento. Se sugiere emplear la cláusula C1 del Manual de Relaciones con Terceros y/o los apéndices CM-1 o C-1.",
+  },
+  3: {
+    clauseType: "(1) Vigésima. Protección de Datos Personales",
+    complianceLabel: "No cumple",
+    recommendation:
+      "La cláusula no cumple con los requisitos de la LFPDPPP. Se sugiere emplear la cláusula C2 del Manual de Relaciones con Terceros y/o los apéndices CM-2 o C-2.",
+  },
+  4: {
+    clauseType: "(1) Vigésima. Protección de Datos Personales",
+    complianceLabel: "Sí cumple",
+    recommendation: "La cláusula cumple con los requisitos de la LFPDPPP y su Reglamento.",
+  },
+  5: {
+    clauseType: "(1) Addendum to MSA. (2) Addendum to MSA for MyVeeva for Doctors",
+    complianceLabel: "No cumple",
+    recommendation:
+      "La cláusula no cumple con los requisitos de la LFPDPPP. Se sugiere emplear la cláusula C2 del Manual de Relaciones con Terceros y/o los apéndices CM-2 o C-2.",
+  },
+  6: {
+    clauseType: "No se encontró cláusula relativa.",
+    complianceLabel: "N/A",
+    recommendation:
+      "El análisis no localizó cláusula relativa. Se sugiere incorporar la cláusula C2 del Manual de Relaciones con Terceros y/o los apéndices CM-2 o C-2.",
+    notes: "El documento fuente marca la columna de cumplimiento como N/A, no como incumplimiento directo.",
+  },
+  7: {
+    clauseType: "Standard Contractual Clauses (Controller to Processor) del Cloud Agreement",
+    complianceLabel: "Sí cumple",
+    recommendation: "La cláusula cumple con los requisitos de la LFPDPPP y su Reglamento.",
+  },
+  8: {
+    clauseType: "(1) Vigésimo. Protección de datos personales",
+    complianceLabel: "No cumple",
+    recommendation:
+      "La falta de cláusula o instrumento jurídico puede implicar una violación al principio de responsabilidad. Se sugiere emplear la cláusula C1 y/o los apéndices CM-1 o C-1.",
+  },
+  9: {
+    clauseType: "(1) Vigésima Segunda. Protección de Datos Personales.",
+    complianceLabel: "No cumple",
+    recommendation:
+      "Las cláusulas no cumplen con los requisitos de la LFPDPPP. Se sugiere emplear la cláusula C1 y/o los apéndices CM-1 o C-1.",
+  },
+  10: {
+    clauseType: "(1) Vigésima Segunda. Protección de Datos Personales.",
+    complianceLabel: "No cumple",
+    recommendation:
+      "Las cláusulas no cumplen con los requisitos de la LFPDPPP. Se sugiere emplear la cláusula C1 y/o los apéndices CM-1 o C-1.",
+  },
+  11: {
+    clauseType: "No se encontró cláusula relativa.",
+    complianceLabel: "No cumple",
+    recommendation:
+      "Para la gestión de flota se sugiere cláusula C1 y/o apéndices CM-1 o C-1. Para el derecho de adquisición se sugiere cláusula C2 y/o apéndices CM-2 o C-2.",
+  },
+  12: {
+    clauseType: "Vigésima. Protección de Datos Personales",
+    complianceLabel: "No cumple",
+    recommendation:
+      "Se sugieren cláusulas C1/CM-1/C-1 para remisión y C2/CM-2/C-2 para transferencia de datos de empleados del proveedor.",
+  },
+  13: {
+    clauseType: "§ 2 Geheimhaltung / Datenschutz",
+    complianceLabel: "No cumple",
+    recommendation: "Se sugiere emplear la cláusula C2 y/o los apéndices CM-2 o C-2.",
+  },
+  14: {
+    clauseType: "(1) Vigésima Segunda. Protección de Datos Personales.",
+    complianceLabel: "No cumple",
+    recommendation: "Se sugiere emplear la cláusula C1 y/o los apéndices CM-1 o C-1.",
+  },
+  15: {
+    clauseType: "(1) Vigésima. Protección de Datos Personales.",
+    complianceLabel: "No cumple",
+    recommendation:
+      "Se sugieren cláusulas C1/CM-1/C-1 para remisión y C2/CM-2/C-2 para transferencia de datos de empleados del proveedor.",
+  },
+  16: {
+    clauseType: "(1) Vigésima Tercera. Datos Personales",
+    complianceLabel: "No cumple",
+    recommendation: "Se sugiere emplear la cláusula C2 y/o los apéndices CM-2 o C-2.",
+  },
+  17: {
+    clauseType: "(1) Vigésima Primera. Protección de Datos Personales. (2) Anexo 3. Contrato de Procesamiento de Datos. (3) Convenio de Confidencialidad.",
+    complianceLabel: "No cumple",
+    recommendation:
+      "La cláusula y anexo tratan la comunicación como remisión, pero el análisis indica que debe regularse como transferencia. Se sugiere emplear cláusula C2 y/o apéndices CM-2 o C-2.",
+  },
+  18: {
+    clauseType: "(1) Vigésima Protección de Datos Personales. (2) Anexo 3 Acuerdo Complementario de Protección de Datos",
+    complianceLabel: "Sí cumple",
+    recommendation: "La cláusula cumple con los requisitos de la LFPDPPP y su Reglamento.",
+  },
+  19: {
+    clauseType: "(1) Confidencialidad",
+    complianceLabel: "No cumple",
+    recommendation:
+      "La cláusula y anexo tratan la comunicación como remisión, pero el análisis indica que debe regularse como transferencia. Se sugiere cláusula C2 y/o apéndices CM-2 o C-2.",
+  },
+  20: {
+    clauseType: "(1) Artículo 6 Confidencialidad",
+    complianceLabel: "No cumple",
+    recommendation: "Se sugiere emplear la cláusula C2 y/o los apéndices CM-2 o C-2.",
+  },
+  21: {
+    clauseType: "Trigésima tercera. Confidencialidad y protección de datos personales",
+    complianceLabel: "No cumple",
+    recommendation: "Se sugiere emplear la cláusula C2 y/o los apéndices CM-2 o C-2.",
+  },
+  22: {
+    clauseType: "(1) Artículo 6 - Confidencialidad - Publicidad",
+    complianceLabel: "No cumple",
+    recommendation: "Se sugiere emplear la cláusula C2 y/o los apéndices CM-2 o C-2.",
+  },
+  23: {
+    clauseType: "(1) Artículo 6 - Confidencialidad - Publicidad",
+    complianceLabel: "No cumple",
+    recommendation: "Se sugiere emplear la cláusula C1 y/o los apéndices CM-1 o C-1.",
+  },
+  24: {
+    clauseType: "(1) Décima octava. Privacidad de Datos Personales",
+    complianceLabel: "No cumple",
+    recommendation: "Se sugiere emplear la cláusula C1 y/o los apéndices CM-1 o C-1.",
+  },
+  25: {
+    clauseType: "(1) Vigésima Protección de Datos Personales",
+    complianceLabel: "No cumple",
+    recommendation: "Se sugiere emplear la cláusula C1 y/o los apéndices CM-1 o C-1.",
+  },
+  26: {
+    clauseType: "(1) Octava. Protección de Datos Personales",
+    complianceLabel: "No cumple",
+    recommendation: "Se sugiere emplear la cláusula C2 y/o los apéndices CM-2 o C-2.",
+  },
+  27: {
+    clauseType: "(1) Vigésima primera. Manejo de Datos Personales",
+    complianceLabel: "Sí cumple",
+    recommendation:
+      "La columna de recomendación del documento fuente contiene texto de no cumplimiento, aunque la columna de cumplimiento dice Sí cumple.",
+    notes: "Revisión recomendada por contradicción interna del análisis fuente.",
+  },
+  28: {
+    clauseType: "(1) Data Processing Agreement for Cloud Services",
+    complianceLabel: "Sí cumple",
+    recommendation: "La cláusula cumple con los requisitos de la LFPDPPP y su Reglamento.",
+  },
+  29: {
+    clauseType: "(1) Apéndice 3 - Cláusulas Contractuales Tipo (Encargados del Tratamiento)",
+    complianceLabel: "Sí cumple",
+    recommendation: "La cláusula cumple con los requisitos de la LFPDPPP y su Reglamento.",
+  },
+  30: {
+    clauseType: "(1) Acuerdo de procesamiento de datos para servicios SAP Cloud",
+    complianceLabel: "Sí cumple",
+    recommendation: "La cláusula cumple con los requisitos de la LFPDPPP y su Reglamento.",
+  },
+  31: {
+    clauseType: "(1) Data Processing Addendum",
+    complianceLabel: "Sí cumple",
+    recommendation: "La cláusula cumple con los requisitos de la LFPDPPP y su Reglamento.",
+  },
+  32: {
+    clauseType: "(1) Agreement on Data Protection",
+    complianceLabel: "Sí cumple",
+    recommendation: "La cláusula cumple con los requisitos de la LFPDPPP y su Reglamento.",
+  },
 }
 
 function privacyNotice(seed: {
@@ -313,9 +503,11 @@ function contract(seed: {
   lineStart: number
   lineEnd: number
   recommendedInstrument?: string
+  riskLevel?: GrunenthalThirdPartyContractSeed["riskLevel"]
 }): GrunenthalThirdPartyContractSeed {
   const internalCode = `GRT-TER-2026-${String(seed.index).padStart(3, "0")}`
   const slug = `${internalCode.toLowerCase()}-${slugify(seed.providerIdentity).slice(0, 70)}`
+  const clauseAnalysis = THIRD_PARTY_CLAUSE_ANALYSIS_BY_INDEX[seed.index]
   const relationType =
     seed.communicationType === "remision"
       ? "encargado"
@@ -333,12 +525,15 @@ function contract(seed: {
         : seed.communicationType === "mixta"
           ? "Cláusulas C1 y C2 / apéndices CM-1 y CM-2"
           : "Sin instrumento adicional identificado")
-  const riskLevel =
-    seed.communicationType === "sin-comunicacion" || seed.complianceStatus === "cumple"
-      ? "bajo"
-      : seed.communicationType === "mixta"
-        ? "alto"
-        : "medio"
+  const riskLevel = seed.riskLevel
+    ? seed.riskLevel
+    : seed.complianceStatus === "no-aplica"
+      ? "medio"
+      : seed.communicationType === "sin-comunicacion" || seed.complianceStatus === "cumple"
+        ? "bajo"
+        : seed.communicationType === "mixta"
+          ? "alto"
+          : "medio"
 
   return {
     id: `grunenthal-third-party-contract-${String(seed.index).padStart(3, "0")}`,
@@ -367,6 +562,10 @@ function contract(seed: {
     relationType,
     contractorType: seed.communicationType === "transferencia" ? "tercero" : "proveedor",
     complianceStatus: seed.complianceStatus,
+    sourceClauseType: clauseAnalysis?.clauseType || "Cláusula no detallada en el extracto fuente.",
+    sourceComplianceLabel: clauseAnalysis?.complianceLabel || seed.complianceStatus,
+    sourceRecommendation: clauseAnalysis?.recommendation || recommendedInstrument,
+    sourceComplianceNotes: clauseAnalysis?.notes,
     recommendedInstrument,
     riskLevel,
   }
@@ -378,7 +577,7 @@ export const GRUNENTHAL_INDIVIDUAL_THIRD_PARTY_RECORDS: GrunenthalThirdPartyCont
   contract({ index: 3, providerIdentity: "INSTITUTO DE INVESTIGACIÓN E INNOVACIÓN FARMACÉUTICA, A.C. (INEFAM)", area: "COMEX", contractObject: "Suscripción y entrega de reportes por parte de INEFAM.", communicationType: "transferencia", complianceStatus: "no-cumple", lineStart: 266, lineEnd: 278 }),
   contract({ index: 4, providerIdentity: "D&MS DRUGS AND MARKETSHARE, S.C.", area: "COMEX", contractObject: "Generación de sistema de incentivos.", communicationType: "sin-comunicacion", complianceStatus: "cumple", lineStart: 279, lineEnd: 284 }),
   contract({ index: 5, providerIdentity: "VEEVA SYSTEMS INC.", area: "COMEX", contractObject: "Formato de orden de servicios.", communicationType: "transferencia", complianceStatus: "no-cumple", lineStart: 285, lineEnd: 297 }),
-  contract({ index: 6, providerIdentity: "CORAD MEETING PLANNER, S.A. DE C.V.", area: "COMPRAS", contractObject: "Operación de grupos, congresos, convenciones, transportación, producción y viajes.", communicationType: "transferencia", complianceStatus: "no-cumple", lineStart: 308, lineEnd: 315 }),
+  contract({ index: 6, providerIdentity: "CORAD MEETING PLANNER, S.A. DE C.V.", area: "COMPRAS", contractObject: "Operación de grupos, congresos, convenciones, transportación, producción y viajes.", communicationType: "transferencia", complianceStatus: "no-aplica", lineStart: 308, lineEnd: 315 }),
   contract({ index: 7, providerIdentity: "ORO LABS, INC.", area: "COMPRAS", contractObject: "Convenio de nube.", communicationType: "remision", complianceStatus: "cumple", lineStart: 316, lineEnd: 323 }),
   contract({ index: 8, providerIdentity: "CENTRAL MEDIA, S.C.", area: "DIGITAL", contractObject: "Servicios de creación de contenido para Grünenthal.", communicationType: "remision", complianceStatus: "no-cumple", lineStart: 334, lineEnd: 341 }),
   contract({ index: 9, providerIdentity: "BESPOKE ADVERTISING, S.A. DE C.V.", area: "DIGITAL", contractObject: "Servicios de marketing y publicidad.", communicationType: "remision", complianceStatus: "no-cumple", lineStart: 342, lineEnd: 349 }),
@@ -399,7 +598,7 @@ export const GRUNENTHAL_INDIVIDUAL_THIRD_PARTY_RECORDS: GrunenthalThirdPartyCont
   contract({ index: 24, providerIdentity: "SAFE DATA RESOURCES, S.A. DE C.V.", area: "HUMAN RESOURCES", contractObject: "Contrato de depósito.", communicationType: "remision", complianceStatus: "no-cumple", lineStart: 513, lineEnd: 520 }),
   contract({ index: 25, providerIdentity: "SINEFARMA, S.A. DE C.V.", area: "INVESTIGACIÓN DE MERCADOS", contractObject: "Servicios de marketing.", communicationType: "remision", complianceStatus: "no-cumple", lineStart: 546, lineEnd: 554 }),
   contract({ index: 26, providerIdentity: "Agencias, Asociaciones e Instituciones de Salud", area: "PRIMARY CARE", contractObject: "Contrato de patrocinio.", communicationType: "transferencia", complianceStatus: "no-cumple", lineStart: 565, lineEnd: 572 }),
-  contract({ index: 27, providerIdentity: "UPS SCS (MÉXICO), S.A. DE C.V.", area: "SUPPLY", contractObject: "Almacenamiento, embalaje, surtido, empaque, preparación de pedidos y órdenes de entrega.", communicationType: "transferencia", complianceStatus: "cumple", lineStart: 584, lineEnd: 591 }),
+  contract({ index: 27, providerIdentity: "UPS SCS (MÉXICO), S.A. DE C.V.", area: "SUPPLY", contractObject: "Almacenamiento, embalaje, surtido, empaque, preparación de pedidos y órdenes de entrega.", communicationType: "transferencia", complianceStatus: "requiere-revision", lineStart: 584, lineEnd: 591, riskLevel: "medio" }),
   contract({ index: 28, providerIdentity: "CONCUR TECHNOLOGIES, INC.", area: "GLOBALES", contractObject: "Servicios de nube.", communicationType: "remision", complianceStatus: "cumple", lineStart: 603, lineEnd: 608 }),
   contract({ index: 29, providerIdentity: "MICROSOFT CORPORATION", area: "GLOBALES", contractObject: "Licencia para uso de software y servicios en línea.", communicationType: "remision", complianceStatus: "cumple", lineStart: 609, lineEnd: 614 }),
   contract({ index: 30, providerIdentity: "SAP SE", area: "GLOBALES", contractObject: "Servicios de nube.", communicationType: "remision", complianceStatus: "cumple", lineStart: 615, lineEnd: 620 }),

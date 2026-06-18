@@ -1032,6 +1032,20 @@ export default function ContractRegistrationPage() {
     vencido: { label: "Vencido", variant: "destructive" },
     sin_definir: { label: "Sin definir", variant: "outline" },
   };
+  const clauseComplianceBadges: Record<
+    NonNullable<ContractMeta["clauseComplianceStatus"]>,
+    { label: string; variant: "default" | "secondary" | "outline" | "destructive" }
+  > = {
+    cumple: { label: "Cláusula cumple", variant: "secondary" },
+    no_cumple: { label: "Cláusula no cumple", variant: "destructive" },
+    no_aplica: { label: "Cláusula N/A", variant: "outline" },
+    requiere_revision: { label: "Cláusula en revisión", variant: "outline" },
+  };
+  const getClauseComplianceBadge = (contract: ContractMeta) => {
+    const status = contract.clauseComplianceStatus;
+    if (status && clauseComplianceBadges[status]) return clauseComplianceBadges[status];
+    return null;
+  };
   const navItems = THIRD_PARTY_CONTRACTS_NAV.map((item) => {
     if (item.href === "/third-party-contracts/registration") {
       return { ...item, badge: contractsHistory.length };
@@ -1865,6 +1879,15 @@ export default function ContractRegistrationPage() {
           {selectedContract && (
             <div className="space-y-4 text-sm">
               <div>
+                {(() => {
+                  const clauseBadge = getClauseComplianceBadge(selectedContract);
+
+                  return clauseBadge ? (
+                    <div className="mb-2">
+                      <Badge variant={clauseBadge.variant}>{clauseBadge.label}</Badge>
+                    </div>
+                  ) : null;
+                })()}
                 <p className="font-semibold">{selectedContract.contractTitle}</p>
                 <p className="text-muted-foreground">Código interno: {selectedContract.internalCode}</p>
                 <div className="mt-2 flex flex-wrap gap-2">
@@ -1876,6 +1899,35 @@ export default function ContractRegistrationPage() {
                     Riesgo: {selectedContract.riskLevel}
                   </Badge>
                 </div>
+              </div>
+
+              <div className="rounded-md border bg-muted/30 p-3">
+                <p className="font-medium">Análisis de cláusula</p>
+                <div className="mt-2 grid gap-2 md:grid-cols-2">
+                  <div>
+                    <p className="text-xs uppercase text-muted-foreground">Resultado fuente</p>
+                    <p>{selectedContract.clauseComplianceLabel || selectedContract.clauseRegulation}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs uppercase text-muted-foreground">Cláusula revisada</p>
+                    <p>{selectedContract.clauseType || "No especificada"}</p>
+                  </div>
+                </div>
+                <div className="mt-2">
+                  <p className="text-xs uppercase text-muted-foreground">Criterio regulatorio</p>
+                  <p>{selectedContract.clauseRegulation}</p>
+                </div>
+                {selectedContract.complianceNeeds && (
+                  <div className="mt-2">
+                    <p className="text-xs uppercase text-muted-foreground">Recomendación</p>
+                    <p>{selectedContract.complianceNeeds}</p>
+                  </div>
+                )}
+                {selectedContract.clauseComplianceNotes && (
+                  <p className="mt-2 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-amber-900">
+                    {selectedContract.clauseComplianceNotes}
+                  </p>
+                )}
               </div>
 
               <div className="grid gap-2 md:grid-cols-2">

@@ -585,6 +585,52 @@ function instrumentTypesFor(record: GrunenthalThirdPartyContractSeed) {
   return ["contrato"]
 }
 
+function guaranteesFor(record: GrunenthalThirdPartyContractSeed) {
+  if (record.complianceStatus === "cumple") return ["clausulas_contractuales"]
+  if (record.complianceStatus === "no-aplica") return ["pendiente_incorporar_clausula"]
+  if (record.complianceStatus === "requiere-revision") return ["clausulas_contractuales", "pendiente_validacion"]
+  return ["clausulas_contractuales", "pendiente_ajuste"]
+}
+
+function clauseComplianceStatusFor(record: GrunenthalThirdPartyContractSeed) {
+  if (record.complianceStatus === "no-cumple") return "no_cumple"
+  if (record.complianceStatus === "no-aplica") return "no_aplica"
+  if (record.complianceStatus === "requiere-revision") return "requiere_revision"
+  return "cumple"
+}
+
+function clauseRegulationFor(record: GrunenthalThirdPartyContractSeed) {
+  if (record.complianceStatus === "cumple") {
+    return "Resultado del análisis de cláusulas: cumple con la LFPDPPP y su Reglamento."
+  }
+
+  if (record.complianceStatus === "no-aplica") {
+    return "Resultado del análisis de cláusulas: N/A en la fuente; no se localizó cláusula relativa y se recomienda incorporarla."
+  }
+
+  if (record.complianceStatus === "requiere-revision") {
+    return "Resultado del análisis de cláusulas: requiere revisión por contradicción entre columnas del documento fuente."
+  }
+
+  return "Resultado del análisis de cláusulas: no cumple con la LFPDPPP o su Reglamento, conforme al documento fuente."
+}
+
+function riskNotesFor(record: GrunenthalThirdPartyContractSeed) {
+  if (record.complianceStatus === "cumple") {
+    return "Riesgo bajo por cláusula marcada como compatible en el análisis fuente."
+  }
+
+  if (record.complianceStatus === "no-aplica") {
+    return "Revisión requerida: el análisis fuente marca N/A porque no localizó cláusula relativa; debe incorporarse el instrumento recomendado."
+  }
+
+  if (record.complianceStatus === "requiere-revision") {
+    return record.sourceComplianceNotes || "Revisión requerida por inconsistencia en el análisis fuente."
+  }
+
+  return `Revisión requerida: ${record.sourceRecommendation || record.recommendedInstrument}.`
+}
+
 function buildIndividualThirdPartyContract(record: GrunenthalThirdPartyContractSeed) {
   const sourceLineRange = `${record.lineStart}-${record.lineEnd}`
 
@@ -609,7 +655,7 @@ function buildIndividualThirdPartyContract(record: GrunenthalThirdPartyContractS
     instrumentTypes: instrumentTypesFor(record),
     formalized: "si",
     baseLegal: ["relacion_juridica"],
-    guarantees: record.complianceStatus === "cumple" ? ["clausulas_contractuales"] : ["clausulas_contractuales", "pendiente_ajuste"],
+    guarantees: guaranteesFor(record),
     contractValidity: "indefinida",
     startDate: "2025-10-21",
     expirationDate: "2026-10-21",
@@ -618,11 +664,12 @@ function buildIndividualThirdPartyContract(record: GrunenthalThirdPartyContractS
     terminationClause: true,
     communicationType: record.communicationType,
     communicationDetails: record.contractObject,
-    clauseRegulation:
-      record.complianceStatus === "cumple"
-        ? "El análisis fuente identifica cláusulas compatibles con la LFPDPPP o su Reglamento."
-        : "El análisis fuente identifica ajustes necesarios para cumplir con la LFPDPPP y su Reglamento.",
-    complianceNeeds: record.recommendedInstrument,
+    clauseRegulation: clauseRegulationFor(record),
+    clauseType: record.sourceClauseType,
+    clauseComplianceStatus: clauseComplianceStatusFor(record),
+    clauseComplianceLabel: record.sourceComplianceLabel,
+    clauseComplianceNotes: record.sourceComplianceNotes,
+    complianceNeeds: record.sourceRecommendation,
     evidenceAvailable: ["analisis", "extracto_individual"],
     evidenceNotes: `Registro individual extraído del análisis de relaciones con terceros, líneas ${sourceLineRange}.`,
     responsibleName: GRUNENTHAL_ADMIN_NAME,
@@ -632,10 +679,7 @@ function buildIndividualThirdPartyContract(record: GrunenthalThirdPartyContractS
     reminders: [],
     linkedInventories: "RAT Grünenthal 2026",
     riskLevel: record.riskLevel,
-    riskNotes:
-      record.complianceStatus === "cumple"
-        ? "Riesgo bajo por cláusula marcada como compatible en el análisis fuente."
-        : `Revisión requerida: ${record.recommendedInstrument}.`,
+    riskNotes: riskNotesFor(record),
     versioningNotes: "Carga individual generada desde el compilado de relaciones con terceros.",
     reviewLog: "Creado por Admin para demo Grünenthal 2026.",
     attachments: [
@@ -657,6 +701,8 @@ function buildIndividualThirdPartyContract(record: GrunenthalThirdPartyContractS
       sourceLineRange,
       sourceRelativePath: record.sourceRelativePath,
       individualRecordId: record.id,
+      clauseComplianceStatus: record.complianceStatus,
+      clauseComplianceLabel: record.sourceComplianceLabel,
       createdBy: "Admin",
       createdAt: SEEDED_AT,
     },

@@ -182,6 +182,24 @@ describe("personalización Grünenthal", () => {
       "cada contrato individual debe enlazar su DOCX original con preview PDF",
     )
 
+    const coradContract = individualContracts.find((contract) =>
+      contract.providerIdentity.includes("CORAD MEETING PLANNER"),
+    )
+    assert.ok(coradContract, "debe sembrarse el contrato individual de CORAD")
+    assert.equal(coradContract.clauseComplianceStatus, "no_aplica")
+    assert.equal(coradContract.clauseComplianceLabel, "N/A")
+    assert.match(coradContract.clauseRegulation, /N\/A/)
+    assert.equal(coradContract.metadata?.clauseComplianceStatus, "no-aplica")
+
+    const upsContract = individualContracts.find((contract) =>
+      contract.providerIdentity.includes("UPS SCS"),
+    )
+    assert.ok(upsContract, "debe sembrarse el contrato individual de UPS")
+    assert.equal(upsContract.clauseComplianceStatus, "requiere_revision")
+    assert.equal(upsContract.clauseComplianceLabel, "Sí cumple")
+    assert.equal(upsContract.riskLevel, "medio")
+    assert.match(upsContract.clauseComplianceNotes, /contradicción/i)
+
     const laborPolicyFiles = storedFiles.filter((file) => file.metadata?.individualRecordType === "labor-policy-reference")
     assert.equal(laborPolicyFiles.length, 2)
     assert.equal(laborPolicyFiles.every((file) => file.category === "data-policy-evidence"), true)

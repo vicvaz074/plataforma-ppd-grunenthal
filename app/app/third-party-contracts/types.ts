@@ -61,6 +61,10 @@ export type ContractMeta = {
   communicationType: string;
   communicationDetails?: string;
   clauseRegulation: string;
+  clauseType?: string;
+  clauseComplianceStatus?: "cumple" | "no_cumple" | "no_aplica" | "requiere_revision";
+  clauseComplianceLabel?: string;
+  clauseComplianceNotes?: string;
   complianceNeeds?: string;
   evidenceAvailable: string[];
   evidenceNotes?: string;
