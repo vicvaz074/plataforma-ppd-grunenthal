@@ -48,6 +48,7 @@ describe("personalización Grünenthal", () => {
   let seed
   let fileStorage
   let ratData
+  let grtContracts
 
   before(async () => {
     assets = await importModule("lib/grunenthal-assets.ts")
@@ -55,6 +56,7 @@ describe("personalización Grünenthal", () => {
     seed = await importModule("lib/grunenthal-seed.ts")
     fileStorage = await importModule("lib/fileStorage.ts")
     ratData = await importModule("lib/grunenthal-rat-data.ts")
+    grtContracts = await importModule("lib/grunenthal-contracts-grt.ts")
   })
 
   beforeEach(() => {
@@ -96,7 +98,8 @@ describe("personalización Grünenthal", () => {
     const individualDocumentCount =
       repository.GRUNENTHAL_INDIVIDUAL_PRIVACY_NOTICE_RECORDS.length +
       repository.GRUNENTHAL_INDIVIDUAL_THIRD_PARTY_RECORDS.length +
-      repository.GRUNENTHAL_LABOR_POLICY_REPOSITORY_DOCUMENTS.length
+      repository.GRUNENTHAL_LABOR_POLICY_REPOSITORY_DOCUMENTS.length +
+      grtContracts.GRUNENTHAL_GRT_CONTRACT_DOCUMENTS.length
 
     assert.equal(inventories.length, 15)
     assert.equal(
@@ -205,6 +208,38 @@ describe("personalización Grünenthal", () => {
     assert.equal(upsContract.clauseComplianceLabel, "Sí cumple")
     assert.equal(upsContract.riskLevel, "medio")
     assert.match(upsContract.clauseComplianceNotes, /contradicción/i)
+
+    const grtContractFiles = storedFiles.filter((file) => file.metadata?.individualRecordType === "third-party-grt-contract")
+    const grtHistoryContracts = contracts.filter((contract) => contract.metadata?.sourceFolder === "Contratos GRt")
+    assert.equal(grtContracts.GRUNENTHAL_GRT_CONTRACT_DOCUMENTS.length, 40)
+    assert.equal(grtContractFiles.length, 40)
+    assert.equal(grtHistoryContracts.length, 40)
+    assert.equal(
+      grtContractFiles.every((file) => {
+        const publicPath = file.content.startsWith("/") ? file.content.slice(1) : file.content
+        const previewPath = String(file.metadata?.previewPdfPath || "").replace(/^\//, "")
+        return fs.existsSync(path.join(publicDir, publicPath)) && fs.existsSync(path.join(publicDir, previewPath))
+      }),
+      true,
+      "cada contrato de Contratos GRt debe tener original público y preview PDF",
+    )
+    assert.equal(
+      grtHistoryContracts.every((contract) =>
+        contract.attachments?.some((attachment) =>
+          grtContractFiles.some((file) => file.id === attachment.storageId && file.metadata?.individualRecordId === contract.metadata?.individualRecordId),
+        ),
+      ),
+      true,
+      "cada contrato de Contratos GRt debe enlazar su archivo original con preview",
+    )
+    assert.ok(
+      grtHistoryContracts.some((contract) =>
+        contract.providerIdentity?.includes("BACHER ZOPPI") &&
+        contract.clauseComplianceStatus === "no_cumple" &&
+        contract.attachments?.length === 1,
+      ),
+      "debe sembrarse BACHER ZOPPI con análisis de incumplimiento y contrato enlazado",
+    )
 
     const laborPolicyFiles = storedFiles.filter((file) => file.metadata?.individualRecordType === "labor-policy-reference")
     assert.equal(laborPolicyFiles.length, 2)

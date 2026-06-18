@@ -79,4 +79,5 @@ export type ContractMeta = {
   versioningNotes?: string;
   reviewLog?: string;
   attachments: AttachmentMeta[];
+  metadata?: Record<string, unknown>;
 };

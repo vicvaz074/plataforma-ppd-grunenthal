@@ -370,6 +370,7 @@ export default function DocumentsAndClausesPage() {
   const [activeTemplate, setActiveTemplate] = useState<TemplateRepositoryItem | null>(null)
   const [templatePlaceholderValues, setTemplatePlaceholderValues] = useState<Record<string, string>>({})
   const [previewContractFile, setPreviewContractFile] = useState<StoredFile | null>(null)
+  const [analysisContract, setAnalysisContract] = useState<ContractMeta | null>(null)
 
   const filledTemplateText = useMemo(() => {
     if (!activeTemplate?.baseTemplate) return ""
@@ -805,6 +806,7 @@ export default function DocumentsAndClausesPage() {
       return
     }
 
+    setAnalysisContract(null)
     setPreviewContractFile(stored)
   }
 
@@ -971,6 +973,39 @@ export default function DocumentsAndClausesPage() {
     statusFilter,
     riskFilter,
   ])
+
+  const filteredUploadedContracts = useMemo(() => {
+    const searchValue = contractSearchTerm.trim().toLowerCase()
+
+    return uploadedContracts.filter((contract) => {
+      const metadata = contract.metadata ?? {}
+      const searchableFields = [
+        contract.name,
+        metadata.title,
+        metadata.displayName,
+        metadata.contractTitle,
+        metadata.providerIdentity,
+        metadata.thirdPartyName,
+        metadata.contractType,
+        metadata.contractObject,
+        metadata.communicationType,
+        metadata.relationType,
+        metadata.area,
+        metadata.analysisSummary,
+        metadata.recommendation,
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase()
+
+      const matchesSearch = !searchValue || searchableFields.includes(searchValue)
+      const matchesCommunication =
+        communicationFilter === "all" || metadata.communicationType === communicationFilter
+      const matchesRisk = riskFilter === "all" || metadata.riskLevel === riskFilter
+
+      return matchesSearch && matchesCommunication && matchesRisk
+    })
+  }, [uploadedContracts, contractSearchTerm, communicationFilter, riskFilter])
 
   const navItems = THIRD_PARTY_CONTRACTS_NAV.map((item) => {
     if (item.href === "/third-party-contracts/registration") {
@@ -1708,10 +1743,22 @@ export default function DocumentsAndClausesPage() {
                           <CardTitle className="text-lg">
                             {contract.contractTitle || contract.providerIdentity || contract.contractorType || "Contrato registrado"}
                           </CardTitle>
-                          <CardDescription>
-                            Registrado el {formatDate(contract.created)} · Vigencia {contract.contractValidity}
-                            {contract.responsibleName && ` · Responsable: ${contract.responsibleName}`}
-                          </CardDescription>
+                          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                            <CardDescription>
+                              Registrado el {formatDate(contract.created)} · Vigencia {contract.contractValidity}
+                              {contract.responsibleName && ` · Responsable: ${contract.responsibleName}`}
+                            </CardDescription>
+                            <Button
+                              type="button"
+                              size="sm"
+                              variant="outline"
+                              className="w-full sm:w-auto"
+                              onClick={() => setAnalysisContract(contract)}
+                            >
+                              <ListChecks className="mr-2 h-4 w-4" />
+                              Ver análisis
+                            </Button>
+                          </div>
                         </CardHeader>
                         <CardContent className="space-y-2 text-sm">
                           <p>
@@ -1811,9 +1858,9 @@ export default function DocumentsAndClausesPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              {uploadedContracts.length > 0 ? (
+              {filteredUploadedContracts.length > 0 ? (
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                  {uploadedContracts.map((contract) => {
+                  {filteredUploadedContracts.map((contract) => {
                     const metadata = contract.metadata ?? {}
                     const serviceTypes = Array.isArray(metadata.serviceTypes)
                       ? metadata.serviceTypes
@@ -1889,7 +1936,9 @@ export default function DocumentsAndClausesPage() {
                 </div>
               ) : (
                 <div className="rounded-md border border-dashed border-muted-foreground/40 p-8 text-center text-muted-foreground">
-                  No hay archivos de contratos en esta categoría todavía. Registra un contrato e incluye el documento para verlo aquí.
+                  {uploadedContracts.length > 0
+                    ? "No hay archivos que coincidan con los filtros actuales."
+                    : "No hay archivos de contratos en esta categoría todavía. Registra un contrato e incluye el documento para verlo aquí."}
                 </div>
               )}
             </CardContent>
@@ -1903,6 +1952,148 @@ export default function DocumentsAndClausesPage() {
           if (!open) setPreviewContractFile(null)
         }}
       />
+      <Dialog
+        open={Boolean(analysisContract)}
+        onOpenChange={(open) => {
+          if (!open) setAnalysisContract(null)
+        }}
+      >
+        <DialogContent className="flex max-h-[88vh] w-[calc(100vw-2rem)] max-w-4xl flex-col overflow-hidden p-0">
+          {analysisContract && (
+            <>
+              <DialogHeader className="border-b px-6 py-5">
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div className="min-w-0 space-y-1">
+                    <DialogTitle className="break-words text-xl">
+                      Análisis del contrato
+                    </DialogTitle>
+                    <DialogDescription className="break-words">
+                      {analysisContract.contractTitle || analysisContract.providerIdentity || "Contrato registrado"}
+                    </DialogDescription>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    <Badge variant={riskVariants[analysisContract.riskLevel]} className="capitalize">
+                      Riesgo {analysisContract.riskLevel}
+                    </Badge>
+                    {getClauseComplianceBadge(analysisContract) && (
+                      <Badge variant={getClauseComplianceBadge(analysisContract)!.variant}>
+                        {getClauseComplianceBadge(analysisContract)!.label}
+                      </Badge>
+                    )}
+                  </div>
+                </div>
+              </DialogHeader>
+
+              <div className="min-h-0 flex-1 overflow-y-auto px-6 py-5">
+                <div className="grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">
+                  <section className="space-y-4">
+                    <div className="rounded-lg border bg-muted/20 p-4">
+                      <div className="mb-3 flex items-center gap-2 font-medium">
+                        <Shield className="h-4 w-4 text-primary" />
+                        Resultado regulatorio
+                      </div>
+                      <div className="space-y-3 text-sm">
+                        <p>
+                          <strong>Resultado:</strong>{" "}
+                          {analysisContract.clauseComplianceLabel || analysisContract.clauseRegulation}
+                        </p>
+                        {analysisContract.clauseType && (
+                          <p>
+                            <strong>Cláusula revisada:</strong> {analysisContract.clauseType}
+                          </p>
+                        )}
+                        <p>
+                          <strong>Criterio:</strong> {analysisContract.clauseRegulation}
+                        </p>
+                        {analysisContract.complianceNeeds && (
+                          <p>
+                            <strong>Recomendación:</strong> {analysisContract.complianceNeeds}
+                          </p>
+                        )}
+                        {analysisContract.clauseComplianceNotes && (
+                          <p className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-amber-900">
+                            <strong>Nota:</strong> {analysisContract.clauseComplianceNotes}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="rounded-lg border p-4">
+                      <p className="mb-3 font-medium">Documentos asociados</p>
+                      {analysisContract.attachments.length > 0 ? (
+                        <div className="space-y-2">
+                          {analysisContract.attachments.map((attachment) => (
+                            <div
+                              key={`${analysisContract.id}-modal-${attachment.storageId ?? attachment.fileName}`}
+                              className="flex flex-col gap-3 rounded-md border bg-background p-3 sm:flex-row sm:items-center sm:justify-between"
+                            >
+                              <div className="min-w-0">
+                                <p className="break-words text-sm font-medium">{attachment.fileName}</p>
+                                <p className="text-xs text-muted-foreground">{attachment.definition}</p>
+                              </div>
+                              <div className="flex shrink-0 flex-wrap gap-2">
+                                <Button size="sm" variant="outline" onClick={() => previewContractAttachment(attachment)}>
+                                  <Eye className="mr-2 h-4 w-4" />
+                                  Ver
+                                </Button>
+                                <Button size="sm" variant="outline" onClick={() => downloadContractAttachment(attachment)}>
+                                  <Download className="mr-2 h-4 w-4" />
+                                  Descargar
+                                </Button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-sm text-muted-foreground">Sin archivos adjuntos.</p>
+                      )}
+                    </div>
+                  </section>
+
+                  <aside className="space-y-3 rounded-lg border bg-background p-4 text-sm">
+                    <p className="font-medium">Datos del contrato</p>
+                    <p>
+                      <strong>Tercero:</strong>{" "}
+                      {analysisContract.providerIdentity || analysisContract.thirdPartyName || "No definido"}
+                    </p>
+                    <p>
+                      <strong>Área:</strong> {analysisContract.areas.join(", ")}
+                    </p>
+                    <p>
+                      <strong>Objeto:</strong> {analysisContract.treatmentPurpose}
+                    </p>
+                    <p>
+                      <strong>Comunicación:</strong> {analysisContract.communicationType}
+                    </p>
+                    <p>
+                      <strong>Relación:</strong> {analysisContract.relationType}
+                    </p>
+                    <p>
+                      <strong>Vigencia:</strong> {formatDate(analysisContract.startDate)} a{" "}
+                      {formatDate(analysisContract.expirationDate)}
+                    </p>
+                    <p>
+                      <strong>Fuente:</strong>{" "}
+                      {(analysisContract.metadata?.sourceFolder as string) || "Historial de contratos"}
+                    </p>
+                    {analysisContract.riskNotes && (
+                      <p className="rounded-md bg-muted px-3 py-2">
+                        <strong>Riesgo:</strong> {analysisContract.riskNotes}
+                      </p>
+                    )}
+                  </aside>
+                </div>
+              </div>
+
+              <DialogFooter className="border-t px-6 py-4">
+                <Button type="button" variant="outline" onClick={() => setAnalysisContract(null)}>
+                  Cerrar
+                </Button>
+              </DialogFooter>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </ArcoModuleShell>
   )
 }
