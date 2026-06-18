@@ -20,6 +20,7 @@ import {
   GRUNENTHAL_INDIVIDUAL_PRIVACY_NOTICE_RECORDS,
   GRUNENTHAL_INDIVIDUAL_THIRD_PARTY_RECORDS,
   GRUNENTHAL_LABOR_POLICY_REPOSITORY_DOCUMENTS,
+  PRIVACY_NOTICE_SOURCE_ASSET_ID,
   getGrunenthalRepositoryFileId,
   type GrunenthalLaborPolicySeed,
   type GrunenthalPrivacyNoticeSeed,
@@ -28,11 +29,12 @@ import {
 import type { StoredFile } from "@/lib/fileStorage"
 import type { Inventory } from "@/app/rat/types"
 
-export const GRUNENTHAL_SEED_VERSION = "2026.1.0"
+export const GRUNENTHAL_SEED_VERSION = "2026.2.0"
 export const GRUNENTHAL_SEED_STATE_KEY = "grunenthal_seed_state_v1"
 
 const STORED_FILES_KEY = "storedFiles"
 const INVENTORIES_KEY = "inventories"
+const INVENTORIES_PROGRESS_KEY = "inventories_progress"
 const TRAINING_STORE_KEY = "davara-training-store-v1"
 const TRAINING_RESOURCES_KEY = "davara-training-recursos-v1"
 const POLICY_STORAGE_KEY = "security_policies"
@@ -44,9 +46,11 @@ const RAT_VALIDATION_STORAGE_KEY = "grunenthal_rat_validation_report_v1"
 const SEEDED_AT = "2026-01-01T00:00:00.000Z"
 const TRAINING_PROGRAM_ID = "grunenthal-training-privacy-2026"
 const ARCO_TEMPLATE_ASSET_ID = "grunenthal-arco-rights-matriz-de-control-y-seguimiento-del-ejercicio-de-derechos-arco"
-const PRIVACY_NOTICE_SOURCE_ASSET_ID = "grunenthal-privacy-notices-manualap-grunentha-davara-v3"
 const THIRD_PARTY_ANALYSIS_SOURCE_ASSET_ID = "grunenthal-third-party-contracts-analisisderelacionesgrunenthal"
 const STATIC_PREVIEW_EXTENSIONS = new Set(["docx", "docm", "xlsx"])
+const LEGACY_SEEDED_FILE_IDS = new Set([
+  "grunenthal-file-grunenthal-privacy-notices-manualap-grunentha-davara-v3",
+])
 
 type JsonRecord = Record<string, unknown>
 type RatPdfLink = (typeof GRUNENTHAL_RAT_PDF_LINKS)[number]
@@ -248,7 +252,12 @@ function upsertSeededFiles() {
   ]
   const seededIds = new Set(seededFiles.map((file) => file.id))
   const existing = readJson<StoredFile[]>(STORED_FILES_KEY, [])
-  const userFiles = existing.filter((file) => !seededIds.has(file.id))
+  const userFiles = existing.filter(
+    (file) =>
+      !seededIds.has(file.id) &&
+      !LEGACY_SEEDED_FILE_IDS.has(file.id) &&
+      file.metadata?.grunenthalAssetId !== "grunenthal-privacy-notices-manualap-grunentha-davara-v3",
+  )
   writeJson(STORED_FILES_KEY, [...userFiles, ...seededFiles])
 }
 
@@ -292,44 +301,13 @@ function buildSeededInventories(): SeededInventory[] {
   }))
 }
 
-function mergeSubInventories(seed: SeededSubInventory[], current: Inventory["subInventories"]) {
-  const currentById = new Map(current.map((subInventory) => [subInventory.id, subInventory]))
-  return seed.map((seedSubInventory) => ({
-    ...seedSubInventory,
-    ...(currentById.get(seedSubInventory.id) || {}),
-    grunenthalSourcePdfFileId: seedSubInventory.grunenthalSourcePdfFileId,
-    grunenthalSourcePdfPath: seedSubInventory.grunenthalSourcePdfPath,
-    grunenthalSourcePdfStatus: seedSubInventory.grunenthalSourcePdfStatus,
-    grunenthalValidationStatus: seedSubInventory.grunenthalValidationStatus,
-    grunenthalValidationFields: seedSubInventory.grunenthalValidationFields,
-    grunenthalValidationMismatches: seedSubInventory.grunenthalValidationMismatches,
-  }))
-}
-
 function upsertInventories() {
   const seededInventories = buildSeededInventories()
-  const existing = readJson<Inventory[]>(INVENTORIES_KEY, [])
-  const existingById = new Map(existing.map((inventory) => [inventory.id, inventory]))
-  const seededIds = new Set(seededInventories.map((inventory) => inventory.id))
-  const preserved = existing.filter((inventory) => !seededIds.has(inventory.id))
-  const merged = seededInventories.map((seedInventory) => {
-    const current = existingById.get(seedInventory.id)
-    if (!current) return seedInventory
 
-    return {
-      ...seedInventory,
-      ...current,
-      companyLogoDataUrl: seedInventory.companyLogoDataUrl,
-      companyLogoFileName: seedInventory.companyLogoFileName,
-      companyLogoPublicPath: seedInventory.companyLogoPublicPath,
-      reportAccentColor: seedInventory.reportAccentColor,
-      grunenthalSeedVersion: GRUNENTHAL_SEED_VERSION,
-      grunenthalSourceExportedAt: GRUNENTHAL_RAT_SOURCE_EXPORTED_AT,
-      subInventories: mergeSubInventories(seedInventory.subInventories, current.subInventories || []),
-    }
-  })
-
-  writeJson(INVENTORIES_KEY, [...preserved, ...merged])
+  writeJson(INVENTORIES_KEY, seededInventories)
+  if (hasStorage()) {
+    localStorage.removeItem(INVENTORIES_PROGRESS_KEY)
+  }
   writeJson(RAT_VALIDATION_STORAGE_KEY, GRUNENTHAL_RAT_VALIDATION_REPORT)
 }
 

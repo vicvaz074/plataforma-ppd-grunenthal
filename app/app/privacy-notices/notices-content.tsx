@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/table";
 import { useToast } from "@/components/ui/use-toast";
 import {
+  createFileURL,
   deleteFile,
   getFilesByCategory,
   saveFile,
@@ -27,7 +28,7 @@ import {
   updateFile,
   updateFileMetadata,
 } from "@/lib/fileStorage";
-import { Eye, FileCheck2, FilePlus2, Files, ShieldCheck, Trash2 } from "lucide-react";
+import { Download, Eye, FileCheck2, FilePlus2, FileText, Files, ShieldCheck, Trash2 } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
@@ -40,6 +41,8 @@ import {
   PRIVACY_NOTICES_META,
   PRIVACY_NOTICES_NAV,
 } from "@/components/arco-module-config";
+import { getGrunenthalAsset } from "@/lib/grunenthal-assets";
+import { PRIVACY_NOTICE_SOURCE_ASSET_ID } from "@/lib/grunenthal-repository";
 
 const HOLDER_CATEGORY_OPTIONS = [
   {
@@ -95,7 +98,7 @@ const HOLDER_CATEGORY_OPTIONS = [
     value: "estudiantes",
     label: "Estudiantes / Padres de familia / Docentes (sector educativo)",
   },
-  { value: "consultores", label: "Consultores externos / Auditores" },
+  { value: "consultores", label: "Consultores externos y profesionales de la salud" },
   {
     value: "representantes_legales",
     label: "Representantes legales / Contactos de negocio",
@@ -192,6 +195,44 @@ const NOTICE_TYPE_LABELS = createLabelMap(NOTICE_TYPE_OPTIONS);
 const RESPONSIBLE_AREA_LABELS = createLabelMap(RESPONSIBLE_AREA_OPTIONS);
 const APPLICABLE_NOTICE_LABELS = createLabelMap(APPLICABLE_NOTICE_OPTIONS);
 const DISPOSITION_METHOD_LABELS = createLabelMap(DISPOSITION_METHOD_OPTIONS);
+
+const HOLDER_CATEGORY_ALIASES: Record<string, string> = {
+  auditores: "consultores",
+  auditores_externos: "consultores",
+  profesionales_salud: "consultores",
+  profesionales_de_la_salud: "consultores",
+};
+
+const manualApSourceAsset = getGrunenthalAsset(PRIVACY_NOTICE_SOURCE_ASSET_ID);
+const MANUAL_AP_SOURCE_FILE: StoredFile | null = manualApSourceAsset
+  ? {
+      id: `grunenthal-file-${manualApSourceAsset.id}`,
+      name: manualApSourceAsset.name,
+      type: manualApSourceAsset.type,
+      size: manualApSourceAsset.size,
+      content: manualApSourceAsset.path,
+      uploadDate: "2026-01-01T00:00:00.000Z",
+      category: "privacy-policy",
+      metadata: {
+        title: manualApSourceAsset.displayName,
+        displayName: manualApSourceAsset.displayName,
+        module: manualApSourceAsset.module,
+        grunenthalAssetId: manualApSourceAsset.id,
+        sourceRelativePath: manualApSourceAsset.sourceRelativePath,
+        previewPdfPath: manualApSourceAsset.path.replace(/\.docx$/i, "-preview.pdf"),
+        previewMimeType: "application/pdf",
+      },
+    }
+  : null;
+
+const normalizeHolderCategories = (values: string[] | undefined) =>
+  Array.from(
+    new Set(
+      (values ?? [])
+        .map((value) => HOLDER_CATEGORY_ALIASES[value] ?? value)
+        .filter((value) => value && value.length > 0),
+    ),
+  );
 
 const formSchema = z
   .object({
@@ -319,6 +360,9 @@ const formatSelection = (
   return formatted.length > 0 ? formatted.join(", ") : "No especificado";
 };
 
+const formatHolderCategories = (values: string[] | undefined, other?: string) =>
+  formatSelection(normalizeHolderCategories(values), HOLDER_CATEGORY_LABELS, other);
+
 const formatDate = (value?: string) => {
   if (!value) {
     return "-";
@@ -349,6 +393,7 @@ export function PrivacyNoticesContent({ section }: PrivacyNoticesContentProps) {
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedDocument, setSelectedDocument] = useState<StoredFile | null>(null);
+  const [sourceManualFile, setSourceManualFile] = useState<StoredFile | null>(MANUAL_AP_SOURCE_FILE);
   const itemsPerPage = 10;
 
   const form = useForm<FormValues>({
@@ -360,6 +405,13 @@ export function PrivacyNoticesContent({ section }: PrivacyNoticesContentProps) {
     const loadPrivacyNotices = () => {
       const notices = getFilesByCategory("privacy-notice");
       setPrivacyNotices(notices);
+      const sourceManual =
+        getFilesByCategory("privacy-policy").find(
+          (file) =>
+            file.metadata?.grunenthalAssetId === PRIVACY_NOTICE_SOURCE_ASSET_ID ||
+            file.id === `grunenthal-file-${PRIVACY_NOTICE_SOURCE_ASSET_ID}`,
+        ) || MANUAL_AP_SOURCE_FILE;
+      setSourceManualFile(sourceManual);
     };
 
     loadPrivacyNotices();
@@ -420,8 +472,8 @@ export function PrivacyNoticesContent({ section }: PrivacyNoticesContentProps) {
     }
   };
 
-  const handleViewDocument = (notice: StoredFile) => {
-    if (!notice.content) {
+  const handleViewDocument = (file: StoredFile) => {
+    if (!file.content) {
       toast({
         title: "Documento no disponible",
         description: "No se adjuntó archivo para este aviso.",
@@ -429,7 +481,32 @@ export function PrivacyNoticesContent({ section }: PrivacyNoticesContentProps) {
       return;
     }
 
-    setSelectedDocument(notice);
+    setSelectedDocument(file);
+  };
+
+  const handleDownloadDocument = (file: StoredFile) => {
+    if (!file.content) {
+      toast({
+        title: "Documento no disponible",
+        description: "No se adjuntó archivo para descargar.",
+      });
+      return;
+    }
+
+    try {
+      const link = document.createElement("a");
+      link.href = createFileURL(file.content);
+      link.download = file.name || "documento";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      toast({
+        title: "No se pudo descargar",
+        description: error instanceof Error ? error.message : "La ruta del archivo no es válida.",
+        variant: "destructive",
+      });
+    }
   };
 
   const onSubmit = async (values: FormValues) => {
@@ -591,13 +668,13 @@ export function PrivacyNoticesContent({ section }: PrivacyNoticesContentProps) {
   const applyEditNotice = (notice: StoredFile) => {
     setEditingNotice(notice);
 
-    const holderCategoriesFromMetadata = Array.isArray(
-      notice.metadata.holderCategories,
-    )
-      ? notice.metadata.holderCategories
-      : notice.metadata.category
-      ? [notice.metadata.category]
-      : [];
+    const holderCategoriesFromMetadata = normalizeHolderCategories(
+      Array.isArray(notice.metadata.holderCategories)
+        ? notice.metadata.holderCategories
+        : notice.metadata.category
+        ? [notice.metadata.category]
+        : [],
+    );
 
     const noticeTypesFromMetadata = Array.isArray(notice.metadata.noticeTypes)
       ? notice.metadata.noticeTypes
@@ -673,11 +750,11 @@ export function PrivacyNoticesContent({ section }: PrivacyNoticesContentProps) {
       .toLowerCase();
     const matchesName = name.includes(searchTerm.toLowerCase());
 
-    const categories = Array.isArray(notice.metadata.holderCategories)
+    const categories = normalizeHolderCategories(Array.isArray(notice.metadata.holderCategories)
       ? notice.metadata.holderCategories
       : notice.metadata.category
       ? [notice.metadata.category]
-      : [];
+      : []);
 
     const hasOtherCategory = Boolean(
       (notice.metadata.holderCategoryOther || notice.metadata.otherCategory)?.trim(),
@@ -800,6 +877,45 @@ export function PrivacyNoticesContent({ section }: PrivacyNoticesContentProps) {
             tone="warning"
           />
         </div>
+
+        {isListSection && sourceManualFile && (
+          <Card className="border-emerald-100 bg-emerald-50/40">
+            <CardContent className="flex flex-col gap-4 p-5 md:flex-row md:items-center md:justify-between">
+              <div className="flex min-w-0 gap-3">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-emerald-200 bg-white text-emerald-700">
+                  <FileText className="h-5 w-5" />
+                </div>
+                <div className="min-w-0">
+                  <h2 className="text-base font-semibold text-slate-950">
+                    Insumo fuente ManualAP v5
+                  </h2>
+                  <p className="mt-1 text-sm text-slate-600">
+                    Compilado oficial de avisos de privacidad Grünenthal. La vista previa usa PDF y la descarga conserva el Word original.
+                  </p>
+                </div>
+              </div>
+              <div className="flex shrink-0 flex-wrap gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleViewDocument(sourceManualFile)}
+                >
+                  <Eye className="mr-2 h-4 w-4" />
+                  Ver
+                </Button>
+                <Button
+                  type="button"
+                  size="sm"
+                  onClick={() => handleDownloadDocument(sourceManualFile)}
+                >
+                  <Download className="mr-2 h-4 w-4" />
+                  Descargar
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
       {isRegisterSection && (
         <Card>
@@ -1268,13 +1384,12 @@ export function PrivacyNoticesContent({ section }: PrivacyNoticesContentProps) {
                               notice.name}
                           </TableCell>
                           <TableCell>
-                            {formatSelection(
+                            {formatHolderCategories(
                               Array.isArray(notice.metadata.holderCategories)
                                 ? notice.metadata.holderCategories
                                 : notice.metadata.category
                                 ? [notice.metadata.category]
                                 : [],
-                              HOLDER_CATEGORY_LABELS,
                               notice.metadata.holderCategoryOther ||
                                 notice.metadata.otherCategory,
                             )}
@@ -1311,7 +1426,7 @@ export function PrivacyNoticesContent({ section }: PrivacyNoticesContentProps) {
                             </div>
                           </TableCell>
                           <TableCell>
-                            <div className="flex space-x-2">
+                            <div className="flex flex-wrap gap-2">
                               <Button
                                 variant="outline"
                                 size="sm"
@@ -1319,6 +1434,14 @@ export function PrivacyNoticesContent({ section }: PrivacyNoticesContentProps) {
                               >
                                 <Eye className="mr-2 h-4 w-4" />
                                 Ver documento
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handleDownloadDocument(notice)}
+                              >
+                                <Download className="mr-2 h-4 w-4" />
+                                Descargar
                               </Button>
                               <Button
                                 variant="outline"

@@ -19,17 +19,17 @@ describe("visor de archivos", () => {
 
   it("usa un PDF seguro como preview para un aviso DOCX público y conserva la descarga original", () => {
     const descriptor = filePreview.buildFilePreviewDescriptor({
-      id: "grunenthal-privacy-notices-manualap-grunentha-davara-v3",
-      name: "ManualAP_Grünentha Davara v3.docx",
+      id: "grunenthal-privacy-notices-manualap-grunentha-davara-v5",
+      name: "ManualAP_Grünentha Davara v5.docx",
       type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      size: 209007,
-      content: "/client/grunenthal/privacy-notices/manualap-grunentha-davara-v3.docx",
+      size: 166062,
+      content: "/client/grunenthal/privacy-notices/manualap-grunentha-davara-v5.docx",
       uploadDate: "2026-01-01T00:00:00.000Z",
       category: "privacy-notice",
       metadata: {
-        title: "ManualAP_Grünentha Davara v3",
+        title: "ManualAP_Grünentha Davara v5",
         module: "privacy-notices",
-        previewPdfPath: "/client/grunenthal/privacy-notices/manualap-grunentha-davara-v3-preview.pdf",
+        previewPdfPath: "/client/grunenthal/privacy-notices/manualap-grunentha-davara-v5-preview.pdf",
       },
     })
 
@@ -37,16 +37,16 @@ describe("visor de archivos", () => {
     assert.equal(descriptor.previewKind, "pdf")
     assert.equal(
       descriptor.fileUrl,
-      "/client/grunenthal/privacy-notices/manualap-grunentha-davara-v3.docx",
+      "/client/grunenthal/privacy-notices/manualap-grunentha-davara-v5.docx",
     )
     assert.equal(
       descriptor.previewUrl,
-      "/client/grunenthal/privacy-notices/manualap-grunentha-davara-v3-preview.pdf",
+      "/client/grunenthal/privacy-notices/manualap-grunentha-davara-v5-preview.pdf",
     )
     assert.equal(descriptor.canEmbed, true)
     assert.equal(descriptor.extension, "DOCX")
-    assert.equal(descriptor.downloadName, "ManualAP_Grünentha Davara v3.docx")
-    assert.equal(descriptor.title, "ManualAP_Grünentha Davara v3")
+    assert.equal(descriptor.downloadName, "ManualAP_Grünentha Davara v5.docx")
+    assert.equal(descriptor.title, "ManualAP_Grünentha Davara v5")
   })
 
   it("no ofrece vista previa para JSON aunque conserve la descarga segura", () => {
