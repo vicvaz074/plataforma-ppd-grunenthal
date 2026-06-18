@@ -140,7 +140,6 @@ export default function DpoRegistroPage() {
       <div className="mx-auto max-w-3xl space-y-6">
         <ModuleSectionCard
           title="Datos base de los miembros del Departamento de Datos Personales"
-          description="Usa la misma superficie de captura tipo ARCO antes de entrar a los 29 reactivos de acreditación."
           action={
             <div className="rounded-xl bg-slate-50 p-2 text-slate-600">
               <UserCog className="h-5 w-5" />
