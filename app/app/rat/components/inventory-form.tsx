@@ -22,6 +22,7 @@ import { StepperNav } from "./stepper-nav"
 import { saveFile } from "@/lib/fileStorage"
 import { parseRatExcel } from "../utils/parseRatExcel"
 import { parseExcelOrCsvManual } from "../utils/fileParserManual"
+import { normalizeInventoryForForm } from "../utils/inventory-normalization"
 
 const normalizePurposeDisplay = (value: unknown): string | null => {
   if (typeof value !== "string") return null
@@ -253,7 +254,7 @@ const defaultSubInventory = (): SubInventory => ({
   secondaryExpresoEscritoForm: "",
   secondaryPurposesConsent: {},
 
-  processingArea: "",
+  processingArea: [],
   processingSystem: "",
   processingSystemName: "",
   processingDescription: [],
@@ -461,7 +462,7 @@ export function InventoryForm({
               category: d.category || "Sin categoría"
             }))
           })
-          setFormData(parsed)
+          setFormData(normalizeInventoryForForm(parsed))
           setMode("create")
         } catch {}
       }
@@ -1714,4 +1715,3 @@ export function InventoryForm({
     </>
   )
 }
-

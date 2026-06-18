@@ -16,176 +16,16 @@ import {
 } from "lucide-react"
 import { InventoryForm } from "../components/inventory-form"
 import { InventoryList } from "../components/inventory-list"
-import type { Inventory, SubInventory, PersonalData } from "../types"
+import type { Inventory, SubInventory } from "../types"
 import { parseRatExcel } from "../utils/parseRatExcel"
+import {
+  createDefaultInventory,
+  createDefaultSubInventory,
+  normalizeInventoryForForm,
+} from "../utils/inventory-normalization"
 
-// --- FUNCIÓN SEGURA PARA DATOS PERSONALES ---
-const defaultPersonalData = (): PersonalData => ({
-  id: Date.now().toString(),
-  name: "",
-  category: "",
-  proporcionalidad: true,
-  riesgo: "bajo",
-  purposesPrimary: [],
-  purposesSecondary: [],
-})
-
-// --- FUNCIÓN SEGURA PARA SUBINVENTARIOS ---
-const defaultSubInventory = () =>
-  ({
-    id: Date.now().toString(),
-    databaseName: "",
-    otherConsentException: "",
-    otherConsentMechanism: "",
-    otherConsentType: "",
-    
-    holderTypes: [],
-    otherHolderType: "",
-    holdersVolume: "",
-    accessibility: "",
-    environment: "",
-    responsibleArea: "",
-    showOtherResponsibleArea: false,
-    obtainingMethod: "",
-    showOtherObtainingMethod: false,
-    obtainingSource: "",
-    privacyNoticeFiles: [],
-    privacyNoticeFileIds: [],
-    privacyNoticeFileNames: [],
-    privacyNoticeFile: undefined,
-    privacyNoticeFileId: undefined,
-    privacyNoticeFileName: undefined,
-    consentFile: undefined,
-    otherProcessingArea: "",
-    consentFileId: undefined,
-    consentFileName: undefined,
-    transferConsentFile: undefined,
-    transferConsentFileId: undefined,
-    transferConsentFileName: undefined,
-    consentRequired: true,
-    consentException: [],
-    consentMechanism: "",
-    consentType: "",
-    tacitDescription: "",
-    secondaryConsentType: "",
-    secondaryConsentMechanism: "",
-    secondaryTacitDescription: "",
-    secondaryConsentFile: undefined,
-    secondaryConsentFileId: undefined,
-    secondaryConsentFileName: undefined,
-    secondaryExpresoForm: "",
-    secondaryExpresoEscritoForm: "",
-    secondaryPurposesConsent: {},
-    processingArea: "",
-    showOtherProcessingArea: false,
-    processingSystem: "",
-    processingSystemName: "",
-    processingDescription: [],
-      accessDescription: [],
-      otherAccessDescription: "",
-      dataLifecyclePrivileges: "",
-      additionalAccesses: [
-        {
-          id: Date.now().toString(),
-          area: "",
-          showOtherArea: false,
-          privileges: [],
-          otherPrivilege: "",
-        },
-      ],
-    storageMethod: "",
-    otherStorageMethod: "",
-      physicalLocation: "",
-      backupPeriodicity: "",
-      isBackedUp: false,
-      backupDescription: "",
-      backupResponsible: "",
-    showOtherBackupResponsible: false,
-    conservationTerm: "",
-    showOtherConservationTerm: false,
-    conservationJustification: [],
-    otherConservationJustification: "",
-    conservationJustificationDetail: "",
-    conservationLegalBasis: "",
-    blockingTime: "",
-    showOtherBlockingTime: false,
-    legalPrescription: [],
-    otherLegalPrescription: "",
-    blockingLegalDisposition: "",
-    additionalConservations: [],
-    additionalBlockings: [],
-    // ⬇️ Alinea con tu tipo: usa singular
-    deletionMethod: "",            // ← antes tenías deletionMethods: []
-    deletionMethods: [],           // ← agrega este campo para cumplir con SubInventory
-    otherDeletionMethod: "",
-
-    dataTransfer: "",
-    transferPurposes: "",
-    transferConsentRequired: false,
-    transferExceptions: [],
-    transferConsentType: "",
-    transferTacitDescription: "",
-    transferExpresoForm: "",
-    transferOtherExpresoForm: "",
-    transferExpresoEscritoForm: "",
-    transferOtherExpresoEscritoForm: "",
-    transferLegalInstrument: [],
-    otherTransferLegalInstrument: "",
-    transferInAP: false,
-    transferRecipient: "",
-    additionalTransfers: [],
-    dataRemission: "",
-    remissionRecipient: "",
-    remissionPurposes: [],
-    otherRemissionPurpose: "",
-    remissionLegalInstrument: [],
-    otherRemissionLegalInstrument: "",
-    remissionContractFile: undefined,
-    remissionContractFileId: undefined,
-    remissionContractFileName: undefined,
-    additionalRemissions: [],
-    personalData: [defaultPersonalData()],
-
-    // Areas adicionales
-    additionalAreas: [],
-    additionalAreasAccess: [],
-    otherAdditionalAreasAccess: "",
-    showOtherAdditionalAreasAccess: false,
-    additionalAreasLegalBasis: [],
-    otherAdditionalAreasLegalBasis: "",
-    additionalAreasLegalBasisFile: undefined,
-    additionalAreasLegalBasisFileId: undefined,
-    additionalAreasLegalBasisFileName: undefined,
-    additionalAreasPurposes: [],
-    otherAdditionalAreasPurposes: "",
-
-    // --- CAMPOS QUE TE FALTABAN SEGÚN EL ERROR ---
-    postRelationshipProcessing: "", // nuevo
-    legalConservation: [],          // nuevo (si tu tipo espera arreglo)
-    otherLegalConservation: "",     // nuevo
-
-    // --- Otros que ya traías como "MISSING PROPERTIES" en tu comentario ---
-      showOtherProcessingTime: false,
-      processingTime: "",
-    otherLegalBasis: "",
-  } satisfies SubInventory);
-
-
-
-// --- FUNCIÓN SEGURA PARA INVENTARIO GENERAL ---
-const defaultInventory = (): Inventory => ({
-  id: Date.now().toString(),
-  databaseName: "",
-  responsible: "",
-  companyLogoDataUrl: undefined,
-  companyLogoFileName: undefined,
-  reportAccentColor: "#1E3A8A",
-  subInventories: [defaultSubInventory()],
-  riskLevel: "",
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
-  status: "pendiente",
-})
+const defaultSubInventory = (): SubInventory => createDefaultSubInventory()
+const defaultInventory = (): Inventory => createDefaultInventory()
 
 export default function RegistroPage() {
   const [inventories, setInventories] = useState<Inventory[]>([])
@@ -205,24 +45,7 @@ export default function RegistroPage() {
       try {
         const parsed = JSON.parse(saved) as Inventory[]
 
-        // Recorre cada inventario y cada subinventario para asegurarse que tienen todos los campos
-        const safeParsed = parsed.map(inv => ({
-          ...defaultInventory(),
-          ...inv,
-          subInventories: (inv.subInventories ?? []).map(si => ({
-            ...defaultSubInventory(),
-            ...si,
-            holderTypes: Array.isArray(si.holderTypes) ? si.holderTypes : [],
-            databaseName: si.databaseName ?? "",
-            responsibleArea: si.responsibleArea ?? "",
-            personalData: Array.isArray(si.personalData)
-              ? si.personalData.map(pd => ({
-                  ...defaultPersonalData(),
-                  ...pd,
-                }))
-              : [defaultPersonalData()],
-          })),
-        }))
+        const safeParsed = parsed.map(normalizeInventoryForForm)
 
         setInventories(safeParsed)
       } catch {
@@ -298,7 +121,7 @@ export default function RegistroPage() {
         subInventories: subs,
         databaseName,
       }
-      setFormData(newInv)
+      setFormData(normalizeInventoryForForm(newInv))
       setEditingInventoryId(null)
       setMode("create")
     } catch {
@@ -313,21 +136,7 @@ export default function RegistroPage() {
     if (!saved) return
     try {
       const parsed = JSON.parse(saved) as Inventory
-      const safeInventory: Inventory = {
-        ...defaultInventory(),
-        ...parsed,
-        subInventories: (parsed.subInventories ?? []).map((si) => ({
-          ...defaultSubInventory(),
-          ...si,
-          personalData: Array.isArray(si.personalData)
-            ? si.personalData.map((pd) => ({
-                ...defaultPersonalData(),
-                ...pd,
-              }))
-            : [defaultPersonalData()],
-        })),
-      }
-      setFormData(safeInventory)
+      setFormData(normalizeInventoryForForm(parsed))
       setEditingInventoryId(parsed.id ?? null)
       setMode("create")
     } catch {
@@ -488,6 +297,5 @@ export default function RegistroPage() {
     </motion.div>
   )
 }
-
 
 

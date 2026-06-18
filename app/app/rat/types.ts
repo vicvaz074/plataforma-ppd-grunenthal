@@ -31,6 +31,8 @@ export interface AdditionalAccess {
   showOtherArea: boolean
   privileges: string[]
   otherPrivilege: string
+  role?: string
+  otherRole?: string
 }
 
 export interface AdditionalTransfer {
@@ -145,7 +147,7 @@ export interface SubInventory {
     }
   >;
 
-  processingArea: string
+  processingArea: string[]
   otherProcessingArea: string
   showOtherProcessingArea: boolean        // <-- corregido (antes string)
   processingSystem: string
@@ -238,6 +240,14 @@ export interface SubInventory {
   additionalRemissions: AdditionalRemission[]
 
   personalData: PersonalData[]
+
+  riskLevel?: RiskLevel | string
+  grunenthalSourcePdfFileId?: string
+  grunenthalSourcePdfPath?: string
+  grunenthalSourcePdfStatus?: string
+  grunenthalValidationStatus?: string
+  grunenthalValidationFields?: string[] | readonly string[]
+  grunenthalValidationMismatches?: string[] | readonly string[]
 }
 
 
@@ -259,4 +269,3 @@ export interface Inventory {
   // Campos extra permitidos
   [key: string]: any
 }
-
