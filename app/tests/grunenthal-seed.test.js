@@ -129,7 +129,7 @@ describe("personalización Grünenthal", () => {
     }
 
     const individualNotices = storedFiles.filter((file) => file.metadata?.individualRecordType === "privacy-notice")
-    assert.equal(individualNotices.length, 10)
+    assert.equal(individualNotices.length, 11)
     assert.equal(individualNotices.every((file) => file.category === "privacy-notice"), true)
     assert.equal(
       individualNotices.every((file) => file.metadata?.previewPdfPath && file.metadata?.sourceCompiledAssetId),
@@ -138,9 +138,13 @@ describe("personalización Grünenthal", () => {
     )
 
     const compiledPrivacyManual = storedFiles.find(
-      (file) => file.metadata?.grunenthalAssetId === "grunenthal-privacy-notices-manualap-grunentha-davara-v3",
+      (file) => file.metadata?.grunenthalAssetId === "grunenthal-privacy-notices-manualap-grunentha-davara-v5",
     )
     assert.equal(compiledPrivacyManual?.category, "privacy-policy")
+    assert.equal(
+      storedFiles.some((file) => file.metadata?.grunenthalAssetId === "grunenthal-privacy-notices-manualap-grunentha-davara-v3"),
+      false,
+    )
 
     const arcoTemplateAsset = assets.GRUNENTHAL_DOCUMENT_MANIFEST.find((asset) =>
       asset.id === "grunenthal-arco-rights-matriz-de-control-y-seguimiento-del-ejercicio-de-derechos-arco"

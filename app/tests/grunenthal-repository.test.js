@@ -22,7 +22,7 @@ describe("repositorio documental Grünenthal", () => {
   })
 
   it("declara avisos, contratos y recursos laborales individuales con trazabilidad", () => {
-    assert.equal(repository.GRUNENTHAL_INDIVIDUAL_PRIVACY_NOTICE_RECORDS.length, 10)
+    assert.equal(repository.GRUNENTHAL_INDIVIDUAL_PRIVACY_NOTICE_RECORDS.length, 11)
     assert.equal(repository.GRUNENTHAL_INDIVIDUAL_THIRD_PARTY_RECORDS.length, 32)
     assert.equal(repository.GRUNENTHAL_LABOR_POLICY_REPOSITORY_DOCUMENTS.length, 2)
 
@@ -43,6 +43,19 @@ describe("repositorio documental Grünenthal", () => {
     assert.match(ups.sourceComplianceNotes, /contradicción/i)
 
     const knownAssetIds = new Set(assets.GRUNENTHAL_DOCUMENT_MANIFEST.map((asset) => asset.id))
+    assert.ok(
+      knownAssetIds.has("grunenthal-privacy-notices-manualap-grunentha-davara-v5"),
+      "debe existir el ManualAP v5 como fuente compilada",
+    )
+    assert.equal(
+      knownAssetIds.has("grunenthal-privacy-notices-manualap-grunentha-davara-v3"),
+      false,
+      "el ManualAP v3 no debe quedar expuesto como fuente vigente",
+    )
+    assert.ok(
+      repository.GRUNENTHAL_INDIVIDUAL_PRIVACY_NOTICE_RECORDS.some((record) => record.slug === "aviso-plataformas"),
+      "debe declararse el aviso individual general para plataformas",
+    )
     const allIndividualDocuments = [
       ...repository.GRUNENTHAL_INDIVIDUAL_PRIVACY_NOTICE_RECORDS,
       ...repository.GRUNENTHAL_INDIVIDUAL_THIRD_PARTY_RECORDS,

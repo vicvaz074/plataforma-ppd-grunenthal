@@ -15,4 +15,14 @@ describe("layout de avisos de privacidad", () => {
     assert.match(source, /lg:grid-cols-\[minmax\(0,1fr\)_minmax\(220px,360px\)\]/)
     assert.match(source, /<select[\s\S]*className="[^"]*w-full[^"]*min-w-0[^"]*max-w-full/)
   })
+
+  it("homologa consultores y profesionales de la salud sin mencionar auditores externos", () => {
+    const source = fs.readFileSync(
+      path.join(appDir, "app/privacy-notices/notices-content.tsx"),
+      "utf8",
+    )
+
+    assert.match(source, /Consultores externos y profesionales de la salud/)
+    assert.doesNotMatch(source, /Consultores externos \/ Auditores/)
+  })
 })

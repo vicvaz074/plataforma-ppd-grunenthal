@@ -612,17 +612,17 @@ export const GRUNENTHAL_DOCUMENT_MANIFEST: GrunenthalAsset[] = [
     "sourceRelativePath": "Material de capacitación/Infografía_Principios LFPDPPP_GRT.pdf"
   },
   {
-    "id": "grunenthal-privacy-notices-manualap-grunentha-davara-v3",
-    "name": "ManualAP_Grünentha Davara v3.docx",
-    "displayName": "ManualAP_Grünentha Davara v3",
-    "path": "/client/grunenthal/privacy-notices/manualap-grunentha-davara-v3.docx",
+    "id": "grunenthal-privacy-notices-manualap-grunentha-davara-v5",
+    "name": "ManualAP_Grünentha Davara v5.docx",
+    "displayName": "ManualAP_Grünentha Davara v5",
+    "path": "/client/grunenthal/privacy-notices/manualap-grunentha-davara-v5.docx",
     "type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    "size": 209007,
+    "size": 166062,
     "module": "privacy-notices",
     "category": "privacy-notice",
     "folder": "privacy-notices",
     "extension": "docx",
-    "sourceRelativePath": "PolíticasGRT_Davara/Avisos de Privacidad/ManualAP_Grünentha Davara v3.docx"
+    "sourceRelativePath": "ManualAP_Grünentha Davara v5.docx"
   },
   {
     "id": "grunenthal-dpo-acta-designacion-de-miembros-del-departamento-de-datos-personales-de-grunenthal",
