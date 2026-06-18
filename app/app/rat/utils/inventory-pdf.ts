@@ -6,6 +6,7 @@ import {
   getHighestRiskLevel,
   normalizeRisk,
 } from "@/lib/security-controls";
+import { GRUNENTHAL_CLIENT_NAME } from "@/lib/grunenthal-assets";
 import type { Inventory } from "../types";
 
 type PersonalDataItem =
@@ -18,7 +19,7 @@ type AdditionalRemissionItem =
 
 type FieldMap = Record<string, unknown>;
 
-const DEFAULT_ACCENT_COLOR = "#1E3A8A";
+const DEFAULT_ACCENT_COLOR = "#40BB6A";
 const HEX_COLOR_REGEX = /^#?[0-9A-Fa-f]{6}$/;
 
 type SupportedImageFormat = "PNG" | "JPEG" | "WEBP";
@@ -76,6 +77,60 @@ const getImageFormatFromDataUrl = (dataUrl?: string | null): SupportedImageForma
   if (lower.includes("image/jpeg") || lower.includes("image/jpg")) return "JPEG";
   if (lower.includes("image/webp")) return "WEBP";
   return "PNG";
+};
+
+const TEXT_REPLACEMENTS: Array<[RegExp, string]> = [
+  [/\bDireccion General\b/gi, "Dirección General"],
+  [/\bGrunenthal\b/gi, GRUNENTHAL_CLIENT_NAME],
+];
+
+export const normalizeReportText = (value: unknown): string => {
+  const raw = value === null || value === undefined ? "" : String(value);
+  const collapsed = raw.replace(/\s+/g, " ").trim();
+  return TEXT_REPLACEMENTS.reduce(
+    (text, [pattern, replacement]) => text.replace(pattern, replacement),
+    collapsed,
+  );
+};
+
+type CoverInfoInventory = Pick<
+  Inventory,
+  "databaseName" | "responsible" | "createdAt" | "updatedAt"
+>;
+type CoverInfoRow = { label: string; value: string; lines: string[] };
+
+export const buildCoverInfoRows = (
+  doc: Pick<jsPDF, "splitTextToSize">,
+  inventory: Partial<CoverInfoInventory>,
+  maxWidth: number,
+): CoverInfoRow[] => {
+  const entries: [string, string][] = [
+    ["Nombre de la base de datos", normalizeReportText(inventory.databaseName) || "-"],
+    [
+      "Fecha de creación",
+      inventory.createdAt
+        ? new Date(inventory.createdAt).toLocaleDateString()
+        : "-",
+    ],
+    [
+      "Fecha de última edición",
+      inventory.updatedAt
+        ? new Date(inventory.updatedAt).toLocaleDateString()
+        : "-",
+    ],
+    [
+      "Responsable",
+      normalizeReportText(inventory.responsible) || GRUNENTHAL_CLIENT_NAME,
+    ],
+  ];
+
+  return entries.map(([label, value]) => {
+    const text = `${label}: ${value}`;
+    const lines = doc
+      .splitTextToSize(text, maxWidth)
+      .map((line: string) => normalizeReportText(line));
+    return { label, value, lines };
+  });
 };
 
 const normalizePurposes = (purposes?: string[]) =>
@@ -744,7 +799,7 @@ export const generateInventoryPDF = (
 
   const accentHex =
     normalizeHexColor(inventory.reportAccentColor) || DEFAULT_ACCENT_COLOR;
-  const defaultAccentRgb: RGB = { r: 30, g: 58, b: 138 };
+  const defaultAccentRgb: RGB = { r: 64, g: 187, b: 106 };
   const accentRgb = hexToRgb(accentHex) || defaultAccentRgb;
   const accentLightHex = lightenColor(accentHex, 0.35);
   const accentLightRgb = hexToRgb(accentLightHex) || accentRgb;
@@ -850,39 +905,21 @@ export const generateInventoryPDF = (
     }
   }
 
-  const infoEntries: [string, string][] = [
-    ["Nombre de la base de datos", inventory.databaseName || "-"],
-    [
-      "Fecha de creación",
-      inventory.createdAt
-        ? new Date(inventory.createdAt).toLocaleDateString()
-        : "-",
-    ],
-    [
-      "Fecha de última edición",
-      inventory.updatedAt
-        ? new Date(inventory.updatedAt).toLocaleDateString()
-        : "-",
-    ],
-    ["Responsable", inventory.responsible?.trim() || "-"],
-  ];
-
   const titleText = "Inventario de Datos personales";
   const titleFontSize = 22;
   const infoLineHeight = 6;
+  const infoRowGap = 1.5;
   const titleInfoSpacing = 16;
+  const coverInfoMaxWidth = Math.min(pageWidth - 60, 128);
 
   doc.setFontSize(titleFontSize);
   const titleHeight = doc.getTextDimensions(titleText).h;
 
   doc.setFontSize(12);
-  const wrappedInfoEntries = infoEntries.map(([label, value]) => {
-    const line = `${label}: ${value}`;
-    return doc.splitTextToSize(line, pageWidth - 60);
-  });
+  const coverInfoRows = buildCoverInfoRows(doc, inventory, coverInfoMaxWidth);
 
-  const infoHeight = wrappedInfoEntries.reduce(
-    (total, wrapped) => total + wrapped.length * infoLineHeight,
+  const infoHeight = coverInfoRows.reduce(
+    (total, row) => total + row.lines.length * infoLineHeight + infoRowGap,
     0,
   );
 
@@ -903,14 +940,16 @@ export const generateInventoryPDF = (
   doc.setFontSize(12);
   let currentY = titleY + titleInfoSpacing;
 
-  wrappedInfoEntries.forEach((wrapped) => {
-    // usamos el centro de la página y le decimos que alinee al centro
-    (doc as any).text(wrapped, pageWidth / 2, currentY, {
-      align: "center",
+  coverInfoRows.forEach((row) => {
+    row.lines.forEach((line) => {
+      (doc as any).text(line, pageWidth / 2, currentY, {
+        align: "center",
+        charSpace: 0,
+        maxWidth: coverInfoMaxWidth,
+      });
+      currentY += infoLineHeight;
     });
-
-    // avanzamos tantas líneas como haya envuelto
-    currentY += wrapped.length * infoLineHeight;
+    currentY += infoRowGap;
   });
 
   doc.addPage();
@@ -919,7 +958,7 @@ export const generateInventoryPDF = (
   const tablesPageStartY = 28;
 
   const generalSummaryRows: [string, string][] = [
-    ["Nombre de la base de datos", inventory.databaseName?.trim() || "-"],
+    ["Nombre de la base de datos", normalizeReportText(inventory.databaseName) || "-"],
     ["Volumen de titulares", aggregateSubInventoryField("holdersVolume")],
     [
       "Accesibilidad y número de personas que tienen acceso a la base de datos",
@@ -1013,7 +1052,7 @@ export const generateInventoryPDF = (
     doc.setFontSize(14);
     doc.setTextColor(...rgbArray(accentRgb));
     doc.text(
-      `Subinventario ${idx + 1}: ${sub.databaseName || "-"}`,
+      `Subinventario ${idx + 1}: ${normalizeReportText(sub.databaseName) || "-"}`,
       18,
       20,
     );

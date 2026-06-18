@@ -8,11 +8,17 @@ import type {
   PersonalData,
   SubInventory,
 } from "../types"
+import { GRUNENTHAL_CLIENT_NAME, GRUNENTHAL_LOGO } from "@/lib/grunenthal-assets"
+import { GRUNENTHAL_LOGO_DATA_URL } from "@/lib/grunenthal-rat-data"
 
 type LooseRecord = Record<string, unknown>
 type NormalizedRisk = PersonalData["riesgo"]
 
-const DEFAULT_ACCENT_COLOR = "#1E3A8A"
+export const DEFAULT_REPORT_ACCENT_COLOR = "#40BB6A"
+export const DEFAULT_REPORT_RESPONSIBLE = GRUNENTHAL_CLIENT_NAME
+export const DEFAULT_REPORT_LOGO_FILE_NAME = "Grünenthal_logo_green.png"
+export const DEFAULT_REPORT_LOGO_PUBLIC_PATH = GRUNENTHAL_LOGO.path
+export const DEFAULT_REPORT_LOGO_DATA_URL = GRUNENTHAL_LOGO_DATA_URL
 
 const isRecord = (value: unknown): value is LooseRecord =>
   Boolean(value) && typeof value === "object" && !Array.isArray(value)
@@ -276,11 +282,11 @@ export const createDefaultSubInventory = (index = 0): SubInventory => ({
 export const createDefaultInventory = (): Inventory => ({
   id: `inventory-${Date.now()}`,
   databaseName: "",
-  responsible: "",
-  companyLogoDataUrl: undefined,
-  companyLogoFileName: undefined,
-  companyLogoPublicPath: undefined,
-  reportAccentColor: DEFAULT_ACCENT_COLOR,
+  responsible: DEFAULT_REPORT_RESPONSIBLE,
+  companyLogoDataUrl: DEFAULT_REPORT_LOGO_DATA_URL,
+  companyLogoFileName: DEFAULT_REPORT_LOGO_FILE_NAME,
+  companyLogoPublicPath: DEFAULT_REPORT_LOGO_PUBLIC_PATH,
+  reportAccentColor: DEFAULT_REPORT_ACCENT_COLOR,
   subInventories: [createDefaultSubInventory()],
   riskLevel: "",
   createdAt: new Date().toISOString(),
@@ -567,11 +573,11 @@ export const normalizeInventoryForForm = (
     ...source,
     id: cleanText(source.id) || "inventory-new",
     databaseName: cleanText(source.databaseName),
-    responsible: cleanText(source.responsible),
-    companyLogoDataUrl: cleanText(source.companyLogoDataUrl) || undefined,
-    companyLogoFileName: cleanText(source.companyLogoFileName) || undefined,
-    companyLogoPublicPath: cleanText(source.companyLogoPublicPath) || undefined,
-    reportAccentColor: cleanText(source.reportAccentColor) || DEFAULT_ACCENT_COLOR,
+    responsible: cleanText(source.responsible) || DEFAULT_REPORT_RESPONSIBLE,
+    companyLogoDataUrl: cleanText(source.companyLogoDataUrl) || DEFAULT_REPORT_LOGO_DATA_URL,
+    companyLogoFileName: cleanText(source.companyLogoFileName) || DEFAULT_REPORT_LOGO_FILE_NAME,
+    companyLogoPublicPath: cleanText(source.companyLogoPublicPath) || DEFAULT_REPORT_LOGO_PUBLIC_PATH,
+    reportAccentColor: cleanText(source.reportAccentColor) || DEFAULT_REPORT_ACCENT_COLOR,
     subInventories: Array.isArray(source.subInventories)
       ? source.subInventories.map(normalizeSubInventoryForForm)
       : [createDefaultSubInventory()],

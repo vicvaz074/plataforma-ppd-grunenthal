@@ -257,6 +257,7 @@ export interface Inventory {
   responsible?: string
   companyLogoDataUrl?: string
   companyLogoFileName?: string
+  companyLogoPublicPath?: string
   reportAccentColor?: string
   subInventories: SubInventory[]
   riskLevel?: RiskLevel | string

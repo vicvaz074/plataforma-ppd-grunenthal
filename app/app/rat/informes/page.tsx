@@ -41,6 +41,11 @@ import {
   FileSpreadsheet,
 } from "lucide-react"
 import { motion } from "framer-motion"
+import {
+  DEFAULT_REPORT_ACCENT_COLOR,
+  DEFAULT_REPORT_RESPONSIBLE,
+  normalizeInventoryForForm,
+} from "../utils/inventory-normalization"
 
 // Etiquetas amigables para PDF
 const FIELD_LABELS: Record<string, string> = {
@@ -218,7 +223,7 @@ const REMISSION_SECTION_FIELDS = new Set(
   SECTION_GROUPS.find((section) => section.name === "Remisión")?.fields || []
 )
 
-const DEFAULT_ACCENT_COLOR = "#1E3A8A"
+const DEFAULT_ACCENT_COLOR = DEFAULT_REPORT_ACCENT_COLOR
 const HEX_COLOR_REGEX = /^#?[0-9A-Fa-f]{6}$/
 
 const normalizeHexColor = (value?: string | null): string | null => {
@@ -330,7 +335,7 @@ export default function InformesPage() {
     if (inventories.length === 0) return null
     return (
       inventories.find(
-        (inv) => inv.companyLogoDataUrl || inv.reportAccentColor || inv.responsible
+        (inv) => inv.companyLogoDataUrl || inv.companyLogoPublicPath || inv.reportAccentColor || inv.responsible
       ) || inventories[0]
     )
   }, [inventories])
@@ -340,7 +345,7 @@ export default function InformesPage() {
   }, [brandingSource?.reportAccentColor])
 
   const fallbackAccentRgb =
-    hexToRgb(DEFAULT_ACCENT_COLOR) || { r: 30, g: 58, b: 138 }
+    hexToRgb(DEFAULT_ACCENT_COLOR) || { r: 64, g: 187, b: 106 }
   const accentRgb = hexToRgb(accentColor) || fallbackAccentRgb
   const accentLight = lightenColor(accentColor, 0.35)
   const accentLightRgb = hexToRgb(accentLight) || fallbackAccentRgb
@@ -358,15 +363,16 @@ export default function InformesPage() {
     ],
     [accentColor]
   )
-  const companyLogo = brandingSource?.companyLogoDataUrl || null
-  const responsibleName = brandingSource?.responsible || ""
+  const companyLogo =
+    brandingSource?.companyLogoDataUrl || brandingSource?.companyLogoPublicPath || null
+  const responsibleName = brandingSource?.responsible || DEFAULT_REPORT_RESPONSIBLE
 
   // Load saved inventories
   useEffect(() => {
     const saved = localStorage.getItem("inventories")
     if (saved) {
       try {
-        setInventories(JSON.parse(saved) as Inventory[])
+        setInventories((JSON.parse(saved) as Inventory[]).map(normalizeInventoryForForm))
       } catch (err) {
         console.error("Failed to parse inventories", err)
       }
