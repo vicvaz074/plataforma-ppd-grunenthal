@@ -1004,7 +1004,6 @@ export default function DPOCompliancePage() {
               <div className="space-y-6">
                 <ModuleSectionCard
                   title="Datos base de los miembros del Departamento de Datos Personales"
-                  description="Usa la misma superficie de captura tipo ARCO antes de entrar a los 29 reactivos."
                 >
                   <div className="grid gap-4 md:grid-cols-2">
                     <div>
