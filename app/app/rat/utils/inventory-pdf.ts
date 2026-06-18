@@ -94,11 +94,22 @@ const TEXT_REPLACEMENTS: Array<[RegExp, string]> = [
 
 export const normalizeReportText = (value: unknown): string => {
   const raw = value === null || value === undefined ? "" : String(value);
-  const collapsed = raw.replace(/\s+/g, " ").trim();
+  const collapsed = raw.normalize("NFC").replace(/\s+/g, " ").trim();
   return TEXT_REPLACEMENTS.reduce(
     (text, [pattern, replacement]) => text.replace(pattern, replacement),
     collapsed,
   );
+};
+
+export const buildInventoryPdfFileName = (databaseName: unknown): string => {
+  const safeName = normalizeReportText(databaseName)
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^A-Za-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "")
+    .replace(/_{2,}/g, "_");
+
+  return `inventario_${safeName || "export"}.pdf`;
 };
 
 type CoverInfoInventory = Pick<
@@ -1722,7 +1733,5 @@ export const generateInventoryPDF = (
     }
   });
 
-  doc.save(
-    `inventario_${inventory.databaseName?.replace(/\s+/g, "_") || "export"}.pdf`,
-  );
+  doc.save(buildInventoryPdfFileName(inventory.databaseName));
 };
