@@ -840,6 +840,22 @@ export default function DocumentsAndClausesPage() {
     alto: "destructive",
   }
 
+  const clauseComplianceBadges: Record<
+    NonNullable<ContractMeta["clauseComplianceStatus"]>,
+    { label: string; variant: "default" | "secondary" | "outline" | "destructive" }
+  > = {
+    cumple: { label: "Cláusula cumple", variant: "secondary" },
+    no_cumple: { label: "Cláusula no cumple", variant: "destructive" },
+    no_aplica: { label: "Cláusula N/A", variant: "outline" },
+    requiere_revision: { label: "Cláusula en revisión", variant: "outline" },
+  }
+
+  const getClauseComplianceBadge = (contract: ContractMeta) => {
+    const status = contract.clauseComplianceStatus
+    if (status && clauseComplianceBadges[status]) return clauseComplianceBadges[status]
+    return null
+  }
+
   const allDocumentResources = useMemo<DocumentResource[]>(() => {
     const libraryResources: DocumentResource[] = defaultUtilityDocuments.map((doc) => ({
       ...doc,
@@ -1671,90 +1687,113 @@ export default function DocumentsAndClausesPage() {
 
               {filteredContractHistory.length > 0 ? (
                 <div className="grid grid-cols-1 gap-4">
-                  {filteredContractHistory.map((contract) => (
-                    <Card key={contract.id} className="border-muted">
-                      <CardHeader className="pb-2">
-                        <div className="flex flex-wrap items-center gap-2 text-xs">
-                          <Badge variant="secondary">{getContractModeLabel(contract.contractMode)}</Badge>
-                          <Badge variant="outline">{contract.contractType}</Badge>
-                          <Badge variant="outline">{contract.communicationType}</Badge>
-                          <Badge variant={statusVariants[contract.contractStatus]}>
-                            {statusLabels[contract.contractStatus]}
-                          </Badge>
-                          <Badge variant={riskVariants[contract.riskLevel]} className="capitalize">
-                            Riesgo: {contract.riskLevel}
-                          </Badge>
-                        </div>
-                        <CardTitle className="text-lg">
-                          {contract.contractTitle || contract.providerIdentity || contract.contractorType || "Contrato registrado"}
-                        </CardTitle>
-                        <CardDescription>
-                          Registrado el {formatDate(contract.created)} · Vigencia {contract.contractValidity}
-                          {contract.responsibleName && ` · Responsable: ${contract.responsibleName}`}
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent className="space-y-2 text-sm">
-                        <p>
-                          <strong>Tercero:</strong> {contract.providerIdentity || contract.contractorType || contract.thirdPartyName}
-                        </p>
-                        {contract.thirdPartyTypes.length > 0 && (
+                  {filteredContractHistory.map((contract) => {
+                    const clauseBadge = getClauseComplianceBadge(contract)
+
+                    return (
+                      <Card key={contract.id} className="border-muted">
+                        <CardHeader className="pb-2">
+                          <div className="flex flex-wrap items-center gap-2 text-xs">
+                            <Badge variant="secondary">{getContractModeLabel(contract.contractMode)}</Badge>
+                            <Badge variant="outline">{contract.contractType}</Badge>
+                            <Badge variant="outline">{contract.communicationType}</Badge>
+                            <Badge variant={statusVariants[contract.contractStatus]}>
+                              {statusLabels[contract.contractStatus]}
+                            </Badge>
+                            {clauseBadge && <Badge variant={clauseBadge.variant}>{clauseBadge.label}</Badge>}
+                            <Badge variant={riskVariants[contract.riskLevel]} className="capitalize">
+                              Riesgo: {contract.riskLevel}
+                            </Badge>
+                          </div>
+                          <CardTitle className="text-lg">
+                            {contract.contractTitle || contract.providerIdentity || contract.contractorType || "Contrato registrado"}
+                          </CardTitle>
+                          <CardDescription>
+                            Registrado el {formatDate(contract.created)} · Vigencia {contract.contractValidity}
+                            {contract.responsibleName && ` · Responsable: ${contract.responsibleName}`}
+                          </CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-2 text-sm">
                           <p>
-                            <strong>Tipo de tercero:</strong> {contract.thirdPartyTypes.join(", ")}
+                            <strong>Tercero:</strong> {contract.providerIdentity || contract.contractorType || contract.thirdPartyName}
                           </p>
-                        )}
-                        <p>
-                          <strong>Áreas involucradas:</strong> {contract.areas.join(", ")}
-                        </p>
-                        <p>
-                          <strong>Período:</strong> {formatDate(contract.startDate)} a {formatDate(contract.expirationDate)}
-                        </p>
-                        <p>
-                          <strong>Volumen aproximado:</strong> {contract.dataVolume}
-                        </p>
-                        <p>
-                          <strong>Cláusula regulatoria:</strong> {contract.clauseRegulation}
-                        </p>
-                        {contract.communicationDetails && (
-                          <p>
-                            <strong>Detalle de comunicación:</strong> {contract.communicationDetails}
-                          </p>
-                        )}
-                        <p>
-                          <strong>Recordatorios configurados:</strong> {contract.reminders.join(", ")} días antes del vencimiento
-                        </p>
-                        <div className="space-y-2">
-                          <p className="font-medium">Documentos asociados</p>
-                          {contract.attachments.length > 0 ? (
-                            <div className="grid gap-2 md:grid-cols-2">
-                              {contract.attachments.map((attachment) => (
-                                <div
-                                  key={`${contract.id}-${attachment.storageId ?? attachment.fileName}`}
-                                  className="flex flex-wrap items-center justify-between gap-3 rounded-md border p-2"
-                                >
-                                  <div className="min-w-0">
-                                    <p className="break-words text-sm font-medium">{attachment.fileName}</p>
-                                    <p className="text-xs text-muted-foreground">{attachment.definition}</p>
-                                  </div>
-                                  <div className="flex shrink-0 flex-wrap gap-2">
-                                    <Button size="sm" variant="outline" onClick={() => previewContractAttachment(attachment)}>
-                                      <Eye className="mr-2 h-4 w-4" />
-                                      Ver
-                                    </Button>
-                                    <Button size="sm" variant="outline" onClick={() => downloadContractAttachment(attachment)}>
-                                      <Download className="mr-2 h-4 w-4" />
-                                      Descargar
-                                    </Button>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          ) : (
-                            <p className="text-sm text-muted-foreground">Sin documentos adjuntos en el registro.</p>
+                          {contract.thirdPartyTypes.length > 0 && (
+                            <p>
+                              <strong>Tipo de tercero:</strong> {contract.thirdPartyTypes.join(", ")}
+                            </p>
                           )}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
+                          <p>
+                            <strong>Áreas involucradas:</strong> {contract.areas.join(", ")}
+                          </p>
+                          <p>
+                            <strong>Período:</strong> {formatDate(contract.startDate)} a {formatDate(contract.expirationDate)}
+                          </p>
+                          <p>
+                            <strong>Volumen aproximado:</strong> {contract.dataVolume}
+                          </p>
+                          <p>
+                            <strong>Resultado de análisis:</strong> {contract.clauseComplianceLabel || contract.clauseRegulation}
+                          </p>
+                          {contract.clauseType && (
+                            <p>
+                              <strong>Cláusula revisada:</strong> {contract.clauseType}
+                            </p>
+                          )}
+                          <p>
+                            <strong>Criterio regulatorio:</strong> {contract.clauseRegulation}
+                          </p>
+                          {contract.complianceNeeds && (
+                            <p>
+                              <strong>Recomendación:</strong> {contract.complianceNeeds}
+                            </p>
+                          )}
+                          {contract.clauseComplianceNotes && (
+                            <p className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-amber-900">
+                              <strong>Nota de revisión:</strong> {contract.clauseComplianceNotes}
+                            </p>
+                          )}
+                          {contract.communicationDetails && (
+                            <p>
+                              <strong>Detalle de comunicación:</strong> {contract.communicationDetails}
+                            </p>
+                          )}
+                          <p>
+                            <strong>Recordatorios configurados:</strong> {contract.reminders.join(", ")} días antes del vencimiento
+                          </p>
+                          <div className="space-y-2">
+                            <p className="font-medium">Documentos asociados</p>
+                            {contract.attachments.length > 0 ? (
+                              <div className="grid gap-2 md:grid-cols-2">
+                                {contract.attachments.map((attachment) => (
+                                  <div
+                                    key={`${contract.id}-${attachment.storageId ?? attachment.fileName}`}
+                                    className="flex flex-wrap items-center justify-between gap-3 rounded-md border p-2"
+                                  >
+                                    <div className="min-w-0">
+                                      <p className="break-words text-sm font-medium">{attachment.fileName}</p>
+                                      <p className="text-xs text-muted-foreground">{attachment.definition}</p>
+                                    </div>
+                                    <div className="flex shrink-0 flex-wrap gap-2">
+                                      <Button size="sm" variant="outline" onClick={() => previewContractAttachment(attachment)}>
+                                        <Eye className="mr-2 h-4 w-4" />
+                                        Ver
+                                      </Button>
+                                      <Button size="sm" variant="outline" onClick={() => downloadContractAttachment(attachment)}>
+                                        <Download className="mr-2 h-4 w-4" />
+                                        Descargar
+                                      </Button>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            ) : (
+                              <p className="text-sm text-muted-foreground">Sin documentos adjuntos en el registro.</p>
+                            )}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    )
+                  })}
                 </div>
               ) : (
                 <div className="rounded-md border border-dashed border-muted-foreground/40 p-8 text-center text-muted-foreground">

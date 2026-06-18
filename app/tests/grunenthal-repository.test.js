@@ -26,6 +26,22 @@ describe("repositorio documental Grünenthal", () => {
     assert.equal(repository.GRUNENTHAL_INDIVIDUAL_THIRD_PARTY_RECORDS.length, 32)
     assert.equal(repository.GRUNENTHAL_LABOR_POLICY_REPOSITORY_DOCUMENTS.length, 2)
 
+    const corad = repository.GRUNENTHAL_INDIVIDUAL_THIRD_PARTY_RECORDS.find((record) =>
+      record.providerIdentity.includes("CORAD MEETING PLANNER"),
+    )
+    assert.ok(corad, "debe existir el análisis individual de CORAD")
+    assert.equal(corad.complianceStatus, "no-aplica")
+    assert.equal(corad.sourceComplianceLabel, "N/A")
+    assert.match(corad.sourceClauseType, /No se encontró cláusula relativa/i)
+
+    const ups = repository.GRUNENTHAL_INDIVIDUAL_THIRD_PARTY_RECORDS.find((record) =>
+      record.providerIdentity.includes("UPS SCS"),
+    )
+    assert.ok(ups, "debe existir el análisis individual de UPS")
+    assert.equal(ups.complianceStatus, "requiere-revision")
+    assert.equal(ups.sourceComplianceLabel, "Sí cumple")
+    assert.match(ups.sourceComplianceNotes, /contradicción/i)
+
     const knownAssetIds = new Set(assets.GRUNENTHAL_DOCUMENT_MANIFEST.map((asset) => asset.id))
     const allIndividualDocuments = [
       ...repository.GRUNENTHAL_INDIVIDUAL_PRIVACY_NOTICE_RECORDS,
