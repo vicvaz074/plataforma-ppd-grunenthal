@@ -16,6 +16,15 @@ import {
   GRUNENTHAL_ADMIN_NAME,
   ensureGrunenthalAdminUser,
 } from "@/lib/user-permissions"
+import {
+  GRUNENTHAL_INDIVIDUAL_PRIVACY_NOTICE_RECORDS,
+  GRUNENTHAL_INDIVIDUAL_THIRD_PARTY_RECORDS,
+  GRUNENTHAL_LABOR_POLICY_REPOSITORY_DOCUMENTS,
+  getGrunenthalRepositoryFileId,
+  type GrunenthalLaborPolicySeed,
+  type GrunenthalPrivacyNoticeSeed,
+  type GrunenthalThirdPartyContractSeed,
+} from "@/lib/grunenthal-repository"
 import type { StoredFile } from "@/lib/fileStorage"
 import type { Inventory } from "@/app/rat/types"
 
@@ -35,6 +44,8 @@ const RAT_VALIDATION_STORAGE_KEY = "grunenthal_rat_validation_report_v1"
 const SEEDED_AT = "2026-01-01T00:00:00.000Z"
 const TRAINING_PROGRAM_ID = "grunenthal-training-privacy-2026"
 const ARCO_TEMPLATE_ASSET_ID = "grunenthal-arco-rights-matriz-de-control-y-seguimiento-del-ejercicio-de-derechos-arco"
+const PRIVACY_NOTICE_SOURCE_ASSET_ID = "grunenthal-privacy-notices-manualap-grunentha-davara-v3"
+const THIRD_PARTY_ANALYSIS_SOURCE_ASSET_ID = "grunenthal-third-party-contracts-analisisderelacionesgrunenthal"
 const STATIC_PREVIEW_EXTENSIONS = new Set(["docx", "docm", "xlsx"])
 
 type JsonRecord = Record<string, unknown>
@@ -88,6 +99,7 @@ function staticPreviewPathForAsset(asset: GrunenthalAsset) {
 function buildStoredFile(asset: GrunenthalAsset): StoredFile {
   const previewPath = staticPreviewPathForAsset(asset)
   const isArcoTemplate = asset.id === ARCO_TEMPLATE_ASSET_ID
+  const category = asset.id === PRIVACY_NOTICE_SOURCE_ASSET_ID ? "privacy-policy" : asset.category
 
   return {
     id: seededFileId(asset.id),
@@ -96,7 +108,7 @@ function buildStoredFile(asset: GrunenthalAsset): StoredFile {
     size: asset.size,
     content: asset.path,
     uploadDate: SEEDED_AT,
-    category: asset.category,
+    category,
     metadata: {
       client: GRUNENTHAL_CLIENT_NAME,
       clientSeed: "grunenthal-2026",
@@ -116,6 +128,7 @@ function buildStoredFile(asset: GrunenthalAsset): StoredFile {
       folder: asset.folder,
       extension: asset.extension,
       title: asset.displayName,
+      displayName: asset.displayName,
       createdAt: SEEDED_AT,
       createdBy: "Admin",
       lastUpdated: SEEDED_AT,
@@ -126,8 +139,113 @@ function buildStoredFile(asset: GrunenthalAsset): StoredFile {
   }
 }
 
+function commonIndividualMetadata(
+  record: GrunenthalPrivacyNoticeSeed | GrunenthalThirdPartyContractSeed | GrunenthalLaborPolicySeed,
+  individualRecordType: "privacy-notice" | "third-party-contract" | "labor-policy-reference",
+) {
+  return {
+    client: GRUNENTHAL_CLIENT_NAME,
+    clientSeed: "grunenthal-2026",
+    grunenthalSeedVersion: GRUNENTHAL_SEED_VERSION,
+    individualRecordId: record.id,
+    individualRecordType,
+    module: record.module,
+    publicPath: record.originalPath,
+    sourceLabel: record.sourceLabel,
+    sourceRelativePath: record.sourceRelativePath,
+    sourceCompiledAssetId: record.sourceCompiledAssetId,
+    sourceLineRange: `${record.lineStart}-${record.lineEnd}`,
+    previewPdfPath: record.previewPdfPath,
+    previewMimeType: "application/pdf",
+    folder: record.module,
+    extension: "docx",
+    title: record.title,
+    displayName: record.title,
+    area: record.area,
+    tags: record.tags,
+    createdAt: SEEDED_AT,
+    createdBy: "Admin",
+    lastUpdated: SEEDED_AT,
+    lastUpdatedBy: "Admin",
+  }
+}
+
+function buildPrivacyNoticeStoredFile(record: GrunenthalPrivacyNoticeSeed): StoredFile {
+  return {
+    id: getGrunenthalRepositoryFileId(record.id),
+    name: record.downloadName,
+    type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    size: 0,
+    content: record.originalPath,
+    uploadDate: SEEDED_AT,
+    category: record.category,
+    metadata: {
+      ...commonIndividualMetadata(record, "privacy-notice"),
+      noticeName: record.title,
+      holderCategories: record.holderCategories,
+      category: record.holderCategories[0] || "otro",
+      noticeTypes: record.noticeTypes,
+      hasPolicy: "si",
+      policyLink: record.previewPdfPath,
+      responsibleAreas: record.responsibleAreas,
+      issueDate: SEEDED_AT.slice(0, 10),
+      versionCode: "1.0",
+      applicableNotices: record.applicableNotices,
+      dispositionMethods: record.dispositionMethods,
+      evidenceNotes: record.evidenceNotes,
+    },
+  }
+}
+
+function buildThirdPartyStoredFile(record: GrunenthalThirdPartyContractSeed): StoredFile {
+  return {
+    id: getGrunenthalRepositoryFileId(record.id),
+    name: record.downloadName,
+    type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    size: 0,
+    content: record.originalPath,
+    uploadDate: SEEDED_AT,
+    category: record.category,
+    metadata: {
+      ...commonIndividualMetadata(record, "third-party-contract"),
+      contractTitle: record.contractTitle,
+      internalCode: record.internalCode,
+      providerIdentity: record.providerIdentity,
+      thirdPartyName: record.thirdPartyName,
+      communicationType: record.communicationType,
+      relationType: record.relationType,
+      riskLevel: record.riskLevel,
+      contractorType: record.contractorType,
+      contractObject: record.contractObject,
+      recommendedInstrument: record.recommendedInstrument,
+    },
+  }
+}
+
+function buildLaborPolicyStoredFile(record: GrunenthalLaborPolicySeed): StoredFile {
+  return {
+    id: getGrunenthalRepositoryFileId(record.id),
+    name: record.downloadName,
+    type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    size: 0,
+    content: record.originalPath,
+    uploadDate: SEEDED_AT,
+    category: record.category,
+    metadata: {
+      ...commonIndividualMetadata(record, "labor-policy-reference"),
+      employmentMode: record.employmentMode,
+      recommendedClause: record.recommendedClause,
+    },
+  }
+}
+
 function upsertSeededFiles() {
-  const seededFiles = GRUNENTHAL_DOCUMENT_MANIFEST.map(buildStoredFile)
+  const seededFiles = [
+    ...GRUNENTHAL_DOCUMENT_MANIFEST.map(buildStoredFile),
+    ...GRUNENTHAL_INDIVIDUAL_PRIVACY_NOTICE_RECORDS.map(buildPrivacyNoticeStoredFile),
+    ...GRUNENTHAL_INDIVIDUAL_THIRD_PARTY_RECORDS.map(buildThirdPartyStoredFile),
+    ...GRUNENTHAL_LABOR_POLICY_REPOSITORY_DOCUMENTS.map(buildLaborPolicyStoredFile),
+  ]
   const seededIds = new Set(seededFiles.map((file) => file.id))
   const existing = readJson<StoredFile[]>(STORED_FILES_KEY, [])
   const userFiles = existing.filter((file) => !seededIds.has(file.id))
@@ -453,6 +571,98 @@ function seedArcoProcedure() {
   })
 }
 
+function thirdPartyTypesFor(record: GrunenthalThirdPartyContractSeed) {
+  if (record.relationType === "mixta") return ["encargado", "tercero"]
+  if (record.relationType === "encargado") return ["encargado"]
+  if (record.relationType === "tercero") return ["tercero"]
+  return ["proveedor"]
+}
+
+function instrumentTypesFor(record: GrunenthalThirdPartyContractSeed) {
+  if (record.communicationType === "mixta") return ["contrato", "dpa", "clausulas"]
+  if (record.communicationType === "remision") return ["dpa", "clausulas"]
+  if (record.communicationType === "transferencia") return ["contrato", "clausulas"]
+  return ["contrato"]
+}
+
+function buildIndividualThirdPartyContract(record: GrunenthalThirdPartyContractSeed) {
+  const sourceLineRange = `${record.lineStart}-${record.lineEnd}`
+
+  return {
+    id: `contract-${record.id}`,
+    created: SEEDED_AT,
+    contractMode: "especifico",
+    contractTitle: record.contractTitle,
+    internalCode: record.internalCode,
+    contractType: "Análisis de relación con tercero",
+    contractStatus: "vigente",
+    contractorType: record.contractorType,
+    providerIdentity: record.providerIdentity,
+    thirdPartyTypes: thirdPartyTypesFor(record),
+    thirdPartyName: record.thirdPartyName,
+    areas: [record.area],
+    serviceTypes: ["servicios_profesionales"],
+    treatmentPurpose: record.contractObject,
+    dataCategories: ["identificacion", "contacto", "laboral"],
+    dataVolume: "Variable",
+    relationType: record.relationType,
+    instrumentTypes: instrumentTypesFor(record),
+    formalized: "si",
+    baseLegal: ["relacion_juridica"],
+    guarantees: record.complianceStatus === "cumple" ? ["clausulas_contractuales"] : ["clausulas_contractuales", "pendiente_ajuste"],
+    contractValidity: "indefinida",
+    startDate: "2025-10-21",
+    expirationDate: "2026-10-21",
+    durationType: "anual",
+    reviewFrequency: "anual",
+    terminationClause: true,
+    communicationType: record.communicationType,
+    communicationDetails: record.contractObject,
+    clauseRegulation:
+      record.complianceStatus === "cumple"
+        ? "El análisis fuente identifica cláusulas compatibles con la LFPDPPP o su Reglamento."
+        : "El análisis fuente identifica ajustes necesarios para cumplir con la LFPDPPP y su Reglamento.",
+    complianceNeeds: record.recommendedInstrument,
+    evidenceAvailable: ["analisis", "extracto_individual"],
+    evidenceNotes: `Registro individual extraído del análisis de relaciones con terceros, líneas ${sourceLineRange}.`,
+    responsibleName: GRUNENTHAL_ADMIN_NAME,
+    responsibleRole: "Administrador demo",
+    lastReview: "2025-10-21",
+    nextReview: "2026-10-21",
+    reminders: [],
+    linkedInventories: "RAT Grünenthal 2026",
+    riskLevel: record.riskLevel,
+    riskNotes:
+      record.complianceStatus === "cumple"
+        ? "Riesgo bajo por cláusula marcada como compatible en el análisis fuente."
+        : `Revisión requerida: ${record.recommendedInstrument}.`,
+    versioningNotes: "Carga individual generada desde el compilado de relaciones con terceros.",
+    reviewLog: "Creado por Admin para demo Grünenthal 2026.",
+    attachments: [
+      {
+        fileName: record.downloadName,
+        definition: "principal",
+        storageId: getGrunenthalRepositoryFileId(record.id),
+        category: record.category,
+      },
+      {
+        fileName: "AnálisisDeRelacionesGrünenthal .docx",
+        definition: "evidencia",
+        storageId: seededFileId(THIRD_PARTY_ANALYSIS_SOURCE_ASSET_ID),
+        category: "third-party-contract",
+      },
+    ],
+    metadata: {
+      sourceCompiledAssetId: record.sourceCompiledAssetId,
+      sourceLineRange,
+      sourceRelativePath: record.sourceRelativePath,
+      individualRecordId: record.id,
+      createdBy: "Admin",
+      createdAt: SEEDED_AT,
+    },
+  }
+}
+
 function seedThirdPartyContracts() {
   const thirdPartyAssets = assetsForModule("third-party-contracts")
   const current = readJson<Array<JsonRecord & { id: string }>>(CONTRACTS_STORAGE_KEY, [])
@@ -505,7 +715,9 @@ function seedThirdPartyContracts() {
     })),
   }
 
-  writeJson(CONTRACTS_STORAGE_KEY, upsertById(current, [record]))
+  const individualRecords = GRUNENTHAL_INDIVIDUAL_THIRD_PARTY_RECORDS.map(buildIndividualThirdPartyContract)
+
+  writeJson(CONTRACTS_STORAGE_KEY, upsertById(current, [record, ...individualRecords]))
 }
 
 function seedDpoAccreditation() {
