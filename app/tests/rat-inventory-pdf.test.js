@@ -61,6 +61,19 @@ describe("generación PDF de inventarios RAT", () => {
     }
   })
 
+  it("normaliza acentos combinados para texto visible y usa nombres de archivo sin acentos", async () => {
+    const pdf = await importModule("app/rat/utils/inventory-pdf.ts")
+
+    assert.equal(
+      pdf.normalizeReportText("Direccio\u0301n General"),
+      "Dirección General",
+    )
+    assert.equal(
+      pdf.buildInventoryPdfFileName("Direccio\u0301n General"),
+      "inventario_Direccion_General.pdf",
+    )
+  })
+
   it("pinta las líneas preenvueltas de portada sin pedir ajuste de ancho al renderizador", () => {
     const source = fs.readFileSync(
       path.join(appDir, "app/rat/utils/inventory-pdf.ts"),
