@@ -58,7 +58,8 @@ import {
   FileText as FileTextIcon,
 } from "lucide-react"
 import { loadItems } from "@/lib/module-statistics"
-import { getPolicyProgramSnapshot, getPrimaryPolicy } from "@/lib/policy-governance"
+import { getPrimaryPolicy } from "@/lib/policy-governance"
+import { getPolicyDashboardSnapshot, getTrainingDashboardSnapshot } from "@/lib/dashboard-progress"
 import {
   getUsers,
   saveUsers,
@@ -216,9 +217,9 @@ function getRealModuleReports() {
   const dpo = loadItems("dpo") as any[]
   const eipd = loadItems("eipd") as any[]
   const policies = loadItems("policies") as any[]
-  const policySnapshot = getPolicyProgramSnapshot(policies)
+  const policySnapshot = getPolicyDashboardSnapshot(policies)
   const primaryPolicy = getPrimaryPolicy(policies)
-  const training = loadItems("training") as any[]
+  const trainingSnapshot = getTrainingDashboardSnapshot()
   const incidents = loadItems("incidents") as any[]
   const procedures = loadItems("procedures") as any[]
   const arco = loadItems("arco") as any[]
@@ -264,17 +265,27 @@ function getRealModuleReports() {
     { module: "EIPD", scoreLabel: "EIPD registradas", score: eipd.length > 0 ? 100 : 0, summary: "Control de evaluaciones de impacto realizadas.", indicators: [{ label: "Realizadas", value: eipd.length.toString() }, { label: "Concluídas", value: eipd.filter(e => e.status === "Completado").length.toString() }, { label: "Pendientes", value: eipd.filter(e => e.status !== "Completado").length.toString() }] },
     { module: "Incidentes de Seguridad", scoreLabel: "Eventos", score: incidents.length > 0 ? 100 : 0, summary: "Clasificación y seguimiento de casos de incidentes.", indicators: [{ label: "Incidentes totales", value: incidents.length.toString() }, { label: "Críticos", value: incidents.filter(i => i.data?.evaluacionIncidente?.gravedad === "Alta").length.toString() }, { label: "Mitigados", value: incidents.filter(i => i.status === "cerrado").length.toString() }] },
     { module: "Procedimientos", scoreLabel: "Registrados", score: procedures.length > 0 ? 100 : 0, summary: "Estado de procedimientos LFPDPPP con evidencia.", indicators: [{ label: "Total", value: procedures.length.toString() }, { label: "En ejecución", value: procedures.filter(p => p.status === "en-curso").length.toString() }, { label: "Concluidos", value: procedures.filter(p => p.status === "resuelto").length.toString() }] },
-    { module: "Capacitación", scoreLabel: "Sesiones", score: training.length > 0 ? 100 : 0, summary: "Monitoreo de avance por programa de formación.", indicators: [{ label: "Sesiones", value: training.length.toString() }, { label: "Aprobados", value: training.filter(t => t.status === "completada" || t.status === "Completada").length.toString() }, { label: "En curso", value: training.filter(t => t.status === "en-curso").length.toString() }] },
+    {
+      module: "Capacitación",
+      scoreLabel: "Avance documental",
+      score: trainingSnapshot.score,
+      summary: "Monitoreo de programas, recursos cargados y avance de sesiones o constancias.",
+      indicators: [
+        { label: "Programas", value: trainingSnapshot.programs.toString() },
+        { label: "Recursos", value: trainingSnapshot.resources.toString() },
+        { label: "Sesiones completas", value: trainingSnapshot.completedSessions.toString() },
+      ],
+    },
     {
       module: "Políticas",
-      scoreLabel: "Programa vigente",
+      scoreLabel: "Avance documental",
       score: policySnapshot.score,
       summary: primaryPolicy
         ? `PGDP ${primaryPolicy.referenceCode} con workflow, evidencia mínima y cobertura reutilizable para ARCO.`
         : "Seguimiento del builder PGDP, expediente, workflow y consumo del documento desde ARCO.",
       indicators: [
         { label: "Registradas", value: policySnapshot.total.toString() },
-        { label: "Vigentes con evidencia", value: policySnapshot.publishedWithEvidence.toString() },
+        { label: "Documentos", value: policySnapshot.documentCount.toString() },
         { label: "Bloqueos workflow", value: policySnapshot.blockedWorkflow.toString() },
       ],
     },
