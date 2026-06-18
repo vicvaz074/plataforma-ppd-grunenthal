@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import mimetypes
 import re
@@ -20,6 +21,26 @@ def slugify(value: str) -> str:
 
 def public_path(path: Path, public_root: Path) -> str:
     return "/" + path.relative_to(public_root).as_posix()
+
+
+def file_sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def source_priority(path: Path) -> tuple[int, str]:
+    normalized_name = slugify(path.stem)
+    score = 0
+    if "contrato" in normalized_name:
+        score -= 20
+    if "firmado" in normalized_name:
+        score -= 10
+    if re.match(r"^\d{2}-\d{2}-\d{4}", normalized_name):
+        score += 5
+    return score, path.name.lower()
 
 
 def run_soffice(soffice: str, docx_path: Path, out_dir: Path) -> Path:
@@ -57,14 +78,20 @@ def main() -> None:
 
     records = []
     seen_slugs: dict[str, int] = {}
+    seen_hashes: set[str] = set()
 
-    for source_path in sorted(source_dir.iterdir(), key=lambda item: item.name.lower()):
+    for source_path in sorted(source_dir.iterdir(), key=source_priority):
         if not source_path.is_file() or source_path.name.startswith("."):
             continue
 
         extension = source_path.suffix.lower()
         if extension not in {".pdf", ".docx"}:
             continue
+
+        content_hash = file_sha256(source_path)
+        if content_hash in seen_hashes:
+            continue
+        seen_hashes.add(content_hash)
 
         base_slug = slugify(source_path.stem)
         seen_slugs[base_slug] = seen_slugs.get(base_slug, 0) + 1
@@ -90,6 +117,7 @@ def main() -> None:
                 "size": target_path.stat().st_size,
                 "path": public_path(target_path, public_root),
                 "previewPdfPath": public_path(preview_path, public_root),
+                "contentSha256": content_hash,
             }
         )
 

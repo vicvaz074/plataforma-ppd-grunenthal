@@ -55,6 +55,14 @@ const STATIC_PREVIEW_EXTENSIONS = new Set(["docx", "docm", "xlsx"])
 const LEGACY_SEEDED_FILE_IDS = new Set([
   "grunenthal-file-grunenthal-privacy-notices-manualap-grunentha-davara-v3",
 ])
+const LEGACY_GRT_DUPLICATE_FILE_IDS = new Set([
+  "grunenthal-file-grunenthal-grt-contract-001-03-04-2025-bacher-zoppi-s-a-de-c-v-1",
+  "grunenthal-file-grunenthal-grt-contract-008-11-15-2024-betterfly-mexico-1",
+])
+const LEGACY_GRT_DUPLICATE_CONTRACT_IDS = new Set([
+  "contract-grunenthal-grt-contract-001-03-04-2025-bacher-zoppi-s-a-de-c-v-1",
+  "contract-grunenthal-grt-contract-008-11-15-2024-betterfly-mexico-1",
+])
 
 type JsonRecord = Record<string, unknown>
 type RatPdfLink = (typeof GRUNENTHAL_RAT_PDF_LINKS)[number]
@@ -248,6 +256,8 @@ function buildLaborPolicyStoredFile(record: GrunenthalLaborPolicySeed): StoredFi
 }
 
 function buildGrtContractStoredFile(record: GrunenthalGrtContractDocument): StoredFile {
+  const usesGeneratedPdfPreview = record.extension !== "pdf"
+
   return {
     id: seededFileId(record.id),
     name: record.sourceName,
@@ -266,8 +276,10 @@ function buildGrtContractStoredFile(record: GrunenthalGrtContractDocument): Stor
       publicPath: record.path,
       sourceLabel: "Contratos GRt",
       sourceRelativePath: `Contratos GRt/${record.sourceName}`,
-      previewPdfPath: record.previewPdfPath,
-      previewMimeType: "application/pdf",
+      documentViewMode: usesGeneratedPdfPreview ? "pdf-preview" : "original",
+      ...(usesGeneratedPdfPreview
+        ? { previewPdfPath: record.previewPdfPath, previewMimeType: "application/pdf" }
+        : {}),
       folder: "third-party-contracts/contratos-grt",
       extension: record.extension,
       title: record.displayName,
@@ -308,7 +320,9 @@ function upsertSeededFiles() {
   const userFiles = existing.filter(
     (file) =>
       !seededIds.has(file.id) &&
+      !LEGACY_GRT_DUPLICATE_FILE_IDS.has(file.id) &&
       !LEGACY_SEEDED_FILE_IDS.has(file.id) &&
+      !(file.metadata?.individualRecordType === "third-party-grt-contract" && !seededIds.has(file.id)) &&
       file.metadata?.grunenthalAssetId !== "grunenthal-privacy-notices-manualap-grunentha-davara-v3",
   )
   writeJson(STORED_FILES_KEY, [...userFiles, ...seededFiles])
@@ -778,6 +792,8 @@ function buildIndividualThirdPartyContract(record: GrunenthalThirdPartyContractS
 }
 
 function buildGrtThirdPartyContract(record: GrunenthalGrtContractDocument, index: number) {
+  const usesGeneratedPdfPreview = record.extension !== "pdf"
+
   return {
     id: `contract-${record.id}`,
     created: SEEDED_AT,
@@ -824,7 +840,7 @@ function buildGrtThirdPartyContract(record: GrunenthalGrtContractDocument, index
     linkedInventories: "No vinculado en esta carga",
     riskLevel: record.riskLevel,
     riskNotes: riskNotesForGrt(record),
-    versioningNotes: "Carga directa desde carpeta Contratos GRt con preview y análisis en modal.",
+    versioningNotes: "Carga directa desde carpeta Contratos GRt con documento original y análisis en modal.",
     reviewLog: "Creado por Admin para demo Grünenthal 2026.",
     attachments: [
       {
@@ -839,8 +855,9 @@ function buildGrtThirdPartyContract(record: GrunenthalGrtContractDocument, index
       sourceRelativePath: `Contratos GRt/${record.sourceName}`,
       individualRecordId: record.id,
       grtContractId: record.id,
-      previewPdfPath: record.previewPdfPath,
       originalPublicPath: record.path,
+      documentViewMode: usesGeneratedPdfPreview ? "pdf-preview" : "original",
+      ...(usesGeneratedPdfPreview ? { previewPdfPath: record.previewPdfPath } : {}),
       analysisInModal: true,
       createdBy: "Admin",
       createdAt: SEEDED_AT,
@@ -902,8 +919,15 @@ function seedThirdPartyContracts() {
 
   const individualRecords = GRUNENTHAL_INDIVIDUAL_THIRD_PARTY_RECORDS.map(buildIndividualThirdPartyContract)
   const grtContractRecords = GRUNENTHAL_GRT_CONTRACT_DOCUMENTS.map(buildGrtThirdPartyContract)
+  const grtContractIds = new Set(grtContractRecords.map((contract) => contract.id))
+  const cleanedCurrent = current.filter((contract) => {
+    const metadata = contract.metadata as JsonRecord | undefined
+    if (LEGACY_GRT_DUPLICATE_CONTRACT_IDS.has(contract.id)) return false
+    if (metadata?.sourceFolder === "Contratos GRt" && !grtContractIds.has(contract.id)) return false
+    return true
+  })
 
-  writeJson(CONTRACTS_STORAGE_KEY, upsertById(current, [record, ...individualRecords, ...grtContractRecords]))
+  writeJson(CONTRACTS_STORAGE_KEY, upsertById(cleanedCurrent, [record, ...individualRecords, ...grtContractRecords]))
 }
 
 function seedDpoAccreditation() {

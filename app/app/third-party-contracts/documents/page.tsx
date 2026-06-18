@@ -53,6 +53,11 @@ import {
   THIRD_PARTY_CONTRACTS_META,
   THIRD_PARTY_CONTRACTS_NAV,
 } from "@/components/arco-module-config"
+import {
+  GRUNENTHAL_THIRD_PARTY_ANALYSIS_MATRIX,
+  GRUNENTHAL_THIRD_PARTY_ANALYSIS_MATRIX_SOURCE,
+  type GrunenthalThirdPartyAnalysisMatrixRow,
+} from "@/lib/grunenthal-third-party-analysis-matrix"
 import { SafeLink } from "@/components/SafeLink"
 import type { ContractMeta } from "../types"
 
@@ -341,6 +346,38 @@ const triggerTextDownload = (content: string, fileName: string) => {
   URL.revokeObjectURL(url)
 }
 
+const GRT_CONTRACT_SOURCE_FOLDER = "Contratos GRt"
+const COMPILED_THIRD_PARTY_SOURCE_ID = "grunenthal-third-party-contracts-analisisderelacionesgrunenthal"
+
+const normalizeContractText = (value: string) =>
+  value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .replace(/\b(s a de c v|sapi de cv|s de rl de cv|sc|sa de cv|s c|s a p i de c v)\b/g, "")
+    .replace(/\s+/g, " ")
+    .trim()
+
+const contractPartyKey = (contract: Pick<ContractMeta, "providerIdentity" | "thirdPartyName" | "contractorType">) =>
+  normalizeContractText(contract.providerIdentity || contract.thirdPartyName || contract.contractorType || "")
+
+const isGrtHistoryContract = (contract: ContractMeta) => contract.metadata?.sourceFolder === GRT_CONTRACT_SOURCE_FOLDER
+
+const isCompiledAnalysisContract = (contract: ContractMeta) =>
+  contract.metadata?.sourceCompiledAssetId === COMPILED_THIRD_PARTY_SOURCE_ID
+
+const isGrtSeededFile = (file: StoredFile) => file.metadata?.individualRecordType === "third-party-grt-contract"
+
+const communicationTypeLabels: Record<GrunenthalThirdPartyAnalysisMatrixRow["communicationType"], string> = {
+  remision: "Remisión",
+  transferencia: "Transferencia",
+  mixta: "Mixta",
+  "sin-comunicacion": "Sin comunicación",
+  "no-aplica": "N/A",
+  otro: "Otro",
+}
+
 export default function DocumentsAndClausesPage() {
   const { toast } = useToast()
   const [uploadedContracts, setUploadedContracts] = useState<StoredFile[]>([])
@@ -366,6 +403,9 @@ export default function DocumentsAndClausesPage() {
   const [communicationFilter, setCommunicationFilter] = useState("all")
   const [statusFilter, setStatusFilter] = useState("all")
   const [riskFilter, setRiskFilter] = useState("all")
+  const [matrixSearchTerm, setMatrixSearchTerm] = useState("")
+  const [matrixAreaFilter, setMatrixAreaFilter] = useState("all")
+  const [matrixCommunicationFilter, setMatrixCommunicationFilter] = useState("all")
   const [isTemplateFillDialogOpen, setIsTemplateFillDialogOpen] = useState(false)
   const [activeTemplate, setActiveTemplate] = useState<TemplateRepositoryItem | null>(null)
   const [templatePlaceholderValues, setTemplatePlaceholderValues] = useState<Record<string, string>>({})
@@ -922,24 +962,81 @@ export default function DocumentsAndClausesPage() {
 
   const combinedClauses = useMemo(() => [...defaultModelClauses, ...userClauses], [userClauses])
 
-  const availableCommunicationTypes = useMemo(() => {
-    const types = new Set(contractHistory.map((entry) => entry.communicationType).filter(Boolean))
-    return Array.from(types).sort()
+  const visibleContractHistory = useMemo(() => {
+    const grtContractParties = new Set(
+      contractHistory
+        .filter(isGrtHistoryContract)
+        .map(contractPartyKey)
+        .filter(Boolean),
+    )
+
+    return contractHistory.filter((contract) => {
+      const partyKey = contractPartyKey(contract)
+      if (isCompiledAnalysisContract(contract) && partyKey && grtContractParties.has(partyKey)) {
+        return false
+      }
+      return true
+    })
   }, [contractHistory])
+
+  const visibleUploadedContracts = useMemo(
+    () => uploadedContracts.filter((contract) => !isGrtSeededFile(contract)),
+    [uploadedContracts],
+  )
+
+  const contractByPartyKey = useMemo(() => {
+    const contracts = new Map<string, ContractMeta>()
+    visibleContractHistory.forEach((contract) => {
+      const partyKey = contractPartyKey(contract)
+      if (partyKey && !contracts.has(partyKey)) {
+        contracts.set(partyKey, contract)
+      }
+    })
+    return contracts
+  }, [visibleContractHistory])
+
+  const matrixAreas = useMemo(() => {
+    return Array.from(new Set(GRUNENTHAL_THIRD_PARTY_ANALYSIS_MATRIX.map((row) => row.area))).sort()
+  }, [])
+
+  const matrixCommunicationTypes = useMemo(() => {
+    return Array.from(new Set(GRUNENTHAL_THIRD_PARTY_ANALYSIS_MATRIX.map((row) => row.communicationType))).sort()
+  }, [])
+
+  const filteredMatrixRows = useMemo(() => {
+    const searchValue = normalizeContractText(matrixSearchTerm)
+
+    return GRUNENTHAL_THIRD_PARTY_ANALYSIS_MATRIX.filter((row) => {
+      const searchableFields = normalizeContractText(
+        [row.area, row.thirdParty, row.contract, row.communication].join(" "),
+      )
+      const matchesSearch = !searchValue || searchableFields.includes(searchValue)
+      const matchesArea = matrixAreaFilter === "all" || row.area === matrixAreaFilter
+      const matchesCommunication =
+        matrixCommunicationFilter === "all" || row.communicationType === matrixCommunicationFilter
+
+      return matchesSearch && matchesArea && matchesCommunication
+    })
+  }, [matrixAreaFilter, matrixCommunicationFilter, matrixSearchTerm])
+
+  const availableCommunicationTypes = useMemo(() => {
+    const types = new Set(visibleContractHistory.map((entry) => entry.communicationType).filter(Boolean))
+    return Array.from(types).sort()
+  }, [visibleContractHistory])
 
   const availableStatuses = useMemo(() => {
-    const statuses = new Set(contractHistory.map((entry) => entry.contractStatus))
+    const statuses = new Set(visibleContractHistory.map((entry) => entry.contractStatus))
     return (Array.from(statuses) as ContractMeta["contractStatus"][]).sort()
-  }, [contractHistory])
+  }, [visibleContractHistory])
 
   const availableRiskLevels = useMemo(() => {
-    const risks = new Set(contractHistory.map((entry) => entry.riskLevel))
+    const risks = new Set(visibleContractHistory.map((entry) => entry.riskLevel))
     return (Array.from(risks) as ContractMeta["riskLevel"][]).sort()
-  }, [contractHistory])
+  }, [visibleContractHistory])
 
   const filteredContractHistory = useMemo(() => {
     const searchValue = contractSearchTerm.trim().toLowerCase()
-    return contractHistory.filter((contract) => {
+    return visibleContractHistory.filter((contract) => {
       const matchesSearch =
         !searchValue ||
         [
@@ -966,7 +1063,7 @@ export default function DocumentsAndClausesPage() {
       return matchesSearch && matchesMode && matchesCommunication && matchesStatus && matchesRisk
     })
   }, [
-    contractHistory,
+    visibleContractHistory,
     contractSearchTerm,
     contractModeFilter,
     communicationFilter,
@@ -977,7 +1074,7 @@ export default function DocumentsAndClausesPage() {
   const filteredUploadedContracts = useMemo(() => {
     const searchValue = contractSearchTerm.trim().toLowerCase()
 
-    return uploadedContracts.filter((contract) => {
+    return visibleUploadedContracts.filter((contract) => {
       const metadata = contract.metadata ?? {}
       const searchableFields = [
         contract.name,
@@ -1005,14 +1102,14 @@ export default function DocumentsAndClausesPage() {
 
       return matchesSearch && matchesCommunication && matchesRisk
     })
-  }, [uploadedContracts, contractSearchTerm, communicationFilter, riskFilter])
+  }, [visibleUploadedContracts, contractSearchTerm, communicationFilter, riskFilter])
 
   const navItems = THIRD_PARTY_CONTRACTS_NAV.map((item) => {
     if (item.href === "/third-party-contracts/registration") {
-      return { ...item, badge: contractHistory.length }
+      return { ...item, badge: visibleContractHistory.length }
     }
     if (item.href === "/third-party-contracts/documents") {
-      return { ...item, badge: templateFiles.length + uploadedContracts.length }
+      return { ...item, badge: templateFiles.length + visibleUploadedContracts.length }
     }
     return item
   })
@@ -1027,7 +1124,7 @@ export default function DocumentsAndClausesPage() {
       pageDescription="Plantillas, cláusulas y contratos relacionados en una sola biblioteca."
       navItems={navItems}
       headerBadges={[
-        { label: `${templateFiles.length + uploadedContracts.length} recursos`, tone: "neutral" },
+        { label: `${templateFiles.length + visibleUploadedContracts.length} recursos`, tone: "neutral" },
         { label: `${combinedClauses.length} cláusulas`, tone: "primary" },
       ]}
       actions={
@@ -1038,9 +1135,10 @@ export default function DocumentsAndClausesPage() {
       }
     >
       <Tabs defaultValue="documents" className="w-full">
-        <TabsList className="mb-8 grid w-full grid-cols-1 gap-2 rounded-2xl bg-[#edf4ff] p-1 sm:grid-cols-3">
+        <TabsList className="mb-8 grid h-auto w-full grid-cols-1 gap-2 rounded-2xl bg-[#edf4ff] p-1 sm:grid-cols-4">
           <TabsTrigger value="documents" className="text-xs sm:text-sm">Plantillas</TabsTrigger>
           <TabsTrigger value="clauses" className="text-xs sm:text-sm">Cláusulas</TabsTrigger>
+          <TabsTrigger value="matrix" className="text-xs sm:text-sm">Matriz</TabsTrigger>
           <TabsTrigger value="uploaded" className="text-xs sm:text-sm">Contratos</TabsTrigger>
         </TabsList>
 
@@ -1643,6 +1741,133 @@ export default function DocumentsAndClausesPage() {
           </Dialog>
         </TabsContent>
 
+        <TabsContent value="matrix" className="space-y-6">
+          <Card>
+            <CardHeader className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+              <div className="min-w-0">
+                <CardTitle>Matriz del análisis de relaciones</CardTitle>
+                <CardDescription>
+                  Vista interactiva de {GRUNENTHAL_THIRD_PARTY_ANALYSIS_MATRIX_SOURCE.sourceTable.toLowerCase()} del documento "{GRUNENTHAL_THIRD_PARTY_ANALYSIS_MATRIX_SOURCE.sourceDocument}".
+                </CardDescription>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <Badge variant="secondary">
+                  {GRUNENTHAL_THIRD_PARTY_ANALYSIS_MATRIX.length} registros
+                </Badge>
+                <Badge variant="outline">
+                  Actualizado: {GRUNENTHAL_THIRD_PARTY_ANALYSIS_MATRIX_SOURCE.lastUpdated}
+                </Badge>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid gap-3 xl:grid-cols-[minmax(0,1fr)_220px_240px]">
+                <div className="relative min-w-0">
+                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                  <Input
+                    value={matrixSearchTerm}
+                    onChange={(event) => setMatrixSearchTerm(event.target.value)}
+                    placeholder="Buscar por área, tercero, contrato o tipo de comunicación"
+                    className="pl-9"
+                  />
+                </div>
+                <Select value={matrixAreaFilter} onValueChange={setMatrixAreaFilter}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Área" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Todas las áreas</SelectItem>
+                    {matrixAreas.map((area) => (
+                      <SelectItem key={area} value={area}>
+                        {area}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Select value={matrixCommunicationFilter} onValueChange={setMatrixCommunicationFilter}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Comunicación" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Todas las comunicaciones</SelectItem>
+                    {matrixCommunicationTypes.map((type) => (
+                      <SelectItem key={type} value={type}>
+                        {communicationTypeLabels[type]}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+                <span>{filteredMatrixRows.length} resultados visibles</span>
+                <span className="hidden sm:inline">·</span>
+                <span>Fuente: {GRUNENTHAL_THIRD_PARTY_ANALYSIS_MATRIX_SOURCE.title}</span>
+              </div>
+
+              <div className="overflow-hidden rounded-lg border">
+                <div className="overflow-x-auto">
+                  <table className="w-full min-w-[980px] border-collapse text-sm">
+                    <thead className="bg-muted/60 text-left text-xs uppercase text-muted-foreground">
+                      <tr>
+                        <th className="w-[140px] px-4 py-3 font-medium">Área</th>
+                        <th className="w-[260px] px-4 py-3 font-medium">Tercero</th>
+                        <th className="px-4 py-3 font-medium">Contrato</th>
+                        <th className="w-[210px] px-4 py-3 font-medium">Comunicación</th>
+                        <th className="w-[140px] px-4 py-3 text-right font-medium">Acción</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredMatrixRows.map((row) => {
+                        const linkedContract = contractByPartyKey.get(normalizeContractText(row.thirdParty))
+
+                        return (
+                          <tr key={row.id} className="border-t align-top">
+                            <td className="px-4 py-3 font-medium">{row.area}</td>
+                            <td className="px-4 py-3">
+                              <p className="break-words font-medium text-foreground">{row.thirdParty}</p>
+                              <p className="mt-1 text-xs text-muted-foreground">Fila fuente {row.sourceRow}</p>
+                            </td>
+                            <td className="px-4 py-3">
+                              <p className="break-words leading-6">{row.contract}</p>
+                            </td>
+                            <td className="px-4 py-3">
+                              <div className="space-y-2">
+                                <Badge variant="outline">{communicationTypeLabels[row.communicationType]}</Badge>
+                                <p className="break-words text-xs leading-5 text-muted-foreground">
+                                  {row.communication}
+                                </p>
+                              </div>
+                            </td>
+                            <td className="px-4 py-3 text-right">
+                              <Button
+                                type="button"
+                                size="sm"
+                                variant="outline"
+                                disabled={!linkedContract}
+                                onClick={() => {
+                                  if (linkedContract) setAnalysisContract(linkedContract)
+                                }}
+                              >
+                                <ListChecks className="mr-2 h-4 w-4" />
+                                Análisis
+                              </Button>
+                            </td>
+                          </tr>
+                        )
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+                {filteredMatrixRows.length === 0 && (
+                  <div className="border-t p-8 text-center text-sm text-muted-foreground">
+                    No hay registros que coincidan con los filtros seleccionados.
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
         <TabsContent value="uploaded" className="space-y-6">
           <Card>
             <CardHeader className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
@@ -1937,7 +2162,7 @@ export default function DocumentsAndClausesPage() {
               ) : (
                 <div className="rounded-md border border-dashed border-muted-foreground/40 p-8 text-center text-muted-foreground">
                   {uploadedContracts.length > 0
-                    ? "No hay archivos que coincidan con los filtros actuales."
+                    ? "Los contratos de Contratos GRt se consultan desde el historial, con análisis y documento original en el mismo modal."
                     : "No hay archivos de contratos en esta categoría todavía. Registra un contrato e incluye el documento para verlo aquí."}
                 </div>
               )}
