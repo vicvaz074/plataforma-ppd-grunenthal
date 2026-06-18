@@ -30,6 +30,7 @@ import Link from "next/link"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { secureRandomInt } from "@/lib/secure-random"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { getPolicyDashboardSnapshot, getTrainingDashboardSnapshot } from "@/lib/dashboard-progress"
 
 // Definición de las secciones principales con sus estados
 export interface Section {
@@ -197,9 +198,9 @@ const initialSections: Section[] = [
     category: "capacitacion",
     priority: 2,
     tasks: [
-      { id: "ed-1", title: "Completar curso básico", completed: false },
-      { id: "ed-2", title: "Realizar evaluaciones", completed: false },
-      { id: "ed-3", title: "Obtener certificaciones", completed: false },
+      { id: "ed-1", title: "Cargar programa y materiales base", completed: false },
+      { id: "ed-2", title: "Programar o ejecutar sesiones", completed: false },
+      { id: "ed-3", title: "Registrar evaluaciones o constancias", completed: false },
     ],
   },
   {
@@ -300,6 +301,84 @@ const initialSections: Section[] = [
     ],
   },
 ]
+
+function statusFromProgress(progress: number, currentStatus?: Section["status"]): Section["status"] {
+  if (progress >= 100) return currentStatus === "completado" ? "completado" : "pendiente-revision"
+  if (progress > 0) return "en-progreso"
+  return "no-iniciado"
+}
+
+function recomputeSectionProgress(section: Section): Section {
+  const completedTasks = section.tasks.filter((task) => task.completed).length
+  const progress = section.tasks.length > 0 ? Math.round((completedTasks / section.tasks.length) * 100) : 0
+  return {
+    ...section,
+    progress,
+    status: statusFromProgress(progress, section.status),
+  }
+}
+
+function applyEvidenceProgress(sections: Section[]) {
+  const trainingSnapshot = getTrainingDashboardSnapshot()
+  const policySnapshot = getPolicyDashboardSnapshot()
+
+  return sections.map((section) => {
+    if (section.id === "entrenamiento-davara") {
+      const tasks = section.tasks.map((task) => ({
+        ...task,
+        completed:
+          task.completed ||
+          (task.id === "ed-1" && (trainingSnapshot.resources > 0 || trainingSnapshot.programs > 0)) ||
+          (task.id === "ed-2" && trainingSnapshot.sessions > 0) ||
+          (task.id === "ed-3" && (trainingSnapshot.results > 0 || trainingSnapshot.certificates > 0)),
+      }))
+
+      return recomputeSectionProgress({ ...section, tasks })
+    }
+
+    if (section.id === "programa-gestion") {
+      const tasks = section.tasks.map((task) => ({
+        ...task,
+        completed:
+          task.completed ||
+          (task.id === "pg-1" && policySnapshot.documentCount > 0) ||
+          (task.id === "pg-2" && (policySnapshot.total > 0 || policySnapshot.published > 0)) ||
+          (task.id === "pg-3" && policySnapshot.completeEvidence > 0),
+      }))
+
+      return recomputeSectionProgress({ ...section, tasks })
+    }
+
+    return recomputeSectionProgress(section)
+  })
+}
+
+function mergeSavedSections(savedSections: unknown): Section[] {
+  if (!Array.isArray(savedSections)) return initialSections
+
+  const savedById = new Map(
+    savedSections
+      .filter((section): section is Section => Boolean(section && typeof section === "object" && "id" in section))
+      .map((section) => [section.id, section]),
+  )
+
+  return initialSections.map((initialSection) => {
+    const savedSection = savedById.get(initialSection.id)
+    if (!savedSection) return initialSection
+
+    const savedTasksById = new Map(savedSection.tasks?.map((task) => [task.id, task]) || [])
+    const tasks = initialSection.tasks.map((task) => ({
+      ...task,
+      completed: savedTasksById.get(task.id)?.completed ?? task.completed,
+    }))
+
+    return recomputeSectionProgress({
+      ...initialSection,
+      tasks,
+      status: savedSection.status,
+    })
+  })
+}
 
 // Categorías para la vista por pestañas
 const categories = [
@@ -469,15 +548,20 @@ export const UserProgressDashboard = () => {
 
   // Cargar datos de localStorage al iniciar
   useEffect(() => {
-    const savedProgress = localStorage.getItem("userSectionsProgress")
-    if (savedProgress) {
+    const loadProgress = () => {
+      const savedProgress = localStorage.getItem("userSectionsProgress")
       try {
-        const parsedData = JSON.parse(savedProgress)
-        setSections(parsedData)
+        const parsedData = savedProgress ? JSON.parse(savedProgress) : initialSections
+        setSections(applyEvidenceProgress(mergeSavedSections(parsedData)))
       } catch (error) {
         console.error("Error al cargar datos de progreso:", error)
+        setSections(applyEvidenceProgress(initialSections))
       }
     }
+
+    loadProgress()
+    window.addEventListener("storage", loadProgress)
+    return () => window.removeEventListener("storage", loadProgress)
   }, [])
 
   // Actualizar progreso general y recomendación cuando cambian las secciones
