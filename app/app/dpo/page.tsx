@@ -156,8 +156,8 @@ export default function DPOPage() {
       moduleTitle={DPO_META.moduleTitle}
       moduleDescription={DPO_META.moduleDescription}
       pageLabel="Overview"
-      pageTitle="Estado operativo del programa DPO"
-      pageDescription="Resumen de acreditación, evaluación funcional y proyectos del DPO."
+      pageTitle="Estado operativo del Departamento de Datos Personales"
+      pageDescription="Resumen de designación, evaluación funcional y proyectos del Departamento de Datos Personales."
       navItems={navItems}
       headerBadges={[
         {
@@ -177,7 +177,7 @@ export default function DPOPage() {
           tone: overview.functional ? "primary" : "warning",
         },
         {
-          label: `${overview.projectStats.total} proyectos OPD`,
+          label: `${overview.projectStats.total} proyectos del departamento`,
           tone: overview.projectStats.pendingDictamen > 0 ? "warning" : "neutral",
         },
         { label: `${reports.length + actas.length} piezas documentales`, tone: "neutral" },
@@ -216,13 +216,13 @@ export default function DPOPage() {
             helper={
               overview.functional
                 ? `${overview.functional.level} · Próxima revisión ${formatDate(overview.nextReview)}`
-                : "Completa la revisión F1-F5 para medir el ejercicio efectivo del OPD."
+                : "Completa la revisión F1-F5 para medir el ejercicio efectivo del Departamento de Datos Personales."
             }
             icon={ShieldCheck}
             tone={overview.functional ? "primary" : "warning"}
           />
           <ModuleMetricCard
-            label="Proyectos OPD"
+            label="Proyectos del departamento"
             value={overview.projectStats.total}
             helper={`${overview.projectStats.pendingDictamen} pendientes · ${overview.projectStats.eipdRequired} con EIPD obligatoria`}
             icon={FolderKanban}
@@ -240,7 +240,7 @@ export default function DPOPage() {
         <div className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
           <ModuleSectionCard
             title="Producción documental y carga operativa"
-            description="Distribución entre informes, actas, proyectos OPD y evidencias dentro del programa."
+            description="Distribución entre informes, actas, proyectos y evidencias dentro del programa."
           >
             {metrics.buckets.length > 0 ? (
               <div className="h-[320px]">
@@ -267,7 +267,7 @@ export default function DPOPage() {
           </ModuleSectionCard>
 
           <ModuleSectionCard
-            title="Estado actual del programa OPD"
+            title="Estado actual del Departamento de Datos Personales"
             description="Presencia de acreditación, evaluación funcional, pendientes de dictamen y proyectos con EIPD obligatoria."
           >
             {overview.operationMix.some((item) => item.value > 0) ? (
@@ -286,7 +286,7 @@ export default function DPOPage() {
             ) : (
               <ModuleEmptyState
                 title="Sin evaluación operativa todavía"
-                description="Guarda la acreditación, la evaluación funcional o el primer proyecto OPD para poblar este tablero."
+                description="Guarda la designación, la evaluación funcional o el primer proyecto del departamento para poblar este tablero."
               />
             )}
           </ModuleSectionCard>

@@ -97,6 +97,7 @@ import {
 type EvidenceFilter = "all" | DpoEvidenceScope
 
 const EMPTY_FILES: File[] = []
+const DPO_ACCREDITATION_DRAFT_KEY = "dpo-accreditation-draft-v1"
 type AutoTableDoc = jsPDF & {
   autoTable: (options: {
     startY: number
@@ -106,6 +107,31 @@ type AutoTableDoc = jsPDF & {
     headStyles: { fillColor: number[]; textColor: number }
   }) => void
   lastAutoTable?: { finalY: number }
+}
+
+function hasAccreditationDraftContent(draft: DpoAccreditationDraft) {
+  return Boolean(
+    draft.dpoName.trim() ||
+      draft.dpoRole ||
+      draft.dpoRoleOther.trim() ||
+      draft.dpoArea ||
+      draft.dpoAreaOther.trim() ||
+      draft.designationDate ||
+      draft.plannedNextReview ||
+      draft.notes.trim() ||
+      Object.values(draft.responses).some((response) => response.answer || response.notes.trim()),
+  )
+}
+
+function readStoredAccreditationDraft() {
+  if (typeof window === "undefined") return createAccreditationDraft()
+
+  try {
+    const rawDraft = window.localStorage.getItem(DPO_ACCREDITATION_DRAFT_KEY)
+    return rawDraft ? createAccreditationDraft(JSON.parse(rawDraft)) : createAccreditationDraft()
+  } catch {
+    return createAccreditationDraft()
+  }
 }
 
 function toneFromScore(score: number) {
@@ -335,6 +361,7 @@ export default function DPOCompliancePage() {
   const [selectedAccreditationId, setSelectedAccreditationId] = useState<string | null>(null)
   const [selectedFunctionalId, setSelectedFunctionalId] = useState<string | null>(null)
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null)
+  const [storageReady, setStorageReady] = useState(false)
   const [draftsBootstrapped, setDraftsBootstrapped] = useState(false)
   const [accreditationFiles, setAccreditationFiles] = useState({
     designation: EMPTY_FILES,
@@ -360,6 +387,7 @@ export default function DPOCompliancePage() {
     setAccreditationHistory(loadAccreditationHistory())
     setFunctionalHistory(loadFunctionalHistory())
     setProjectReviews(loadProjectReviews())
+    setStorageReady(true)
   }
 
   useEffect(() => {
@@ -369,8 +397,12 @@ export default function DPOCompliancePage() {
   }, [])
 
   useEffect(() => {
-    if (draftsBootstrapped) return
-    if (accreditationHistory[0]) {
+    if (draftsBootstrapped || !storageReady) return
+
+    const storedAccreditationDraft = readStoredAccreditationDraft()
+    if (hasAccreditationDraftContent(storedAccreditationDraft)) {
+      setAccreditationDraft(storedAccreditationDraft)
+    } else if (accreditationHistory[0]) {
       setAccreditationDraft(cloneAccreditationRecordToDraft(accreditationHistory[0]))
       setSelectedAccreditationId(accreditationHistory[0].id)
     }
@@ -382,7 +414,17 @@ export default function DPOCompliancePage() {
       setSelectedProjectId(projectReviews[0].id)
     }
     setDraftsBootstrapped(true)
-  }, [accreditationHistory, draftsBootstrapped, functionalHistory, projectReviews])
+  }, [accreditationHistory, draftsBootstrapped, functionalHistory, projectReviews, storageReady])
+
+  useEffect(() => {
+    if (!draftsBootstrapped || typeof window === "undefined") return
+
+    if (hasAccreditationDraftContent(accreditationDraft)) {
+      window.localStorage.setItem(DPO_ACCREDITATION_DRAFT_KEY, JSON.stringify(accreditationDraft))
+    } else {
+      window.localStorage.removeItem(DPO_ACCREDITATION_DRAFT_KEY)
+    }
+  }, [accreditationDraft, draftsBootstrapped])
 
   const latestAccreditation = accreditationHistory[0] || null
   const latestFunctional = functionalHistory[0] || null
@@ -455,7 +497,7 @@ export default function DPOCompliancePage() {
         }
       : { label: "Evaluación funcional pendiente", tone: "warning" as const },
     {
-      label: `${projectPortfolio.total} proyectos OPD`,
+      label: `${projectPortfolio.total} proyectos del departamento`,
       tone: projectPortfolio.pendingDictamen > 0 ? ("warning" as const) : ("neutral" as const),
     },
     {
@@ -474,7 +516,7 @@ export default function DPOCompliancePage() {
     }
     if (projectPortfolio.pendingDictamen > 0) {
       actionList.push(
-        `${projectPortfolio.pendingDictamen} proyecto(s) permanecen pendientes de dictamen del OPD.`,
+        `${projectPortfolio.pendingDictamen} proyecto(s) permanecen pendientes de dictamen del Departamento de Datos Personales.`,
       )
     }
     if (projectPortfolio.eipdRequired > 0) {
@@ -562,7 +604,7 @@ export default function DPOCompliancePage() {
 
     if (!accreditationDraft.dpoName.trim() || !accreditationDraft.dpoRole || !accreditationDraft.dpoArea) {
       toast({
-        title: "Completa la ficha del OPD",
+        title: "Completa la ficha del Departamento de Datos Personales",
         description: "Nombre, cargo y área son obligatorios para guardar la acreditación.",
         variant: "destructive",
       })
@@ -598,10 +640,10 @@ export default function DPOCompliancePage() {
       setActiveTab("results")
       toast({
         title: "Acreditación guardada",
-        description: "La evaluación de acreditación del OPD ya forma parte del historial del módulo.",
+        description: "La evaluación de designación ya forma parte del historial del módulo.",
       })
     } catch (error) {
-      console.error("Error al guardar la acreditación del OPD:", error)
+      console.error("Error al guardar la acreditación del Departamento de Datos Personales:", error)
       toast({
         title: "No se pudo guardar la acreditación",
         description: "Revisa los archivos adjuntos y vuelve a intentarlo.",
@@ -616,7 +658,7 @@ export default function DPOCompliancePage() {
     if (!functionalDraft.dpoName.trim() || !functionalDraft.evaluationDate || !functionalDraft.periodLabel.trim()) {
       toast({
         title: "Completa la ficha funcional",
-        description: "Nombre del OPD, fecha y periodo evaluado son obligatorios.",
+        description: "Nombre del integrante, fecha y periodo evaluado son obligatorios.",
         variant: "destructive",
       })
       return
@@ -645,10 +687,10 @@ export default function DPOCompliancePage() {
       setActiveTab("results")
       toast({
         title: "Evaluación funcional guardada",
-        description: "La revisión funcional del OPD quedó registrada con su puntuación histórica.",
+        description: "La revisión funcional del Departamento de Datos Personales quedó registrada con su puntuación histórica.",
       })
     } catch (error) {
-      console.error("Error al guardar la evaluación funcional del OPD:", error)
+      console.error("Error al guardar la evaluación funcional del Departamento de Datos Personales:", error)
       toast({
         title: "No se pudo guardar la evaluación funcional",
         description: "Revisa los archivos adjuntos y vuelve a intentarlo.",
@@ -706,7 +748,7 @@ export default function DPOCompliancePage() {
 
     if (projectDraft.dictamenResult && (!projectDraft.dictamenFoundation.trim() || !projectDraft.recommendations.trim())) {
       toast({
-        title: "Completa el dictamen del OPD",
+        title: "Completa el dictamen del Departamento de Datos Personales",
         description: "Cuando existe dictamen debes capturar el fundamento y las recomendaciones.",
         variant: "destructive",
       })
@@ -724,11 +766,11 @@ export default function DPOCompliancePage() {
       setSelectedProjectId(record.id)
       resetFileInputs()
       toast({
-        title: "Proyecto OPD guardado",
+        title: "Proyecto del departamento guardado",
         description: "El privacy review quedó incorporado al historial del módulo.",
       })
     } catch (error) {
-      console.error("Error al guardar el proyecto OPD:", error)
+      console.error("Error al guardar el proyecto del Departamento de Datos Personales:", error)
       toast({
         title: "No se pudo guardar el proyecto",
         description: "Revisa los archivos adjuntos y vuelve a intentarlo.",
@@ -751,7 +793,7 @@ export default function DPOCompliancePage() {
     persistAll(accreditationHistory, functionalHistory, projectReviews)
     toast({
       title: "Evidencia eliminada",
-      description: "El archivo se eliminó del repositorio local del módulo OPD.",
+      description: "El archivo se eliminó del repositorio local del módulo.",
     })
   }
 
@@ -784,7 +826,7 @@ export default function DPOCompliancePage() {
     }
 
     doc.setFontSize(18)
-    doc.text("Reporte ejecutivo del módulo OPD", 14, currentY)
+    doc.text("Reporte ejecutivo del Departamento de Datos Personales", 14, currentY)
     currentY += 8
     doc.setFontSize(10)
     doc.text(`Fecha de exportación: ${formatDateLabel(new Date().toISOString())}`, 14, currentY)
@@ -792,7 +834,7 @@ export default function DPOCompliancePage() {
 
     if (latestAccreditation) {
       doc.setFontSize(13)
-      doc.text("1. Última acreditación del OPD", 14, currentY)
+      doc.text("1. Última designación del Departamento de Datos Personales", 14, currentY)
       currentY += 7
       doc.setFontSize(10)
       writeParagraph(
@@ -855,7 +897,7 @@ export default function DPOCompliancePage() {
 
     ensureSpace(18)
     doc.setFontSize(13)
-    doc.text("3. Portafolio de proyectos OPD", 14, currentY)
+    doc.text("3. Portafolio de proyectos del Departamento de Datos Personales", 14, currentY)
     currentY += 7
     doc.setFontSize(10)
     writeParagraph(
@@ -888,7 +930,7 @@ export default function DPOCompliancePage() {
       latestSummaryActions.forEach((item) => writeParagraph(`• ${item}`, 18))
     }
 
-    doc.save("reporte-opd-cumplimiento.pdf")
+    doc.save("reporte-departamento-datos-personales.pdf")
   }
 
   return (
@@ -897,8 +939,8 @@ export default function DPOCompliancePage() {
       moduleTitle={DPO_META.moduleTitle}
       moduleDescription={DPO_META.moduleDescription}
       pageLabel="Cumplimiento"
-      pageTitle="Acreditación, evaluación funcional y Privacy Review del OPD"
-      pageDescription="Acreditación, evaluación funcional y privacy review del OPD."
+      pageTitle="Designación, evaluación funcional y Privacy Review del Departamento de Datos Personales"
+      pageDescription="Designación, evaluación funcional y privacy review del Departamento de Datos Personales."
       navItems={navItems}
       headerBadges={headerBadges}
       actions={
@@ -916,7 +958,7 @@ export default function DPOCompliancePage() {
             helper={
               latestAccreditation
                 ? `${latestAccreditation.analysis.level}${latestAccreditation.analysis.criticalInvalidation ? " · Con bloqueo crítico" : ""}`
-                : "Completa los 29 reactivos de acreditación del OPD."
+                : "Completa los 29 reactivos de designación del Departamento de Datos Personales."
             }
             icon={ClipboardCheck}
             tone={latestAccreditation ? toneFromScore(latestAccreditation.analysis.score) : "warning"}
@@ -927,13 +969,13 @@ export default function DPOCompliancePage() {
             helper={
               latestFunctional
                 ? `${latestFunctional.analysis.level} · Periodo ${latestFunctional.periodLabel}`
-                : "Completa la evaluación F1-F5 para medir el ejercicio efectivo del OPD."
+                : "Completa la evaluación F1-F5 para medir el ejercicio efectivo del Departamento de Datos Personales."
             }
             icon={ShieldCheck}
             tone={latestFunctional ? toneFromScore(latestFunctional.analysis.score) : "warning"}
           />
           <ModuleMetricCard
-            label="Proyectos OPD"
+            label="Proyectos del departamento"
             value={projectPortfolio.total}
             helper={`${projectPortfolio.pendingDictamen} pendientes de dictamen · ${projectPortfolio.eipdRequired} con EIPD obligatoria.`}
             icon={FolderKanban}
@@ -961,12 +1003,12 @@ export default function DPOCompliancePage() {
             <div className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
               <div className="space-y-6">
                 <ModuleSectionCard
-                  title="Ficha breve del OPD"
-                  description="Datos base del oficial, usando la misma superficie ARCO antes de entrar a los 29 reactivos."
+                  title="Datos base de los miembros del Departamento de Datos Personales"
+                  description="Usa la misma superficie de captura tipo ARCO antes de entrar a los 29 reactivos."
                 >
                   <div className="grid gap-4 md:grid-cols-2">
                     <div>
-                      <Label htmlFor="accreditation-dpo-name">Nombre completo del OPD</Label>
+                      <Label htmlFor="accreditation-dpo-name">Nombre completo del integrante</Label>
                       <Input
                         id="accreditation-dpo-name"
                         className="mt-2"
@@ -1113,7 +1155,7 @@ export default function DPOCompliancePage() {
                   </ModuleSectionCard>
                 ))}
 
-                <ModuleSectionCard title="Evidencias de acreditación" description="Carga la documentación del nombramiento, formación y soportes del expediente del OPD.">
+                <ModuleSectionCard title="Evidencias de designación" description="Carga la documentación del nombramiento, formación y soportes del expediente del Departamento de Datos Personales.">
                   <div className="grid gap-4 md:grid-cols-3">
                     <div>
                       <Label>Documento de designación</Label>
@@ -1239,7 +1281,7 @@ export default function DPOCompliancePage() {
                 >
                   <div className="grid gap-4 md:grid-cols-2">
                     <div>
-                      <Label htmlFor="functional-name">Nombre del OPD</Label>
+                      <Label htmlFor="functional-name">Nombre del integrante</Label>
                       <Input
                         id="functional-name"
                         className="mt-2"
@@ -1343,7 +1385,7 @@ export default function DPOCompliancePage() {
                       />
                     </div>
                     <div>
-                      <Label>Bitácora del DPD</Label>
+                      <Label>Bitácora del Departamento de Datos Personales</Label>
                       <Input
                         key={`functional-log-${fileInputVersion}`}
                         type="file"
@@ -1459,7 +1501,7 @@ export default function DPOCompliancePage() {
               <div className="space-y-6">
                 <ModuleSectionCard
                   title="Bloque I — Identificación del proyecto"
-                  description="Ficha de análisis de proyecto (Privacy Review) conforme al documento del módulo OPD."
+                  description="Ficha de análisis de proyecto (Privacy Review) conforme al documento del Departamento de Datos Personales."
                 >
                   <div className="grid gap-4 md:grid-cols-2">
                     <div>
@@ -1708,7 +1750,7 @@ export default function DPOCompliancePage() {
                 </ModuleSectionCard>
 
                 <ModuleSectionCard
-                  title="Bloque III — Dictamen del OPD"
+                  title="Bloque III — Dictamen del Departamento de Datos Personales"
                   description="El dictamen puede dejarse pendiente o registrarse formalmente con fundamento, riesgos y recomendaciones."
                 >
                   <div className="grid gap-4 md:grid-cols-2">
@@ -1819,7 +1861,7 @@ export default function DPOCompliancePage() {
                             followUpRequired: event.target.value,
                           }))
                         }
-                        placeholder="¿El OPD dará seguimiento posterior? ¿En qué reunión o fecha?"
+                        placeholder="¿El Departamento de Datos Personales dará seguimiento posterior? ¿En qué reunión o fecha?"
                       />
                     </div>
                     <div className="md:col-span-2">
@@ -1838,7 +1880,7 @@ export default function DPOCompliancePage() {
 
                 <ModuleSectionCard
                   title="Documentos del proyecto"
-                  description="Adjunta brief, solicitud, dictamen firmado u otra evidencia del análisis del OPD."
+                  description="Adjunta brief, solicitud, dictamen firmado u otra evidencia del análisis del Departamento de Datos Personales."
                 >
                   <div className="grid gap-4 md:grid-cols-2">
                     <div>
@@ -1857,7 +1899,7 @@ export default function DPOCompliancePage() {
                       />
                     </div>
                     <div>
-                      <Label>Dictamen o anexos del OPD</Label>
+                      <Label>Dictamen o anexos del Departamento de Datos Personales</Label>
                       <Input
                         key={`project-dictamen-${fileInputVersion}`}
                         type="file"
@@ -1994,7 +2036,7 @@ export default function DPOCompliancePage() {
           <TabsContent value="results" className="space-y-6">
             <div className="grid gap-6">
               <ModuleSectionCard
-                title="Resumen ejecutivo OPD"
+                title="Resumen ejecutivo del Departamento de Datos Personales"
                 description="Resultados vigentes del cuestionario de acreditación, la evaluación funcional y el portafolio de proyectos."
               >
                 {latestAccreditation || latestFunctional || projectReviews.length > 0 ? (
@@ -2041,7 +2083,7 @@ export default function DPOCompliancePage() {
                       </div>
                     ) : (
                       <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-700">
-                        No hay acciones prioritarias abiertas en el último corte del módulo OPD.
+                        No hay acciones prioritarias abiertas en el último corte del módulo.
                       </div>
                     )}
                   </div>
@@ -2145,7 +2187,7 @@ export default function DPOCompliancePage() {
 
           <TabsContent value="evidence" className="space-y-6">
             <ModuleSectionCard
-              title="Expediente de evidencias del OPD"
+              title="Expediente de evidencias del Departamento de Datos Personales"
               description="Filtra por acreditación, evaluación funcional o proyectos para revisar y depurar soportes del módulo."
               action={
                 <div className="flex flex-wrap gap-2">

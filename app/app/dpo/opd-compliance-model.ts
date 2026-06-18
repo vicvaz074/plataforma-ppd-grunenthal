@@ -21,7 +21,7 @@ export const DPO_STORAGE_KEYS = {
 } as const
 
 export const DPO_ROLE_OPTIONS = [
-  { value: "oficial", label: "Oficial de Protección de Datos" },
+  { value: "oficial", label: "Miembros del Departamento de Datos Personales" },
   { value: "cumplimiento", label: "Responsable de Cumplimiento" },
   { value: "seguridad", label: "Encargado de Seguridad de la Información" },
   { value: "otro", label: "Otro" },
@@ -83,14 +83,14 @@ export const DPO_EVIDENCE_SCOPE_LABELS: Record<DpoEvidenceScope, string> = {
 
 export const DPO_EVIDENCE_TYPE_LABELS: Record<string, string> = {
   designation: "Documento de designación",
-  training: "Formación o certificación OPD",
+  training: "Formación o certificación del Departamento de Datos Personales",
   "accreditation-support": "Soporte de acreditación",
   "functional-support": "Evidencia funcional",
-  "activity-log": "Bitácora del DPD",
+  "activity-log": "Bitácora del Departamento de Datos Personales",
   report: "Informe remitido",
   "management-ack": "Acuse Alta Dirección",
   "project-brief": "Documento del proyecto",
-  "project-dictamen": "Dictamen OPD",
+  "project-dictamen": "Dictamen del Departamento de Datos Personales",
   policy: "Política o marco documental",
   procedures: "Procedimientos documentados",
 }
@@ -124,14 +124,14 @@ export const ACCREDITATION_SECTIONS: readonly AccreditationSectionDefinition[] =
     id: "A",
     title: "Bloque A — Formalización del acto de designación",
     description:
-      "Este bloque verifica que la designación del OPD se formalizó a través de un acto jurídico o administrativo válido, con evidencia documental suficiente.",
+      "Este bloque verifica que la designación de los Miembros del Departamento de Datos Personales se formalizó a través de un acto jurídico o administrativo válido, con evidencia documental suficiente.",
     weight: 25,
     minimumRatio: 6 / 8,
     questions: [
       {
         id: "A-01",
         prompt:
-          "¿Existe un documento formal de designación del OPD (acta, resolución, nombramiento u orden de servicio)?",
+          "¿Existe un documento formal de designación de los Miembros del Departamento de Datos Personales (acta, resolución, nombramiento u orden de servicio)?",
         helper: "El documento debe identificar al titular, la fecha de inicio y el alcance del rol.",
       },
       {
@@ -142,17 +142,17 @@ export const ACCREDITATION_SECTIONS: readonly AccreditationSectionDefinition[] =
       },
       {
         id: "A-03",
-        prompt: "¿La designación del OPD está registrada en el expediente del SGDP de la organización?",
+        prompt: "¿La designación de los Miembros del Departamento de Datos Personales está registrada en el expediente del SGDP de la organización?",
       },
       {
         id: "A-04",
         prompt:
-          "¿Se ha notificado formalmente al OPD designado sobre sus funciones, responsabilidades y recursos asignados?",
+          "¿Se ha notificado formalmente a los Miembros del Departamento de Datos Personales sobre sus funciones, responsabilidades y recursos asignados?",
         helper: "Se recomienda un acuse de recibo o firma de aceptación del cargo.",
       },
       {
         id: "A-05",
-        prompt: "¿Existe un procedimiento para la sustitución del OPD ante ausencia temporal o definitiva?",
+        prompt: "¿Existe un procedimiento para la sustitución de los Miembros del Departamento de Datos Personales ante ausencia temporal o definitiva?",
         helper: "El protocolo de sustitución debe estar documentado y aprobado.",
       },
       {
@@ -163,12 +163,12 @@ export const ACCREDITATION_SECTIONS: readonly AccreditationSectionDefinition[] =
       },
       {
         id: "A-07",
-        prompt: "¿Se ha comunicado la identidad y datos de contacto del OPD a toda la organización?",
+        prompt: "¿Se ha comunicado la identidad y datos de contacto de los Miembros del Departamento de Datos Personales a toda la organización?",
         helper: "El personal debe saber a quién acudir en materia de datos personales.",
       },
       {
         id: "A-08",
-        prompt: "¿La designación del OPD ha sido incorporada al organigrama o estructura organizacional formal?",
+        prompt: "¿La designación de los Miembros del Departamento de Datos Personales ha sido incorporada al organigrama o estructura organizacional formal?",
       },
     ],
   },
@@ -176,54 +176,54 @@ export const ACCREDITATION_SECTIONS: readonly AccreditationSectionDefinition[] =
     id: "B",
     title: "Bloque B — Idoneidad del perfil y competencias",
     description:
-      "Este bloque evalúa si la persona designada como OPD tiene el perfil, las competencias y la experiencia requeridos para ejercer el cargo de manera efectiva, conforme a los estándares internacionales.",
+      "Este bloque evalúa si los Miembros del Departamento de Datos Personales tienen el perfil, las competencias y la experiencia requeridos para ejercer el cargo de manera efectiva, conforme a los estándares internacionales.",
     weight: 30,
     minimumRatio: 6 / 8,
     questions: [
       {
         id: "B-01",
         prompt:
-          "¿El OPD tiene formación específica en protección de datos personales, privacidad o derecho digital?",
+          "¿Los Miembros del Departamento de Datos Personales tienen formación específica en protección de datos personales, privacidad o derecho digital?",
         helper: "Se acredita mediante título, diplomado, certificación o cursos formales documentados.",
       },
       {
         id: "B-02",
         prompt:
-          "¿El OPD cuenta con conocimiento suficiente de la LFPDPPP, su Reglamento y los lineamientos del INAI?",
+          "¿Los Miembros del Departamento de Datos Personales cuentan con conocimiento suficiente de la LFPDPPP, su Reglamento y los lineamientos del INAI?",
         helper: "Puede evaluarse mediante un examen de conocimientos o certificación reconocida.",
       },
       {
         id: "B-03",
         prompt:
-          "¿El OPD conoce el modelo de negocio, los procesos y las operaciones de la organización que involucran datos personales?",
+          "¿Los Miembros del Departamento de Datos Personales conocen el modelo de negocio, los procesos y las operaciones de la organización que involucran datos personales?",
         helper: "El conocimiento del contexto organizacional es esencial para identificar riesgos reales.",
       },
       {
         id: "B-04",
         prompt:
-          "¿El OPD tiene conocimientos básicos de seguridad de la información relevantes para su cargo?",
+          "¿Los Miembros del Departamento de Datos Personales tienen conocimientos básicos de seguridad de la información relevantes para su cargo?",
         helper:
           "No requiere ser experto técnico, pero sí entender los principios de seguridad aplicados a datos personales.",
       },
       {
         id: "B-05",
-        prompt: "¿El OPD ha completado un programa de actualización en protección de datos en los últimos 12 meses?",
+        prompt: "¿Los Miembros del Departamento de Datos Personales han completado un programa de actualización en protección de datos en los últimos 12 meses?",
         helper: "La normativa evoluciona; la formación continua es un requisito de efectividad.",
       },
       {
         id: "B-06",
         prompt:
-          "¿El OPD tiene experiencia previa en funciones de cumplimiento, legal, auditoría o seguridad?",
+          "¿Los Miembros del Departamento de Datos Personales tienen experiencia previa en funciones de cumplimiento, legal, auditoría o seguridad?",
         helper: "Se acredita con curriculum vitae y referencias profesionales.",
       },
       {
         id: "B-07",
         prompt:
-          "¿El OPD posee habilidades de comunicación suficientes para interactuar con la Alta Dirección, el personal y los titulares de datos?",
+          "¿Los Miembros del Departamento de Datos Personales poseen habilidades de comunicación suficientes para interactuar con la Alta Dirección, el personal y los titulares de datos?",
       },
       {
         id: "B-08",
-        prompt: "¿Existe un plan de desarrollo profesional del OPD vinculado al SGDP de la organización?",
+        prompt: "¿Existe un plan de desarrollo profesional de los Miembros del Departamento de Datos Personales vinculado al SGDP de la organización?",
         helper: "Se recomienda un plan anual de formación y actualización.",
       },
     ],
@@ -232,83 +232,83 @@ export const ACCREDITATION_SECTIONS: readonly AccreditationSectionDefinition[] =
     id: "C",
     title: "Bloque C — Independencia y posición en la organización",
     description:
-      "La independencia del OPD es un requisito central de los estándares internacionales (ISO 27701, GDPR Art. 38). Este bloque evalúa si el OPD puede ejercer su cargo sin conflictos de interés ni presiones indebidas.",
+      "La independencia de los Miembros del Departamento de Datos Personales es un requisito central de los estándares internacionales (ISO 27701, GDPR Art. 38). Este bloque evalúa si pueden ejercer su cargo sin conflictos de interés ni presiones indebidas.",
     weight: 25,
     minimumRatio: 5 / 7,
     questions: [
       {
         id: "C-01",
         prompt:
-          "¿El OPD reporta directamente a la Alta Dirección o al órgano de gobierno de la organización?",
+          "¿Los Miembros del Departamento de Datos Personales reportan directamente a la Alta Dirección o al órgano de gobierno de la organización?",
         helper: "El reporte directo a la Dirección es el estándar internacional para garantizar independencia.",
       },
       {
         id: "C-02",
         prompt:
-          "¿El OPD puede comunicarse directamente con la Alta Dirección sin intermediarios que puedan filtrar o bloquear sus reportes?",
+          "¿Los Miembros del Departamento de Datos Personales pueden comunicarse directamente con la Alta Dirección sin intermediarios que puedan filtrar o bloquear sus reportes?",
       },
       {
         id: "C-03",
         prompt:
-          "¿El OPD está libre de conflictos de interés que puedan comprometer su independencia de criterio?",
+          "¿Los Miembros del Departamento de Datos Personales están libres de conflictos de interés que puedan comprometer su independencia de criterio?",
         helper:
           "No debe tener funciones operativas que impliquen la toma de decisiones sobre tratamiento de datos.",
       },
       {
         id: "C-04",
         prompt:
-          "¿Existe una política o procedimiento que proteja al OPD de represalias por sus recomendaciones o reportes?",
+          "¿Existe una política o procedimiento que proteja a los Miembros del Departamento de Datos Personales de represalias por sus recomendaciones o reportes?",
         helper: "La protección contra represalias es un principio del GDPR y de buenas prácticas internacionales.",
       },
       {
         id: "C-05",
         prompt:
-          "¿El OPD tiene acceso directo a todas las áreas, sistemas e información necesaria para ejercer sus funciones?",
+          "¿Los Miembros del Departamento de Datos Personales tienen acceso directo a todas las áreas, sistemas e información necesaria para ejercer sus funciones?",
       },
       {
         id: "C-06",
         prompt:
-          "¿El OPD puede contratar asesoría externa especializada cuando sea necesario, con cargo a un presupuesto asignado?",
+          "¿Los Miembros del Departamento de Datos Personales pueden contratar asesoría externa especializada cuando sea necesario, con cargo a un presupuesto asignado?",
       },
       {
         id: "C-07",
         prompt:
-          "¿El OPD tiene autoridad para emitir recomendaciones vinculantes o, al menos, que requieran respuesta formal por parte de la Dirección?",
+          "¿Los Miembros del Departamento de Datos Personales tienen autoridad para emitir recomendaciones vinculantes o, al menos, que requieran respuesta formal por parte de la Dirección?",
       },
     ],
   },
   {
     id: "D",
     title: "Bloque D — Recursos y condiciones de ejercicio",
-    description: "Este bloque revisa si el OPD tiene recursos, tiempo, apoyo y condiciones documentadas para desempeñar el cargo.",
+    description: "Este bloque revisa si los Miembros del Departamento de Datos Personales tienen recursos, tiempo, apoyo y condiciones documentadas para desempeñar el cargo.",
     weight: 20,
     minimumRatio: 5 / 6,
     questions: [
       {
         id: "D-01",
         prompt:
-          "¿El OPD dispone de los recursos tecnológicos necesarios para ejercer sus funciones (plataforma, herramientas, acceso a sistemas)?",
-        helper: "La plataforma Davara Governance debe estar disponible y configurada para el OPD.",
+          "¿Los Miembros del Departamento de Datos Personales disponen de los recursos tecnológicos necesarios para ejercer sus funciones (plataforma, herramientas, acceso a sistemas)?",
+        helper: "La plataforma Davara Governance debe estar disponible y configurada para el Departamento de Datos Personales.",
       },
       {
         id: "D-02",
         prompt:
-          "¿El OPD tiene tiempo dedicado suficiente para el ejercicio de su cargo (dedicación parcial o completa documentada)?",
+          "¿Los Miembros del Departamento de Datos Personales tienen tiempo dedicado suficiente para el ejercicio de su cargo (dedicación parcial o completa documentada)?",
         helper: "Se debe definir el porcentaje de tiempo dedicado y que sea suficiente para la carga de trabajo.",
       },
       {
         id: "D-03",
-        prompt: "¿Existe un presupuesto asignado al SGDP y a las actividades del OPD?",
+        prompt: "¿Existe un presupuesto asignado al SGDP y a las actividades del Departamento de Datos Personales?",
       },
       {
         id: "D-04",
         prompt:
-          "¿El OPD tiene acceso al inventario de datos personales, políticas, contratos con encargados y documentación del SGDP?",
+          "¿Los Miembros del Departamento de Datos Personales tienen acceso al inventario de datos personales, políticas, contratos con encargados y documentación del SGDP?",
       },
       {
         id: "D-05",
         prompt:
-          "¿El OPD cuenta con apoyo de equipo propio o de otras áreas (Legal, Compliance, TI) para ejercer sus funciones?",
+          "¿Los Miembros del Departamento de Datos Personales cuentan con apoyo de equipo propio o de otras áreas (Legal, Compliance, TI) para ejercer sus funciones?",
       },
       {
         id: "D-06",
@@ -324,99 +324,99 @@ export const FUNCTIONAL_SECTIONS: readonly FunctionalSectionDefinition[] = [
     id: "F1",
     title: "Función 1 — Supervisión del cumplimiento normativo",
     description:
-      "Evalúa si el OPD monitorea activamente el cumplimiento de la LFPDPPP y políticas internas del SGDP en toda la organización.",
+      "Evalúa si los Miembros del Departamento de Datos Personales monitorean activamente el cumplimiento de la LFPDPPP y políticas internas del SGDP en toda la organización.",
     weight: 25,
     minimumRatio: 7 / 10,
     questions: [
       {
         id: "F1-01",
-        prompt: "¿El OPD ha revisado y aprobado las políticas del SGDP en los últimos 12 meses?",
+        prompt: "¿Los Miembros del Departamento de Datos Personales han revisado y aprobado las políticas del SGDP en los últimos 12 meses?",
         helper: "Se acredita con registros de aprobación en el módulo de Políticas de Davara Governance.",
       },
-      { id: "F1-02", prompt: "¿El OPD ha identificado y documentado los gaps de cumplimiento normativo actuales de la organización?", helper: "Se acredita con un registro de gaps y planes de acción vigentes." },
-      { id: "F1-03", prompt: "¿El OPD ha realizado al menos una revisión formal del inventario de datos personales en los últimos 6 meses?" },
-      { id: "F1-04", prompt: "¿El OPD supervisa activamente el proceso de atención de Derechos ARCO y verifica el cumplimiento de plazos?" },
-      { id: "F1-05", prompt: "¿El OPD ha verificado que los avisos de privacidad vigentes cumplen con los requisitos de la LFPDPPP?" },
-      { id: "F1-06", prompt: "¿El OPD da seguimiento a las obligaciones legales derivadas de contratos con encargados de tratamiento?" },
-      { id: "F1-07", prompt: "¿El OPD coordina con el área de TI para verificar medidas técnicas de seguridad de datos personales?" },
-      { id: "F1-08", prompt: "¿El OPD lleva un registro actualizado de los cambios normativos que impactan a la organización?", helper: "Se acredita con un log de cambios normativos y acciones tomadas." },
-      { id: "F1-09", prompt: "¿El OPD verifica que las nuevas iniciativas de negocio incluyan una evaluación de impacto en privacidad (EIPD) cuando corresponde?" },
-      { id: "F1-10", prompt: "¿El OPD ha completado o supervisado al menos una auditoría interna del SGDP en el periodo evaluado?" },
+      { id: "F1-02", prompt: "¿Los Miembros del Departamento de Datos Personales han identificado y documentado los gaps de cumplimiento normativo actuales de la organización?", helper: "Se acredita con un registro de gaps y planes de acción vigentes." },
+      { id: "F1-03", prompt: "¿Los Miembros del Departamento de Datos Personales han realizado al menos una revisión formal del inventario de datos personales en los últimos 6 meses?" },
+      { id: "F1-04", prompt: "¿Los Miembros del Departamento de Datos Personales supervisan activamente el proceso de atención de Derechos ARCO y verifican el cumplimiento de plazos?" },
+      { id: "F1-05", prompt: "¿Los Miembros del Departamento de Datos Personales han verificado que los avisos de privacidad vigentes cumplen con los requisitos de la LFPDPPP?" },
+      { id: "F1-06", prompt: "¿Los Miembros del Departamento de Datos Personales dan seguimiento a las obligaciones legales derivadas de contratos con encargados de tratamiento?" },
+      { id: "F1-07", prompt: "¿Los Miembros del Departamento de Datos Personales coordinan con el área de TI para verificar medidas técnicas de seguridad de datos personales?" },
+      { id: "F1-08", prompt: "¿Los Miembros del Departamento de Datos Personales llevan un registro actualizado de los cambios normativos que impactan a la organización?", helper: "Se acredita con un log de cambios normativos y acciones tomadas." },
+      { id: "F1-09", prompt: "¿Los Miembros del Departamento de Datos Personales verifican que las nuevas iniciativas de negocio incluyan una evaluación de impacto en privacidad (EIPD) cuando corresponde?" },
+      { id: "F1-10", prompt: "¿Los Miembros del Departamento de Datos Personales han completado o supervisado al menos una auditoría interna del SGDP en el periodo evaluado?" },
     ],
   },
   {
     id: "F2",
     title: "Función 2 — Asesoría y orientación interna",
     description:
-      "Evalúa si el OPD actúa efectivamente como consultor interno en materia de privacidad para todas las áreas de la organización.",
+      "Evalúa si los Miembros del Departamento de Datos Personales actúan efectivamente como consultores internos en materia de privacidad para todas las áreas de la organización.",
     weight: 20,
     minimumRatio: 6 / 8,
     questions: [
-      { id: "F2-01", prompt: "¿El OPD tiene un canal habilitado para que las áreas consulten dudas sobre protección de datos (correo, ticket, formulario)?" },
-      { id: "F2-02", prompt: "¿El OPD responde consultas internas dentro de un plazo razonable documentado (ej. 5 días hábiles)?", helper: "Se acredita con registro de consultas y tiempos de respuesta." },
-      { id: "F2-03", prompt: "¿El OPD participa en los comités de aprobación de nuevos proyectos que involucran datos personales?" },
-      { id: "F2-04", prompt: "¿El OPD emite dictámenes o recomendaciones formales cuando se le consulta sobre tratamientos de alto riesgo?", helper: "Se acredita con registros de dictámenes en el módulo de Proyectos." },
-      { id: "F2-05", prompt: "¿El OPD ha asesorado al área de Recursos Humanos sobre el tratamiento de datos personales de empleados en el periodo evaluado?" },
-      { id: "F2-06", prompt: "¿El OPD ha revisado contratos con proveedores que involucran tratamiento de datos personales antes de su firma?" },
-      { id: "F2-07", prompt: "¿El OPD proporciona orientación al área de Marketing sobre el uso lícito de datos personales en campañas y plataformas digitales?" },
-      { id: "F2-08", prompt: "¿El OPD ha emitido al menos un dictamen o recomendación formal en el periodo de evaluación?" },
+      { id: "F2-01", prompt: "¿Los Miembros del Departamento de Datos Personales tienen un canal habilitado para que las áreas consulten dudas sobre protección de datos (correo, ticket, formulario)?" },
+      { id: "F2-02", prompt: "¿Los Miembros del Departamento de Datos Personales responden consultas internas dentro de un plazo razonable documentado (ej. 5 días hábiles)?", helper: "Se acredita con registro de consultas y tiempos de respuesta." },
+      { id: "F2-03", prompt: "¿Los Miembros del Departamento de Datos Personales participan en los comités de aprobación de nuevos proyectos que involucran datos personales?" },
+      { id: "F2-04", prompt: "¿Los Miembros del Departamento de Datos Personales emiten dictámenes o recomendaciones formales cuando se les consulta sobre tratamientos de alto riesgo?", helper: "Se acredita con registros de dictámenes en el módulo de Proyectos." },
+      { id: "F2-05", prompt: "¿Los Miembros del Departamento de Datos Personales han asesorado al área de Recursos Humanos sobre el tratamiento de datos personales de empleados en el periodo evaluado?" },
+      { id: "F2-06", prompt: "¿Los Miembros del Departamento de Datos Personales han revisado contratos con proveedores que involucran tratamiento de datos personales antes de su firma?" },
+      { id: "F2-07", prompt: "¿Los Miembros del Departamento de Datos Personales proporcionan orientación al área de Marketing sobre el uso lícito de datos personales en campañas y plataformas digitales?" },
+      { id: "F2-08", prompt: "¿Los Miembros del Departamento de Datos Personales han emitido al menos un dictamen o recomendación formal en el periodo de evaluación?" },
     ],
   },
   {
     id: "F3",
     title: "Función 3 — Capacitación y cultura de privacidad",
     description:
-      "Evalúa si el OPD lidera activamente el programa de capacitación y sensibilización en protección de datos.",
+      "Evalúa si los Miembros del Departamento de Datos Personales lideran activamente el programa de capacitación y sensibilización en protección de datos.",
     weight: 20,
     minimumRatio: 5 / 7,
     questions: [
-      { id: "F3-01", prompt: "¿El OPD ha diseñado o coordinado al menos un programa de capacitación en protección de datos en el periodo?", helper: "Se acredita con temario, asistencia y evaluación de la capacitación." },
-      { id: "F3-02", prompt: "¿Existe un plan anual de capacitación en privacidad aprobado y supervisado por el OPD?" },
-      { id: "F3-03", prompt: "¿El OPD verifica que el personal de nuevo ingreso recibe capacitación en protección de datos dentro de los primeros 30 días?" },
-      { id: "F3-04", prompt: "¿El OPD coordina capacitaciones diferenciadas por perfil de riesgo (ej. áreas que tratan datos sensibles)?" },
-      { id: "F3-05", prompt: "¿El OPD lleva un registro actualizado del personal capacitado y los pendientes de capacitación?", helper: "Se acredita con evidencias de capacitación en el módulo de Evidencias de Davara Governance." },
-      { id: "F3-06", prompt: "¿El OPD mide la efectividad de las capacitaciones mediante evaluaciones o indicadores de conocimiento?" },
-      { id: "F3-07", prompt: "¿El OPD genera y distribuye comunicaciones internas (boletines, alertas, circulares) sobre privacidad de forma periódica?" },
+      { id: "F3-01", prompt: "¿Los Miembros del Departamento de Datos Personales han diseñado o coordinado al menos un programa de capacitación en protección de datos en el periodo?", helper: "Se acredita con temario, asistencia y evaluación de la capacitación." },
+      { id: "F3-02", prompt: "¿Existe un plan anual de capacitación en privacidad aprobado y supervisado por los Miembros del Departamento de Datos Personales?" },
+      { id: "F3-03", prompt: "¿Los Miembros del Departamento de Datos Personales verifican que el personal de nuevo ingreso recibe capacitación en protección de datos dentro de los primeros 30 días?" },
+      { id: "F3-04", prompt: "¿Los Miembros del Departamento de Datos Personales coordinan capacitaciones diferenciadas por perfil de riesgo (ej. áreas que tratan datos sensibles)?" },
+      { id: "F3-05", prompt: "¿Los Miembros del Departamento de Datos Personales llevan un registro actualizado del personal capacitado y los pendientes de capacitación?", helper: "Se acredita con evidencias de capacitación en el módulo de Evidencias de Davara Governance." },
+      { id: "F3-06", prompt: "¿Los Miembros del Departamento de Datos Personales miden la efectividad de las capacitaciones mediante evaluaciones o indicadores de conocimiento?" },
+      { id: "F3-07", prompt: "¿Los Miembros del Departamento de Datos Personales generan y distribuyen comunicaciones internas (boletines, alertas, circulares) sobre privacidad de forma periódica?" },
     ],
   },
   {
     id: "F4",
     title: "Función 4 — Punto de contacto con titulares y autoridades",
     description:
-      "Evalúa si el OPD gestiona eficazmente la relación con los titulares de datos y con el INAI u otras autoridades competentes.",
+      "Evalúa si los Miembros del Departamento de Datos Personales gestionan eficazmente la relación con los titulares de datos y con el INAI u otras autoridades competentes.",
     weight: 20,
     minimumRatio: 5 / 7,
     questions: [
-      { id: "F4-01", prompt: "¿El OPD supervisa el proceso de atención de solicitudes de Derechos ARCO y verifica el cumplimiento de los plazos legales?", helper: "Plazo legal: 20 días hábiles para Access/Rectificación/Cancelación; 15 días para Oposición." },
-      { id: "F4-02", prompt: "¿El OPD registra y da seguimiento a las quejas de titulares relacionadas con el tratamiento de sus datos personales?" },
-      { id: "F4-03", prompt: "¿El OPD supervisa la atención de requerimientos del INAI dentro de los plazos establecidos?" },
-      { id: "F4-04", prompt: "¿El OPD coordina la respuesta de la organización ante procedimientos de verificación o visitas del INAI?" },
-      { id: "F4-05", prompt: "¿El OPD mantiene un registro de las interacciones con el INAI (requerimientos, respuestas, resoluciones)?" },
-      { id: "F4-06", prompt: "¿El OPD verifica que el aviso de privacidad incluye los datos de contacto actualizados para el ejercicio de Derechos ARCO?" },
-      { id: "F4-07", prompt: "¿El OPD gestiona o supervisa la notificación de vulneraciones de seguridad a los titulares afectados en los plazos requeridos?", helper: "Conforme al Art. 20 LFPDPPP, la notificación debe hacerse en tiempo y forma." },
+      { id: "F4-01", prompt: "¿Los Miembros del Departamento de Datos Personales supervisan el proceso de atención de solicitudes de Derechos ARCO y verifican el cumplimiento de los plazos legales?", helper: "Plazo legal: 20 días hábiles para Access/Rectificación/Cancelación; 15 días para Oposición." },
+      { id: "F4-02", prompt: "¿Los Miembros del Departamento de Datos Personales registran y dan seguimiento a las quejas de titulares relacionadas con el tratamiento de sus datos personales?" },
+      { id: "F4-03", prompt: "¿Los Miembros del Departamento de Datos Personales supervisan la atención de requerimientos del INAI dentro de los plazos establecidos?" },
+      { id: "F4-04", prompt: "¿Los Miembros del Departamento de Datos Personales coordinan la respuesta de la organización ante procedimientos de verificación o visitas del INAI?" },
+      { id: "F4-05", prompt: "¿Los Miembros del Departamento de Datos Personales mantienen un registro de las interacciones con el INAI (requerimientos, respuestas, resoluciones)?" },
+      { id: "F4-06", prompt: "¿Los Miembros del Departamento de Datos Personales verifican que el aviso de privacidad incluye los datos de contacto actualizados para el ejercicio de Derechos ARCO?" },
+      { id: "F4-07", prompt: "¿Los Miembros del Departamento de Datos Personales gestionan o supervisan la notificación de vulneraciones de seguridad a los titulares afectados en los plazos requeridos?", helper: "Conforme al Art. 20 LFPDPPP, la notificación debe hacerse en tiempo y forma." },
     ],
   },
   {
     id: "F5",
     title: "Función 5 — Gestión de riesgos e incidentes de privacidad",
     description:
-      "Evalúa si el OPD participa activamente en la gestión de riesgos, incidentes y evaluaciones de impacto del SGDP.",
+      "Evalúa si los Miembros del Departamento de Datos Personales participan activamente en la gestión de riesgos, incidentes y evaluaciones de impacto del SGDP.",
     weight: 15,
     minimumRatio: 5 / 7,
     questions: [
-      { id: "F5-01", prompt: "¿El OPD supervisa la realización de Evaluaciones de Impacto en la Protección de Datos (EIPD) para tratamientos de alto riesgo?" },
-      { id: "F5-02", prompt: "¿El OPD participa en la gestión de vulneraciones de seguridad que afectan datos personales desde la detección hasta el cierre?" },
-      { id: "F5-03", prompt: "¿El OPD revisa y valida el mapa de riesgos del SGDP al menos una vez al año?" },
-      { id: "F5-04", prompt: "¿El OPD verifica que los planes de acción correctiva derivados de auditorías e incidentes se implementan en los plazos acordados?" },
-      { id: "F5-05", prompt: "¿El OPD monitorea indicadores de riesgo de privacidad (ej. solicitudes ARCO pendientes, políticas vencidas, encargados sin contrato)?" },
-      { id: "F5-06", prompt: "¿El OPD ha reportado a la Alta Dirección al menos una vez en el periodo sobre el estado de los riesgos de privacidad?" },
-      { id: "F5-07", prompt: "¿El OPD coordina con el CISO o responsable de seguridad de la información la atención de vulneraciones técnicas?" },
+      { id: "F5-01", prompt: "¿Los Miembros del Departamento de Datos Personales supervisan la realización de Evaluaciones de Impacto en la Protección de Datos (EIPD) para tratamientos de alto riesgo?" },
+      { id: "F5-02", prompt: "¿Los Miembros del Departamento de Datos Personales participan en la gestión de vulneraciones de seguridad que afectan datos personales desde la detección hasta el cierre?" },
+      { id: "F5-03", prompt: "¿Los Miembros del Departamento de Datos Personales revisan y validan el mapa de riesgos del SGDP al menos una vez al año?" },
+      { id: "F5-04", prompt: "¿Los Miembros del Departamento de Datos Personales verifican que los planes de acción correctiva derivados de auditorías e incidentes se implementan en los plazos acordados?" },
+      { id: "F5-05", prompt: "¿Los Miembros del Departamento de Datos Personales monitorean indicadores de riesgo de privacidad (ej. solicitudes ARCO pendientes, políticas vencidas, encargados sin contrato)?" },
+      { id: "F5-06", prompt: "¿Los Miembros del Departamento de Datos Personales han reportado a la Alta Dirección al menos una vez en el periodo sobre el estado de los riesgos de privacidad?" },
+      { id: "F5-07", prompt: "¿Los Miembros del Departamento de Datos Personales coordinan con el CISO o responsable de seguridad de la información la atención de vulneraciones técnicas?" },
     ],
   },
 ] as const
 
 export const PROJECT_REVIEW_QUESTIONS = [
-  { id: "P-01", prompt: "¿El proyecto involucra el tratamiento de datos personales de cualquier tipo?", helper: "Si la respuesta es No, el proyecto no requiere análisis adicional del OPD." },
+  { id: "P-01", prompt: "¿El proyecto involucra el tratamiento de datos personales de cualquier tipo?", helper: "Si la respuesta es No, el proyecto no requiere análisis adicional del Departamento de Datos Personales." },
   { id: "P-02", prompt: "¿Se tratarán datos personales sensibles (salud, biometría, genética, origen étnico, religión, preferencia sexual)?", helper: "Si es Sí, se requiere EIPD completa y consentimiento expreso por escrito." },
   { id: "P-03", prompt: "¿El proyecto implica tratamiento de datos personales a gran escala o de manera sistemática?" },
   { id: "P-04", prompt: "¿Se utilizarán tecnologías de perfilamiento, puntuación, predicción o decisiones automatizadas sobre los titulares?" },
@@ -919,7 +919,7 @@ export function createFunctionalRecord(
 
 function buildProjectCode() {
   const year = new Date().getFullYear()
-  return `PRY-OPD-${year}-${secureRandomId("pry").slice(-6).toUpperCase()}`
+  return `PRY-DDP-${year}-${secureRandomId("pry").slice(-6).toUpperCase()}`
 }
 
 export function createProjectReviewRecord(draft: DpoProjectReviewDraft): DpoProjectReviewRecord {
@@ -1155,7 +1155,7 @@ export function migrateLegacyDpoSnapshot(evidenceFiles: StoredFile[]) {
     dpoAreaOther: legacy.dpoAreaOther || "",
     designationDate: legacy.designationDate || "",
     plannedNextReview: legacy.plannedNextReview || "",
-    notes: "Registro migrado desde el cuestionario legado del módulo OPD.",
+    notes: "Registro migrado desde el cuestionario legado del Departamento de Datos Personales.",
   })
 
   accreditationDraft.responses["A-01"] = {
@@ -1192,7 +1192,7 @@ export function migrateLegacyDpoSnapshot(evidenceFiles: StoredFile[]) {
     evaluationDate: legacy.updatedAt?.slice?.(0, 10) || new Date().toISOString().slice(0, 10),
     periodLabel: "Migración histórica",
     plannedNextReview: legacy.plannedNextReview || "",
-    notes: legacy.observations || "Registro migrado desde la evaluación legada del módulo OPD.",
+    notes: legacy.observations || "Registro migrado desde la evaluación legada del Departamento de Datos Personales.",
   })
 
   functionalDraft.responses["F1-01"] = {
