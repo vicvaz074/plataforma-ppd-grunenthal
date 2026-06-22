@@ -2261,20 +2261,20 @@ export default function DocumentsAndClausesPage() {
           if (!open) setAnalysisContract(null)
         }}
       >
-        <DialogContent className="flex max-h-[88vh] w-[calc(100vw-2rem)] max-w-4xl flex-col overflow-hidden p-0">
+        <DialogContent className="!flex max-h-[86vh] !w-[min(1040px,calc(100vw_-_2rem))] !max-w-[1040px] flex-col gap-0 overflow-hidden rounded-[24px] border-slate-200 p-0 shadow-2xl">
           {analysisContract && (
             <>
-              <DialogHeader className="border-b px-6 py-5">
-                <div className="flex flex-wrap items-start justify-between gap-3">
-                  <div className="min-w-0 space-y-1">
-                    <DialogTitle className="break-words text-xl">
+              <DialogHeader className="shrink-0 border-b bg-background py-4 pl-5 pr-16 text-left sm:pl-6">
+                <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-start">
+                  <div className="min-w-0">
+                    <DialogTitle className="break-words text-lg sm:text-xl">
                       Análisis del contrato
                     </DialogTitle>
-                    <DialogDescription className="break-words">
+                    <DialogDescription className="mt-1 break-words text-sm">
                       {analysisContract.contractTitle || analysisContract.providerIdentity || "Contrato registrado"}
                     </DialogDescription>
                   </div>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex min-w-0 flex-wrap gap-2 sm:justify-end sm:pr-1">
                     <Badge variant={riskVariants[analysisContract.riskLevel]} className="capitalize">
                       Riesgo {analysisContract.riskLevel}
                     </Badge>
@@ -2287,15 +2287,15 @@ export default function DocumentsAndClausesPage() {
                 </div>
               </DialogHeader>
 
-              <div className="min-h-0 flex-1 overflow-y-auto px-6 py-5">
-                <div className="grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">
-                  <section className="space-y-4">
-                    <div className="rounded-lg border bg-muted/20 p-4">
+              <div className="min-h-0 max-h-[min(62vh,640px)] overflow-y-auto bg-muted/20 px-4 py-4 sm:px-5">
+                <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_320px]">
+                  <section className="flex min-w-0 flex-col gap-4">
+                    <div className="rounded-xl border bg-background p-4 shadow-sm">
                       <div className="mb-3 flex items-center gap-2 font-medium">
                         <Shield className="h-4 w-4 text-primary" />
                         Resultado regulatorio
                       </div>
-                      <div className="space-y-3 text-sm">
+                      <div className="flex flex-col gap-3 text-sm leading-relaxed">
                         <p>
                           <strong>Resultado:</strong>{" "}
                           {analysisContract.clauseComplianceLabel || analysisContract.clauseRegulation}
@@ -2321,10 +2321,10 @@ export default function DocumentsAndClausesPage() {
                       </div>
                     </div>
 
-                    <div className="rounded-lg border p-4">
+                    <div className="rounded-xl border bg-background p-4 shadow-sm">
                       <p className="mb-3 font-medium">Documentos asociados</p>
                       {analysisContract.attachments.length > 0 ? (
-                        <div className="space-y-2">
+                        <div className="flex flex-col gap-2">
                           {analysisContract.attachments.map((attachment) => (
                             <div
                               key={`${analysisContract.id}-modal-${attachment.storageId ?? attachment.fileName}`}
@@ -2353,8 +2353,8 @@ export default function DocumentsAndClausesPage() {
                     </div>
                   </section>
 
-                  <aside className="space-y-3 rounded-lg border bg-background p-4 text-sm">
-                    <p className="font-medium">Datos del contrato</p>
+                  <aside className="sticky top-0 flex min-w-0 flex-col gap-3 self-start rounded-xl border bg-background p-4 text-sm leading-relaxed shadow-sm">
+                    <p className="text-base font-medium">Datos del contrato</p>
                     <p>
                       <strong>Tercero:</strong>{" "}
                       {analysisContract.providerIdentity || analysisContract.thirdPartyName || "No definido"}
@@ -2384,7 +2384,7 @@ export default function DocumentsAndClausesPage() {
                         <strong>Riesgo:</strong> {analysisContract.riskNotes}
                       </p>
                     )}
-                    <div className="space-y-3 rounded-lg border bg-muted/20 p-3">
+                    <div className="flex flex-col gap-3 rounded-lg border bg-muted/20 p-3">
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex items-center gap-2">
                           <Checkbox
@@ -2448,7 +2448,10 @@ export default function DocumentsAndClausesPage() {
                 </div>
               </div>
 
-              <DialogFooter className="border-t px-6 py-4">
+              <DialogFooter className="shrink-0 items-center justify-between border-t bg-background px-5 py-4 sm:justify-between sm:px-6">
+                <span className="hidden text-xs font-medium uppercase tracking-wide text-muted-foreground sm:inline">
+                  Análisis contractual
+                </span>
                 <Button type="button" variant="outline" onClick={() => setAnalysisContract(null)}>
                   Cerrar
                 </Button>
