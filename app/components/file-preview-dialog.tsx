@@ -274,7 +274,7 @@ export function FilePreviewDialog({ file, open, onOpenChange }: FilePreviewDialo
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="!flex max-h-[86vh] !w-[min(944px,calc(100vw_-_2rem))] !max-w-[944px] flex-col gap-0 overflow-hidden rounded-[24px] border-slate-200 p-0 shadow-2xl">
-        <DialogHeader className="shrink-0 border-b px-6 py-4 pr-12">
+        <DialogHeader className="shrink-0 border-b py-4 pl-6 pr-16">
           <div className="flex flex-wrap items-center gap-2">
             {preview && <Badge variant="secondary">{preview.extension}</Badge>}
             {file?.category && <Badge variant="outline">{file.category}</Badge>}
@@ -290,7 +290,7 @@ export function FilePreviewDialog({ file, open, onOpenChange }: FilePreviewDialo
         </div>
 
         {preview && (
-          <DialogFooter className="shrink-0 gap-2 border-t bg-background px-6 py-4 sm:space-x-0">
+          <DialogFooter className="shrink-0 gap-2 border-t bg-background px-6 py-4">
             <Button type="button" variant="outline" onClick={saveCopy}>
               <Download className="mr-2 h-4 w-4" />
               Guardar copia
