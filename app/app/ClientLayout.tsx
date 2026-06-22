@@ -10,6 +10,7 @@ import { SecurityProvider } from "@/lib/SecurityContext"
 import "@/lib/zod-config"
 import { Sidebar } from "@/components/sidebar"
 import { Header } from "@/components/header"
+import { Toaster } from "@/components/ui/toaster"
 import { isSessionValid, startInactivityMonitor, onSessionExpired, destroySession } from "@/lib/session"
 import { seedGrunenthalDemoData } from "@/lib/grunenthal-seed"
 
@@ -122,6 +123,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
           </LanguageProvider>
         </AppProvider>
       </SecurityProvider>
+      <Toaster />
     </ThemeProvider>
   )
 }
