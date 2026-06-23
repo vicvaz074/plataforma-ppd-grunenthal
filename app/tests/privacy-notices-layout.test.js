@@ -6,6 +6,18 @@ const path = require("node:path")
 const appDir = path.join(__dirname, "..")
 
 describe("layout de avisos de privacidad", () => {
+  it("mantiene las graficas del panorama dentro de su contenedor responsivo", () => {
+    const source = fs.readFileSync(
+      path.join(appDir, "app/privacy-notices/page.tsx"),
+      "utf8",
+    )
+
+    assert.match(source, /ResponsiveContainer/)
+    assert.match(source, /xl:grid-cols-\[minmax\(0,1\.1fr\)_minmax\(0,0\.9fr\)\]/)
+    assert.match(source, /className="h-\[320px\] min-w-0/)
+    assert.doesNotMatch(source, /<(?:BarChart|PieChart)[^>]*\swidth=\{\d+\}/)
+  })
+
   it("mantiene responsivo el filtro por titulares sin desbordar", () => {
     const source = fs.readFileSync(
       path.join(appDir, "app/privacy-notices/notices-content.tsx"),
