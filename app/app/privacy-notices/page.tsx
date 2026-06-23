@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { useEffect, useMemo, useState } from "react"
-import { Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, Tooltip, XAxis, YAxis } from "recharts"
+import { Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
 import { BarChart3, FileCheck2, FilePlus2, Files, ShieldCheck } from "lucide-react"
 
 import {
@@ -147,24 +147,27 @@ export default function PrivacyNoticesLandingPage() {
           />
         </div>
 
-        <div className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
+        <div className="grid min-w-0 gap-6 xl:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
           <ModuleSectionCard
             title="Tipologías con mayor presencia"
             description="Distribución real a partir de los tipos de aviso capturados en la plataforma."
+            className="min-w-0 overflow-hidden"
           >
             {metrics.buckets.length > 0 ? (
-              <div className="h-[320px]">
-                <BarChart width={800} height={320} data={metrics.buckets} margin={{ top: 8, right: 8, left: 0, bottom: 12 }}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                  <XAxis dataKey="label" tick={{ fontSize: 12 }} />
-                  <YAxis allowDecimals={false} />
-                  <Tooltip />
-                  <Bar dataKey="value" radius={[10, 10, 0, 0]}>
-                    {metrics.buckets.map((entry, index) => (
-                      <Cell key={entry.label} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Bar>
-                </BarChart>
+              <div className="h-[320px] min-w-0 overflow-hidden">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={metrics.buckets} margin={{ top: 8, right: 8, left: 0, bottom: 12 }}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                    <XAxis dataKey="label" tick={{ fontSize: 12 }} />
+                    <YAxis allowDecimals={false} />
+                    <Tooltip />
+                    <Bar dataKey="value" radius={[10, 10, 0, 0]}>
+                      {metrics.buckets.map((entry, index) => (
+                        <Cell key={entry.label} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
               </div>
             ) : (
               <ModuleEmptyState
@@ -182,17 +185,20 @@ export default function PrivacyNoticesLandingPage() {
           <ModuleSectionCard
             title="Cobertura documental"
             description="Relación entre registros con evidencia asociada y expedientes pendientes de robustecer."
+            className="min-w-0 overflow-hidden"
           >
             {notices.length > 0 ? (
-              <div className="h-[320px]">
-                <PieChart width={420} height={320}>
-                  <Pie data={overview.evidenceBreakdown} dataKey="value" nameKey="name" innerRadius={62} outerRadius={108}>
-                    {overview.evidenceBreakdown.map((entry, index) => (
-                      <Cell key={entry.name} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
+              <div className="h-[320px] min-w-0 overflow-hidden">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie data={overview.evidenceBreakdown} dataKey="value" nameKey="name" innerRadius={62} outerRadius={108}>
+                      {overview.evidenceBreakdown.map((entry, index) => (
+                        <Cell key={entry.name} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                  </PieChart>
+                </ResponsiveContainer>
               </div>
             ) : (
               <ModuleEmptyState
