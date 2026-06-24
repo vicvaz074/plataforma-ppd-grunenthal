@@ -65,7 +65,7 @@ const translations: Record<"en" | "es", Record<OptionKey | "welcome", string>> =
     dataInventory: "Personal data inventory",
     privacyNotices: "Privacy notices",
     thirdPartyContracts: "Third party contracts",
-    dataProtectionOfficer: "Data protection officer",
+    dataProtectionOfficer: "Personal Data Department Members",
     arcoRights: "ARCO rights",
     personalDataSecuritySystem: "Personal Data Security Management System",
     davaraTraining: "Training",
@@ -81,7 +81,7 @@ const translations: Record<"en" | "es", Record<OptionKey | "welcome", string>> =
     dataInventory: "Inventario de datos personales",
     privacyNotices: "Avisos de privacidad",
     thirdPartyContracts: "Contratos con terceros",
-    dataProtectionOfficer: "Oficial de protección de datos",
+    dataProtectionOfficer: "Miembros del Departamento de Datos Personales",
     arcoRights: "Derechos ARCO",
     personalDataSecuritySystem: "Sistema de gestión de seguridad de datos personales",
     davaraTraining: "Capacitación",
@@ -103,7 +103,7 @@ const descriptions: Record<"en" | "es", Record<OptionKey, string>> = {
     thirdPartyContracts:
       "Review and adapt the legal instruments to regulate the communication of personal data to third parties (revisions and transfers).",
     dataProtectionOfficer:
-      "Document the appointment and periodic activities of the DPO.",
+      "Document the appointment and periodic activities of the Personal Data Department members.",
     arcoRights:
       "Review the processes for handling ARCO rights and record the received ARCO rights requests, as well as their processing.",
     personalDataSecuritySystem:
@@ -131,7 +131,7 @@ const descriptions: Record<"en" | "es", Record<OptionKey, string>> = {
     thirdPartyContracts:
       "Revisa y adapta los instrumentos jurídicos para regular comunicaciones de datos personales a terceros (revisiones y transferencias).",
     dataProtectionOfficer:
-      "Documenta la designación y actividades periódicas del DPD ante la Alta Dirección.",
+      "Documenta la designación y actividades periódicas de los Miembros del Departamento de Datos Personales ante la Alta Dirección.",
     arcoRights:
       "Revisa los procesos para la atención de derechos ARCO y registra las solicitudes recibidas y su proceso de atención.",
     personalDataSecuritySystem:

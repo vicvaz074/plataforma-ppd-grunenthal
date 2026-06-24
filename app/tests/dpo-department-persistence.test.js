@@ -25,6 +25,7 @@ describe("módulo Departamento de Datos Personales", () => {
 
   it("homologa la terminología visible del módulo", () => {
     const visibleSources = [
+      "app/page.tsx",
       "components/arco-module-config.ts",
       "components/sidebar.tsx",
       "components/user-progress-dashboard.tsx",
@@ -38,8 +39,8 @@ describe("módulo Departamento de Datos Personales", () => {
       .join("\n")
 
     assert.match(visibleSources, new RegExp(departmentLabel))
-    assert.equal(visibleSources.includes("Oficial de Protección de Datos"), false)
-    assert.equal(visibleSources.includes("oficial de protección de datos"), false)
+    assert.doesNotMatch(visibleSources, /Oficial de Protecci[oó]n de Datos/i)
+    assert.doesNotMatch(visibleSources, /Data protection officer/i)
     assert.equal(visibleSources.includes("OPD"), false)
     assert.equal(visibleSources.includes("DPD"), false)
   })
