@@ -28,6 +28,18 @@ describe("layout de avisos de privacidad", () => {
     assert.match(source, /<select[\s\S]*className="[^"]*w-full[^"]*min-w-0[^"]*max-w-full/)
   })
 
+  it("conserva paginación en registros y agrega soporte PDF de registro", () => {
+    const source = fs.readFileSync(
+      path.join(appDir, "app/privacy-notices/notices-content.tsx"),
+      "utf8",
+    )
+
+    assert.match(source, /itemsPerPage/)
+    assert.match(source, /paginatedNotices/)
+    assert.match(source, /generatePrivacyNoticeRecordPDF/)
+    assert.match(source, /Descargar soporte/)
+  })
+
   it("homologa consultores y profesionales de la salud sin mencionar auditores externos", () => {
     const source = fs.readFileSync(
       path.join(appDir, "app/privacy-notices/notices-content.tsx"),

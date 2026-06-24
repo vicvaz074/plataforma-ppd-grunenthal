@@ -43,6 +43,7 @@ import {
 } from "@/components/arco-module-config";
 import { getGrunenthalAsset } from "@/lib/grunenthal-assets";
 import { PRIVACY_NOTICE_SOURCE_ASSET_ID } from "@/lib/grunenthal-repository";
+import { generatePrivacyNoticeRecordPDF } from "./utils/privacy-notice-record-pdf";
 
 const HOLDER_CATEGORY_OPTIONS = [
   {
@@ -509,6 +510,23 @@ export function PrivacyNoticesContent({ section }: PrivacyNoticesContentProps) {
     }
   };
 
+  const handleDownloadSupport = (notice: StoredFile) => {
+    try {
+      generatePrivacyNoticeRecordPDF(notice);
+      toast({
+        title: "Soporte generado",
+        description: "El PDF de soporte del registro se descargó correctamente.",
+      });
+    } catch (error) {
+      console.error("Error al generar soporte PDF de aviso", error);
+      toast({
+        title: "No se pudo generar el soporte",
+        description: "Intenta nuevamente o revisa el registro del aviso.",
+        variant: "destructive",
+      });
+    }
+  };
+
   const onSubmit = async (values: FormValues) => {
     try {
       setIsSubmitting(true);
@@ -775,6 +793,16 @@ export function PrivacyNoticesContent({ section }: PrivacyNoticesContentProps) {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage,
   );
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [categoryFilter, searchTerm]);
+
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
 
   const isRegisterSection = section === "register";
   const isListSection = section === "list";
@@ -1324,25 +1352,19 @@ export function PrivacyNoticesContent({ section }: PrivacyNoticesContentProps) {
                 Avisos de Privacidad Registrados
               </h2>
               <div className="mb-4 grid gap-3 lg:grid-cols-[minmax(0,1fr)_minmax(220px,360px)]">
-                <Input
-                  placeholder="Buscar por nombre"
-                  value={searchTerm}
-                  onChange={(event) => {
-                    setSearchTerm(event.target.value);
-                    setCurrentPage(1);
-                  }}
-                  className="w-full min-w-0"
-                />
+                  <Input
+                    placeholder="Buscar por nombre"
+                    value={searchTerm}
+                    onChange={(event) => setSearchTerm(event.target.value)}
+                    className="w-full min-w-0"
+                  />
                 <div className="grid min-w-0 gap-1.5 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center">
                   <Label className="text-sm sm:whitespace-nowrap">
                     Filtrar por titulares
                   </Label>
                   <select
                     value={categoryFilter}
-                    onChange={(event) => {
-                      setCategoryFilter(event.target.value);
-                      setCurrentPage(1);
-                    }}
+                    onChange={(event) => setCategoryFilter(event.target.value)}
                     className="w-full min-w-0 max-w-full truncate rounded-md border border-input bg-background px-3 py-2 text-sm"
                   >
                     <option value="all">Todas las categorías</option>
@@ -1446,6 +1468,14 @@ export function PrivacyNoticesContent({ section }: PrivacyNoticesContentProps) {
                               <Button
                                 variant="outline"
                                 size="sm"
+                                onClick={() => handleDownloadSupport(notice)}
+                              >
+                                <FileCheck2 className="mr-2 h-4 w-4" />
+                                Descargar soporte
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
                                 onClick={() => handleEdit(notice)}
                               >
                                 Editar
@@ -1464,22 +1494,22 @@ export function PrivacyNoticesContent({ section }: PrivacyNoticesContentProps) {
                     </TableBody>
                   </Table>
                   {totalPages > 1 && (
-                    <div className="flex justify-center mt-4 space-x-2">
+                    <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => setCurrentPage((page) => page - 1)}
+                        onClick={() => setCurrentPage((page) => Math.max(page - 1, 1))}
                         disabled={currentPage === 1}
                       >
                         Anterior
                       </Button>
-                      <span className="text-sm px-2 py-1">
+                      <span className="px-2 py-1 text-sm text-muted-foreground">
                         Página {currentPage} de {totalPages}
                       </span>
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => setCurrentPage((page) => page + 1)}
+                        onClick={() => setCurrentPage((page) => Math.min(page + 1, totalPages))}
                         disabled={currentPage === totalPages}
                       >
                         Siguiente

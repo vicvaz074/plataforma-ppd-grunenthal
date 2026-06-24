@@ -37,7 +37,7 @@ import {
 import type { StoredFile } from "@/lib/fileStorage"
 import type { Inventory } from "@/app/rat/types"
 
-export const GRUNENTHAL_SEED_VERSION = "2026.2.1"
+export const GRUNENTHAL_SEED_VERSION = "2026.2.2"
 export const GRUNENTHAL_SEED_STATE_KEY = "grunenthal_seed_state_v1"
 
 const STORED_FILES_KEY = "storedFiles"
@@ -162,6 +162,8 @@ function commonIndividualMetadata(
   record: GrunenthalPrivacyNoticeSeed | GrunenthalThirdPartyContractSeed | GrunenthalLaborPolicySeed,
   individualRecordType: "privacy-notice" | "third-party-contract" | "labor-policy-reference",
 ) {
+  const author = individualRecordType === "privacy-notice" ? "Legal" : "Admin"
+
   return {
     client: GRUNENTHAL_CLIENT_NAME,
     clientSeed: "grunenthal-2026",
@@ -183,9 +185,9 @@ function commonIndividualMetadata(
     area: record.area,
     tags: record.tags,
     createdAt: SEEDED_AT,
-    createdBy: "Admin",
+    createdBy: author,
     lastUpdated: SEEDED_AT,
-    lastUpdatedBy: "Admin",
+    lastUpdatedBy: author,
   }
 }
 

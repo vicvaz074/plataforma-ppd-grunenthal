@@ -50,9 +50,11 @@ import { ensureBrowserStorageEvents } from "@/lib/browser-storage-events"
 import { createFileURL, getAllFiles, getFileById, type StoredFile } from "@/lib/fileStorage"
 import { canOfferFilePreview } from "@/lib/file-preview"
 import {
+  GRUNENTHAL_CURATED_POLICY_DOCUMENTS,
+  buildGrunenthalCuratedPolicyDocuments,
   buildGrunenthalRepositoryDocuments,
+  type GrunenthalPolicyScope,
   type GrunenthalRepositoryDocumentWithFile,
-  type GrunenthalRepositoryModule,
 } from "@/lib/grunenthal-repository"
 import { cn } from "@/lib/utils"
 import {
@@ -119,9 +121,12 @@ type PoliciesManagerProps = {
 
 type PoliciesManagerSection = "registro" | "consulta" | "repositorio"
 
-const REPOSITORY_MODULE_LABELS: Record<GrunenthalRepositoryModule, string> = {
+const REPOSITORY_MODULE_LABELS: Record<string, string> = {
+  "arco-rights": "Derechos ARCO",
   "data-policies": "Políticas",
+  dpo: "Departamento de Datos Personales",
   "privacy-notices": "Avisos",
+  "security-system": "Seguridad",
   "third-party-contracts": "Contratos",
 }
 
@@ -163,8 +168,8 @@ function repositoryDocumentSearchText(document: GrunenthalRepositoryDocumentWith
   )
 }
 
-function repositoryModuleLabel(module: GrunenthalRepositoryModule) {
-  return REPOSITORY_MODULE_LABELS[module] || module
+function repositoryModuleLabel(module?: string) {
+  return module ? REPOSITORY_MODULE_LABELS[module] || module : "Repositorio"
 }
 
 function addMonthsToDate(dateValue: string, months: number) {
@@ -252,7 +257,8 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
   const [draft, setDraft] = useState<PolicyRecord>(() => createEmptyPolicyRecord())
   const [selectedPolicyId, setSelectedPolicyId] = useState<string | null>(null)
   const [repositorySearch, setRepositorySearch] = useState("")
-  const [repositoryModuleFilter, setRepositoryModuleFilter] = useState<"all" | GrunenthalRepositoryModule>("all")
+  const [repositoryPolicyScopeFilter, setRepositoryPolicyScopeFilter] = useState<"all" | GrunenthalPolicyScope>("all")
+  const [repositoryModuleFilter, setRepositoryModuleFilter] = useState("all")
   const [repositoryTypeFilter, setRepositoryTypeFilter] = useState("all")
   const [repositoryAreaFilter, setRepositoryAreaFilter] = useState("all")
   const [repositoryPreviewFile, setRepositoryPreviewFile] = useState<StoredFile | null>(null)
@@ -305,9 +311,22 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
   const donutData = useMemo(() => getPolicyDimensionDonut(primaryPolicy), [primaryPolicy])
   const previewDraft = useMemo(() => normalizePolicyRecord(draft), [draft])
   const previewRows = useMemo(() => getPolicyDimensionRows(previewDraft), [previewDraft])
-  const repositoryDocuments = useMemo(
+  const allRepositoryDocuments = useMemo(
     () => buildGrunenthalRepositoryDocuments(repositoryFiles),
     [repositoryFiles],
+  )
+  const repositoryDocuments = useMemo(
+    () => buildGrunenthalCuratedPolicyDocuments(repositoryFiles),
+    [repositoryFiles],
+  )
+  const repositoryModuleOptions = useMemo(
+    () =>
+      Array.from(
+        new Set(repositoryDocuments.map((document) => document.originModule || document.module)),
+      ).sort((left, right) =>
+        repositoryModuleLabel(left).localeCompare(repositoryModuleLabel(right), "es"),
+      ),
+    [repositoryDocuments],
   )
   const repositoryTypes = useMemo(
     () => Array.from(new Set(repositoryDocuments.map((document) => document.type))).sort((left, right) => left.localeCompare(right, "es")),
@@ -322,24 +341,30 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
 
     return repositoryDocuments.filter((document) => {
       const matchesSearch = !query || repositoryDocumentSearchText(document).includes(query)
-      const matchesModule = repositoryModuleFilter === "all" || document.module === repositoryModuleFilter
+      const originModule = document.originModule || document.module
+      const matchesScope = repositoryPolicyScopeFilter === "all" || document.policyScope === repositoryPolicyScopeFilter
+      const matchesModule = repositoryModuleFilter === "all" || originModule === repositoryModuleFilter
       const matchesType = repositoryTypeFilter === "all" || document.type === repositoryTypeFilter
       const matchesArea = repositoryAreaFilter === "all" || document.area === repositoryAreaFilter
-      return matchesSearch && matchesModule && matchesType && matchesArea
+      return matchesSearch && matchesScope && matchesModule && matchesType && matchesArea
     })
-  }, [repositoryAreaFilter, repositoryDocuments, repositoryModuleFilter, repositorySearch, repositoryTypeFilter])
-  const repositoryStats = useMemo(
+  }, [
+    repositoryAreaFilter,
+    repositoryDocuments,
+    repositoryModuleFilter,
+    repositoryPolicyScopeFilter,
+    repositorySearch,
+    repositoryTypeFilter,
+  ])
+  const policyScopeStats = useMemo(
     () =>
       repositoryDocuments.reduce(
         (acc, document) => {
-          acc[document.module] += 1
+          if (document.policyScope === "global") acc.global += 1
+          if (document.policyScope === "mexico") acc.mexico += 1
           return acc
         },
-        {
-          "data-policies": 0,
-          "privacy-notices": 0,
-          "third-party-contracts": 0,
-        } as Record<GrunenthalRepositoryModule, number>,
+        { mexico: 0, global: 0 },
       ),
     [repositoryDocuments],
   )
@@ -844,7 +869,7 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
         ? {
             label: "Repositorio",
             title: "Repositorio documental Grünenthal",
-            description: "Consulta, filtra, previsualiza y descarga políticas, avisos y contratos desde un solo lugar.",
+            description: "Consulta, filtra, previsualiza y descarga políticas locales de México y políticas globales.",
           }
         : {
             label: "Consulta",
@@ -1764,23 +1789,25 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
           <div className="grid min-w-0 gap-4 md:grid-cols-3">
             <Card className="min-w-0 border-slate-200 shadow-sm">
               <CardContent className="p-5">
-                <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Políticas</p>
-                <p className="mt-3 text-4xl text-slate-950">{repositoryStats["data-policies"]}</p>
-                <p className="mt-2 text-sm text-slate-500">Documentos base, evidencias y referencias de PGDP.</p>
+                <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Políticas México</p>
+                <p className="mt-3 text-4xl text-slate-950">{policyScopeStats.mexico}</p>
+                <p className="mt-2 text-sm text-slate-500">Políticas locales, manuales y evidencias operativas.</p>
               </CardContent>
             </Card>
             <Card className="min-w-0 border-slate-200 shadow-sm">
               <CardContent className="p-5">
-                <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Avisos</p>
-                <p className="mt-3 text-4xl text-slate-950">{repositoryStats["privacy-notices"]}</p>
-                <p className="mt-2 text-sm text-slate-500">Compilado fuente y avisos individuales generados.</p>
+                <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Políticas Globales</p>
+                <p className="mt-3 text-4xl text-slate-950">{policyScopeStats.global}</p>
+                <p className="mt-2 text-sm text-slate-500">Lineamientos globales aplicables al programa local.</p>
               </CardContent>
             </Card>
             <Card className="min-w-0 border-slate-200 shadow-sm">
               <CardContent className="p-5">
-                <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Contratos</p>
-                <p className="mt-3 text-4xl text-slate-950">{repositoryStats["third-party-contracts"]}</p>
-                <p className="mt-2 text-sm text-slate-500">Análisis, plantillas y registros individuales de terceros.</p>
+                <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Repositorio curado</p>
+                <p className="mt-3 text-4xl text-slate-950">{repositoryDocuments.length}</p>
+                <p className="mt-2 text-sm text-slate-500">
+                  De {GRUNENTHAL_CURATED_POLICY_DOCUMENTS.length} definidos y {allRepositoryDocuments.length} recursos fuente.
+                </p>
               </CardContent>
             </Card>
           </div>
@@ -1792,7 +1819,7 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
                   <FolderSearch className="h-5 w-5 text-primary" />
                   Repositorio documental
                 </CardTitle>
-                <CardDescription>Búsqueda y filtros para políticas, avisos y contratos cargados.</CardDescription>
+                <CardDescription>Búsqueda y filtros para políticas locales de México y políticas globales.</CardDescription>
               </CardHeader>
               <CardContent className="min-w-0 space-y-4 p-5">
                 <div className="min-w-0">
@@ -1808,21 +1835,44 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
                   </div>
                 </div>
 
+                <div className="min-w-0 space-y-2">
+                  <Label>Alcance</Label>
+                  <div className="grid min-w-0 gap-2">
+                    {[
+                      { value: "all", label: "Todas" },
+                      { value: "mexico", label: "Políticas México" },
+                      { value: "global", label: "Políticas Globales" },
+                    ].map((option) => (
+                      <Button
+                        key={option.value}
+                        type="button"
+                        variant={repositoryPolicyScopeFilter === option.value ? "default" : "outline"}
+                        className="justify-start"
+                        onClick={() => setRepositoryPolicyScopeFilter(option.value as "all" | GrunenthalPolicyScope)}
+                      >
+                        {option.label}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+
                 <div className="grid min-w-0 gap-4 sm:grid-cols-2 2xl:grid-cols-1">
                   <div className="min-w-0">
-                    <Label>Módulo</Label>
+                    <Label>Origen documental</Label>
                     <Select
                       value={repositoryModuleFilter}
-                      onValueChange={(value) => setRepositoryModuleFilter(value as "all" | GrunenthalRepositoryModule)}
+                      onValueChange={setRepositoryModuleFilter}
                     >
                       <SelectTrigger className="mt-1">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="all">Todos</SelectItem>
-                        <SelectItem value="data-policies">Políticas</SelectItem>
-                        <SelectItem value="privacy-notices">Avisos</SelectItem>
-                        <SelectItem value="third-party-contracts">Contratos</SelectItem>
+                        {repositoryModuleOptions.map((module) => (
+                          <SelectItem key={module} value={module}>
+                            {repositoryModuleLabel(module)}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </div>
@@ -1868,6 +1918,7 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
                   className="w-full"
                   onClick={() => {
                     setRepositorySearch("")
+                    setRepositoryPolicyScopeFilter("all")
                     setRepositoryModuleFilter("all")
                     setRepositoryTypeFilter("all")
                     setRepositoryAreaFilter("all")
@@ -1884,11 +1935,11 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
                   <div className="min-w-0">
                     <CardTitle className="text-2xl text-slate-950">Documentos disponibles</CardTitle>
                     <CardDescription>
-                      {filteredRepositoryDocuments.length} de {repositoryDocuments.length} recursos listos para consulta.
+                      {filteredRepositoryDocuments.length} de {repositoryDocuments.length} políticas curadas listas para consulta.
                     </CardDescription>
                   </div>
                   <Badge variant="outline" className="border-primary/20 bg-primary/5 text-primary">
-                    Sin RAT ni JSON
+                    México / Global
                   </Badge>
                 </div>
               </CardHeader>
@@ -1909,7 +1960,10 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
                           <div className="min-w-0 space-y-3">
                             <div className="flex min-w-0 flex-wrap items-center gap-2">
                               <Badge variant="outline" className="border-slate-200 text-slate-600">
-                                {repositoryModuleLabel(document.module)}
+                                {document.policyScopeLabel}
+                              </Badge>
+                              <Badge variant="outline" className="border-slate-200 text-slate-600">
+                                {repositoryModuleLabel(document.originModule || document.module)}
                               </Badge>
                               <Badge variant="secondary">{document.type}</Badge>
                               <Badge variant="outline" className="border-slate-200 text-slate-600">

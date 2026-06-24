@@ -102,4 +102,37 @@ describe("repositorio documental Grünenthal", () => {
       assert.ok(["data-policies", "privacy-notices", "third-party-contracts"].includes(document.module))
     }
   })
+
+  it("declara políticas curadas por alcance México y Global con nombres públicos", () => {
+    assert.equal(repository.GRUNENTHAL_CURATED_POLICY_DOCUMENTS.length, 18)
+
+    const mexicoPolicies = repository.GRUNENTHAL_CURATED_POLICY_DOCUMENTS.filter(
+      (document) => document.policyScope === "mexico",
+    )
+    const globalPolicies = repository.GRUNENTHAL_CURATED_POLICY_DOCUMENTS.filter(
+      (document) => document.policyScope === "global",
+    )
+
+    assert.equal(mexicoPolicies.length, 14)
+    assert.equal(globalPolicies.length, 4)
+    assert.ok(
+      mexicoPolicies.some(
+        (document) =>
+          document.title ===
+          "Política General de Protección de Datos Personales de Grünenthal.",
+      ),
+    )
+    assert.ok(
+      mexicoPolicies.some(
+        (document) =>
+          document.title ===
+          "Manual de Atención de Derechos ARCO de Grünenthal",
+      ),
+    )
+    assert.ok(
+      globalPolicies.some(
+        (document) => document.title === "Política de Tratamiento de Datos Personales.",
+      ),
+    )
+  })
 })
