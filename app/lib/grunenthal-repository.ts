@@ -19,6 +19,9 @@ export type GrunenthalRepositoryDocument = {
   sourceCompiledAssetId?: string
   sourceLineRange?: string
   sourceRelativePath?: string
+  originModule?: GrunenthalAsset["module"]
+  policyScope?: GrunenthalPolicyScope
+  policyScopeLabel?: string
   tags: string[]
 }
 
@@ -78,6 +81,8 @@ export type GrunenthalLaborPolicySeed = IndividualDocumentBase & {
   recommendedClause: string
 }
 
+export type GrunenthalPolicyScope = "mexico" | "global"
+
 export const PRIVACY_NOTICE_SOURCE_ASSET_ID = "grunenthal-privacy-notices-manualap-grunentha-davara-v5"
 const THIRD_PARTY_ANALYSIS_SOURCE_ASSET_ID = "grunenthal-third-party-contracts-analisisderelacionesgrunenthal"
 const PRIVACY_SOURCE_RELATIVE_PATH = "ManualAP_Grünentha Davara v5.docx"
@@ -126,6 +131,10 @@ function moduleArea(module: GrunenthalRepositoryModule) {
   if (module === "privacy-notices") return "Privacidad"
   if (module === "third-party-contracts") return "Terceros"
   return "Gobernanza de datos"
+}
+
+function policyScopeLabel(scope: GrunenthalPolicyScope) {
+  return scope === "global" ? "Políticas Globales" : "Políticas México"
 }
 
 function individualPath(folder: string, slug: string, extension: "docx" | "pdf") {
@@ -711,6 +720,167 @@ function repositoryDocumentFromIndividual(seed: IndividualDocumentBase): Grunent
   }
 }
 
+type CuratedPolicyOverride = {
+  assetId: string
+  policyScope: GrunenthalPolicyScope
+  title: string
+  type?: string
+  area?: string
+}
+
+const CURATED_POLICY_OVERRIDES: CuratedPolicyOverride[] = [
+  {
+    assetId: "grunenthal-data-policies-analisisbaseslegalesgrunenthal",
+    policyScope: "mexico",
+    title: "Análisis de fundamento legal de los tratamientos de datos personales de Grünenthal.",
+  },
+  {
+    assetId: "grunenthal-data-policies-politica-general-pdp-grt",
+    policyScope: "mexico",
+    title: "Política General de Protección de Datos Personales de Grünenthal.",
+  },
+  {
+    assetId: "grunenthal-data-policies-politicadeconservaciongrt",
+    policyScope: "mexico",
+    title: "Política de Conservación, Bloqueo y Cancelación de Datos Personales.",
+  },
+  {
+    assetId: "grunenthal-security-system-carta-empleados-pdp-grt",
+    policyScope: "mexico",
+    title: "Carta de Protección de Datos Personales para Empleados",
+    area: "Seguridad y empleados",
+  },
+  {
+    assetId: "grunenthal-security-system-politica-de-vulneraciones-de-seguridad-de-grt",
+    policyScope: "mexico",
+    title: "Política de Vulneraciones de Seguridad de Grünenthal",
+    area: "Seguridad",
+  },
+  {
+    assetId: "grunenthal-security-system-politica-eipd-grt",
+    policyScope: "mexico",
+    title: "Política para la Elaboración de Evaluaciones de Impacto en la Protección de Datos de Grünenthal",
+    area: "Seguridad",
+  },
+  {
+    assetId: "grunenthal-security-system-politica-sgsdp-grt",
+    policyScope: "mexico",
+    title: "Política del Sistema de Gestión de Seguridad de Datos Personales",
+    area: "Seguridad",
+  },
+  {
+    assetId: "grunenthal-third-party-contracts-1-cuestionario-de-proveedores",
+    policyScope: "mexico",
+    title:
+      "Cuestionario de Evaluación de Cumplimiento en Materia de Protección de Datos Personales para Proveedores de Servicios de Grünenthal",
+    area: "Terceros",
+  },
+  {
+    assetId: "grunenthal-third-party-contracts-analisisderelacionesgrunenthal",
+    policyScope: "mexico",
+    title: "Análisis de Relaciones con Terceros de Grünenthal",
+    area: "Terceros",
+  },
+  {
+    assetId: "grunenthal-third-party-contracts-manualderelaciones-grunenthal-davara-v2",
+    policyScope: "mexico",
+    title: "Manual de Relaciones con Terceros de Grünenthal.",
+    area: "Terceros",
+  },
+  {
+    assetId: "grunenthal-arco-rights-manualderechosarco-grunenthal-davara-v2",
+    policyScope: "mexico",
+    title: "Manual de Atención de Derechos ARCO de Grünenthal",
+    area: "Derechos ARCO",
+  },
+  {
+    assetId: "grunenthal-dpo-acta-designacion-de-miembros-del-departamento-de-datos-personales-de-grunenthal",
+    policyScope: "mexico",
+    title: "Acta designación de miembros del Departamento de Datos Personales de Grünenthal",
+    area: "Departamento de Datos Personales",
+  },
+  {
+    assetId: "grunenthal-dpo-manualdeldepartamento-grunenthal-davara-v2",
+    policyScope: "mexico",
+    title: "Manual para el Departamento de Datos Personales de Grünenthal",
+    area: "Departamento de Datos Personales",
+  },
+  {
+    assetId: PRIVACY_NOTICE_SOURCE_ASSET_ID,
+    policyScope: "mexico",
+    title: "Manual de Avisos de Privacidad Grünenthal",
+    area: "Avisos de privacidad",
+  },
+  {
+    assetId: "grunenthal-data-policies-copia-de-grt-hq-sop-proc-006916-mexico-davara-v1-1",
+    policyScope: "global",
+    title: "Política de Tratamiento de Datos Personales.",
+  },
+  {
+    assetId: "grunenthal-data-policies-grt-proc-003162-davara-v1",
+    policyScope: "global",
+    title: "Política Global de Violaciones",
+  },
+  {
+    assetId: "grunenthal-data-policies-grt-proc-003298-data-subject-requests-davarav1",
+    policyScope: "global",
+    title: "Global SOP_Data Subject Request",
+  },
+  {
+    assetId: "grunenthal-data-policies-grt-proc-7000-retention-of-personal-data-en-released-in-mcl-es-419-davara-v1",
+    policyScope: "global",
+    title: "Procedimiento operativo estándar sobre la retención de datos personales",
+  },
+]
+
+function policyDownloadName(title: string, extension: string) {
+  const safeTitle = title.replace(/\.+$/g, "").trim()
+  return `${safeTitle || "politica-grunenthal"}.${extension}`
+}
+
+function curatedPolicyDocumentFromAsset(override: CuratedPolicyOverride): GrunenthalRepositoryDocument | null {
+  const asset = GRUNENTHAL_DOCUMENT_MANIFEST.find((item) => item.id === override.assetId)
+  if (!asset || asset.extension === "json") return null
+
+  const category = repositoryCategoryForAsset(asset)
+  const previewPdfPath = previewPathForAsset(asset)
+
+  return {
+    id: `policy-${asset.id}`,
+    title: override.title,
+    module: "data-policies",
+    category,
+    type: override.type || "Política y evidencia",
+    area: override.area || policyScopeLabel(override.policyScope),
+    fileId: getGrunenthalRepositoryFileId(asset.id),
+    originalPath: asset.path,
+    previewPdfPath,
+    previewable: Boolean(previewPdfPath) && asset.extension !== "json",
+    downloadName: policyDownloadName(override.title, asset.extension),
+    sourceLabel: asset.sourceRelativePath,
+    sourceCompiledAssetId: asset.id,
+    sourceRelativePath: asset.sourceRelativePath,
+    originModule: asset.module,
+    policyScope: override.policyScope,
+    policyScopeLabel: policyScopeLabel(override.policyScope),
+    tags: [
+      "politicas",
+      override.policyScope,
+      asset.module,
+      category,
+      override.title,
+      asset.displayName,
+      asset.sourceRelativePath,
+    ],
+  }
+}
+
+export const GRUNENTHAL_CURATED_POLICY_DOCUMENTS: GrunenthalRepositoryDocument[] =
+  CURATED_POLICY_OVERRIDES.flatMap((override) => {
+    const document = curatedPolicyDocumentFromAsset(override)
+    return document ? [document] : []
+  })
+
 const baseRepositoryDocuments = GRUNENTHAL_DOCUMENT_MANIFEST.filter(
   (asset) =>
     ALLOWED_REPOSITORY_MODULES.has(asset.module as GrunenthalRepositoryModule) &&
@@ -728,6 +898,17 @@ export function buildGrunenthalRepositoryDocuments(storedFiles: StoredFile[]): G
   const filesById = new Map(storedFiles.map((file) => [file.id, file]))
 
   return GRUNENTHAL_REPOSITORY_DOCUMENTS.flatMap((document) => {
+    const storedFile = filesById.get(document.fileId)
+    return storedFile ? [{ ...document, storedFile }] : []
+  })
+}
+
+export function buildGrunenthalCuratedPolicyDocuments(
+  storedFiles: StoredFile[],
+): GrunenthalRepositoryDocumentWithFile[] {
+  const filesById = new Map(storedFiles.map((file) => [file.id, file]))
+
+  return GRUNENTHAL_CURATED_POLICY_DOCUMENTS.flatMap((document) => {
     const storedFile = filesById.get(document.fileId)
     return storedFile ? [{ ...document, storedFile }] : []
   })

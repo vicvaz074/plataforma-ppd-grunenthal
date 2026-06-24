@@ -63,6 +63,13 @@ interface InventoryListProps {
   setInventories: React.Dispatch<React.SetStateAction<Inventory[]>>
 }
 
+const normalizeHolderFilter = (value: string) =>
+  value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .toLowerCase()
+
 export function InventoryList({
   inventories,
   setFormData,
@@ -76,6 +83,7 @@ export function InventoryList({
   const { toast } = useToast()
   const [expandedInventoryId, setExpandedInventoryId] = useState<string | null>(null)
   const [searchTerm, setSearchTerm] = useState("")
+  const [holderFilter, setHolderFilter] = useState("")
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   const sortedInventories = useMemo(
@@ -170,28 +178,33 @@ export function InventoryList({
   const getInventoryStatus = (inv: Inventory) => inv.status || "pendiente"
 
   const filteredInventories = useMemo(() => {
-    const term = searchTerm.trim().toLowerCase()
-    if (!term) {
-      return sortedInventories
-    }
+    const term = normalizeHolderFilter(searchTerm)
+    const selectedHolder = normalizeHolderFilter(holderFilter)
 
     return sortedInventories.filter((inv) => {
-      const areaText = getResponsibleAreas(inv).join(" ").toLowerCase()
-      const holderText = getHolderTypes(inv).join(" ").toLowerCase()
+      const holders = getHolderTypes(inv)
+      const areaText = normalizeHolderFilter(getResponsibleAreas(inv).join(" "))
+      const holderText = normalizeHolderFilter(holders.join(" "))
       const subInventoryNames = inv.subInventories
         .map((si) => si.databaseName)
         .join(" ")
-        .toLowerCase()
+      const matchesSearch =
+        !term ||
+        [
+          normalizeHolderFilter(inv.databaseName),
+          areaText,
+          holderText,
+          normalizeHolderFilter(subInventoryNames),
+          normalizeHolderFilter(getInventoryStatus(inv)),
+        ].some((value) => value.includes(term))
 
-      return [
-        inv.databaseName.toLowerCase(),
-        areaText,
-        holderText,
-        subInventoryNames,
-        getInventoryStatus(inv).toLowerCase(),
-      ].some((value) => value.includes(term))
+      const matchesHolder =
+        !selectedHolder ||
+        holders.some((name) => normalizeHolderFilter(name) === selectedHolder)
+
+      return matchesSearch && matchesHolder
     })
-  }, [getHolderTypes, getResponsibleAreas, searchTerm, sortedInventories])
+  }, [getHolderTypes, getResponsibleAreas, holderFilter, searchTerm, sortedInventories])
 
   const handleEdit = (inventory: Inventory) => {
     setFormData(normalizeInventoryForForm(inventory))
@@ -489,6 +502,22 @@ const generatePDF = (inventory: Inventory) => {
                     aria-label="Buscar inventarios"
                   />
                 </div>
+                {holderFilter && (
+                  <div className="flex min-w-0 flex-wrap items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-800">
+                    <span className="min-w-0 truncate">
+                      Filtrar por titular: <strong>{holderFilter}</strong>
+                    </span>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="h-7 px-2 text-emerald-800 hover:bg-emerald-100"
+                      onClick={() => setHolderFilter("")}
+                    >
+                      Limpiar titular
+                    </Button>
+                  </div>
+                )}
               </div>
               <div className="w-full overflow-x-auto">
                 <Table className="min-w-[960px]">
@@ -525,21 +554,36 @@ const generatePDF = (inventory: Inventory) => {
                           {holderNames.length > 0 ? (
                             <TooltipProvider delayDuration={150}>
                               <div className="flex flex-wrap gap-2">
-                                {holderNames.map((name, index) => (
-                                  <Tooltip key={`${inv.id}-holder-${index}`}>
-                                    <TooltipTrigger asChild>
-                                      <Badge
-                                        variant="secondary"
-                                        className="max-w-[200px] px-2 py-1 font-normal text-[0.7rem] sm:text-xs"
-                                      >
-                                        <span className="block max-w-[170px] truncate">{name}</span>
-                                      </Badge>
-                                    </TooltipTrigger>
-                                    <TooltipContent className="max-w-xs break-words">
-                                      <p className="max-w-xs break-words">{name}</p>
-                                    </TooltipContent>
-                                  </Tooltip>
-                                ))}
+                                {holderNames.map((name, index) => {
+                                  const isSelectedHolder =
+                                    normalizeHolderFilter(holderFilter) === normalizeHolderFilter(name)
+
+                                  return (
+                                    <Tooltip key={`${inv.id}-holder-${index}`}>
+                                      <TooltipTrigger asChild>
+                                        <button
+                                          type="button"
+                                          aria-label={`Filtrar por titular ${name}`}
+                                          aria-pressed={isSelectedHolder}
+                                          onClick={() => setHolderFilter(isSelectedHolder ? "" : name)}
+                                          className={cn(
+                                            "inline-flex max-w-[200px] items-center rounded-full border px-2 py-1 text-left text-[0.7rem] font-normal transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 sm:text-xs",
+                                            isSelectedHolder
+                                              ? "border-emerald-300 bg-emerald-50 text-emerald-800"
+                                              : "border-transparent bg-secondary text-secondary-foreground hover:border-primary/25 hover:bg-primary/10",
+                                          )}
+                                        >
+                                          <span className="block max-w-[170px] truncate">{name}</span>
+                                        </button>
+                                      </TooltipTrigger>
+                                      <TooltipContent className="max-w-xs break-words">
+                                        <p className="max-w-xs break-words">
+                                          Filtrar por titular: {name}
+                                        </p>
+                                      </TooltipContent>
+                                    </Tooltip>
+                                  )
+                                })}
                               </div>
                             </TooltipProvider>
                           ) : (

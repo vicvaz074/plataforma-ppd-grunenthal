@@ -109,9 +109,11 @@ describe("personalización Grünenthal", () => {
     assert.equal(storedFiles.length, assets.GRUNENTHAL_DOCUMENT_MANIFEST.length + individualDocumentCount)
     assert.equal(new Set(storedFiles.map((file) => file.id)).size, storedFiles.length)
     assert.equal(
-      storedFiles.every((file) => file.metadata.createdBy === "Admin"),
+      storedFiles
+        .filter((file) => file.metadata?.individualRecordType !== "privacy-notice")
+        .every((file) => file.metadata.createdBy === "Admin"),
       true,
-      "los archivos precargados sin autor deben aparecer como creados por Admin",
+      "los archivos precargados sin autor deben conservar Admin salvo avisos individuales",
     )
 
     const wordAssets = assets.GRUNENTHAL_DOCUMENT_MANIFEST.filter((asset) =>
@@ -136,6 +138,23 @@ describe("personalización Grünenthal", () => {
     const individualNotices = storedFiles.filter((file) => file.metadata?.individualRecordType === "privacy-notice")
     assert.equal(individualNotices.length, 11)
     assert.equal(individualNotices.every((file) => file.category === "privacy-notice"), true)
+    assert.equal(
+      individualNotices.every((file) => file.metadata?.createdBy === "Legal"),
+      true,
+      "los avisos individuales precargados deben mostrarse como creados por Legal",
+    )
+    for (const noticeName of [
+      "Aviso de Privacidad Integral para Candidatos",
+      "Aviso de Privacidad Integral para Empleados",
+      "Aviso de Privacidad Integral para Empleados de Proveedores",
+      "Aviso de Privacidad Integral para Proveedores Persona Física",
+      "Aviso de Privacidad para Visitantes y CCTV",
+    ]) {
+      assert.ok(
+        individualNotices.some((file) => file.metadata?.noticeName === noticeName),
+        `debe existir en Registros: ${noticeName}`,
+      )
+    }
     assert.equal(
       individualNotices.every((file) => file.metadata?.previewPdfPath && file.metadata?.sourceCompiledAssetId),
       true,

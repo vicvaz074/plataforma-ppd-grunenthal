@@ -22,6 +22,15 @@ describe("UI /data-policies repositorio", () => {
     assert.match(source, /Descargar/)
   })
 
+  it("diferencia políticas México y políticas Globales en el repositorio", () => {
+    const source = fs.readFileSync(sourcePath, "utf8")
+
+    assert.match(source, /repositoryPolicyScopeFilter/)
+    assert.match(source, /Políticas México/)
+    assert.match(source, /Políticas Globales/)
+    assert.match(source, /GRUNENTHAL_CURATED_POLICY_DOCUMENTS/)
+  })
+
   it("usa contenedores responsivos para evitar que consulta se vea comprimida", () => {
     const source = fs.readFileSync(sourcePath, "utf8")
     const minWidthGuards = source.match(/min-w-0/g) || []
