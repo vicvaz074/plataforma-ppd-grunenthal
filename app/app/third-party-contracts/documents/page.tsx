@@ -62,6 +62,11 @@ import {
   GRUNENTHAL_THIRD_PARTY_ANALYSIS_MATRIX_SOURCE,
   type GrunenthalThirdPartyAnalysisMatrixRow,
 } from "@/lib/grunenthal-third-party-analysis-matrix"
+import {
+  GRUNENTHAL_THIRD_PARTY_MODEL_CLAUSES,
+  GRUNENTHAL_THIRD_PARTY_MODEL_CLAUSES_PACKAGE,
+  GRUNENTHAL_THIRD_PARTY_MODEL_CLAUSES_SOURCE,
+} from "@/lib/grunenthal-third-party-model-clauses"
 import { normalizeGrunenthalContractParty } from "@/lib/grunenthal-contract-analysis-linking"
 import {
   getAuditReminderByReferenceKey,
@@ -95,6 +100,7 @@ type ModelClause = {
   title: string
   category: string
   text: string
+  sourceLabel?: string
   isCustom?: boolean
 }
 
@@ -186,41 +192,6 @@ const defaultUtilityDocuments: LibraryDocument[] = [
   },
 ]
 
-const defaultModelClauses: ModelClause[] = [
-  {
-    id: "clause-remision",
-    title: "Cláusula modelo de remisión (encargados)",
-    category: "Remisión",
-    text: `{RAZON_SOCIAL_RESPONSABLE} (el "Responsable") encomienda a {RAZON_SOCIAL_ENCARGADO} (el "Encargado") el tratamiento de datos personales identificados como {CATEGORIAS_DATOS} exclusivamente para {FINALIDADES}. El Encargado operará dentro de los sistemas {SISTEMAS_INVOLUCRADOS} y aplicará las medidas descritas en {REFERENCIA_DOCUMENTO}.
-
-El Encargado garantizará la confidencialidad, limitará accesos, gestionará subencargados con autorización previa del Responsable e impondrá obligaciones equivalentes. Reportará incidentes de seguridad a {CONTACTO_INCIDENTES} en un plazo máximo de 24 horas y devolverá o suprimirá los datos conforme al plazo {PLAZO_BLOQUEO}.`,
-  },
-  {
-    id: "clause-transferencia",
-    title: "Cláusula modelo de transferencia (responsable a responsable)",
-    category: "Transferencias",
-    text: `{RAZON_SOCIAL_TRANSFERENTE} declara que los titulares fueron informados mediante el aviso disponible en {URL_AVISO} y otorgaron consentimiento {TIPO_CONSENTIMIENTO} para transferir los datos {CATEGORIAS_DATOS}. {RAZON_SOCIAL_RECEPTOR} utilizará la información para {FINALIDADES} y adoptará salvaguardas equivalentes, gestionará derechos ARCO a través de {CONTACTO_ARCO} y notificará incidentes a {CONTACTO_INCIDENTES}.`,
-  },
-  {
-    id: "clause-aceptacion-aviso",
-    title: "Cláusula de aceptación de aviso (personal interno)",
-    category: "Aviso de privacidad",
-    text: `{NOMBRE_EMPLEADO} reconoce haber recibido el aviso de privacidad publicado en {URL_AVISO} y se obliga a tratar los datos personales laborales únicamente para {FINALIDADES}. Mantendrá confidencialidad, reportará incidentes a {CONTACTO_INCIDENTES} y devolverá cualquier soporte con datos personales al concluir la relación laboral.`,
-  },
-  {
-    id: "clause-representantes",
-    title: "Cláusula para representantes legales",
-    category: "Representación",
-    text: `Las partes recabarán exclusivamente los datos de identificación y representación de {REPRESENTANTES_APLICABLES} necesarios para {FINALIDADES}. Se informará a los representantes mediante el aviso publicado en {URL_AVISO} y la conservación de los datos se limitará a {PLAZO_CONSERVACION} o al cumplimiento de obligaciones legales.`,
-  },
-  {
-    id: "clause-no-tratamiento",
-    title: "Cláusula de no tratamiento / datos anonimizados",
-    category: "Anonimización",
-    text: `Las partes reconocen que el servicio se presta con datos anonimizados o agregados. {PROVEEDOR} se obliga a mantener técnicas que impidan la reidentificación, a no combinar la información con otras fuentes que permitan identificar a los titulares y a documentar cualquier limitación en {BITACORA_REFERENCIA}.`,
-  },
-]
-
 const templateRepository: TemplateRepositoryItem[] = [
   {
     id: "template-remision",
@@ -297,37 +268,28 @@ const templateRepository: TemplateRepositoryItem[] = [
   {
     id: "template-apendices",
     title: "Apéndices y cláusulas modelo insertables",
-    description: "Cláusulas reutilizables para anexar a contratos existentes según el tipo de relación.",
-    usage: "Ideal para actualizar contratos vigentes con obligaciones de privacidad específicas sin rehacer el instrumento completo.",
-    placeholders: [
-      "{URL_AVISO}",
-      "{FINALIDADES}",
-      "{REPRESENTANTES_APLICABLES}",
-      "{BITACORA_REFERENCIA}",
-      "{CONTACTO_INCIDENTES}",
-    ],
+    description: "Cláusulas del Apéndice 1 del Manual de Relaciones con Terceros de Grünenthal.",
+    usage: "Ideal para actualizar contratos vigentes con las cláusulas validadas del manual fuente.",
+    placeholders: [],
     assetId: "78a417dd-e10e-4564-a6fc-fc41963",
-    baseDownloadName: "Paquete_Clausulas_Modelo.txt",
-    baseTemplate: `PAQUETE DE CLÁUSULAS MODELO\n\nC.1 ENCARGADOS (REMISIÓN)\n- Seguridad y confidencialidad reforzada.\n- Autorización previa para subcontratación y obligación de equivalencia.\n- Procedimiento de devolución/supresión conforme a {FINALIDADES}.\n- Notificación de incidentes en ≤24h a {CONTACTO_INCIDENTES}.\n\nC.2 TRANSFERENCIAS (RESPONSABLE A RESPONSABLE)\n- Aviso de privacidad puesto a disposición en {URL_AVISO}.\n- Finalidades consentidas: {FINALIDADES}.\n- Obligaciones del transferente y receptor respecto a titulares.\n\nC.3 ACEPTACIÓN DE AVISO (LABORAL)\n- Reconocimiento por parte del colaborador.\n- Obligación de reportar incidentes y devolver soportes.\n\nC.4 REPRESENTANTES LEGALES\n- Categorías mínimas recabadas de {REPRESENTANTES_APLICABLES}.\n- Finalidades específicas y plazo de conservación alineado con {BITACORA_REFERENCIA}.\n\nC.5 NO TRATAMIENTO / DATOS ANONIMIZADOS\n- Uso exclusivo de datos anonimizados.\n- Prohibición de reidentificación y controles documentales en {BITACORA_REFERENCIA}.\n\nPersonaliza cada cláusula reemplazando las variables y adjunta el documento correspondiente al expediente del contrato.`,
+    baseDownloadName: "Clausulas_Modelo_Manual_Relaciones_Terceros.txt",
+    baseTemplate: GRUNENTHAL_THIRD_PARTY_MODEL_CLAUSES_PACKAGE,
     metadata: {
       tipo: "Cláusula",
       ambito: "Mixto",
       riesgo: "medio",
-      categorias: ["Identificativos", "Laborales", "Tecnológicos"],
-      titulares: ["Empleados", "Representantes", "Proveedores"],
+      categorias: ["Identificativos", "Laborales", "Terceros"],
+      titulares: ["Empleados", "Proveedores", "Terceros"],
       baseJuridica: ["Relación contractual", "Interés legítimo"],
-      garantias: ["Políticas internas", "Protocolos de anonimización"],
+      garantias: ["Manual de Relaciones con Terceros", "Cláusulas contractuales modelo"],
       owner: "Cumplimiento",
       aprobadores: ["Legal", "DPO"],
-      ultimaRevision: "2024-09-10",
-      proximaRevision: "2025-03-10",
+      ultimaRevision: "2025-10-21",
+      proximaRevision: "2026-04-21",
     },
     notes: [
-      "C.1 Encargados (remisión): seguridad, confidencialidad, subcontratación, devolución/supresión, notificación 24h.",
-      "C.2 Transferencias (R→R): aviso puesto a disposición, finalidades, obligaciones del transferente/receptor.",
-      "C.3 Aceptación de aviso (laboral): reconocimiento y obligaciones del empleado.",
-      "C.4 Representantes legales: categorías mínimas, fines y aviso informado.",
-      "C.5 No tratamiento: uso de datos anonimizados y prohibición de reidentificación.",
+      GRUNENTHAL_THIRD_PARTY_MODEL_CLAUSES_SOURCE,
+      "Incluye C.1 comunicación a encargados, C.2 transferencias, C.3 no aplicación de normatividad y C.4 contrato laboral.",
     ],
   },
 ]
@@ -1038,7 +1000,7 @@ export default function DocumentsAndClausesPage() {
     })
   }, [allDocumentResources, documentSearchTerm, categoryFilter, typeFilter])
 
-  const combinedClauses = useMemo(() => [...defaultModelClauses, ...userClauses], [userClauses])
+  const combinedClauses = useMemo(() => [...GRUNENTHAL_THIRD_PARTY_MODEL_CLAUSES, ...userClauses], [userClauses])
 
   const visibleContractHistory = useMemo(() => {
     const grtContractParties = new Set(
@@ -1665,13 +1627,13 @@ export default function DocumentsAndClausesPage() {
         <TabsContent value="clauses" className="space-y-6">
           <Card>
             <CardHeader className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-              <div>
+              <div className="min-w-0">
                 <CardTitle>Cláusulas modelo para contratos con terceros</CardTitle>
                 <CardDescription>
-                  Inspírate en estas cláusulas y guarda tus versiones personalizadas para reutilizarlas rápidamente en cada contratación.
+                  Modelos validados del Apéndice 1 del Manual de Relaciones con Terceros de Grünenthal; puedes guardar versiones personalizadas para reutilizarlas.
                 </CardDescription>
               </div>
-              <Button onClick={() => openClauseDialog()}>
+              <Button className="w-full whitespace-nowrap md:w-auto md:shrink-0" onClick={() => openClauseDialog()}>
                 <FilePlus className="mr-2 h-4 w-4" />
                 Agregar cláusula personalizada
               </Button>
@@ -1681,12 +1643,13 @@ export default function DocumentsAndClausesPage() {
                 {combinedClauses.map((clause) => (
                   <AccordionItem key={clause.id} value={clause.id}>
                     <AccordionTrigger>
-                      <div className="flex items-center gap-2">
-                        <Shield className="h-4 w-4" />
-                        <span>{clause.title}</span>
+                      <div className="flex min-w-0 flex-wrap items-center gap-2 pr-3 text-left">
+                        <Shield className="h-4 w-4 shrink-0" />
+                        <span className="min-w-0 break-words">{clause.title}</span>
                         <Badge variant="outline" className="ml-2">
                           {clause.category}
                         </Badge>
+                        {!clause.isCustom && <Badge variant="secondary">Validada</Badge>}
                         {clause.isCustom && <Badge variant="secondary">Personalizada</Badge>}
                       </div>
                     </AccordionTrigger>
@@ -1701,13 +1664,13 @@ export default function DocumentsAndClausesPage() {
                           >
                             <Copy className="h-4 w-4" />
                           </Button>
-                          <pre className="whitespace-pre-wrap pr-10 text-sm leading-6">{clause.text}</pre>
+                          <pre className="whitespace-pre-wrap break-words pr-10 text-sm leading-6">{clause.text}</pre>
                         </div>
                         <div className="flex flex-col gap-3 border-t border-dashed border-muted-foreground/30 pt-3 text-sm md:flex-row md:items-center md:justify-between">
                           <p className="text-xs text-muted-foreground">
                             {clause.isCustom
                               ? "Cláusula creada por tu organización. Puedes editarla o eliminarla en cualquier momento."
-                              : "Modelo sugerido listo para que lo adaptes a tus necesidades contractuales."}
+                              : `Fuente: ${clause.sourceLabel || GRUNENTHAL_THIRD_PARTY_MODEL_CLAUSES_SOURCE}.`}
                           </p>
                           <div className="flex flex-wrap gap-2">
                             {clause.isCustom ? (
