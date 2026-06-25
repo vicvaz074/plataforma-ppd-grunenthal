@@ -54,6 +54,10 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { generateInventoryPDF } from "../utils/inventory-pdf"
 import { Input } from "@/components/ui/input"
 import { normalizeInventoryForForm } from "../utils/inventory-normalization"
+import {
+  collectInventorySourcePdfs,
+  type InventorySourcePdfDownload,
+} from "../utils/inventory-source-pdfs"
 
 interface InventoryListProps {
   inventories: Inventory[]
@@ -69,6 +73,16 @@ const normalizeHolderFilter = (value: string) =>
     .replace(/[\u0300-\u036f]/g, "")
     .trim()
     .toLowerCase()
+
+const triggerFileDownload = (file: InventorySourcePdfDownload) => {
+  const anchor = document.createElement("a")
+  anchor.href = file.url
+  anchor.download = file.downloadName
+  anchor.rel = "noopener noreferrer"
+  document.body.appendChild(anchor)
+  anchor.click()
+  document.body.removeChild(anchor)
+}
 
 export function InventoryList({
   inventories,
@@ -175,6 +189,11 @@ export function InventoryList({
     })
   }, [])
 
+  const getInventorySourcePdfDownloads = useCallback(
+    (inventory: Inventory) => collectInventorySourcePdfs(inventory, getFileById),
+    []
+  )
+
   const getInventoryStatus = (inv: Inventory) => inv.status || "pendiente"
 
   const filteredInventories = useMemo(() => {
@@ -263,26 +282,56 @@ export function InventoryList({
     }
   }
 
-const generatePDF = (inventory: Inventory) => {
-  try {
-    const currentUserName =
-      typeof window !== "undefined"
-        ? localStorage.getItem("userName") || "Usuario actual"
-        : "Usuario actual"
-    generateInventoryPDF(inventory, { currentUserName })
-    toast({
-      title: "PDF generado",
-      description: "El PDF ha sido generado correctamente.",
-    })
-  } catch (e) {
-    console.error("Error al generar PDF de inventario", e)
-    toast({
-      title: "Error",
-      description: "Ocurrió un error al generar el PDF.",
-      variant: "destructive",
-    })
+  const downloadInventorySourcePdf = (file: InventorySourcePdfDownload) => {
+    try {
+      triggerFileDownload(file)
+    } catch (error) {
+      console.error("Error al descargar PDF fuente de inventario", error)
+      toast({
+        title: "Error",
+        description: "No se pudo descargar el PDF fuente del inventario.",
+        variant: "destructive",
+      })
+    }
   }
-}
+
+  const downloadLinkedInventoryPdfs = (inventory: Inventory) => {
+    const sourcePdfs = getInventorySourcePdfDownloads(inventory)
+
+    if (sourcePdfs.length > 0) {
+      sourcePdfs.forEach((file, index) => {
+        window.setTimeout(() => downloadInventorySourcePdf(file), index * 200)
+      })
+
+      toast({
+        title: sourcePdfs.length === 1 ? "PDF fuente descargado" : "PDFs fuente descargados",
+        description:
+          sourcePdfs.length === 1
+            ? "Se descargó el PDF validado desde la carpeta de inventarios."
+            : `Se descargaron ${sourcePdfs.length} PDFs validados desde la carpeta de inventarios.`,
+      })
+      return
+    }
+
+    try {
+      const currentUserName =
+        typeof window !== "undefined"
+          ? localStorage.getItem("userName") || "Usuario actual"
+          : "Usuario actual"
+      generateInventoryPDF(inventory, { currentUserName })
+      toast({
+        title: "PDF generado",
+        description: "No hay PDF fuente vinculado; se generó un PDF con la información capturada.",
+      })
+    } catch (e) {
+      console.error("Error al generar PDF de inventario", e)
+      toast({
+        title: "Error",
+        description: "Ocurrió un error al descargar o generar el PDF.",
+        variant: "destructive",
+      })
+    }
+  }
 
   const handleExport = () => {
     try {
@@ -543,6 +592,7 @@ const generatePDF = (inventory: Inventory) => {
                   )}
                   {filteredInventories.map((inv) => {
                     const holderNames = getHolderTypes(inv)
+                    const sourcePdfCount = getInventorySourcePdfDownloads(inv).length
 
                     return (
                       <React.Fragment key={inv.id}>
@@ -661,14 +711,31 @@ const generatePDF = (inventory: Inventory) => {
                                 </Tooltip>
                               </TooltipProvider>
                             )}
-                            <Button
-                              variant="outline"
-                              size="icon"
-                              onClick={() => generatePDF(inv)}
-                              aria-label="Generar PDF"
-                            >
-                              <FileText className="h-4 w-4" />
-                            </Button>
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <Button
+                                    variant="outline"
+                                    size="icon"
+                                    onClick={() => downloadLinkedInventoryPdfs(inv)}
+                                    aria-label={
+                                      sourcePdfCount > 0
+                                        ? "Descargar PDF fuente del inventario"
+                                        : "Generar PDF de inventario"
+                                    }
+                                  >
+                                    <FileText className="h-4 w-4" />
+                                  </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  {sourcePdfCount > 0
+                                    ? sourcePdfCount === 1
+                                      ? "Descargar PDF validado"
+                                      : `Descargar ${sourcePdfCount} PDFs validados`
+                                    : "Generar PDF"}
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
                             <AlertDialog>
                               <AlertDialogTrigger asChild>
                                 <Button variant="outline" size="icon" aria-label="Eliminar">
@@ -792,6 +859,46 @@ const generatePDF = (inventory: Inventory) => {
               </TabsContent>
               <TabsContent value="documentos">
                 <div className="space-y-6">
+                  <div>
+                    <h3 className="font-semibold">PDF de inventario validado</h3>
+                    {(() => {
+                      const sourcePdfs = getInventorySourcePdfDownloads(selectedInventory)
+
+                      if (sourcePdfs.length === 0) {
+                        return (
+                          <p className="text-sm text-muted-foreground">
+                            No hay PDF fuente vinculado para este inventario.
+                          </p>
+                        )
+                      }
+
+                      return (
+                        <div className="mt-2 space-y-2">
+                          {sourcePdfs.map((file) => (
+                            <div
+                              key={file.id}
+                              className="flex flex-wrap items-center gap-2 rounded-md border border-emerald-200 bg-emerald-50/70 px-3 py-2 text-xs sm:text-sm"
+                            >
+                              <span className="font-medium text-emerald-950">
+                                {file.subInventoryName}
+                              </span>
+                              <span className="flex-1 break-words text-emerald-900">
+                                {file.downloadName}
+                              </span>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="border-emerald-300 bg-white text-emerald-900 hover:bg-emerald-100"
+                                onClick={() => downloadInventorySourcePdf(file)}
+                              >
+                                Descargar
+                              </Button>
+                            </div>
+                          ))}
+                        </div>
+                      )
+                    })()}
+                  </div>
                   <div>
                     <h3 className="font-semibold">Aviso de Privacidad</h3>
                     {(() => {
