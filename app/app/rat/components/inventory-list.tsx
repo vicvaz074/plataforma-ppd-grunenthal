@@ -56,6 +56,7 @@ import { Input } from "@/components/ui/input"
 import { normalizeInventoryForForm } from "../utils/inventory-normalization"
 import {
   collectInventorySourcePdfs,
+  createInventoryPdfDownloadPlan,
   type InventorySourcePdfDownload,
 } from "../utils/inventory-source-pdfs"
 
@@ -194,6 +195,11 @@ export function InventoryList({
     []
   )
 
+  const getInventoryPdfDownloadPlan = useCallback(
+    (inventory: Inventory) => createInventoryPdfDownloadPlan(inventory, getFileById),
+    []
+  )
+
   const getInventoryStatus = (inv: Inventory) => inv.status || "pendiente"
 
   const filteredInventories = useMemo(() => {
@@ -296,39 +302,60 @@ export function InventoryList({
   }
 
   const downloadLinkedInventoryPdfs = (inventory: Inventory) => {
-    const sourcePdfs = getInventorySourcePdfDownloads(inventory)
+    const { sourcePdfs, generatedInventory } = getInventoryPdfDownloadPlan(inventory)
 
     if (sourcePdfs.length > 0) {
       sourcePdfs.forEach((file, index) => {
         window.setTimeout(() => downloadInventorySourcePdf(file), index * 200)
       })
-
-      toast({
-        title: sourcePdfs.length === 1 ? "PDF fuente descargado" : "PDFs fuente descargados",
-        description:
-          sourcePdfs.length === 1
-            ? "Se descargó el PDF validado desde la carpeta de inventarios."
-            : `Se descargaron ${sourcePdfs.length} PDFs validados desde la carpeta de inventarios.`,
-      })
-      return
     }
 
-    try {
-      const currentUserName =
-        typeof window !== "undefined"
-          ? localStorage.getItem("userName") || "Usuario actual"
-          : "Usuario actual"
-      generateInventoryPDF(inventory, { currentUserName })
+    if (generatedInventory) {
+      try {
+        const currentUserName =
+          typeof window !== "undefined"
+            ? localStorage.getItem("userName") || "Usuario actual"
+            : "Usuario actual"
+        generateInventoryPDF(generatedInventory, { currentUserName })
+      } catch (e) {
+        console.error("Error al generar PDF de inventario", e)
+        toast({
+          title: "Error",
+          description: "Ocurrió un error al descargar o generar el PDF.",
+          variant: "destructive",
+        })
+        return
+      }
+    }
+
+    if (sourcePdfs.length > 0 || generatedInventory) {
+      const generatedCount = generatedInventory?.subInventories.length ?? 0
+      const sourceDescription =
+        sourcePdfs.length === 0
+          ? ""
+          : sourcePdfs.length === 1
+            ? "Se descargó 1 PDF validado"
+            : `Se descargaron ${sourcePdfs.length} PDFs validados`
+      const generatedDescription =
+        generatedCount === 0
+          ? ""
+          : generatedCount === 1
+            ? "se generó 1 PDF con formato RAT estándar"
+            : `se generó 1 PDF con ${generatedCount} subinventarios en formato RAT estándar`
+      const description = [sourceDescription, generatedDescription]
+        .filter(Boolean)
+        .join(" y ")
+
       toast({
-        title: "PDF generado",
-        description: "No hay PDF fuente vinculado; se generó un PDF con la información capturada.",
-      })
-    } catch (e) {
-      console.error("Error al generar PDF de inventario", e)
-      toast({
-        title: "Error",
-        description: "Ocurrió un error al descargar o generar el PDF.",
-        variant: "destructive",
+        title:
+          sourcePdfs.length > 0 && generatedInventory
+            ? "PDFs descargados y complemento generado"
+            : sourcePdfs.length > 0
+              ? sourcePdfs.length === 1
+                ? "PDF fuente descargado"
+                : "PDFs fuente descargados"
+              : "PDF generado",
+        description: description ? `${description}.` : "PDF procesado.",
       })
     }
   }
@@ -592,7 +619,24 @@ export function InventoryList({
                   )}
                   {filteredInventories.map((inv) => {
                     const holderNames = getHolderTypes(inv)
-                    const sourcePdfCount = getInventorySourcePdfDownloads(inv).length
+                    const pdfPlan = getInventoryPdfDownloadPlan(inv)
+                    const sourcePdfCount = pdfPlan.sourcePdfs.length
+                    const generatedPdfSubInventoryCount =
+                      pdfPlan.generatedInventory?.subInventories.length ?? 0
+                    const hasMixedPdfPlan =
+                      sourcePdfCount > 0 && generatedPdfSubInventoryCount > 0
+                    const pdfButtonAriaLabel = hasMixedPdfPlan
+                      ? "Descargar PDFs fuente y generar PDF complementario"
+                      : sourcePdfCount > 0
+                        ? "Descargar PDF fuente del inventario"
+                        : "Generar PDF de inventario"
+                    const pdfTooltipLabel = hasMixedPdfPlan
+                      ? `Descargar ${sourcePdfCount} PDFs validados y generar ${generatedPdfSubInventoryCount} subinventario(s)`
+                      : sourcePdfCount > 0
+                        ? sourcePdfCount === 1
+                          ? "Descargar PDF validado"
+                          : `Descargar ${sourcePdfCount} PDFs validados`
+                        : "Generar PDF"
 
                     return (
                       <React.Fragment key={inv.id}>
@@ -718,22 +762,12 @@ export function InventoryList({
                                     variant="outline"
                                     size="icon"
                                     onClick={() => downloadLinkedInventoryPdfs(inv)}
-                                    aria-label={
-                                      sourcePdfCount > 0
-                                        ? "Descargar PDF fuente del inventario"
-                                        : "Generar PDF de inventario"
-                                    }
+                                    aria-label={pdfButtonAriaLabel}
                                   >
                                     <FileText className="h-4 w-4" />
                                   </Button>
                                 </TooltipTrigger>
-                                <TooltipContent>
-                                  {sourcePdfCount > 0
-                                    ? sourcePdfCount === 1
-                                      ? "Descargar PDF validado"
-                                      : `Descargar ${sourcePdfCount} PDFs validados`
-                                    : "Generar PDF"}
-                                </TooltipContent>
+                                <TooltipContent>{pdfTooltipLabel}</TooltipContent>
                               </Tooltip>
                             </TooltipProvider>
                             <AlertDialog>

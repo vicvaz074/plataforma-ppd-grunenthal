@@ -21,8 +21,11 @@ PUBLIC_ROOT = APP_ROOT / "public"
 LOGO_FILE = PUBLIC_ROOT / "client" / "grunenthal" / "brand" / "grunenthal-logo-green.png"
 DOWNLOADS_ROOT = Path.home() / "Downloads" / "Políticas de Grünenthal (2026)"
 SOURCE_ROOT = DOWNLOADS_ROOT / "InventariosDatos Personales"
+SUPPLEMENTAL_EXPORTS = [
+    PUBLIC_ROOT / "client" / "grunenthal" / "rat" / "source" / "supplemental" / "inventario-open-data-veeva.json",
+]
 
-SOURCE_EXPORTED_AT = "2026-01-07T00:00:00.000Z"
+SOURCE_EXPORTED_AT = "2026-06-25T17:39:52.875Z"
 SEEDED_AT = "2026-01-01T00:00:00.000Z"
 ACCENT_COLOR = "#40BB6A"
 CLIENT_NAME = "Grünenthal"
@@ -331,6 +334,83 @@ def empty_sub_inventory(sub_id: str, database_name: str, area: str) -> dict[str,
         "personalData": [],
         "otherLegalBasis": "",
     }
+
+
+def clean_display_name(value: str) -> str:
+    return re.sub(r"\s+", " ", clean_cell(value)).strip()
+
+
+def normalize_sub_inventory_name(value: str) -> str:
+    cleaned = clean_display_name(value)
+    cleaned = re.sub(r"\s+\(", " (", cleaned)
+    cleaned = re.sub(r"\)\s+-", ") -", cleaned)
+    return cleaned
+
+
+def normalize_supplemental_sub_inventory(raw: dict[str, Any], area: str) -> dict[str, Any]:
+    name = normalize_sub_inventory_name(raw.get("databaseName", "Subinventario"))
+    sub_id = f"grunenthal-rat-inventario-{slugify(area)}-{slugify(name)}"
+    sub = json.loads(json.dumps(raw, ensure_ascii=False))
+
+    sub["id"] = sub_id
+    sub["databaseName"] = name
+    sub["responsibleArea"] = clean_display_name(sub.get("responsibleArea", "")) or area
+    sub["showOtherResponsibleArea"] = True
+    sub["otherProcessingArea"] = clean_display_name(sub.get("otherProcessingArea", "")) or area
+    sub["showOtherProcessingArea"] = bool(sub["otherProcessingArea"]) or "Otros" in sub.get("processingArea", [])
+    sub["privacyNoticeFiles"] = (
+        [file for file in sub.get("privacyNoticeFiles", []) if file]
+        if isinstance(sub.get("privacyNoticeFiles"), list)
+        else []
+    )
+    sub["privacyNoticeFileIds"] = sub.get("privacyNoticeFileIds") if isinstance(sub.get("privacyNoticeFileIds"), list) else []
+    sub["privacyNoticeFileNames"] = sub.get("privacyNoticeFileNames") if isinstance(sub.get("privacyNoticeFileNames"), list) else []
+    sub["privacyNoticeFileId"] = clean_display_name(sub.get("privacyNoticeFileId", ""))
+    sub["privacyNoticeFileName"] = clean_display_name(sub.get("privacyNoticeFileName", ""))
+    sub["additionalTransfers"] = sub.get("additionalTransfers") if isinstance(sub.get("additionalTransfers"), list) else []
+    sub["additionalRemissions"] = sub.get("additionalRemissions") if isinstance(sub.get("additionalRemissions"), list) else []
+
+    personal_data = sub.get("personalData") if isinstance(sub.get("personalData"), list) else []
+    for index, item in enumerate(personal_data, 1):
+        item["id"] = f"{sub_id}-dato-{index:03d}"
+        item["name"] = clean_display_name(item.get("name", "Dato personal"))
+        item["category"] = clean_display_name(item.get("category", "")) or "Sin categoría"
+        item["riesgo"] = risk_value(item.get("riesgo", ""))
+        item["proporcionalidad"] = parse_bool(item.get("proporcionalidad", True), True)
+        item["purposesPrimary"] = item.get("purposesPrimary") if isinstance(item.get("purposesPrimary"), list) else split_list(item.get("purposesPrimary", ""))
+        item["purposesSecondary"] = item.get("purposesSecondary") if isinstance(item.get("purposesSecondary"), list) else split_list(item.get("purposesSecondary", ""))
+    sub["personalData"] = personal_data
+
+    sub.pop("grunenthalSourcePdfFileId", None)
+    sub.pop("grunenthalSourcePdfPath", None)
+    sub["grunenthalSourcePdfStatus"] = "sin-pdf"
+    sub["grunenthalValidationStatus"] = "pendiente-revision"
+
+    return sub
+
+
+def supplemental_sub_inventories() -> list[tuple[str, dict[str, Any], dict[str, Any]]]:
+    supplements: list[tuple[str, dict[str, Any], dict[str, Any]]] = []
+    for export_path in SUPPLEMENTAL_EXPORTS:
+        if not export_path.exists():
+            continue
+        export = json.loads(export_path.read_text(encoding="utf-8"))
+        for inventory in export.get("inventories", []):
+            area = clean_display_name(inventory.get("databaseName", "")) or "COMEX"
+            for raw_sub in inventory.get("subInventories", []):
+                sub = normalize_supplemental_sub_inventory(raw_sub, area)
+                supplements.append(
+                    (
+                        area,
+                        sub,
+                        {
+                            "createdAt": inventory.get("createdAt") or SEEDED_AT,
+                            "updatedAt": inventory.get("updatedAt") or SEEDED_AT,
+                            "responsible": inventory.get("responsible") or CLIENT_NAME,
+                        },
+                    )
+                )
+    return supplements
 
 
 def parse_pdf(asset: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
@@ -667,6 +747,45 @@ def build_inventories(assets: list[dict[str, Any]]) -> tuple[list[dict[str, Any]
             }
         )
 
+    risk_order = {"bajo": 1, "medio": 2, "alto": 3, "reforzado": 4}
+    for area, sub, meta in supplemental_sub_inventories():
+        inventory_id = f"grunenthal-rat-area-{slugify(area)}"
+        inventory = by_area.setdefault(
+            area,
+            {
+                "id": inventory_id,
+                "databaseName": area,
+                "responsible": meta["responsible"],
+                "companyLogoFileName": "grunenthal-logo-green.png",
+                "reportAccentColor": ACCENT_COLOR,
+                "subInventories": [],
+                "riskLevel": "bajo",
+                "createdAt": meta["createdAt"],
+                "updatedAt": meta["updatedAt"],
+                "createdBy": "Admin",
+                "updatedBy": "Admin",
+                "status": "completado",
+                "grunenthalSeedVersion": "2026.2.0",
+                "grunenthalSourceExportedAt": SOURCE_EXPORTED_AT,
+            },
+        )
+        inventory["createdAt"] = min(inventory["createdAt"], meta["createdAt"])
+        inventory["updatedAt"] = max(inventory["updatedAt"], meta["updatedAt"])
+        existing_index = next(
+            (
+                index
+                for index, existing_sub in enumerate(inventory["subInventories"])
+                if normalize_key(existing_sub["databaseName"]) == normalize_key(sub["databaseName"])
+            ),
+            -1,
+        )
+        if existing_index >= 0:
+            inventory["subInventories"][existing_index] = sub
+        else:
+            inventory["subInventories"].append(sub)
+        if risk_order.get(sub.get("riskLevel", "bajo"), 1) > risk_order.get(inventory["riskLevel"], 1):
+            inventory["riskLevel"] = sub.get("riskLevel", "bajo")
+
     inventories = list(by_area.values())
     for inventory in inventories:
         inventory["subInventories"].sort(key=lambda sub: sub["databaseName"].lower())
@@ -675,6 +794,18 @@ def build_inventories(assets: list[dict[str, Any]]) -> tuple[list[dict[str, Any]
 
 def render_ts(inventories: list[dict[str, Any]], links: list[dict[str, Any]]) -> str:
     logo_data = base64.b64encode(LOGO_FILE.read_bytes()).decode("ascii")
+    linked_sub_inventory_ids = {link["subInventoryId"] for link in links}
+    missing_items = [
+        {
+            "inventoryName": inventory["databaseName"],
+            "subInventoryId": sub["id"],
+            "subInventoryName": sub["databaseName"],
+            "status": "pendiente-revision",
+        }
+        for inventory in inventories
+        for sub in inventory["subInventories"]
+        if sub["id"] not in linked_sub_inventory_ids
+    ]
     report_items = [
         {
             "assetId": link["assetId"],
@@ -687,18 +818,18 @@ def render_ts(inventories: list[dict[str, Any]], links: list[dict[str, Any]]) ->
             "mismatchedFields": [],
         }
         for link in links
-    ]
+    ] + missing_items
     validation_report = {
-        "generatedAt": "2026-06-18T00:00:00.000Z",
+        "generatedAt": "2026-06-25T00:00:00.000Z",
         "sourceDirectory": "Políticas de Grünenthal (2026)/InventariosDatos Personales",
         "canonicalInventoryCount": len(inventories),
         "canonicalSubInventoryCount": sum(len(inv["subInventories"]) for inv in inventories),
         "pdfInventoryCount": len(links),
         "mappedPdfCount": len(links),
-        "missingPdfCount": 0,
+        "missingPdfCount": len(missing_items),
         "unmatchedPdfCount": 0,
         "fieldMismatchCount": 0,
-        "missingPdfs": [],
+        "missingPdfs": missing_items,
         "unmatchedPdfs": [],
         "fieldMismatches": [],
         "items": report_items,
@@ -738,8 +869,8 @@ def main() -> None:
     inventories, links = build_inventories(assets)
     if len(inventories) != 15:
         raise SystemExit(f"Se esperaban 15 inventarios y se generaron {len(inventories)}")
-    if sum(len(inv["subInventories"]) for inv in inventories) != 33:
-        raise SystemExit("El total de subinventarios generados no es 33")
+    if sum(len(inv["subInventories"]) for inv in inventories) != 34:
+        raise SystemExit("El total de subinventarios generados no es 34")
     OUTPUT_TS.write_text(render_ts(inventories, links), encoding="utf-8")
     print("Inventarios generados:", len(inventories))
     print("Subinventarios generados:", sum(len(inv["subInventories"]) for inv in inventories))

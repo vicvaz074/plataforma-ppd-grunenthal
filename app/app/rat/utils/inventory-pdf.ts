@@ -788,6 +788,15 @@ const getField = (obj: any, key: string) => {
   return formatValue(key, obj[key]);
 };
 
+const isInternalPdfMetadataField = (key: string) =>
+  key.startsWith("grunenthal") ||
+  key.endsWith("File") ||
+  key.endsWith("Files") ||
+  key.endsWith("FileId") ||
+  key.endsWith("FileIds") ||
+  key.endsWith("FileName") ||
+  key.endsWith("FileNames");
+
 const normalizeAggregateValueKey = (value: string) =>
   value
     .normalize("NFD")
@@ -1696,8 +1705,7 @@ export const generateInventoryPDF = (
         k !== "additionalTransfers" &&
         !usedFields.has(k) &&
         !k.startsWith("showOther") &&
-        !k.endsWith("File") &&
-        !k.endsWith("FileId"),
+        !isInternalPdfMetadataField(k),
     );
     const otherData: [string, string][] = [];
     remaining.forEach((key) => {
