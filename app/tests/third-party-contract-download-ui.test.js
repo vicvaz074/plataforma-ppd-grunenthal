@@ -37,6 +37,8 @@ describe("UI contratos con terceros - documentos asociados", () => {
     assert.match(source, /buildFallbackContractFromIndividualAnalysis/)
     assert.match(source, /fallbackFromAnalysis/)
     assert.match(source, /filteredMatrixRows/)
+    assert.doesNotMatch(source, /Fuente: \{GRUNENTHAL_THIRD_PARTY_ANALYSIS_MATRIX_SOURCE\.title\}/)
+    assert.doesNotMatch(source, new RegExp(["Contratos analizados", "Davara Abogado"].join(" por ")))
     assert.match(source, /getPrimaryContractAttachment/)
     assert.match(source, /definition\)\.toLowerCase\(\) === "principal"/)
     assert.match(source, /publicPath/)
