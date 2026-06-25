@@ -102,6 +102,27 @@ describe("generación PDF de inventarios RAT", () => {
     )
   })
 
+  it("planea generar un PDF RAT complementario cuando COMEX incluye subinventarios sin PDF fuente", async () => {
+    const sourcePdfs = await importModule("app/rat/utils/inventory-source-pdfs.ts")
+    const ratData = await importModule("lib/grunenthal-rat-data.ts")
+    const inventory = ratData.GRUNENTHAL_RAT_INVENTORIES.find(
+      (item) => item.id === "grunenthal-rat-area-comex",
+    )
+
+    assert.ok(inventory, "debe existir el inventario COMEX")
+    assert.equal(typeof sourcePdfs.createInventoryPdfDownloadPlan, "function")
+
+    const plan = sourcePdfs.createInventoryPdfDownloadPlan(inventory)
+
+    assert.equal(plan.sourcePdfs.length, 3)
+    assert.ok(plan.generatedInventory, "debe generar un PDF para el subinventario sin fuente")
+    assert.equal(plan.generatedInventory.databaseName, "COMEX")
+    assert.deepEqual(
+      plan.generatedInventory.subInventories.map((subInventory) => subInventory.databaseName),
+      ["Open Data (Veeva) - Registro de Médicos"],
+    )
+  })
+
   it("pinta las líneas preenvueltas de portada sin pedir ajuste de ancho al renderizador", () => {
     const source = fs.readFileSync(
       path.join(appDir, "app/rat/utils/inventory-pdf.ts"),
@@ -113,5 +134,17 @@ describe("generación PDF de inventarios RAT", () => {
       /maxWidth:\s*coverInfoMaxWidth/,
       "La portada ya divide el texto antes de pintar; pasar maxWidth a doc.text puede deformar el espaciado",
     )
+  })
+
+  it("oculta metadatos internos y arreglos técnicos de archivos en otros datos del PDF", () => {
+    const source = fs.readFileSync(
+      path.join(appDir, "app/rat/utils/inventory-pdf.ts"),
+      "utf8",
+    )
+
+    assert.match(source, /isInternalPdfMetadataField/)
+    assert.match(source, /key\.startsWith\("grunenthal"\)/)
+    assert.match(source, /key\.endsWith\("FileIds"\)/)
+    assert.match(source, /key\.endsWith\("FileNames"\)/)
   })
 })

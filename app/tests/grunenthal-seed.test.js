@@ -104,7 +104,7 @@ describe("personalización Grünenthal", () => {
     assert.equal(inventories.length, 15)
     assert.equal(
       inventories.reduce((total, inventory) => total + inventory.subInventories.length, 0),
-      33,
+      34,
     )
     assert.equal(storedFiles.length, assets.GRUNENTHAL_DOCUMENT_MANIFEST.length + individualDocumentCount)
     assert.equal(new Set(storedFiles.map((file) => file.id)).size, storedFiles.length)
@@ -301,20 +301,30 @@ describe("personalización Grünenthal", () => {
     const validationReport = ratData.GRUNENTHAL_RAT_VALIDATION_REPORT
 
     assert.equal(withSourcePdf.length, 33)
-    assert.equal(withoutSourcePdf.length, 0)
+    assert.equal(withoutSourcePdf.length, 1)
     assert.equal(validationReport.canonicalInventoryCount, 15)
-    assert.equal(validationReport.canonicalSubInventoryCount, 33)
-    assert.equal(validationReport.missingPdfCount, 0)
+    assert.equal(validationReport.canonicalSubInventoryCount, 34)
+    assert.equal(validationReport.missingPdfCount, 1)
     assert.equal(validationReport.unmatchedPdfCount, 0)
     assert.equal(validationReport.fieldMismatchCount, 0)
     assert.equal(
-      subInventories.every((subInventory) => subInventory.grunenthalValidationStatus === "verificado"),
-      true,
+      subInventories.filter((subInventory) => subInventory.grunenthalValidationStatus === "verificado").length,
+      33,
     )
     assert.equal(
       subInventories.some((subInventory) => subInventory.databaseName === "Ranking de efectividad"),
       true,
     )
+    const openDataVeeva = subInventories.find((subInventory) =>
+      subInventory.databaseName.includes("Open Data") &&
+      subInventory.databaseName.includes("Veeva"),
+    )
+    assert.ok(openDataVeeva, "debe cargarse Open Data Veeva dentro de COMEX")
+    assert.equal(openDataVeeva.responsibleArea, "COMEX")
+    assert.equal(openDataVeeva.processingSystemName, "OPEN DATA (Veeva)")
+    assert.equal(openDataVeeva.personalData.length, 11)
+    assert.equal(openDataVeeva.grunenthalSourcePdfStatus, "sin-pdf")
+    assert.equal(openDataVeeva.grunenthalValidationStatus, "pendiente-revision")
   })
 
   it("reemplaza inventarios locales viejos y limpia progreso RAT al migrar la versión", async () => {
@@ -339,11 +349,12 @@ describe("personalización Grünenthal", () => {
     const subInventories = inventories.flatMap((inventory) => inventory.subInventories)
 
     assert.equal(inventories.length, 15)
-    assert.equal(subInventories.length, 33)
+    assert.equal(subInventories.length, 34)
     assert.equal(inventories.some((inventory) => inventory.id === "inventario-viejo"), false)
     assert.equal(global.localStorage.getItem("inventories_progress"), null)
     assert.equal(
-      subInventories.every((subInventory) => subInventory.grunenthalSourcePdfStatus === "vinculado"),
+      subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfStatus === "vinculado").length === 33 &&
+        subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfStatus === "sin-pdf").length === 1,
       true,
     )
   })

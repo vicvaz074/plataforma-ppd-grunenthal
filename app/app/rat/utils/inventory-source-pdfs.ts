@@ -9,6 +9,11 @@ export type InventorySourcePdfDownload = {
   downloadName: string
 }
 
+export type InventoryPdfDownloadPlan = {
+  sourcePdfs: InventorySourcePdfDownload[]
+  generatedInventory: Inventory | null
+}
+
 const PDF_EXTENSION_PATTERN = /\.pdf(?:$|[?#])/i
 
 const cleanFileNameSegment = (value: string) => {
@@ -90,3 +95,33 @@ export const collectInventorySourcePdfs = (
     })
 }
 
+export const createInventoryPdfDownloadPlan = (
+  inventory: Inventory,
+  getStoredFileById: (id: string) => StoredFile | undefined = () => undefined,
+): InventoryPdfDownloadPlan => {
+  const sourcePdfBySubInventoryId = new Map<string, InventorySourcePdfDownload>()
+  const sourcePdfs: InventorySourcePdfDownload[] = []
+  const generatedSubInventories: SubInventory[] = []
+
+  inventory.subInventories.forEach((subInventory) => {
+    const sourcePdf = readSourcePdf(subInventory, getStoredFileById)
+    if (sourcePdf && !sourcePdfBySubInventoryId.has(sourcePdf.subInventoryId)) {
+      sourcePdfBySubInventoryId.set(sourcePdf.subInventoryId, sourcePdf)
+      sourcePdfs.push(sourcePdf)
+      return
+    }
+
+    generatedSubInventories.push(subInventory)
+  })
+
+  return {
+    sourcePdfs,
+    generatedInventory:
+      generatedSubInventories.length > 0
+        ? {
+            ...inventory,
+            subInventories: generatedSubInventories,
+          }
+        : null,
+  }
+}
