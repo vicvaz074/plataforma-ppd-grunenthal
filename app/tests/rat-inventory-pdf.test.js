@@ -102,7 +102,7 @@ describe("generación PDF de inventarios RAT", () => {
     )
   })
 
-  it("planea generar un PDF RAT complementario cuando COMEX incluye subinventarios sin PDF fuente", async () => {
+  it("planea cuatro descargas PDF para COMEX, incluyendo un PDF generado por subinventario sin fuente", async () => {
     const sourcePdfs = await importModule("app/rat/utils/inventory-source-pdfs.ts")
     const ratData = await importModule("lib/grunenthal-rat-data.ts")
     const inventory = ratData.GRUNENTHAL_RAT_INVENTORIES.find(
@@ -115,12 +115,45 @@ describe("generación PDF de inventarios RAT", () => {
     const plan = sourcePdfs.createInventoryPdfDownloadPlan(inventory)
 
     assert.equal(plan.sourcePdfs.length, 3)
-    assert.ok(plan.generatedInventory, "debe generar un PDF para el subinventario sin fuente")
-    assert.equal(plan.generatedInventory.databaseName, "COMEX")
+    assert.equal(plan.generatedInventories.length, 1)
+    assert.equal(plan.totalPdfDownloads, 4)
+    assert.equal(plan.generatedInventories[0].databaseName, "Open Data (Veeva) - Registro de Médicos")
     assert.deepEqual(
-      plan.generatedInventory.subInventories.map((subInventory) => subInventory.databaseName),
+      plan.generatedInventories[0].subInventories.map((subInventory) => subInventory.databaseName),
       ["Open Data (Veeva) - Registro de Médicos"],
     )
+  })
+
+  it("planea PDF generado para Reporte de Distribuidores Xeomeen dentro de Ventas Internas", async () => {
+    const sourcePdfs = await importModule("app/rat/utils/inventory-source-pdfs.ts")
+    const ratData = await importModule("lib/grunenthal-rat-data.ts")
+    const inventory = ratData.GRUNENTHAL_RAT_INVENTORIES.find(
+      (item) => item.id === "grunenthal-rat-area-ventas-internas",
+    )
+
+    assert.ok(inventory, "debe existir el inventario Ventas Internas")
+
+    const plan = sourcePdfs.createInventoryPdfDownloadPlan(inventory)
+    const generatedNames = plan.generatedInventories.map((item) => item.databaseName)
+
+    assert.equal(plan.sourcePdfs.length, 1)
+    assert.equal(plan.generatedInventories.length, 1)
+    assert.equal(plan.totalPdfDownloads, 2)
+    assert.deepEqual(generatedNames, ["Reporte de Distribuidores Xeomeen"])
+    assert.deepEqual(
+      plan.generatedInventories[0].subInventories.map((subInventory) => subInventory.databaseName),
+      ["Reporte de Distribuidores Xeomeen"],
+    )
+  })
+
+  it("aclara que el respaldo masivo de inventarios es JSON y reserva la descarga PDF a las filas", () => {
+    const source = fs.readFileSync(
+      path.join(appDir, "app/rat/components/inventory-list.tsx"),
+      "utf8",
+    )
+
+    assert.doesNotMatch(source, />\s*Descargar inventarios\s*</)
+    assert.match(source, />\s*Exportar respaldo JSON\s*</)
   })
 
   it("pinta las líneas preenvueltas de portada sin pedir ajuste de ancho al renderizador", () => {

@@ -302,7 +302,8 @@ export function InventoryList({
   }
 
   const downloadLinkedInventoryPdfs = (inventory: Inventory) => {
-    const { sourcePdfs, generatedInventory } = getInventoryPdfDownloadPlan(inventory)
+    const { sourcePdfs, generatedInventories, totalPdfDownloads } =
+      getInventoryPdfDownloadPlan(inventory)
 
     if (sourcePdfs.length > 0) {
       sourcePdfs.forEach((file, index) => {
@@ -310,13 +311,15 @@ export function InventoryList({
       })
     }
 
-    if (generatedInventory) {
+    if (generatedInventories.length > 0) {
       try {
         const currentUserName =
           typeof window !== "undefined"
             ? localStorage.getItem("userName") || "Usuario actual"
             : "Usuario actual"
-        generateInventoryPDF(generatedInventory, { currentUserName })
+        generatedInventories.forEach((generatedInventory) => {
+          generateInventoryPDF(generatedInventory, { currentUserName })
+        })
       } catch (e) {
         console.error("Error al generar PDF de inventario", e)
         toast({
@@ -328,8 +331,8 @@ export function InventoryList({
       }
     }
 
-    if (sourcePdfs.length > 0 || generatedInventory) {
-      const generatedCount = generatedInventory?.subInventories.length ?? 0
+    if (totalPdfDownloads > 0) {
+      const generatedCount = generatedInventories.length
       const sourceDescription =
         sourcePdfs.length === 0
           ? ""
@@ -341,14 +344,14 @@ export function InventoryList({
           ? ""
           : generatedCount === 1
             ? "se generó 1 PDF con formato RAT estándar"
-            : `se generó 1 PDF con ${generatedCount} subinventarios en formato RAT estándar`
+            : `se generaron ${generatedCount} PDFs con formato RAT estándar`
       const description = [sourceDescription, generatedDescription]
         .filter(Boolean)
         .join(" y ")
 
       toast({
         title:
-          sourcePdfs.length > 0 && generatedInventory
+          sourcePdfs.length > 0 && generatedCount > 0
             ? "PDFs descargados y complemento generado"
             : sourcePdfs.length > 0
               ? sourcePdfs.length === 1
@@ -540,13 +543,13 @@ export function InventoryList({
             <div>
               <h2 className="text-xl font-semibold">Inventarios registrados</h2>
               <p className="text-sm text-muted-foreground">
-                Exporta tus inventarios para compartirlos y vuelve a cargarlos cuando lo necesites.
+                Exporta un respaldo JSON de tus inventarios y vuelve a cargarlos cuando lo necesites.
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
               <Button variant="outline" className="flex items-center gap-2" onClick={handleExport}>
                 <Download className="h-4 w-4" />
-                Descargar inventarios
+                Exportar respaldo JSON
               </Button>
               <Button className="flex items-center gap-2" onClick={handleImportClick}>
                 <Upload className="h-4 w-4" />
@@ -621,17 +624,17 @@ export function InventoryList({
                     const holderNames = getHolderTypes(inv)
                     const pdfPlan = getInventoryPdfDownloadPlan(inv)
                     const sourcePdfCount = pdfPlan.sourcePdfs.length
-                    const generatedPdfSubInventoryCount =
-                      pdfPlan.generatedInventory?.subInventories.length ?? 0
+                    const generatedPdfCount = pdfPlan.generatedInventories.length
+                    const totalPdfDownloads = pdfPlan.totalPdfDownloads
                     const hasMixedPdfPlan =
-                      sourcePdfCount > 0 && generatedPdfSubInventoryCount > 0
+                      sourcePdfCount > 0 && generatedPdfCount > 0
                     const pdfButtonAriaLabel = hasMixedPdfPlan
-                      ? "Descargar PDFs fuente y generar PDF complementario"
+                      ? `Descargar ${totalPdfDownloads} PDFs del inventario`
                       : sourcePdfCount > 0
                         ? "Descargar PDF fuente del inventario"
                         : "Generar PDF de inventario"
                     const pdfTooltipLabel = hasMixedPdfPlan
-                      ? `Descargar ${sourcePdfCount} PDFs validados y generar ${generatedPdfSubInventoryCount} subinventario(s)`
+                      ? `Descargar ${totalPdfDownloads} PDFs (${sourcePdfCount} validados y ${generatedPdfCount} generado${generatedPdfCount === 1 ? "" : "s"})`
                       : sourcePdfCount > 0
                         ? sourcePdfCount === 1
                           ? "Descargar PDF validado"

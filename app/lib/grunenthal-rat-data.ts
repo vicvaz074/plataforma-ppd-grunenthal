@@ -766,11 +766,13 @@ export const GRUNENTHAL_RAT_INVENTORIES: Inventory[] = [
       {
         "id": "grunenthal-rat-inventario-comex-open-data-veeva-registro-de-medicos",
         "databaseName": "Open Data (Veeva) - Registro de Médicos",
+        "otherConsentException": "",
+        "otherConsentMechanism": "",
+        "otherConsentType": "",
         "holderTypes": [
           "Health Care Professionals"
         ],
         "otherHolderType": "",
-        "otherLegalBasis": "",
         "holdersVolume": "<500k",
         "accessibility": "A2",
         "environment": "E2",
@@ -779,9 +781,6 @@ export const GRUNENTHAL_RAT_INVENTORIES: Inventory[] = [
         "obtainingMethod": "directo",
         "showOtherObtainingMethod": false,
         "obtainingSource": "",
-        "otherConsentException": "",
-        "otherConsentMechanism": "",
-        "otherConsentType": "",
         "privacyNoticeFiles": [],
         "privacyNoticeFileIds": [
           "stored-file-c5b08cc8-b635-4029-ae89-06b6681862dd"
@@ -791,6 +790,7 @@ export const GRUNENTHAL_RAT_INVENTORIES: Inventory[] = [
         ],
         "privacyNoticeFileId": "stored-file-c5b08cc8-b635-4029-ae89-06b6681862dd",
         "privacyNoticeFileName": "AvisoPrivacidad HCPGRünenthal v 4 Davara.docx",
+        "otherProcessingArea": "COMEX",
         "consentRequired": true,
         "consentException": [],
         "consentMechanism": "medios_electronicos",
@@ -805,7 +805,6 @@ export const GRUNENTHAL_RAT_INVENTORIES: Inventory[] = [
         "processingArea": [
           "Otros"
         ],
-        "otherProcessingArea": "COMEX",
         "showOtherProcessingArea": true,
         "processingSystem": "electronico",
         "processingSystemName": "OPEN DATA (Veeva)",
@@ -911,6 +910,8 @@ export const GRUNENTHAL_RAT_INVENTORIES: Inventory[] = [
           "Otro"
         ],
         "otherRemissionLegalInstrument": "Instrumento jurídica vinculante",
+        "remissionContractFileId": "",
+        "remissionContractFileName": "",
         "additionalRemissions": [],
         "personalData": [
           {
@@ -1112,6 +1113,7 @@ export const GRUNENTHAL_RAT_INVENTORIES: Inventory[] = [
             "purposesSecondary": []
           }
         ],
+        "otherLegalBasis": "",
         "grunenthalSourcePdfStatus": "sin-pdf",
         "grunenthalValidationStatus": "pendiente-revision"
       },
@@ -1437,7 +1439,7 @@ export const GRUNENTHAL_RAT_INVENTORIES: Inventory[] = [
     ],
     "riskLevel": "bajo",
     "createdAt": "2025-11-24T00:00:00.000Z",
-    "updatedAt": "2026-06-25T17:39:52.875Z",
+    "updatedAt": "2026-06-25T17:39:49.792Z",
     "createdBy": "Admin",
     "updatedBy": "Admin",
     "status": "completado",
@@ -4937,7 +4939,7 @@ export const GRUNENTHAL_RAT_INVENTORIES: Inventory[] = [
     "updatedBy": "Admin",
     "status": "completado",
     "grunenthalSeedVersion": "2026.2.0",
-    "grunenthalSourceExportedAt": "2026-01-07T00:00:00.000Z"
+    "grunenthalSourceExportedAt": "2026-06-25T17:39:52.875Z"
   },
   {
     "id": "grunenthal-rat-area-digital",
@@ -5606,7 +5608,7 @@ export const GRUNENTHAL_RAT_INVENTORIES: Inventory[] = [
     "updatedBy": "Admin",
     "status": "completado",
     "grunenthalSeedVersion": "2026.2.0",
-    "grunenthalSourceExportedAt": "2026-01-07T00:00:00.000Z"
+    "grunenthalSourceExportedAt": "2026-06-25T17:39:52.875Z"
   },
   {
     "id": "grunenthal-rat-area-direccion-general",
@@ -7095,7 +7097,7 @@ export const GRUNENTHAL_RAT_INVENTORIES: Inventory[] = [
     "updatedBy": "Admin",
     "status": "completado",
     "grunenthalSeedVersion": "2026.2.0",
-    "grunenthalSourceExportedAt": "2026-01-07T00:00:00.000Z"
+    "grunenthalSourceExportedAt": "2026-06-25T17:39:52.875Z"
   },
   {
     "id": "grunenthal-rat-area-dolor",
@@ -8831,7 +8833,7 @@ export const GRUNENTHAL_RAT_INVENTORIES: Inventory[] = [
     "updatedBy": "Admin",
     "status": "completado",
     "grunenthalSeedVersion": "2026.2.0",
-    "grunenthalSourceExportedAt": "2026-01-07T00:00:00.000Z"
+    "grunenthalSourceExportedAt": "2026-06-25T17:39:52.875Z"
   },
   {
     "id": "grunenthal-rat-area-entrenamiento",
@@ -9354,7 +9356,7 @@ export const GRUNENTHAL_RAT_INVENTORIES: Inventory[] = [
     "updatedBy": "Admin",
     "status": "completado",
     "grunenthalSeedVersion": "2026.2.0",
-    "grunenthalSourceExportedAt": "2026-01-07T00:00:00.000Z"
+    "grunenthalSourceExportedAt": "2026-06-25T17:39:52.875Z"
   },
   {
     "id": "grunenthal-rat-area-flotilla",
@@ -10570,7 +10572,7 @@ export const GRUNENTHAL_RAT_INVENTORIES: Inventory[] = [
     "updatedBy": "Admin",
     "status": "completado",
     "grunenthalSeedVersion": "2026.2.0",
-    "grunenthalSourceExportedAt": "2026-01-07T00:00:00.000Z"
+    "grunenthalSourceExportedAt": "2026-06-25T17:39:52.875Z"
   },
   {
     "id": "grunenthal-rat-area-hr",
@@ -16080,7 +16082,7 @@ export const GRUNENTHAL_RAT_INVENTORIES: Inventory[] = [
     "updatedBy": "Admin",
     "status": "completado",
     "grunenthalSeedVersion": "2026.2.0",
-    "grunenthalSourceExportedAt": "2026-01-07T00:00:00.000Z"
+    "grunenthalSourceExportedAt": "2026-06-25T17:39:52.875Z"
   },
   {
     "id": "grunenthal-rat-area-it",
@@ -16808,7 +16810,7 @@ export const GRUNENTHAL_RAT_INVENTORIES: Inventory[] = [
     "updatedBy": "Admin",
     "status": "completado",
     "grunenthalSeedVersion": "2026.2.0",
-    "grunenthalSourceExportedAt": "2026-01-07T00:00:00.000Z"
+    "grunenthalSourceExportedAt": "2026-06-25T17:39:52.875Z"
   },
   {
     "id": "grunenthal-rat-area-investigacion-de-mercado",
@@ -17171,7 +17173,7 @@ export const GRUNENTHAL_RAT_INVENTORIES: Inventory[] = [
     "updatedBy": "Admin",
     "status": "completado",
     "grunenthalSeedVersion": "2026.2.0",
-    "grunenthalSourceExportedAt": "2026-01-07T00:00:00.000Z"
+    "grunenthalSourceExportedAt": "2026-06-25T17:39:52.875Z"
   },
   {
     "id": "grunenthal-rat-area-medical-information",
@@ -17471,7 +17473,7 @@ export const GRUNENTHAL_RAT_INVENTORIES: Inventory[] = [
     "updatedBy": "Admin",
     "status": "completado",
     "grunenthalSeedVersion": "2026.2.0",
-    "grunenthalSourceExportedAt": "2026-01-07T00:00:00.000Z"
+    "grunenthalSourceExportedAt": "2026-06-25T17:39:52.875Z"
   },
   {
     "id": "grunenthal-rat-area-medical",
@@ -18720,7 +18722,7 @@ export const GRUNENTHAL_RAT_INVENTORIES: Inventory[] = [
     "updatedBy": "Admin",
     "status": "completado",
     "grunenthalSeedVersion": "2026.2.0",
-    "grunenthalSourceExportedAt": "2026-01-07T00:00:00.000Z"
+    "grunenthalSourceExportedAt": "2026-06-25T17:39:52.875Z"
   },
   {
     "id": "grunenthal-rat-area-primary-care",
@@ -20264,7 +20266,7 @@ export const GRUNENTHAL_RAT_INVENTORIES: Inventory[] = [
     "updatedBy": "Admin",
     "status": "completado",
     "grunenthalSeedVersion": "2026.2.0",
-    "grunenthalSourceExportedAt": "2026-01-07T00:00:00.000Z"
+    "grunenthalSourceExportedAt": "2026-06-25T17:39:52.875Z"
   },
   {
     "id": "grunenthal-rat-area-regulatorio",
@@ -20681,7 +20683,7 @@ export const GRUNENTHAL_RAT_INVENTORIES: Inventory[] = [
     "updatedBy": "Admin",
     "status": "completado",
     "grunenthalSeedVersion": "2026.2.0",
-    "grunenthalSourceExportedAt": "2026-01-07T00:00:00.000Z"
+    "grunenthalSourceExportedAt": "2026-06-25T17:39:52.875Z"
   },
   {
     "id": "grunenthal-rat-area-ventas-internas",
@@ -20959,6 +20961,388 @@ export const GRUNENTHAL_RAT_INVENTORIES: Inventory[] = [
           "additionalRemissions"
         ],
         "grunenthalValidationMismatches": []
+      },
+      {
+        "id": "grunenthal-rat-inventario-ventas-internas-reporte-de-distribuidores-xeomeen",
+        "databaseName": "Reporte de Distribuidores Xeomeen",
+        "otherConsentException": "",
+        "otherConsentMechanism": "",
+        "otherConsentType": "",
+        "holderTypes": [
+          "Health Care Professionals",
+          "Otro"
+        ],
+        "otherHolderType": "Pacientes",
+        "holdersVolume": "<5k",
+        "accessibility": "A2",
+        "environment": "E2",
+        "responsibleArea": "Ventas Internas",
+        "showOtherResponsibleArea": true,
+        "obtainingMethod": "indirecto",
+        "showOtherObtainingMethod": false,
+        "obtainingSource": "Por medio del Distribuidores",
+        "privacyNoticeFiles": [],
+        "privacyNoticeFileIds": [
+          "stored-file-96b0cbb2-d220-422a-81f3-c2911357aace"
+        ],
+        "privacyNoticeFileNames": [
+          "Aviso de Privacidad Integral para HCP Non Visited.docx"
+        ],
+        "privacyNoticeFileId": "stored-file-96b0cbb2-d220-422a-81f3-c2911357aace",
+        "privacyNoticeFileName": "Aviso de Privacidad Integral para HCP Non Visited.docx",
+        "otherProcessingArea": "Ventas Privado",
+        "consentRequired": true,
+        "consentException": [],
+        "consentMechanism": "medios_electronicos",
+        "consentType": "expreso",
+        "tacitDescription": "",
+        "secondaryConsentType": "",
+        "secondaryConsentMechanism": "",
+        "secondaryTacitDescription": "",
+        "secondaryExpresoForm": "",
+        "secondaryExpresoEscritoForm": "",
+        "secondaryPurposesConsent": {},
+        "processingArea": [
+          "Otros"
+        ],
+        "showOtherProcessingArea": true,
+        "processingSystem": "electronico",
+        "processingSystemName": "",
+        "processingDescription": [
+          "Uso",
+          "Divulgacion",
+          "Almacenamiento"
+        ],
+        "accessDescription": [
+          "Visualización",
+          "Edición",
+          "Descarga"
+        ],
+        "otherAccessDescription": "",
+        "dataLifecyclePrivileges": "",
+        "additionalAccesses": [
+          {
+            "id": "additional-access-1",
+            "area": "N/A",
+            "showOtherArea": true,
+            "privileges": [
+              "Otros"
+            ],
+            "otherPrivilege": "N/A",
+            "role": "",
+            "otherRole": ""
+          }
+        ],
+        "additionalAreas": [],
+        "additionalAreasAccess": [],
+        "otherAdditionalAreasAccess": "",
+        "showOtherAdditionalAreasAccess": false,
+        "additionalAreasLegalBasis": [],
+        "otherAdditionalAreasLegalBasis": "",
+        "additionalAreasPurposes": [],
+        "otherAdditionalAreasPurposes": "",
+        "storageMethod": "disco-duro",
+        "otherStorageMethod": "",
+        "physicalLocation": "Servidor Local",
+        "backupPeriodicity": "N/A",
+        "isBackedUp": false,
+        "backupDescription": "",
+        "backupResponsible": "",
+        "showOtherBackupResponsible": false,
+        "conservationTerm": "No hay relación jurídica",
+        "showOtherConservationTerm": true,
+        "conservationJustification": [
+          "Consentimiento vigente"
+        ],
+        "otherConservationJustification": "",
+        "conservationJustificationDetail": "",
+        "conservationLegalBasis": "",
+        "blockingTime": "15 días posteriores a haber revocado su consentimiento.  ",
+        "showOtherBlockingTime": true,
+        "legalPrescription": [
+          "Otros"
+        ],
+        "otherLegalPrescription": "",
+        "blockingLegalDisposition": "40 de la Ley Federal de Protección de Datos Personales en Posesión de los Particulares",
+        "additionalConservations": [],
+        "additionalBlockings": [],
+        "showOtherProcessingTime": false,
+        "processingTime": "",
+        "postRelationshipProcessing": "",
+        "legalConservation": [],
+        "otherLegalConservation": "",
+        "deletionMethods": [
+          "Otros"
+        ],
+        "otherDeletionMethod": "Borrado de Archivos",
+        "deletionMethod": "",
+        "dataTransfer": "si",
+        "transferRecipient": "Autoridades Competentes",
+        "transferPurposes": "Cumplimiento de requerimientos y obligaciones legales. ",
+        "transferConsentRequired": false,
+        "transferExceptions": [
+          "Cuando lo establezca una ley o tratado internacional."
+        ],
+        "transferConsentType": "",
+        "transferTacitDescription": "",
+        "transferExpresoForm": "",
+        "transferOtherExpresoForm": "",
+        "transferExpresoEscritoForm": "",
+        "transferOtherExpresoEscritoForm": "",
+        "transferLegalInstrument": [
+          "Otro"
+        ],
+        "otherTransferLegalInstrument": "N/A",
+        "transferInAP": true,
+        "additionalTransfers": [],
+        "dataRemission": "no",
+        "remissionRecipient": "",
+        "remissionPurposes": [],
+        "otherRemissionPurpose": "",
+        "remissionLegalInstrument": [],
+        "otherRemissionLegalInstrument": "",
+        "remissionContractFileId": "",
+        "remissionContractFileName": "",
+        "additionalRemissions": [],
+        "personalData": [
+          {
+            "id": "grunenthal-rat-inventario-ventas-internas-reporte-de-distribuidores-xeomeen-dato-001",
+            "name": "Número de Factura",
+            "category": "Patrimoniales",
+            "proporcionalidad": true,
+            "riesgo": "medio",
+            "purposesPrimary": [
+              "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+              "Visitas profesionales: Contactarlo y, en su caso, visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+              "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+              "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+              "Invitaciones y participación en eventos: Invitarlo, registrar su asistencia y gestionar su participación en congresos, seminarios, programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+              "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal, así como notificaciones o alertas de seguridad que resulten pertinentes.",
+              "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas, educativas y promocionales dirigidas a profesionales de la salud, con el fin de mejorar su contenido y alcance.",
+              "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+            ],
+            "purposesSecondary": []
+          },
+          {
+            "id": "grunenthal-rat-inventario-ventas-internas-reporte-de-distribuidores-xeomeen-dato-002",
+            "name": "Fecha de emisión",
+            "category": "Identificación",
+            "proporcionalidad": true,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+              "Visitas profesionales: Contactarlo y, en su caso, visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+              "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+              "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+              "Invitaciones y participación en eventos: Invitarlo, registrar su asistencia y gestionar su participación en congresos, seminarios, programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+              "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal, así como notificaciones o alertas de seguridad que resulten pertinentes.",
+              "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas, educativas y promocionales dirigidas a profesionales de la salud, con el fin de mejorar su contenido y alcance.",
+              "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+            ],
+            "purposesSecondary": []
+          },
+          {
+            "id": "grunenthal-rat-inventario-ventas-internas-reporte-de-distribuidores-xeomeen-dato-003",
+            "name": "Nombre del paciente",
+            "category": "Identificación",
+            "proporcionalidad": false,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+              "Visitas profesionales: Contactarlo y, en su caso, visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+              "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+              "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+              "Invitaciones y participación en eventos: Invitarlo, registrar su asistencia y gestionar su participación en congresos, seminarios, programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+              "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal, así como notificaciones o alertas de seguridad que resulten pertinentes.",
+              "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas, educativas y promocionales dirigidas a profesionales de la salud, con el fin de mejorar su contenido y alcance.",
+              "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+            ],
+            "purposesSecondary": []
+          },
+          {
+            "id": "grunenthal-rat-inventario-ventas-internas-reporte-de-distribuidores-xeomeen-dato-004",
+            "name": "Producto ID",
+            "category": "Identificación",
+            "proporcionalidad": true,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+              "Visitas profesionales: Contactarlo y, en su caso, visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+              "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+              "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+              "Invitaciones y participación en eventos: Invitarlo, registrar su asistencia y gestionar su participación en congresos, seminarios, programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+              "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal, así como notificaciones o alertas de seguridad que resulten pertinentes.",
+              "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas, educativas y promocionales dirigidas a profesionales de la salud, con el fin de mejorar su contenido y alcance.",
+              "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+            ],
+            "purposesSecondary": []
+          },
+          {
+            "id": "grunenthal-rat-inventario-ventas-internas-reporte-de-distribuidores-xeomeen-dato-005",
+            "name": "País de cliente",
+            "category": "Identificación",
+            "proporcionalidad": true,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+              "Visitas profesionales: Contactarlo y, en su caso, visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+              "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+              "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+              "Invitaciones y participación en eventos: Invitarlo, registrar su asistencia y gestionar su participación en congresos, seminarios, programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+              "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal, así como notificaciones o alertas de seguridad que resulten pertinentes.",
+              "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas, educativas y promocionales dirigidas a profesionales de la salud, con el fin de mejorar su contenido y alcance.",
+              "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+            ],
+            "purposesSecondary": []
+          },
+          {
+            "id": "grunenthal-rat-inventario-ventas-internas-reporte-de-distribuidores-xeomeen-dato-006",
+            "name": "Nombre del médico",
+            "category": "Identificación",
+            "proporcionalidad": true,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+              "Visitas profesionales: Contactarlo y, en su caso, visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+              "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+              "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+              "Invitaciones y participación en eventos: Invitarlo, registrar su asistencia y gestionar su participación en congresos, seminarios, programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+              "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal, así como notificaciones o alertas de seguridad que resulten pertinentes.",
+              "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas, educativas y promocionales dirigidas a profesionales de la salud, con el fin de mejorar su contenido y alcance.",
+              "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+            ],
+            "purposesSecondary": []
+          },
+          {
+            "id": "grunenthal-rat-inventario-ventas-internas-reporte-de-distribuidores-xeomeen-dato-007",
+            "name": "Municipio / Alcaldía",
+            "category": "Identificación",
+            "proporcionalidad": true,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+              "Visitas profesionales: Contactarlo y, en su caso, visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+              "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+              "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+              "Invitaciones y participación en eventos: Invitarlo, registrar su asistencia y gestionar su participación en congresos, seminarios, programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+              "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal, así como notificaciones o alertas de seguridad que resulten pertinentes.",
+              "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas, educativas y promocionales dirigidas a profesionales de la salud, con el fin de mejorar su contenido y alcance.",
+              "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+            ],
+            "purposesSecondary": []
+          },
+          {
+            "id": "grunenthal-rat-inventario-ventas-internas-reporte-de-distribuidores-xeomeen-dato-008",
+            "name": "Estado",
+            "category": "Ubicación",
+            "proporcionalidad": true,
+            "riesgo": "medio",
+            "purposesPrimary": [
+              "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+              "Visitas profesionales: Contactarlo y, en su caso, visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+              "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+              "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+              "Invitaciones y participación en eventos: Invitarlo, registrar su asistencia y gestionar su participación en congresos, seminarios, programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+              "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal, así como notificaciones o alertas de seguridad que resulten pertinentes.",
+              "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas, educativas y promocionales dirigidas a profesionales de la salud, con el fin de mejorar su contenido y alcance.",
+              "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+            ],
+            "purposesSecondary": []
+          },
+          {
+            "id": "grunenthal-rat-inventario-ventas-internas-reporte-de-distribuidores-xeomeen-dato-009",
+            "name": "Precio unitario",
+            "category": "Patrimoniales",
+            "proporcionalidad": true,
+            "riesgo": "medio",
+            "purposesPrimary": [
+              "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+              "Visitas profesionales: Contactarlo y, en su caso, visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+              "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+              "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+              "Invitaciones y participación en eventos: Invitarlo, registrar su asistencia y gestionar su participación en congresos, seminarios, programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+              "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal, así como notificaciones o alertas de seguridad que resulten pertinentes.",
+              "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas, educativas y promocionales dirigidas a profesionales de la salud, con el fin de mejorar su contenido y alcance.",
+              "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+            ],
+            "purposesSecondary": []
+          },
+          {
+            "id": "grunenthal-rat-inventario-ventas-internas-reporte-de-distribuidores-xeomeen-dato-010",
+            "name": "Cantidad total",
+            "category": "Patrimoniales",
+            "proporcionalidad": true,
+            "riesgo": "medio",
+            "purposesPrimary": [
+              "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+              "Visitas profesionales: Contactarlo y, en su caso, visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+              "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+              "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+              "Invitaciones y participación en eventos: Invitarlo, registrar su asistencia y gestionar su participación en congresos, seminarios, programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+              "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal, así como notificaciones o alertas de seguridad que resulten pertinentes.",
+              "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas, educativas y promocionales dirigidas a profesionales de la salud, con el fin de mejorar su contenido y alcance.",
+              "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+            ],
+            "purposesSecondary": []
+          },
+          {
+            "id": "grunenthal-rat-inventario-ventas-internas-reporte-de-distribuidores-xeomeen-dato-011",
+            "name": "Importe total",
+            "category": "Patrimoniales",
+            "proporcionalidad": true,
+            "riesgo": "medio",
+            "purposesPrimary": [
+              "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+              "Visitas profesionales: Contactarlo y, en su caso, visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+              "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+              "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+              "Invitaciones y participación en eventos: Invitarlo, registrar su asistencia y gestionar su participación en congresos, seminarios, programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+              "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal, así como notificaciones o alertas de seguridad que resulten pertinentes.",
+              "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas, educativas y promocionales dirigidas a profesionales de la salud, con el fin de mejorar su contenido y alcance.",
+              "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+            ],
+            "purposesSecondary": []
+          },
+          {
+            "id": "grunenthal-rat-inventario-ventas-internas-reporte-de-distribuidores-xeomeen-dato-012",
+            "name": "Tipo de venta",
+            "category": "Identificación",
+            "proporcionalidad": true,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+              "Visitas profesionales: Contactarlo y, en su caso, visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+              "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+              "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+              "Invitaciones y participación en eventos: Invitarlo, registrar su asistencia y gestionar su participación en congresos, seminarios, programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+              "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal, así como notificaciones o alertas de seguridad que resulten pertinentes.",
+              "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas, educativas y promocionales dirigidas a profesionales de la salud, con el fin de mejorar su contenido y alcance.",
+              "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+            ],
+            "purposesSecondary": []
+          },
+          {
+            "id": "grunenthal-rat-inventario-ventas-internas-reporte-de-distribuidores-xeomeen-dato-013",
+            "name": "Canal / origen",
+            "category": "Identificación",
+            "proporcionalidad": true,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+              "Visitas profesionales: Contactarlo y, en su caso, visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+              "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+              "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+              "Invitaciones y participación en eventos: Invitarlo, registrar su asistencia y gestionar su participación en congresos, seminarios, programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+              "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal, así como notificaciones o alertas de seguridad que resulten pertinentes.",
+              "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas, educativas y promocionales dirigidas a profesionales de la salud, con el fin de mejorar su contenido y alcance.",
+              "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+            ],
+            "purposesSecondary": []
+          }
+        ],
+        "otherLegalBasis": "",
+        "grunenthalSourcePdfStatus": "sin-pdf",
+        "grunenthalValidationStatus": "pendiente-revision"
       }
     ],
     "riskLevel": "bajo",
@@ -20968,7 +21352,7 @@ export const GRUNENTHAL_RAT_INVENTORIES: Inventory[] = [
     "updatedBy": "Admin",
     "status": "completado",
     "grunenthalSeedVersion": "2026.2.0",
-    "grunenthalSourceExportedAt": "2026-01-07T00:00:00.000Z"
+    "grunenthalSourceExportedAt": "2026-06-25T17:39:52.875Z"
   }
 ]
 
@@ -20980,7 +21364,7 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
     "subInventoryId": "grunenthal-rat-inventario-comex-comunicacion-opioddisclaimer-hcps-davara",
     "subInventoryName": "Comunicación OpiodDisclaimer HCPs",
     "publicPath": "/client/grunenthal/rat/comex/inventario-comex-comunicacion-opioddisclaimer-hcps-davara.pdf",
-    "matchScore": 1,
+    "matchScore": 1.0,
     "validatedFields": [
       "databaseName",
       "responsible",
@@ -21022,7 +21406,7 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
     "subInventoryId": "grunenthal-rat-inventario-comex-ranking-de-efectividad",
     "subInventoryName": "Ranking de efectividad",
     "publicPath": "/client/grunenthal/rat/comex/inventario-comex-ranking-de-efectividad.pdf",
-    "matchScore": 1,
+    "matchScore": 1.0,
     "validatedFields": [
       "databaseName",
       "responsible",
@@ -21064,7 +21448,7 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
     "subInventoryId": "grunenthal-rat-inventario-comex-directorio-de-ventas",
     "subInventoryName": "Directorio de Ventas",
     "publicPath": "/client/grunenthal/rat/comex/inventario-comex-directorio-de-ventas.pdf",
-    "matchScore": 1,
+    "matchScore": 1.0,
     "validatedFields": [
       "databaseName",
       "responsible",
@@ -21106,7 +21490,7 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
     "subInventoryId": "grunenthal-rat-inventario-compras-base-de-datos-de-titulares-sin-tarjeta-corporativa",
     "subInventoryName": "Base de datos de titulares sin tarjeta corporativa",
     "publicPath": "/client/grunenthal/rat/compras/inventario-compras-base-de-datos-de-titulares-sin-tarjeta-corporativa.pdf",
-    "matchScore": 1,
+    "matchScore": 1.0,
     "validatedFields": [
       "databaseName",
       "responsible",
@@ -21148,7 +21532,7 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
     "subInventoryId": "grunenthal-rat-inventario-compras-concur",
     "subInventoryName": "Concur",
     "publicPath": "/client/grunenthal/rat/compras/inventario-compras-concur.pdf",
-    "matchScore": 1,
+    "matchScore": 1.0,
     "validatedFields": [
       "databaseName",
       "responsible",
@@ -21190,7 +21574,7 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
     "subInventoryId": "grunenthal-rat-inventario-compras-sistema-oro",
     "subInventoryName": "Sistema Oro",
     "publicPath": "/client/grunenthal/rat/compras/inventario-compras-sistema-oro.pdf",
-    "matchScore": 1,
+    "matchScore": 1.0,
     "validatedFields": [
       "databaseName",
       "responsible",
@@ -21232,7 +21616,7 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
     "subInventoryId": "grunenthal-rat-inventario-digital-registro-beyond",
     "subInventoryName": "Registro Beyond",
     "publicPath": "/client/grunenthal/rat/digital/inventario-digital-registro-beyond.pdf",
-    "matchScore": 1,
+    "matchScore": 1.0,
     "validatedFields": [
       "databaseName",
       "responsible",
@@ -21274,7 +21658,7 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
     "subInventoryId": "grunenthal-rat-inventario-digital-salesforce-marketing-davara",
     "subInventoryName": "Salesforce Marketing",
     "publicPath": "/client/grunenthal/rat/digital/inventario-digital-salesforce-marketing-davara.pdf",
-    "matchScore": 1,
+    "matchScore": 1.0,
     "validatedFields": [
       "databaseName",
       "responsible",
@@ -21316,7 +21700,7 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
     "subInventoryId": "grunenthal-rat-inventario-direccion-general-conave-mexico",
     "subInventoryName": "Conave México",
     "publicPath": "/client/grunenthal/rat/direccion-general/inventario-direccion-general-conave-mexico.pdf",
-    "matchScore": 1,
+    "matchScore": 1.0,
     "validatedFields": [
       "databaseName",
       "responsible",
@@ -21358,7 +21742,7 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
     "subInventoryId": "grunenthal-rat-inventario-direccion-general-listado-de-tallas-core-team",
     "subInventoryName": "Listado de Tallas Core Team",
     "publicPath": "/client/grunenthal/rat/direccion-general/inventario-direccion-general-listado-de-tallas-core-team.pdf",
-    "matchScore": 1,
+    "matchScore": 1.0,
     "validatedFields": [
       "databaseName",
       "responsible",
@@ -21400,7 +21784,7 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
     "subInventoryId": "grunenthal-rat-inventario-direccion-general-rooming-general",
     "subInventoryName": "Rooming General",
     "publicPath": "/client/grunenthal/rat/direccion-general/inventario-direccion-general-rooming-general.pdf",
-    "matchScore": 1,
+    "matchScore": 1.0,
     "validatedFields": [
       "databaseName",
       "responsible",
@@ -21442,7 +21826,7 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
     "subInventoryId": "grunenthal-rat-inventario-dolor-listado-de-medicos-ametd",
     "subInventoryName": "Listado de Médicos AMETD",
     "publicPath": "/client/grunenthal/rat/dolor/inventario-dolor-listado-de-medicos-ametd.pdf",
-    "matchScore": 1,
+    "matchScore": 1.0,
     "validatedFields": [
       "databaseName",
       "responsible",
@@ -21484,7 +21868,7 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
     "subInventoryId": "grunenthal-rat-inventario-dolor-perfil-de-medico-salesforce",
     "subInventoryName": "Perfil de Médico Salesforce",
     "publicPath": "/client/grunenthal/rat/dolor/inventario-dolor-perfil-de-medico-salesforce.pdf",
-    "matchScore": 1,
+    "matchScore": 1.0,
     "validatedFields": [
       "databaseName",
       "responsible",
@@ -21526,7 +21910,7 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
     "subInventoryId": "grunenthal-rat-inventario-entrenamiento-master-evaluaciones",
     "subInventoryName": "Master Evaluaciones",
     "publicPath": "/client/grunenthal/rat/entrenamiento/inventario-entrenamiento-master-evaluaciones.pdf",
-    "matchScore": 1,
+    "matchScore": 1.0,
     "validatedFields": [
       "databaseName",
       "responsible",
@@ -21568,7 +21952,7 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
     "subInventoryId": "grunenthal-rat-inventario-flotilla-carta-responsiva-de-automovil",
     "subInventoryName": "Carta Responsiva de Automóvil",
     "publicPath": "/client/grunenthal/rat/flotilla/inventario-flotilla-carta-responsiva-de-automovil.pdf",
-    "matchScore": 1,
+    "matchScore": 1.0,
     "validatedFields": [
       "databaseName",
       "responsible",
@@ -21610,7 +21994,7 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
     "subInventoryId": "grunenthal-rat-inventario-flotilla-informacion-solicitada-a-empleado-por-correo",
     "subInventoryName": "Información solicitada a empleado por Correo",
     "publicPath": "/client/grunenthal/rat/flotilla/inventario-flotilla-informacion-solicitada-a-empleado-por-correo.pdf",
-    "matchScore": 1,
+    "matchScore": 1.0,
     "validatedFields": [
       "databaseName",
       "responsible",
@@ -21652,7 +22036,7 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
     "subInventoryId": "grunenthal-rat-inventario-flotilla-solicitud-de-fondo-de-garantia-de-auto",
     "subInventoryName": "Solicitud de Fondo de Garantía de Auto",
     "publicPath": "/client/grunenthal/rat/flotilla/inventario-flotilla-solicitud-de-fondo-de-garantia-de-auto.pdf",
-    "matchScore": 1,
+    "matchScore": 1.0,
     "validatedFields": [
       "databaseName",
       "responsible",
@@ -21694,7 +22078,7 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
     "subInventoryId": "grunenthal-rat-inventario-human-resources-bacher-zoppi-catalogo-de-empleados",
     "subInventoryName": "Bacher Zoppi (Catálogo de Empleados)",
     "publicPath": "/client/grunenthal/rat/hr/inventario-human-resources-bacher-zoppi-catalogo-de-empleados.pdf",
-    "matchScore": 1,
+    "matchScore": 1.0,
     "validatedFields": [
       "databaseName",
       "responsible",
@@ -21736,7 +22120,7 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
     "subInventoryId": "grunenthal-rat-inventario-human-resources-formato-de-alta-proveedor",
     "subInventoryName": "Formato de alta proveedor",
     "publicPath": "/client/grunenthal/rat/hr/inventario-human-resources-formato-de-alta-proveedor.pdf",
-    "matchScore": 1,
+    "matchScore": 1.0,
     "validatedFields": [
       "databaseName",
       "responsible",
@@ -21778,7 +22162,7 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
     "subInventoryId": "grunenthal-rat-inventario-human-resources-cedula-de-datos",
     "subInventoryName": "Cédula de Datos",
     "publicPath": "/client/grunenthal/rat/hr/inventario-human-resources-cedula-de-datos.pdf",
-    "matchScore": 1,
+    "matchScore": 1.0,
     "validatedFields": [
       "databaseName",
       "responsible",
@@ -21820,7 +22204,7 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
     "subInventoryId": "grunenthal-rat-inventario-human-resources-checklist-de-documentacion",
     "subInventoryName": "Checklist de documentación",
     "publicPath": "/client/grunenthal/rat/hr/inventario-human-resources-checklist-de-documentacion.pdf",
-    "matchScore": 1,
+    "matchScore": 1.0,
     "validatedFields": [
       "databaseName",
       "responsible",
@@ -21862,7 +22246,7 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
     "subInventoryId": "grunenthal-rat-inventario-it-sistema-azure-1",
     "subInventoryName": "Sistema Azure",
     "publicPath": "/client/grunenthal/rat/it/inventario-it-sistema-azure-1.pdf",
-    "matchScore": 1,
+    "matchScore": 1.0,
     "validatedFields": [
       "databaseName",
       "responsible",
@@ -21904,7 +22288,7 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
     "subInventoryId": "grunenthal-rat-inventario-investigacion-de-mercados-sinefarma",
     "subInventoryName": "Sinefarma",
     "publicPath": "/client/grunenthal/rat/investigacion-de-mercado/inventario-investigacion-de-mercados-sinefarma.pdf",
-    "matchScore": 1,
+    "matchScore": 1.0,
     "validatedFields": [
       "databaseName",
       "responsible",
@@ -21946,7 +22330,7 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
     "subInventoryId": "grunenthal-rat-inventario-medical-information-base-de-datos-de-tracker-y-correos-electronicos-1",
     "subInventoryName": "Base de datos de Tracker y Correos Electrónicos",
     "publicPath": "/client/grunenthal/rat/medical-information/inventario-medical-information-base-de-datos-de-tracker-y-correos-electronicos-1.pdf",
-    "matchScore": 1,
+    "matchScore": 1.0,
     "validatedFields": [
       "databaseName",
       "responsible",
@@ -21988,7 +22372,7 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
     "subInventoryId": "grunenthal-rat-inventario-medical-lista-de-requerimientos-hcp-profesional-de-salud-nacional",
     "subInventoryName": "Lista de requerimientos HCP (Profesional de salud nacional)",
     "publicPath": "/client/grunenthal/rat/medical/inventario-medical-lista-de-requerimientos-hcp-profesional-de-salud-nacional.pdf",
-    "matchScore": 1,
+    "matchScore": 1.0,
     "validatedFields": [
       "databaseName",
       "responsible",
@@ -22030,7 +22414,7 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
     "subInventoryId": "grunenthal-rat-inventario-medical-lista-de-requerimientos-hcp-profesionales-de-la-salud-extranjero",
     "subInventoryName": "Lista de requerimientos HCP (Profesionales de la salud extranjero)",
     "publicPath": "/client/grunenthal/rat/medical/inventario-medical-lista-de-requerimientos-hcp-profesionales-de-la-salud-extranjero.pdf",
-    "matchScore": 1,
+    "matchScore": 1.0,
     "validatedFields": [
       "databaseName",
       "responsible",
@@ -22072,7 +22456,7 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
     "subInventoryId": "grunenthal-rat-inventario-medical-lista-de-requerimientos-donaciones",
     "subInventoryName": "Lista de requerimientos donaciones .",
     "publicPath": "/client/grunenthal/rat/medical/inventario-medical-lista-de-requerimientos-donaciones.pdf",
-    "matchScore": 1,
+    "matchScore": 1.0,
     "validatedFields": [
       "databaseName",
       "responsible",
@@ -22114,7 +22498,7 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
     "subInventoryId": "grunenthal-rat-inventario-primary-care-beyond-inscripcion-de-medicos",
     "subInventoryName": "Beyond: Inscripción de médicos.",
     "publicPath": "/client/grunenthal/rat/primary-care/inventario-primary-care-beyond-inscripcion-de-medicos.pdf",
-    "matchScore": 1,
+    "matchScore": 1.0,
     "validatedFields": [
       "databaseName",
       "responsible",
@@ -22156,7 +22540,7 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
     "subInventoryId": "grunenthal-rat-inventario-primary-care-carta-invitacion-de-medicos",
     "subInventoryName": "Carta Invitación de médicos",
     "publicPath": "/client/grunenthal/rat/primary-care/inventario-primary-care-carta-invitacion-de-medicos.pdf",
-    "matchScore": 1,
+    "matchScore": 1.0,
     "validatedFields": [
       "databaseName",
       "responsible",
@@ -22198,7 +22582,7 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
     "subInventoryId": "grunenthal-rat-inventario-primary-care-registro-de-medicos-para-invitaciones-o-becas-a-congresos",
     "subInventoryName": "Registro de médicos para invitaciones o becas a congresos",
     "publicPath": "/client/grunenthal/rat/primary-care/inventario-primary-care-registro-de-medicos-para-invitaciones-o-becas-a-congresos.pdf",
-    "matchScore": 1,
+    "matchScore": 1.0,
     "validatedFields": [
       "databaseName",
       "responsible",
@@ -22240,7 +22624,7 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
     "subInventoryId": "grunenthal-rat-inventario-primary-care-solicitud-de-congreso-internacional",
     "subInventoryName": "Solicitud de Congreso internacional",
     "publicPath": "/client/grunenthal/rat/primary-care/inventario-primary-care-solicitud-de-congreso-internacional.pdf",
-    "matchScore": 1,
+    "matchScore": 1.0,
     "validatedFields": [
       "databaseName",
       "responsible",
@@ -22282,7 +22666,7 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
     "subInventoryId": "grunenthal-rat-inventario-regulatorio-base-de-datos-para-registro-ante-autoridad-sanitaria",
     "subInventoryName": "Base de datos para registro ante autoridad sanitaria.",
     "publicPath": "/client/grunenthal/rat/regulatorio/inventario-regulatorio-base-de-datos-para-registro-ante-autoridad-sanitaria.pdf",
-    "matchScore": 1,
+    "matchScore": 1.0,
     "validatedFields": [
       "databaseName",
       "responsible",
@@ -22324,7 +22708,7 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
     "subInventoryId": "grunenthal-rat-inventario-ventas-internas-informacion-sell-out",
     "subInventoryName": "Información Sell-out",
     "publicPath": "/client/grunenthal/rat/ventas-internas/inventario-ventas-internas-informacion-sell-out.pdf",
-    "matchScore": 1,
+    "matchScore": 1.0,
     "validatedFields": [
       "databaseName",
       "responsible",
@@ -22365,10 +22749,10 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
   "generatedAt": "2026-06-25T00:00:00.000Z",
   "sourceDirectory": "Políticas de Grünenthal (2026)/InventariosDatos Personales",
   "canonicalInventoryCount": 15,
-  "canonicalSubInventoryCount": 34,
+  "canonicalSubInventoryCount": 35,
   "pdfInventoryCount": 33,
   "mappedPdfCount": 33,
-  "missingPdfCount": 1,
+  "missingPdfCount": 2,
   "unmatchedPdfCount": 0,
   "fieldMismatchCount": 0,
   "missingPdfs": [
@@ -22377,6 +22761,12 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
       "subInventoryId": "grunenthal-rat-inventario-comex-open-data-veeva-registro-de-medicos",
       "subInventoryName": "Open Data (Veeva) - Registro de Médicos",
       "status": "pendiente-revision"
+    },
+    {
+      "inventoryName": "Ventas Internas",
+      "subInventoryId": "grunenthal-rat-inventario-ventas-internas-reporte-de-distribuidores-xeomeen",
+      "subInventoryName": "Reporte de Distribuidores Xeomeen",
+      "status": "pendiente-revision"
     }
   ],
   "unmatchedPdfs": [],
@@ -22384,11 +22774,11 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
   "items": [
     {
       "assetId": "grunenthal-rat-inventario-comex-comunicacion-opioddisclaimer-hcps-davara",
-      "pdfName": "inventario-comex-comunicacion-opioddisclaimer-hcps-davara.pdf",
+      "pdfName": "inventario_COMEX_-_Comunicación_OpiodDisclaimer_HCPs_ davara .pdf",
       "inventoryName": "COMEX",
       "subInventoryName": "Comunicación OpiodDisclaimer HCPs",
       "status": "verificado",
-      "matchScore": 1,
+      "matchScore": 1.0,
       "validatedFields": [
         "databaseName",
         "responsible",
@@ -22425,11 +22815,11 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     },
     {
       "assetId": "grunenthal-rat-inventario-comex-ranking-de-efectividad",
-      "pdfName": "inventario-comex-ranking-de-efectividad.pdf",
+      "pdfName": "inventario_COMEX_-_Ranking_de_efectividad.pdf",
       "inventoryName": "COMEX",
       "subInventoryName": "Ranking de efectividad",
       "status": "verificado",
-      "matchScore": 1,
+      "matchScore": 1.0,
       "validatedFields": [
         "databaseName",
         "responsible",
@@ -22466,11 +22856,11 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     },
     {
       "assetId": "grunenthal-rat-inventario-comex-directorio-de-ventas",
-      "pdfName": "inventario-comex-directorio-de-ventas.pdf",
+      "pdfName": "inventario_Comex_-_Directorio_de_Ventas.pdf",
       "inventoryName": "COMEX",
       "subInventoryName": "Directorio de Ventas",
       "status": "verificado",
-      "matchScore": 1,
+      "matchScore": 1.0,
       "validatedFields": [
         "databaseName",
         "responsible",
@@ -22507,11 +22897,11 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     },
     {
       "assetId": "grunenthal-rat-inventario-compras-base-de-datos-de-titulares-sin-tarjeta-corporativa",
-      "pdfName": "inventario-compras-base-de-datos-de-titulares-sin-tarjeta-corporativa.pdf",
+      "pdfName": "inventario_Compras_-_Base_de_datos_de_titulares_sin_tarjeta_corporativa.pdf",
       "inventoryName": "Compras",
       "subInventoryName": "Base de datos de titulares sin tarjeta corporativa",
       "status": "verificado",
-      "matchScore": 1,
+      "matchScore": 1.0,
       "validatedFields": [
         "databaseName",
         "responsible",
@@ -22548,11 +22938,11 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     },
     {
       "assetId": "grunenthal-rat-inventario-compras-concur",
-      "pdfName": "inventario-compras-concur.pdf",
+      "pdfName": "inventario_Compras_-_Concur.pdf",
       "inventoryName": "Compras",
       "subInventoryName": "Concur",
       "status": "verificado",
-      "matchScore": 1,
+      "matchScore": 1.0,
       "validatedFields": [
         "databaseName",
         "responsible",
@@ -22589,11 +22979,11 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     },
     {
       "assetId": "grunenthal-rat-inventario-compras-sistema-oro",
-      "pdfName": "inventario-compras-sistema-oro.pdf",
+      "pdfName": "inventario_Compras_-_Sistema_Oro.pdf",
       "inventoryName": "Compras",
       "subInventoryName": "Sistema Oro",
       "status": "verificado",
-      "matchScore": 1,
+      "matchScore": 1.0,
       "validatedFields": [
         "databaseName",
         "responsible",
@@ -22630,11 +23020,11 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     },
     {
       "assetId": "grunenthal-rat-inventario-digital-registro-beyond",
-      "pdfName": "inventario-digital-registro-beyond.pdf",
+      "pdfName": "inventario_Digital_-_Registro_Beyond.pdf",
       "inventoryName": "Digital",
       "subInventoryName": "Registro Beyond",
       "status": "verificado",
-      "matchScore": 1,
+      "matchScore": 1.0,
       "validatedFields": [
         "databaseName",
         "responsible",
@@ -22671,11 +23061,11 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     },
     {
       "assetId": "grunenthal-rat-inventario-digital-salesforce-marketing-davara",
-      "pdfName": "inventario-digital-salesforce-marketing-davara.pdf",
+      "pdfName": "inventario_Digital_-_Salesforce_Marketing davara .pdf",
       "inventoryName": "Digital",
       "subInventoryName": "Salesforce Marketing",
       "status": "verificado",
-      "matchScore": 1,
+      "matchScore": 1.0,
       "validatedFields": [
         "databaseName",
         "responsible",
@@ -22712,11 +23102,11 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     },
     {
       "assetId": "grunenthal-rat-inventario-direccion-general-conave-mexico",
-      "pdfName": "inventario-direccion-general-conave-mexico.pdf",
+      "pdfName": "inventario_Dirección_General_-_Conave_México.pdf",
       "inventoryName": "Dirección General",
       "subInventoryName": "Conave México",
       "status": "verificado",
-      "matchScore": 1,
+      "matchScore": 1.0,
       "validatedFields": [
         "databaseName",
         "responsible",
@@ -22753,11 +23143,11 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     },
     {
       "assetId": "grunenthal-rat-inventario-direccion-general-listado-de-tallas-core-team",
-      "pdfName": "inventario-direccion-general-listado-de-tallas-core-team.pdf",
+      "pdfName": "inventario_Dirección_General_-_Listado_de_Tallas_Core_Team.pdf",
       "inventoryName": "Dirección General",
       "subInventoryName": "Listado de Tallas Core Team",
       "status": "verificado",
-      "matchScore": 1,
+      "matchScore": 1.0,
       "validatedFields": [
         "databaseName",
         "responsible",
@@ -22794,11 +23184,11 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     },
     {
       "assetId": "grunenthal-rat-inventario-direccion-general-rooming-general",
-      "pdfName": "inventario-direccion-general-rooming-general.pdf",
+      "pdfName": "inventario_Dirección_General_-_Rooming_General.pdf",
       "inventoryName": "Dirección General",
       "subInventoryName": "Rooming General",
       "status": "verificado",
-      "matchScore": 1,
+      "matchScore": 1.0,
       "validatedFields": [
         "databaseName",
         "responsible",
@@ -22835,11 +23225,11 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     },
     {
       "assetId": "grunenthal-rat-inventario-dolor-listado-de-medicos-ametd",
-      "pdfName": "inventario-dolor-listado-de-medicos-ametd.pdf",
+      "pdfName": "inventario_Dolor_-_Listado_de_Médicos_AMETD.pdf",
       "inventoryName": "Dolor",
       "subInventoryName": "Listado de Médicos AMETD",
       "status": "verificado",
-      "matchScore": 1,
+      "matchScore": 1.0,
       "validatedFields": [
         "databaseName",
         "responsible",
@@ -22876,11 +23266,11 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     },
     {
       "assetId": "grunenthal-rat-inventario-dolor-perfil-de-medico-salesforce",
-      "pdfName": "inventario-dolor-perfil-de-medico-salesforce.pdf",
+      "pdfName": "inventario_Dolor_-_Perfil_de_Médico_Salesforce_.pdf",
       "inventoryName": "Dolor",
       "subInventoryName": "Perfil de Médico Salesforce",
       "status": "verificado",
-      "matchScore": 1,
+      "matchScore": 1.0,
       "validatedFields": [
         "databaseName",
         "responsible",
@@ -22917,11 +23307,11 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     },
     {
       "assetId": "grunenthal-rat-inventario-entrenamiento-master-evaluaciones",
-      "pdfName": "inventario-entrenamiento-master-evaluaciones.pdf",
+      "pdfName": "inventario_Entrenamiento_-_Master_Evaluaciones.pdf",
       "inventoryName": "Entrenamiento",
       "subInventoryName": "Master Evaluaciones",
       "status": "verificado",
-      "matchScore": 1,
+      "matchScore": 1.0,
       "validatedFields": [
         "databaseName",
         "responsible",
@@ -22958,11 +23348,11 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     },
     {
       "assetId": "grunenthal-rat-inventario-flotilla-carta-responsiva-de-automovil",
-      "pdfName": "inventario-flotilla-carta-responsiva-de-automovil.pdf",
+      "pdfName": "inventario_Flotilla_-_Carta_Responsiva_de_Automóvil.pdf",
       "inventoryName": "Flotilla",
       "subInventoryName": "Carta Responsiva de Automóvil",
       "status": "verificado",
-      "matchScore": 1,
+      "matchScore": 1.0,
       "validatedFields": [
         "databaseName",
         "responsible",
@@ -22999,11 +23389,11 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     },
     {
       "assetId": "grunenthal-rat-inventario-flotilla-informacion-solicitada-a-empleado-por-correo",
-      "pdfName": "inventario-flotilla-informacion-solicitada-a-empleado-por-correo.pdf",
+      "pdfName": "inventario_Flotilla_-_Información_solicitada_a_empleado_por_Correo.pdf",
       "inventoryName": "Flotilla",
       "subInventoryName": "Información solicitada a empleado por Correo",
       "status": "verificado",
-      "matchScore": 1,
+      "matchScore": 1.0,
       "validatedFields": [
         "databaseName",
         "responsible",
@@ -23040,11 +23430,11 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     },
     {
       "assetId": "grunenthal-rat-inventario-flotilla-solicitud-de-fondo-de-garantia-de-auto",
-      "pdfName": "inventario-flotilla-solicitud-de-fondo-de-garantia-de-auto.pdf",
+      "pdfName": "inventario_Flotilla_-_Solicitud_de_Fondo_de_Garantía_de_Auto_.pdf",
       "inventoryName": "Flotilla",
       "subInventoryName": "Solicitud de Fondo de Garantía de Auto",
       "status": "verificado",
-      "matchScore": 1,
+      "matchScore": 1.0,
       "validatedFields": [
         "databaseName",
         "responsible",
@@ -23081,11 +23471,11 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     },
     {
       "assetId": "grunenthal-rat-inventario-human-resources-bacher-zoppi-catalogo-de-empleados",
-      "pdfName": "inventario-human-resources-bacher-zoppi-catalogo-de-empleados.pdf",
+      "pdfName": "inventario_Human_Resources_-_Bacher_Zoppi_(Catálogo_de_Empleados)_.pdf",
       "inventoryName": "HR",
       "subInventoryName": "Bacher Zoppi (Catálogo de Empleados)",
       "status": "verificado",
-      "matchScore": 1,
+      "matchScore": 1.0,
       "validatedFields": [
         "databaseName",
         "responsible",
@@ -23122,11 +23512,11 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     },
     {
       "assetId": "grunenthal-rat-inventario-human-resources-formato-de-alta-proveedor",
-      "pdfName": "inventario-human-resources-formato-de-alta-proveedor.pdf",
+      "pdfName": "inventario_Human_Resources_-_Formato_de_alta_proveedor.pdf",
       "inventoryName": "HR",
       "subInventoryName": "Formato de alta proveedor",
       "status": "verificado",
-      "matchScore": 1,
+      "matchScore": 1.0,
       "validatedFields": [
         "databaseName",
         "responsible",
@@ -23163,11 +23553,11 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     },
     {
       "assetId": "grunenthal-rat-inventario-human-resources-cedula-de-datos",
-      "pdfName": "inventario-human-resources-cedula-de-datos.pdf",
+      "pdfName": "inventario_Human_resources_-_Cédula_de_Datos.pdf",
       "inventoryName": "HR",
       "subInventoryName": "Cédula de Datos",
       "status": "verificado",
-      "matchScore": 1,
+      "matchScore": 1.0,
       "validatedFields": [
         "databaseName",
         "responsible",
@@ -23204,11 +23594,11 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     },
     {
       "assetId": "grunenthal-rat-inventario-human-resources-checklist-de-documentacion",
-      "pdfName": "inventario-human-resources-checklist-de-documentacion.pdf",
+      "pdfName": "inventario_Human_resources_-_Checklist_de_documentación.pdf",
       "inventoryName": "HR",
       "subInventoryName": "Checklist de documentación",
       "status": "verificado",
-      "matchScore": 1,
+      "matchScore": 1.0,
       "validatedFields": [
         "databaseName",
         "responsible",
@@ -23245,11 +23635,11 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     },
     {
       "assetId": "grunenthal-rat-inventario-it-sistema-azure-1",
-      "pdfName": "inventario-it-sistema-azure-1.pdf",
+      "pdfName": "inventario_IT_-_Sistema_Azure (1).pdf",
       "inventoryName": "IT",
       "subInventoryName": "Sistema Azure",
       "status": "verificado",
-      "matchScore": 1,
+      "matchScore": 1.0,
       "validatedFields": [
         "databaseName",
         "responsible",
@@ -23286,11 +23676,11 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     },
     {
       "assetId": "grunenthal-rat-inventario-investigacion-de-mercados-sinefarma",
-      "pdfName": "inventario-investigacion-de-mercados-sinefarma.pdf",
+      "pdfName": "inventario_Investigación_de_Mercados_-_Sinefarma.pdf",
       "inventoryName": "Investigación De Mercado",
       "subInventoryName": "Sinefarma",
       "status": "verificado",
-      "matchScore": 1,
+      "matchScore": 1.0,
       "validatedFields": [
         "databaseName",
         "responsible",
@@ -23327,11 +23717,11 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     },
     {
       "assetId": "grunenthal-rat-inventario-medical-information-base-de-datos-de-tracker-y-correos-electronicos-1",
-      "pdfName": "inventario-medical-information-base-de-datos-de-tracker-y-correos-electronicos-1.pdf",
+      "pdfName": "inventario_Medical_Information_-_Base_de_datos_de_Tracker_y_Correos_Electrónicos (1).pdf",
       "inventoryName": "Medical information",
       "subInventoryName": "Base de datos de Tracker y Correos Electrónicos",
       "status": "verificado",
-      "matchScore": 1,
+      "matchScore": 1.0,
       "validatedFields": [
         "databaseName",
         "responsible",
@@ -23368,11 +23758,11 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     },
     {
       "assetId": "grunenthal-rat-inventario-medical-lista-de-requerimientos-hcp-profesional-de-salud-nacional",
-      "pdfName": "inventario-medical-lista-de-requerimientos-hcp-profesional-de-salud-nacional.pdf",
+      "pdfName": "inventario_Medical_-_Lista_de_requerimientos_HCP_(Profesional_de_salud_nacional)_.pdf",
       "inventoryName": "Medical",
       "subInventoryName": "Lista de requerimientos HCP (Profesional de salud nacional)",
       "status": "verificado",
-      "matchScore": 1,
+      "matchScore": 1.0,
       "validatedFields": [
         "databaseName",
         "responsible",
@@ -23409,11 +23799,11 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     },
     {
       "assetId": "grunenthal-rat-inventario-medical-lista-de-requerimientos-hcp-profesionales-de-la-salud-extranjero",
-      "pdfName": "inventario-medical-lista-de-requerimientos-hcp-profesionales-de-la-salud-extranjero.pdf",
+      "pdfName": "inventario_Medical_-_Lista_de_requerimientos_HCP_(Profesionales_de_la_salud_extranjero).pdf",
       "inventoryName": "Medical",
       "subInventoryName": "Lista de requerimientos HCP (Profesionales de la salud extranjero)",
       "status": "verificado",
-      "matchScore": 1,
+      "matchScore": 1.0,
       "validatedFields": [
         "databaseName",
         "responsible",
@@ -23450,11 +23840,11 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     },
     {
       "assetId": "grunenthal-rat-inventario-medical-lista-de-requerimientos-donaciones",
-      "pdfName": "inventario-medical-lista-de-requerimientos-donaciones.pdf",
+      "pdfName": "inventario_Medical_lista_de_requerimientos_donaciones.pdf",
       "inventoryName": "Medical",
       "subInventoryName": "Lista de requerimientos donaciones .",
       "status": "verificado",
-      "matchScore": 1,
+      "matchScore": 1.0,
       "validatedFields": [
         "databaseName",
         "responsible",
@@ -23491,11 +23881,11 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     },
     {
       "assetId": "grunenthal-rat-inventario-primary-care-beyond-inscripcion-de-medicos",
-      "pdfName": "inventario-primary-care-beyond-inscripcion-de-medicos.pdf",
+      "pdfName": "inventario_Primary_Care_-_Beyond__Inscripción_de_médicos..pdf",
       "inventoryName": "Primary Care",
       "subInventoryName": "Beyond: Inscripción de médicos.",
       "status": "verificado",
-      "matchScore": 1,
+      "matchScore": 1.0,
       "validatedFields": [
         "databaseName",
         "responsible",
@@ -23532,11 +23922,11 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     },
     {
       "assetId": "grunenthal-rat-inventario-primary-care-carta-invitacion-de-medicos",
-      "pdfName": "inventario-primary-care-carta-invitacion-de-medicos.pdf",
+      "pdfName": "inventario_Primary_Care_-_Carta_Invitación_de_médicos.pdf",
       "inventoryName": "Primary Care",
       "subInventoryName": "Carta Invitación de médicos",
       "status": "verificado",
-      "matchScore": 1,
+      "matchScore": 1.0,
       "validatedFields": [
         "databaseName",
         "responsible",
@@ -23573,11 +23963,11 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     },
     {
       "assetId": "grunenthal-rat-inventario-primary-care-registro-de-medicos-para-invitaciones-o-becas-a-congresos",
-      "pdfName": "inventario-primary-care-registro-de-medicos-para-invitaciones-o-becas-a-congresos.pdf",
+      "pdfName": "inventario_Primary_Care_-_Registro_de_médicos_para_invitaciones_o_becas_a_congresos.pdf",
       "inventoryName": "Primary Care",
       "subInventoryName": "Registro de médicos para invitaciones o becas a congresos",
       "status": "verificado",
-      "matchScore": 1,
+      "matchScore": 1.0,
       "validatedFields": [
         "databaseName",
         "responsible",
@@ -23614,11 +24004,11 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     },
     {
       "assetId": "grunenthal-rat-inventario-primary-care-solicitud-de-congreso-internacional",
-      "pdfName": "inventario-primary-care-solicitud-de-congreso-internacional.pdf",
+      "pdfName": "inventario_Primary_Care_-_Solicitud_de_Congreso_internacional.pdf",
       "inventoryName": "Primary Care",
       "subInventoryName": "Solicitud de Congreso internacional",
       "status": "verificado",
-      "matchScore": 1,
+      "matchScore": 1.0,
       "validatedFields": [
         "databaseName",
         "responsible",
@@ -23655,11 +24045,11 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     },
     {
       "assetId": "grunenthal-rat-inventario-regulatorio-base-de-datos-para-registro-ante-autoridad-sanitaria",
-      "pdfName": "inventario-regulatorio-base-de-datos-para-registro-ante-autoridad-sanitaria.pdf",
+      "pdfName": "inventario_Regulatorio_-_Base_de_datos_para_registro_ante_autoridad_sanitaria._.pdf",
       "inventoryName": "Regulatorio",
       "subInventoryName": "Base de datos para registro ante autoridad sanitaria.",
       "status": "verificado",
-      "matchScore": 1,
+      "matchScore": 1.0,
       "validatedFields": [
         "databaseName",
         "responsible",
@@ -23696,11 +24086,11 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     },
     {
       "assetId": "grunenthal-rat-inventario-ventas-internas-informacion-sell-out",
-      "pdfName": "inventario-ventas-internas-informacion-sell-out.pdf",
+      "pdfName": "inventario_Ventas_Internas_-_Información_Sell-out.pdf",
       "inventoryName": "Ventas Internas",
       "subInventoryName": "Información Sell-out",
       "status": "verificado",
-      "matchScore": 1,
+      "matchScore": 1.0,
       "validatedFields": [
         "databaseName",
         "responsible",
@@ -23739,6 +24129,12 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
       "inventoryName": "COMEX",
       "subInventoryId": "grunenthal-rat-inventario-comex-open-data-veeva-registro-de-medicos",
       "subInventoryName": "Open Data (Veeva) - Registro de Médicos",
+      "status": "pendiente-revision"
+    },
+    {
+      "inventoryName": "Ventas Internas",
+      "subInventoryId": "grunenthal-rat-inventario-ventas-internas-reporte-de-distribuidores-xeomeen",
+      "subInventoryName": "Reporte de Distribuidores Xeomeen",
       "status": "pendiente-revision"
     }
   ]

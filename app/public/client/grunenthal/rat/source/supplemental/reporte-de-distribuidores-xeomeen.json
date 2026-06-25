@@ -1,0 +1,379 @@
+{
+  "id": "sub-inventory-1",
+  "databaseName": "Reporte de Distribuidores Xeomeen",
+  "holderTypes": [
+    "Health Care Professionals",
+    "Otro"
+  ],
+  "otherHolderType": "Pacientes",
+  "otherLegalBasis": "",
+  "holdersVolume": "<5k",
+  "accessibility": "A2",
+  "environment": "E2",
+  "responsibleArea": "Ventar Internas",
+  "showOtherResponsibleArea": true,
+  "obtainingMethod": "indirecto",
+  "showOtherObtainingMethod": false,
+  "obtainingSource": "Por medio del Distribuidores",
+  "otherConsentException": "",
+  "otherConsentMechanism": "",
+  "otherConsentType": "",
+  "privacyNoticeFiles": [
+    null
+  ],
+  "privacyNoticeFileIds": [
+    "stored-file-96b0cbb2-d220-422a-81f3-c2911357aace"
+  ],
+  "privacyNoticeFileNames": [
+    "Aviso de Privacidad Integral para HCP Non Visited.docx"
+  ],
+  "privacyNoticeFileId": "stored-file-96b0cbb2-d220-422a-81f3-c2911357aace",
+  "privacyNoticeFileName": "Aviso de Privacidad Integral para HCP Non Visited.docx",
+  "consentRequired": true,
+  "consentException": [],
+  "consentMechanism": "medios_electronicos",
+  "consentType": "expreso",
+  "tacitDescription": "",
+  "secondaryConsentType": "",
+  "secondaryConsentMechanism": "",
+  "secondaryTacitDescription": "",
+  "secondaryExpresoForm": "",
+  "secondaryExpresoEscritoForm": "",
+  "secondaryPurposesConsent": {},
+  "processingArea": [
+    "Otros"
+  ],
+  "otherProcessingArea": "Ventas Privado",
+  "showOtherProcessingArea": false,
+  "processingSystem": "electronico",
+  "processingSystemName": "",
+  "processingDescription": [
+    "Uso",
+    "Divulgacion",
+    "Almacenamiento"
+  ],
+  "accessDescription": [
+    "Visualización",
+    "Edición",
+    "Descarga"
+  ],
+  "otherAccessDescription": "",
+  "dataLifecyclePrivileges": "",
+  "additionalAccesses": [
+    {
+      "id": "additional-access-1",
+      "area": "N/A",
+      "showOtherArea": true,
+      "privileges": [
+        "Otros"
+      ],
+      "otherPrivilege": "N/A",
+      "role": "",
+      "otherRole": ""
+    }
+  ],
+  "additionalAreas": [],
+  "additionalAreasAccess": [],
+  "otherAdditionalAreasAccess": "",
+  "showOtherAdditionalAreasAccess": false,
+  "additionalAreasLegalBasis": [],
+  "otherAdditionalAreasLegalBasis": "",
+  "additionalAreasPurposes": [],
+  "otherAdditionalAreasPurposes": "",
+  "storageMethod": "disco-duro",
+  "physicalLocation": "Servidor Local",
+  "backupPeriodicity": "N/A",
+  "isBackedUp": false,
+  "backupDescription": "",
+  "backupResponsible": "",
+  "showOtherBackupResponsible": false,
+  "conservationTerm": "No hay relación jurídica",
+  "showOtherConservationTerm": true,
+  "conservationJustification": [
+    "Consentimiento vigente"
+  ],
+  "otherConservationJustification": "",
+  "conservationJustificationDetail": "",
+  "conservationLegalBasis": "",
+  "blockingTime": "15 días posteriores a haber revocado su consentimiento.  ",
+  "showOtherBlockingTime": true,
+  "legalPrescription": [
+    "Otros"
+  ],
+  "otherLegalPrescription": "",
+  "blockingLegalDisposition": "40 de la Ley Federal de Protección de Datos Personales en Posesión de los Particulares",
+  "additionalConservations": [],
+  "additionalBlockings": [],
+  "showOtherProcessingTime": false,
+  "processingTime": "",
+  "postRelationshipProcessing": "",
+  "legalConservation": [],
+  "otherLegalConservation": "",
+  "deletionMethods": [
+    "Otros"
+  ],
+  "otherDeletionMethod": "Borrado de Archivos",
+  "deletionMethod": "",
+  "dataTransfer": "si",
+  "transferRecipient": "Autoridades Competentes",
+  "transferPurposes": "Cumplimiento de requerimientos y obligaciones legales. ",
+  "transferConsentRequired": false,
+  "transferExceptions": [
+    "Cuando lo establezca una ley o tratado internacional."
+  ],
+  "transferConsentType": "",
+  "transferTacitDescription": "",
+  "transferExpresoForm": "",
+  "transferOtherExpresoForm": "",
+  "transferExpresoEscritoForm": "",
+  "transferOtherExpresoEscritoForm": "",
+  "transferLegalInstrument": [
+    "Otro"
+  ],
+  "otherTransferLegalInstrument": "N/A",
+  "transferInAP": true,
+  "additionalTransfers": [],
+  "dataRemission": "no",
+  "remissionRecipient": "",
+  "remissionPurposes": [],
+  "otherRemissionPurpose": "",
+  "remissionLegalInstrument": [],
+  "otherRemissionLegalInstrument": "",
+  "additionalRemissions": [],
+  "personalData": [
+    {
+      "id": "personal-data-1",
+      "name": "Número de Factura",
+      "category": "Patrimoniales",
+      "proporcionalidad": true,
+      "riesgo": "medio",
+      "purposesPrimary": [
+        "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+        "Visitas profesionales: Contactarlo y, en su caso, visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+        "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+        "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+        "Invitaciones y participación en eventos: Invitarlo, registrar su asistencia y gestionar su participación en congresos, seminarios, programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+        "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal, así como notificaciones o alertas de seguridad que resulten pertinentes.",
+        "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas, educativas y promocionales dirigidas a profesionales de la salud, con el fin de mejorar su contenido y alcance.",
+        "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+      ],
+      "purposesSecondary": []
+    },
+    {
+      "id": "1782412501996",
+      "name": "Fecha de emisión ",
+      "category": "Identificación",
+      "proporcionalidad": true,
+      "riesgo": "bajo",
+      "purposesPrimary": [
+        "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+        "Visitas profesionales: Contactarlo y, en su caso, visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+        "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+        "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+        "Invitaciones y participación en eventos: Invitarlo, registrar su asistencia y gestionar su participación en congresos, seminarios, programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+        "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal, así como notificaciones o alertas de seguridad que resulten pertinentes.",
+        "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas, educativas y promocionales dirigidas a profesionales de la salud, con el fin de mejorar su contenido y alcance.",
+        "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+      ],
+      "purposesSecondary": []
+    },
+    {
+      "id": "1782412511345",
+      "name": "Nombre del paciente",
+      "category": "Identificación",
+      "proporcionalidad": false,
+      "riesgo": "bajo",
+      "purposesPrimary": [
+        "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+        "Visitas profesionales: Contactarlo y, en su caso, visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+        "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+        "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+        "Invitaciones y participación en eventos: Invitarlo, registrar su asistencia y gestionar su participación en congresos, seminarios, programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+        "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal, así como notificaciones o alertas de seguridad que resulten pertinentes.",
+        "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas, educativas y promocionales dirigidas a profesionales de la salud, con el fin de mejorar su contenido y alcance.",
+        "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+      ],
+      "purposesSecondary": []
+    },
+    {
+      "id": "1782412520012",
+      "name": "Producto ID",
+      "category": "Identificación",
+      "proporcionalidad": true,
+      "riesgo": "bajo",
+      "purposesPrimary": [
+        "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+        "Visitas profesionales: Contactarlo y, en su caso, visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+        "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+        "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+        "Invitaciones y participación en eventos: Invitarlo, registrar su asistencia y gestionar su participación en congresos, seminarios, programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+        "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal, así como notificaciones o alertas de seguridad que resulten pertinentes.",
+        "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas, educativas y promocionales dirigidas a profesionales de la salud, con el fin de mejorar su contenido y alcance.",
+        "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+      ],
+      "purposesSecondary": []
+    },
+    {
+      "id": "1782412531896",
+      "name": "País de cliente",
+      "category": "Identificación",
+      "proporcionalidad": true,
+      "riesgo": "bajo",
+      "purposesPrimary": [
+        "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+        "Visitas profesionales: Contactarlo y, en su caso, visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+        "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+        "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+        "Invitaciones y participación en eventos: Invitarlo, registrar su asistencia y gestionar su participación en congresos, seminarios, programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+        "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal, así como notificaciones o alertas de seguridad que resulten pertinentes.",
+        "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas, educativas y promocionales dirigidas a profesionales de la salud, con el fin de mejorar su contenido y alcance.",
+        "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+      ],
+      "purposesSecondary": []
+    },
+    {
+      "id": "1782412565862",
+      "name": "Nombre del médico",
+      "category": "Identificación",
+      "proporcionalidad": true,
+      "riesgo": "bajo",
+      "purposesPrimary": [
+        "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+        "Visitas profesionales: Contactarlo y, en su caso, visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+        "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+        "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+        "Invitaciones y participación en eventos: Invitarlo, registrar su asistencia y gestionar su participación en congresos, seminarios, programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+        "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal, así como notificaciones o alertas de seguridad que resulten pertinentes.",
+        "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas, educativas y promocionales dirigidas a profesionales de la salud, con el fin de mejorar su contenido y alcance.",
+        "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+      ],
+      "purposesSecondary": []
+    },
+    {
+      "id": "1782412576446",
+      "name": "Municipio / Alcaldía",
+      "category": "Identificación",
+      "proporcionalidad": true,
+      "riesgo": "bajo",
+      "purposesPrimary": [
+        "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+        "Visitas profesionales: Contactarlo y, en su caso, visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+        "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+        "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+        "Invitaciones y participación en eventos: Invitarlo, registrar su asistencia y gestionar su participación en congresos, seminarios, programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+        "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal, así como notificaciones o alertas de seguridad que resulten pertinentes.",
+        "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas, educativas y promocionales dirigidas a profesionales de la salud, con el fin de mejorar su contenido y alcance.",
+        "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+      ],
+      "purposesSecondary": []
+    },
+    {
+      "id": "1782412585996",
+      "name": "Estado",
+      "category": "Ubicación",
+      "proporcionalidad": true,
+      "riesgo": "medio",
+      "purposesPrimary": [
+        "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+        "Visitas profesionales: Contactarlo y, en su caso, visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+        "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+        "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+        "Invitaciones y participación en eventos: Invitarlo, registrar su asistencia y gestionar su participación en congresos, seminarios, programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+        "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal, así como notificaciones o alertas de seguridad que resulten pertinentes.",
+        "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas, educativas y promocionales dirigidas a profesionales de la salud, con el fin de mejorar su contenido y alcance.",
+        "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+      ],
+      "purposesSecondary": []
+    },
+    {
+      "id": "1782412596613",
+      "name": "Precio unitario",
+      "category": "Patrimoniales",
+      "proporcionalidad": true,
+      "riesgo": "medio",
+      "purposesPrimary": [
+        "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+        "Visitas profesionales: Contactarlo y, en su caso, visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+        "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+        "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+        "Invitaciones y participación en eventos: Invitarlo, registrar su asistencia y gestionar su participación en congresos, seminarios, programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+        "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal, así como notificaciones o alertas de seguridad que resulten pertinentes.",
+        "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas, educativas y promocionales dirigidas a profesionales de la salud, con el fin de mejorar su contenido y alcance.",
+        "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+      ],
+      "purposesSecondary": []
+    },
+    {
+      "id": "1782412619063",
+      "name": "Cantidad total",
+      "category": "Patrimoniales",
+      "proporcionalidad": true,
+      "riesgo": "medio",
+      "purposesPrimary": [
+        "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+        "Visitas profesionales: Contactarlo y, en su caso, visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+        "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+        "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+        "Invitaciones y participación en eventos: Invitarlo, registrar su asistencia y gestionar su participación en congresos, seminarios, programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+        "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal, así como notificaciones o alertas de seguridad que resulten pertinentes.",
+        "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas, educativas y promocionales dirigidas a profesionales de la salud, con el fin de mejorar su contenido y alcance.",
+        "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+      ],
+      "purposesSecondary": []
+    },
+    {
+      "id": "1782412628179",
+      "name": "Importe total",
+      "category": "Patrimoniales",
+      "proporcionalidad": true,
+      "riesgo": "medio",
+      "purposesPrimary": [
+        "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+        "Visitas profesionales: Contactarlo y, en su caso, visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+        "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+        "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+        "Invitaciones y participación en eventos: Invitarlo, registrar su asistencia y gestionar su participación en congresos, seminarios, programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+        "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal, así como notificaciones o alertas de seguridad que resulten pertinentes.",
+        "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas, educativas y promocionales dirigidas a profesionales de la salud, con el fin de mejorar su contenido y alcance.",
+        "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+      ],
+      "purposesSecondary": []
+    },
+    {
+      "id": "1782412638329",
+      "name": "Tipo de venta",
+      "category": "Identificación",
+      "proporcionalidad": true,
+      "riesgo": "bajo",
+      "purposesPrimary": [
+        "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+        "Visitas profesionales: Contactarlo y, en su caso, visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+        "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+        "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+        "Invitaciones y participación en eventos: Invitarlo, registrar su asistencia y gestionar su participación en congresos, seminarios, programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+        "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal, así como notificaciones o alertas de seguridad que resulten pertinentes.",
+        "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas, educativas y promocionales dirigidas a profesionales de la salud, con el fin de mejorar su contenido y alcance.",
+        "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+      ],
+      "purposesSecondary": []
+    },
+    {
+      "id": "1782412645446",
+      "name": "Canal / origen",
+      "category": "Identificación",
+      "proporcionalidad": true,
+      "riesgo": "bajo",
+      "purposesPrimary": [
+        "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+        "Visitas profesionales: Contactarlo y, en su caso, visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+        "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+        "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+        "Invitaciones y participación en eventos: Invitarlo, registrar su asistencia y gestionar su participación en congresos, seminarios, programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+        "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal, así como notificaciones o alertas de seguridad que resulten pertinentes.",
+        "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas, educativas y promocionales dirigidas a profesionales de la salud, con el fin de mejorar su contenido y alcance.",
+        "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+      ],
+      "purposesSecondary": []
+    }
+  ]
+}

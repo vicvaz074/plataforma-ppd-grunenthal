@@ -22,7 +22,14 @@ LOGO_FILE = PUBLIC_ROOT / "client" / "grunenthal" / "brand" / "grunenthal-logo-g
 DOWNLOADS_ROOT = Path.home() / "Downloads" / "Políticas de Grünenthal (2026)"
 SOURCE_ROOT = DOWNLOADS_ROOT / "InventariosDatos Personales"
 SUPPLEMENTAL_EXPORTS = [
-    PUBLIC_ROOT / "client" / "grunenthal" / "rat" / "source" / "supplemental" / "inventario-open-data-veeva.json",
+    {
+        "path": PUBLIC_ROOT / "client" / "grunenthal" / "rat" / "source" / "supplemental" / "inventario-open-data-veeva.json",
+        "defaultArea": "COMEX",
+    },
+    {
+        "path": PUBLIC_ROOT / "client" / "grunenthal" / "rat" / "source" / "supplemental" / "reporte-de-distribuidores-xeomeen.json",
+        "defaultArea": "Ventas Internas",
+    },
 ]
 
 SOURCE_EXPORTED_AT = "2026-06-25T17:39:52.875Z"
@@ -350,11 +357,15 @@ def normalize_sub_inventory_name(value: str) -> str:
 def normalize_supplemental_sub_inventory(raw: dict[str, Any], area: str) -> dict[str, Any]:
     name = normalize_sub_inventory_name(raw.get("databaseName", "Subinventario"))
     sub_id = f"grunenthal-rat-inventario-{slugify(area)}-{slugify(name)}"
-    sub = json.loads(json.dumps(raw, ensure_ascii=False))
+    raw_sub = json.loads(json.dumps(raw, ensure_ascii=False))
+    sub = {
+        **empty_sub_inventory(sub_id, name, area),
+        **raw_sub,
+    }
 
     sub["id"] = sub_id
     sub["databaseName"] = name
-    sub["responsibleArea"] = clean_display_name(sub.get("responsibleArea", "")) or area
+    sub["responsibleArea"] = area
     sub["showOtherResponsibleArea"] = True
     sub["otherProcessingArea"] = clean_display_name(sub.get("otherProcessingArea", "")) or area
     sub["showOtherProcessingArea"] = bool(sub["otherProcessingArea"]) or "Otros" in sub.get("processingArea", [])
@@ -391,12 +402,29 @@ def normalize_supplemental_sub_inventory(raw: dict[str, Any], area: str) -> dict
 
 def supplemental_sub_inventories() -> list[tuple[str, dict[str, Any], dict[str, Any]]]:
     supplements: list[tuple[str, dict[str, Any], dict[str, Any]]] = []
-    for export_path in SUPPLEMENTAL_EXPORTS:
+    for supplement in SUPPLEMENTAL_EXPORTS:
+        export_path = supplement["path"]
+        default_area = supplement["defaultArea"]
         if not export_path.exists():
             continue
         export = json.loads(export_path.read_text(encoding="utf-8"))
-        for inventory in export.get("inventories", []):
-            area = clean_display_name(inventory.get("databaseName", "")) or "COMEX"
+        if isinstance(export, dict) and isinstance(export.get("inventories"), list):
+            inventories = export.get("inventories", [])
+        elif isinstance(export, dict) and export.get("databaseName"):
+            inventories = [
+                {
+                    "databaseName": default_area,
+                    "responsible": CLIENT_NAME,
+                    "createdAt": SEEDED_AT,
+                    "updatedAt": SEEDED_AT,
+                    "subInventories": [export],
+                }
+            ]
+        else:
+            continue
+
+        for inventory in inventories:
+            area = clean_display_name(inventory.get("databaseName", "")) or default_area
             for raw_sub in inventory.get("subInventories", []):
                 sub = normalize_supplemental_sub_inventory(raw_sub, area)
                 supplements.append(
@@ -869,8 +897,8 @@ def main() -> None:
     inventories, links = build_inventories(assets)
     if len(inventories) != 15:
         raise SystemExit(f"Se esperaban 15 inventarios y se generaron {len(inventories)}")
-    if sum(len(inv["subInventories"]) for inv in inventories) != 34:
-        raise SystemExit("El total de subinventarios generados no es 34")
+    if sum(len(inv["subInventories"]) for inv in inventories) != 35:
+        raise SystemExit("El total de subinventarios generados no es 35")
     OUTPUT_TS.write_text(render_ts(inventories, links), encoding="utf-8")
     print("Inventarios generados:", len(inventories))
     print("Subinventarios generados:", sum(len(inv["subInventories"]) for inv in inventories))
