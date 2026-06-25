@@ -86,6 +86,20 @@ describe("generación PDF de inventarios RAT", () => {
     assert.doesNotMatch(pdf.normalizePdfCellText(rawNoticeName), /\p{M}/u)
   })
 
+  it("mantiene las finalidades como tablas de una sola columna con el texto original", () => {
+    const source = fs.readFileSync(
+      path.join(appDir, "app/rat/utils/inventory-pdf.ts"),
+      "utf8",
+    )
+
+    assert.doesNotMatch(source, /Finalidades primarias registradas/)
+    assert.doesNotMatch(source, /Finalidades secundarias y consentimiento asociado/)
+    assert.doesNotMatch(source, /"Finalidad secundaria",\s*"Tipo de consentimiento",\s*"Mecanismo"/)
+    assert.match(source, /renderPurposeTable\(\s*"Finalidades primarias"/)
+    assert.match(source, /renderPurposeTable\(\s*"Finalidades secundarias"/)
+    assert.match(source, /head:\s*\[\[title\]\]/)
+  })
+
   it("prefiere los PDFs fuente vinculados para descargar inventarios Grünenthal", async () => {
     const sourcePdfs = await importModule("app/rat/utils/inventory-source-pdfs.ts")
     const ratData = await importModule("lib/grunenthal-rat-data.ts")
