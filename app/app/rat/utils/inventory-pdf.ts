@@ -101,6 +101,19 @@ export const normalizeReportText = (value: unknown): string => {
   );
 };
 
+export const normalizePdfCellText = (value: unknown): string => {
+  const raw = value === null || value === undefined ? "" : String(value);
+  const normalized = raw
+    .normalize("NFC")
+    .replace(/[\u00ad\u200b-\u200d\ufeff]/g, "")
+    .replace(/\p{M}/gu, "");
+
+  return normalized
+    .split(/\r?\n/)
+    .map((line) => normalizeReportText(line))
+    .join("\n");
+};
+
 export const buildInventoryPdfFileName = (databaseName: unknown): string => {
   const safeName = normalizeReportText(databaseName)
     .normalize("NFD")
@@ -541,7 +554,7 @@ const listsAreEqual = (a?: string[], b?: string[]) =>
   JSON.stringify(normalizeList(a)) === JSON.stringify(normalizeList(b));
 
 const formatList = (list?: string[]) =>
-  list && list.length ? list.join(", ") : "Sin registro";
+  list && list.length ? list.map(normalizePdfCellText).join(", ") : "Sin registro";
 
 const formatConsentTypeValue = (value?: string) =>
   value ? CONSENT_TYPE_LABELS[value] ?? prettifyValue(value) : "Sin registro";
@@ -784,8 +797,10 @@ const formatValue = (key: string, value: any): string => {
 };
 
 const getField = (obj: any, key: string) => {
-  if (key.endsWith("FileName")) return obj[key] || "No subió archivo";
-  return formatValue(key, obj[key]);
+  if (key.endsWith("FileName")) {
+    return normalizePdfCellText(obj[key] || "No subió archivo");
+  }
+  return normalizePdfCellText(formatValue(key, obj[key]));
 };
 
 const isInternalPdfMetadataField = (key: string) =>
