@@ -872,6 +872,39 @@ export const generateInventoryPDF = (
     return startY;
   };
 
+  const renderPurposeTable = (title: string, purposes: string[]) => {
+    const body = purposes
+      .map((purpose) => normalizePdfCellText(purpose))
+      .filter((purpose) => purpose.trim().length > 0)
+      .map((purpose) => [purpose]);
+
+    if (body.length === 0) return;
+
+    let startY = getTableStartY(doc, 28);
+    if (startY > pageHeight - 24) {
+      doc.addPage();
+      (doc as any).lastAutoTable = undefined;
+      startY = getTableStartY(doc, 28);
+    }
+
+    autoTable(doc, {
+      startY,
+      head: [[title]],
+      body,
+      styles: { fontSize: 9, cellPadding: 2, overflow: "linebreak" },
+      headStyles: {
+        fillColor: rgbArray(accentLightRgb),
+        textColor: accentLightTextColor,
+        fontSize: 10,
+        fontStyle: "bold",
+      },
+      columnStyles: {
+        0: { cellWidth: 178 },
+      },
+      margin: { left: 16, right: 14 },
+    });
+  };
+
   const aggregateSubInventoryField = (key: keyof SubInventoryItem & string) => {
     const formattedValues = inventory.subInventories
       .map((sub) => getField(sub as any, key))
@@ -1317,28 +1350,6 @@ export const generateInventoryPDF = (
         )
       : [];
 
-    const activeSecondaryPurposeKeys = new Set<string>();
-    personalData.forEach((item) => {
-      normalizePurposes(item.purposesSecondary).forEach((purpose) => {
-        activeSecondaryPurposeKeys.add(normalizePurposeKey(purpose));
-      });
-    });
-
-    const secondaryConsentEntries = Object.entries(
-      sub.secondaryPurposesConsent ?? {},
-    )
-      .filter(([, value]) => {
-        if (!value) return false;
-        return (
-          Boolean(value.consentType) ||
-          Boolean(value.consentMechanism) ||
-          (Array.isArray(value.exceptions) && value.exceptions.length > 0)
-        );
-      })
-      .filter(([purpose]) =>
-        activeSecondaryPurposeKeys.has(normalizePurposeKey(purpose ?? "")),
-      );
-
     STEP_SECTIONS.forEach((section) => {
       if (section.type === "fields") {
         const sectionData: [string, string][] = [];
@@ -1547,117 +1558,23 @@ export const generateInventoryPDF = (
           );
 
           if (primaryAggregates.length > 0) {
-            const primaryAggregatesStartY = renderTableTitle(
-              "Finalidades primarias registradas",
+            renderPurposeTable(
+              "Finalidades primarias",
+              primaryAggregates.map((aggregate) => aggregate.purpose),
             );
-            autoTable(doc, {
-              startY: primaryAggregatesStartY,
-              head: [["Finalidades primarias"]],
-              body: primaryAggregates.map((aggregate) => [
-                aggregate.purpose,
-              ]),
-              styles: { fontSize: 9, cellPadding: 2, overflow: "linebreak" },
-              headStyles: {
-                fillColor: rgbArray(accentLightRgb),
-                textColor: accentLightTextColor,
-                fontSize: 10,
-                fontStyle: "bold",
-              },
-              columnStyles: {
-                0: { cellWidth: 178 },
-              },
-              margin: { left: 16, right: 14 },
-            });
           }
 
-          type SecondaryConsentEntry =
-            (typeof secondaryConsentEntries)[number][1];
-          type SecondaryAggregate = {
-            display: string;
-            dataLabels: Set<string>;
-            consent?: SecondaryConsentEntry;
-          };
+          const secondaryAggregates = aggregatePurposesToData(
+            personalData,
+            (d) => (allSecondariesSame ? secondaryCommon : d.purposesSecondary),
+            getPersonalDataLabel,
+          );
 
-          const secondaryAggregates = new Map<string, SecondaryAggregate>();
-
-          const getSecondaryAggregate = (
-            purpose: string | null | undefined,
-          ): SecondaryAggregate => {
-            const normalized = normalizePurposeKey(purpose);
-            const trimmed = typeof purpose === "string" ? purpose.trim() : "";
-            const existing = secondaryAggregates.get(normalized);
-            if (existing) return existing;
-            const aggregate: SecondaryAggregate = {
-              display: trimmed.length > 0 ? trimmed : "Sin descripción",
-              dataLabels: new Set<string>(),
-            };
-            secondaryAggregates.set(normalized, aggregate);
-            return aggregate;
-          };
-
-          personalData.forEach((dataItem) => {
-            const purposes = normalizePurposes(
-              allSecondariesSame ? secondaryCommon : dataItem.purposesSecondary,
+          if (secondaryAggregates.length > 0) {
+            renderPurposeTable(
+              "Finalidades secundarias",
+              secondaryAggregates.map((aggregate) => aggregate.purpose),
             );
-            if (purposes.length === 0) return;
-            const label = getPersonalDataLabel(dataItem);
-            purposes.forEach((purpose) => {
-              const aggregate = getSecondaryAggregate(purpose);
-              if (label.trim()) {
-                aggregate.dataLabels.add(label.trim());
-              }
-            });
-          });
-
-          secondaryConsentEntries.forEach(([purpose, consent]) => {
-            const aggregate = getSecondaryAggregate(purpose || "");
-            aggregate.consent = consent;
-          });
-
-          const secondaryRows = Array.from(secondaryAggregates.values())
-            .sort((a, b) => a.display.localeCompare(b.display))
-            .map((aggregate) => {
-              const consent = aggregate.consent;
-              return [
-                aggregate.display,
-                formatConsentTypeValue(consent?.consentType),
-                formatConsentMechanismValue(
-                  consent?.consentMechanism,
-                  consent?.consentType,
-                ),
-              ];
-            });
-
-          if (secondaryRows.length > 0) {
-            if (secondaryConsentEntries.length > 0) {
-              usedFields.add("secondaryPurposesConsent");
-            }
-
-            const secondaryCombinedStartY = renderTableTitle(
-              "Finalidades secundarias y consentimiento asociado",
-            );
-            autoTable(doc, {
-              startY: secondaryCombinedStartY,
-              head: [[
-                "Finalidad secundaria",
-                "Tipo de consentimiento",
-                "Mecanismo",
-              ]],
-              body: secondaryRows,
-              styles: { fontSize: 9, cellPadding: 2, overflow: "linebreak" },
-              headStyles: {
-                fillColor: rgbArray(accentLightRgb),
-                textColor: accentLightTextColor,
-                fontSize: 10,
-                fontStyle: "bold",
-              },
-              columnStyles: {
-                0: { cellWidth: 74 },
-                1: { cellWidth: 42 },
-                2: { cellWidth: 72 },
-              },
-              margin: { left: 16, right: 14 },
-            });
           }
 
         } else {
