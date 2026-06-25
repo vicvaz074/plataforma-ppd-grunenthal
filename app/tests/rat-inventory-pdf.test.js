@@ -74,6 +74,34 @@ describe("generación PDF de inventarios RAT", () => {
     )
   })
 
+  it("prefiere los PDFs fuente vinculados para descargar inventarios Grünenthal", async () => {
+    const sourcePdfs = await importModule("app/rat/utils/inventory-source-pdfs.ts")
+    const ratData = await importModule("lib/grunenthal-rat-data.ts")
+    const inventory = ratData.GRUNENTHAL_RAT_INVENTORIES.find(
+      (item) => item.id === "grunenthal-rat-area-direccion-general",
+    )
+
+    assert.ok(inventory, "debe existir el inventario Dirección General")
+
+    const downloads = sourcePdfs.collectInventorySourcePdfs(inventory)
+
+    assert.equal(downloads.length, 3)
+    assert.deepEqual(
+      downloads.map((download) => download.subInventoryName).sort(),
+      ["Conave México", "Listado de Tallas Core Team", "Rooming General"].sort(),
+    )
+    assert.equal(
+      downloads.every((download) =>
+        download.url.startsWith("/client/grunenthal/rat/direccion-general/"),
+      ),
+      true,
+    )
+    assert.equal(
+      downloads.every((download) => download.downloadName.startsWith("inventario-direccion-general-")),
+      true,
+    )
+  })
+
   it("pinta las líneas preenvueltas de portada sin pedir ajuste de ancho al renderizador", () => {
     const source = fs.readFileSync(
       path.join(appDir, "app/rat/utils/inventory-pdf.ts"),
