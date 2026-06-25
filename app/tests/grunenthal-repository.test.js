@@ -31,16 +31,37 @@ describe("repositorio documental Grünenthal", () => {
     )
     assert.ok(corad, "debe existir el análisis individual de CORAD")
     assert.equal(corad.complianceStatus, "no-aplica")
-    assert.equal(corad.sourceComplianceLabel, "N/A")
+    assert.equal(corad.sourceComplianceLabel, "Agregar cláusula")
     assert.match(corad.sourceClauseType, /No se encontró cláusula relativa/i)
+
+    const beterfly = repository.GRUNENTHAL_INDIVIDUAL_THIRD_PARTY_RECORDS.find((record) =>
+      record.providerIdentity.includes("BETERFLY MÉXICO"),
+    )
+    assert.ok(beterfly, "debe existir el análisis individual de BETERFLY")
+    assert.equal(beterfly.complianceStatus, "no-cumple")
+    assert.equal(beterfly.sourceComplianceLabel, "No cumple")
+    assert.equal(
+      beterfly.sourceRecommendation,
+      "La cláusula y anexo establecen que la comunicación de datos es una remisión, lo cual es incorrecto, ya que al ofrecer servicios Telemedicina y otros servicios independientes y ajenos a Grünenthal se debe de considerar como una transferencia de datos personales. Se sugiere emplear la cláusula C2 del Manual de Relaciones con Terceros y/o en su caso, los apéndices 2 CM-2 o 3 C-2 del mismo donde se establece la relación entre las partes y sus obligaciones respectivas.",
+    )
+
+    const sinefarma = repository.GRUNENTHAL_INDIVIDUAL_THIRD_PARTY_RECORDS.find((record) =>
+      record.providerIdentity.includes("SINEFARMA"),
+    )
+    assert.ok(sinefarma, "debe existir el análisis individual de SINEFARMA")
+    assert.match(sinefarma.internalCode, /GRT-TER-2026-025/)
+    assert.equal(sinefarma.sourceClauseType, "(1) Vigésima Protección de Datos Personales")
+    assert.equal(sinefarma.sourceComplianceLabel, "No cumple")
 
     const ups = repository.GRUNENTHAL_INDIVIDUAL_THIRD_PARTY_RECORDS.find((record) =>
       record.providerIdentity.includes("UPS SCS"),
     )
     assert.ok(ups, "debe existir el análisis individual de UPS")
-    assert.equal(ups.complianceStatus, "requiere-revision")
-    assert.equal(ups.sourceComplianceLabel, "Sí cumple")
-    assert.match(ups.sourceComplianceNotes, /contradicción/i)
+    assert.match(ups.internalCode, /GRT-TER-2026-027/)
+    assert.equal(ups.complianceStatus, "no-cumple")
+    assert.equal(ups.sourceComplianceLabel, "No cumple")
+    assert.equal(ups.sourceClauseType, "(1) VIGÉSIMA PRIMERA. MANEJO DE DATOS PERSONALES")
+    assert.match(ups.sourceComplianceNotes || "", /documento fuente marca No cumple/i)
 
     const knownAssetIds = new Set(assets.GRUNENTHAL_DOCUMENT_MANIFEST.map((asset) => asset.id))
     assert.ok(
