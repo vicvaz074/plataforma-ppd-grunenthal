@@ -1114,8 +1114,9 @@ export const GRUNENTHAL_RAT_INVENTORIES: Inventory[] = [
           }
         ],
         "otherLegalBasis": "",
-        "grunenthalSourcePdfStatus": "sin-pdf",
-        "grunenthalValidationStatus": "pendiente-revision"
+        "grunenthalSourcePdfPath": "/client/grunenthal/rat/comex/inventario-comex-open-data-veeva-registro-de-medicos.pdf",
+        "grunenthalSourcePdfStatus": "vinculado",
+        "grunenthalValidationStatus": "verificado"
       },
       {
         "id": "grunenthal-rat-inventario-comex-ranking-de-efectividad",
@@ -21341,8 +21342,9 @@ export const GRUNENTHAL_RAT_INVENTORIES: Inventory[] = [
           }
         ],
         "otherLegalBasis": "",
-        "grunenthalSourcePdfStatus": "sin-pdf",
-        "grunenthalValidationStatus": "pendiente-revision"
+        "grunenthalSourcePdfPath": "/client/grunenthal/rat/ventas-internas/inventario-ventas-internas-reporte-de-distribuidores-xeomeen.pdf",
+        "grunenthalSourcePdfStatus": "vinculado",
+        "grunenthalValidationStatus": "verificado"
       }
     ],
     "riskLevel": "bajo",
@@ -22742,6 +22744,90 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
       "additionalRemissions"
     ],
     "mismatchedFields": []
+  },
+  {
+    "assetId": "grunenthal-rat-inventario-comex-open-data-veeva-registro-de-medicos",
+    "inventoryId": "grunenthal-rat-area-comex",
+    "inventoryName": "COMEX",
+    "subInventoryId": "grunenthal-rat-inventario-comex-open-data-veeva-registro-de-medicos",
+    "subInventoryName": "Open Data (Veeva) - Registro de Médicos",
+    "publicPath": "/client/grunenthal/rat/comex/inventario-comex-open-data-veeva-registro-de-medicos.pdf",
+    "matchScore": 1,
+    "validatedFields": [
+      "databaseName",
+      "responsible",
+      "holdersVolume",
+      "accessibility",
+      "environment",
+      "riskLevel",
+      "responsibleArea",
+      "holderTypes",
+      "obtainingMethod",
+      "privacyNoticeFileName",
+      "personalData",
+      "purposesPrimary",
+      "purposesSecondary",
+      "secondaryPurposesConsent",
+      "consentRequired",
+      "consentException",
+      "processingArea",
+      "processingSystem",
+      "processingDescription",
+      "accessDescription",
+      "additionalAccesses",
+      "storageMethod",
+      "physicalLocation",
+      "conservationTerm",
+      "blockingTime",
+      "deletionMethods",
+      "dataTransfer",
+      "additionalTransfers",
+      "dataRemission",
+      "additionalRemissions"
+    ],
+    "mismatchedFields": []
+  },
+  {
+    "assetId": "grunenthal-rat-inventario-ventas-internas-reporte-de-distribuidores-xeomeen",
+    "inventoryId": "grunenthal-rat-area-ventas-internas",
+    "inventoryName": "Ventas Internas",
+    "subInventoryId": "grunenthal-rat-inventario-ventas-internas-reporte-de-distribuidores-xeomeen",
+    "subInventoryName": "Reporte de Distribuidores Xeomeen",
+    "publicPath": "/client/grunenthal/rat/ventas-internas/inventario-ventas-internas-reporte-de-distribuidores-xeomeen.pdf",
+    "matchScore": 1,
+    "validatedFields": [
+      "databaseName",
+      "responsible",
+      "holdersVolume",
+      "accessibility",
+      "environment",
+      "riskLevel",
+      "responsibleArea",
+      "holderTypes",
+      "obtainingMethod",
+      "privacyNoticeFileName",
+      "personalData",
+      "purposesPrimary",
+      "purposesSecondary",
+      "secondaryPurposesConsent",
+      "consentRequired",
+      "consentException",
+      "processingArea",
+      "processingSystem",
+      "processingDescription",
+      "accessDescription",
+      "additionalAccesses",
+      "storageMethod",
+      "physicalLocation",
+      "conservationTerm",
+      "blockingTime",
+      "deletionMethods",
+      "dataTransfer",
+      "additionalTransfers",
+      "dataRemission",
+      "additionalRemissions"
+    ],
+    "mismatchedFields": []
   }
 ] as const
 
@@ -22750,25 +22836,12 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
   "sourceDirectory": "Políticas de Grünenthal (2026)/InventariosDatos Personales",
   "canonicalInventoryCount": 15,
   "canonicalSubInventoryCount": 35,
-  "pdfInventoryCount": 33,
-  "mappedPdfCount": 33,
-  "missingPdfCount": 2,
+  "pdfInventoryCount": 35,
+  "mappedPdfCount": 35,
+  "missingPdfCount": 0,
   "unmatchedPdfCount": 0,
   "fieldMismatchCount": 0,
-  "missingPdfs": [
-    {
-      "inventoryName": "COMEX",
-      "subInventoryId": "grunenthal-rat-inventario-comex-open-data-veeva-registro-de-medicos",
-      "subInventoryName": "Open Data (Veeva) - Registro de Médicos",
-      "status": "pendiente-revision"
-    },
-    {
-      "inventoryName": "Ventas Internas",
-      "subInventoryId": "grunenthal-rat-inventario-ventas-internas-reporte-de-distribuidores-xeomeen",
-      "subInventoryName": "Reporte de Distribuidores Xeomeen",
-      "status": "pendiente-revision"
-    }
-  ],
+  "missingPdfs": [],
   "unmatchedPdfs": [],
   "fieldMismatches": [],
   "items": [
@@ -24126,16 +24199,86 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
       "mismatchedFields": []
     },
     {
+      "assetId": "grunenthal-rat-inventario-comex-open-data-veeva-registro-de-medicos",
+      "pdfName": "inventario-comex-open-data-veeva-registro-de-medicos.pdf",
       "inventoryName": "COMEX",
-      "subInventoryId": "grunenthal-rat-inventario-comex-open-data-veeva-registro-de-medicos",
       "subInventoryName": "Open Data (Veeva) - Registro de Médicos",
-      "status": "pendiente-revision"
+      "status": "verificado",
+      "matchScore": 1,
+      "validatedFields": [
+        "databaseName",
+        "responsible",
+        "holdersVolume",
+        "accessibility",
+        "environment",
+        "riskLevel",
+        "responsibleArea",
+        "holderTypes",
+        "obtainingMethod",
+        "privacyNoticeFileName",
+        "personalData",
+        "purposesPrimary",
+        "purposesSecondary",
+        "secondaryPurposesConsent",
+        "consentRequired",
+        "consentException",
+        "processingArea",
+        "processingSystem",
+        "processingDescription",
+        "accessDescription",
+        "additionalAccesses",
+        "storageMethod",
+        "physicalLocation",
+        "conservationTerm",
+        "blockingTime",
+        "deletionMethods",
+        "dataTransfer",
+        "additionalTransfers",
+        "dataRemission",
+        "additionalRemissions"
+      ],
+      "mismatchedFields": []
     },
     {
+      "assetId": "grunenthal-rat-inventario-ventas-internas-reporte-de-distribuidores-xeomeen",
+      "pdfName": "inventario-ventas-internas-reporte-de-distribuidores-xeomeen.pdf",
       "inventoryName": "Ventas Internas",
-      "subInventoryId": "grunenthal-rat-inventario-ventas-internas-reporte-de-distribuidores-xeomeen",
       "subInventoryName": "Reporte de Distribuidores Xeomeen",
-      "status": "pendiente-revision"
+      "status": "verificado",
+      "matchScore": 1,
+      "validatedFields": [
+        "databaseName",
+        "responsible",
+        "holdersVolume",
+        "accessibility",
+        "environment",
+        "riskLevel",
+        "responsibleArea",
+        "holderTypes",
+        "obtainingMethod",
+        "privacyNoticeFileName",
+        "personalData",
+        "purposesPrimary",
+        "purposesSecondary",
+        "secondaryPurposesConsent",
+        "consentRequired",
+        "consentException",
+        "processingArea",
+        "processingSystem",
+        "processingDescription",
+        "accessDescription",
+        "additionalAccesses",
+        "storageMethod",
+        "physicalLocation",
+        "conservationTerm",
+        "blockingTime",
+        "deletionMethods",
+        "dataTransfer",
+        "additionalTransfers",
+        "dataRemission",
+        "additionalRemissions"
+      ],
+      "mismatchedFields": []
     }
   ]
 } as const
