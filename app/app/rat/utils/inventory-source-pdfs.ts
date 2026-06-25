@@ -11,7 +11,8 @@ export type InventorySourcePdfDownload = {
 
 export type InventoryPdfDownloadPlan = {
   sourcePdfs: InventorySourcePdfDownload[]
-  generatedInventory: Inventory | null
+  generatedInventories: Inventory[]
+  totalPdfDownloads: number
 }
 
 const PDF_EXTENSION_PATTERN = /\.pdf(?:$|[?#])/i
@@ -116,12 +117,11 @@ export const createInventoryPdfDownloadPlan = (
 
   return {
     sourcePdfs,
-    generatedInventory:
-      generatedSubInventories.length > 0
-        ? {
-            ...inventory,
-            subInventories: generatedSubInventories,
-          }
-        : null,
+    generatedInventories: generatedSubInventories.map((subInventory) => ({
+      ...inventory,
+      databaseName: subInventory.databaseName || inventory.databaseName,
+      subInventories: [subInventory],
+    })),
+    totalPdfDownloads: sourcePdfs.length + generatedSubInventories.length,
   }
 }

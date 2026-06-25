@@ -916,7 +916,7 @@ export const GRUNENTHAL_DOCUMENT_MANIFEST: GrunenthalAsset[] = [
     "displayName": "inventarios-rat-2025-11-20T00-19-05-360Z (2)",
     "path": "/client/grunenthal/rat/source/inventarios-rat-export.json",
     "type": "application/json",
-    "size": 6149755,
+    "size": 6182942,
     "module": "rat",
     "category": "rat-source",
     "folder": "rat/source",
