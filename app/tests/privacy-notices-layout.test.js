@@ -49,4 +49,14 @@ describe("layout de avisos de privacidad", () => {
     assert.match(source, /Consultores externos y profesionales de la salud/)
     assert.doesNotMatch(source, /Consultores externos \/ Auditores/)
   })
+
+  it("muestra el insumo fuente ManualAP sin version en la tarjeta de registros", () => {
+    const source = fs.readFileSync(
+      path.join(appDir, "app/privacy-notices/notices-content.tsx"),
+      "utf8",
+    )
+
+    assert.match(source, /Insumo fuente ManualAP/)
+    assert.doesNotMatch(source, /Insumo fuente ManualAP v5/)
+  })
 })

@@ -351,7 +351,7 @@ function privacyNotice(seed: {
     type: "Aviso de privacidad",
     area: seed.area,
     sourceCompiledAssetId: PRIVACY_NOTICE_SOURCE_ASSET_ID,
-    sourceLabel: "ManualAP Grünenthal Davara v5",
+    sourceLabel: "ManualAP Grünenthal",
     sourceRelativePath: PRIVACY_SOURCE_RELATIVE_PATH,
     lineStart: seed.lineStart,
     lineEnd: seed.lineEnd,
@@ -436,6 +436,19 @@ export const GRUNENTHAL_INDIVIDUAL_PRIVACY_NOTICE_RECORDS: GrunenthalPrivacyNoti
     evidenceNotes: "Integra el aviso integral de Visitantes y CCTV y el aviso simplificado E-1 del mismo compilado.",
   }),
   privacyNotice({
+    slug: "e-1-aviso-privacidad-simplificado-visitantes",
+    title: "E-1 Aviso de Privacidad Simplificado para Visitantes",
+    area: "Seguridad / Recepción",
+    lineStart: 431,
+    lineEnd: 435,
+    holderCategories: ["visitantes"],
+    noticeTypes: ["simplificado"],
+    responsibleAreas: ["seguridad"],
+    applicableNotices: ["videovigilancia"],
+    dispositionMethods: ["formato_fisico", "antes_obtencion"],
+    evidenceNotes: "Extraído del compilado ManualAP como aviso simplificado E-1 para visitantes.",
+  }),
+  privacyNotice({
     slug: "aviso-healthcare-professional",
     title: "Aviso de Privacidad Integral para Healthcare Professional",
     area: "Medical / COMEX",
@@ -511,7 +524,7 @@ export const GRUNENTHAL_INDIVIDUAL_PRIVACY_NOTICE_RECORDS: GrunenthalPrivacyNoti
     responsibleAreas: ["tecnologia", "comunicacion", "juridico"],
     applicableNotices: ["integral_general", "campanas_formularios"],
     dispositionMethods: ["sitio_web", "antes_obtencion"],
-    evidenceNotes: "Extraído del compilado ManualAP v5 como aviso individual general para plataformas digitales.",
+    evidenceNotes: "Extraído del compilado ManualAP como aviso individual general para plataformas digitales.",
   }),
 ]
 
