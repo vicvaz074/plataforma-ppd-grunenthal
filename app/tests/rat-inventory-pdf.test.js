@@ -74,6 +74,18 @@ describe("generación PDF de inventarios RAT", () => {
     )
   })
 
+  it("normaliza caracteres combinantes en textos de celdas para no deformar el PDF", async () => {
+    const pdf = await importModule("app/rat/utils/inventory-pdf.ts")
+    const rawNoticeName = "AvisoPrivacidad HCPGRu\u0308nenthal v 4 Davara.docx"
+
+    assert.equal(typeof pdf.normalizePdfCellText, "function")
+    assert.equal(
+      pdf.normalizePdfCellText(rawNoticeName),
+      "AvisoPrivacidad HCPGRünenthal v 4 Davara.docx",
+    )
+    assert.doesNotMatch(pdf.normalizePdfCellText(rawNoticeName), /\p{M}/u)
+  })
+
   it("prefiere los PDFs fuente vinculados para descargar inventarios Grünenthal", async () => {
     const sourcePdfs = await importModule("app/rat/utils/inventory-source-pdfs.ts")
     const ratData = await importModule("lib/grunenthal-rat-data.ts")
