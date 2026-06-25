@@ -31,6 +31,28 @@ describe("UI /data-policies repositorio", () => {
     assert.match(source, /GRUNENTHAL_CURATED_POLICY_DOCUMENTS/)
   })
 
+  it("usa navegación interna con estado visible y scroll al contenido activo", () => {
+    const source = fs.readFileSync(sourcePath, "utf8")
+
+    assert.match(source, /sectionContentRef/)
+    assert.match(source, /handleSectionChange/)
+    assert.match(source, /scrollIntoView/)
+    assert.match(source, /role="tablist"/)
+    assert.match(source, /aria-selected/)
+    assert.match(source, /Vista activa/)
+  })
+
+  it("hace que los filtros de alcance ocupen el ancho disponible", () => {
+    const source = fs.readFileSync(sourcePath, "utf8")
+
+    assert.match(source, /Filtros del repositorio/)
+    assert.match(source, /activeRepositoryFilterCount/)
+    assert.match(source, /!max-w-none/)
+    assert.match(source, /inline-flex min-h-11 w-full min-w-0/)
+    assert.match(source, /sm:grid-cols-3/)
+    assert.match(source, /xl:grid-cols-\[minmax\(260px,1\.35fr\)_minmax\(180px,0\.9fr\)_minmax\(180px,0\.9fr\)_minmax\(180px,0\.9fr\)\]/)
+  })
+
   it("usa contenedores responsivos para evitar que consulta se vea comprimida", () => {
     const source = fs.readFileSync(sourcePath, "utf8")
     const minWidthGuards = source.match(/min-w-0/g) || []

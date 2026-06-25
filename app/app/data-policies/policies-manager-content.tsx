@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import {
@@ -22,6 +22,7 @@ import {
   FileDown,
   FileText,
   FolderSearch,
+  ListFilter,
   PlusCircle,
   RefreshCw,
   Search,
@@ -121,6 +122,12 @@ type PoliciesManagerProps = {
 
 type PoliciesManagerSection = "registro" | "consulta" | "repositorio"
 
+function getSectionRoute(section: PoliciesManagerSection) {
+  if (section === "registro") return "/data-policies?section=registro"
+  if (section === "repositorio") return "/data-policies?section=repositorio"
+  return "/data-policies?section=consulta"
+}
+
 const REPOSITORY_MODULE_LABELS: Record<string, string> = {
   "arco-rights": "Derechos ARCO",
   "data-policies": "Políticas",
@@ -210,6 +217,43 @@ function buildReferenceCode(index: number) {
   return `DG-GDP-${String(index + 1).padStart(3, "0")}`
 }
 
+function getNearestScrollableParent(node: HTMLElement) {
+  let parent = node.parentElement
+
+  while (parent) {
+    const style = window.getComputedStyle(parent)
+    const canScroll = /(auto|scroll|overlay)/.test(style.overflowY)
+    if (canScroll && parent.scrollHeight > parent.clientHeight) return parent
+    parent = parent.parentElement
+  }
+
+  return null
+}
+
+function scrollSectionPanelIntoView(node: HTMLElement, behavior: ScrollBehavior = "smooth") {
+  const scrollParent = getNearestScrollableParent(node)
+
+  if (scrollParent) {
+    let targetTop = 0
+    let current: HTMLElement | null = node
+
+    while (current && current !== scrollParent) {
+      targetTop += current.offsetTop
+      current = current.offsetParent as HTMLElement | null
+    }
+
+    if (!current) {
+      targetTop = node.offsetTop
+    }
+
+    scrollParent.scrollTo({ top: Math.max(targetTop, 0), behavior })
+  } else {
+    node.scrollIntoView({ behavior, block: "start" })
+  }
+
+  node.focus({ preventScroll: true })
+}
+
 function statusClasses(status: PolicyRecord["status"]) {
   const tone = getPolicyStatusTone(status)
   if (tone === "green") return "border-emerald-200 bg-emerald-50 text-emerald-700"
@@ -248,6 +292,8 @@ function SectionPill({ active, done, index, title }: { active: boolean; done: bo
 export function PoliciesManager({ initialSection = "registro" }: PoliciesManagerProps) {
   const { toast } = useToast()
   const previewRef = useRef<HTMLDivElement>(null)
+  const sectionContentRef = useRef<HTMLDivElement>(null)
+  const pendingSectionScrollRef = useRef(false)
   const searchParams = useSearchParams()
 
   const [policies, setPolicies] = useState<PolicyRecord[]>([])
@@ -368,15 +414,60 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
       ),
     [repositoryDocuments],
   )
+  const activeRepositoryFilterCount = useMemo(
+    () =>
+      [
+        repositorySearch.trim() ? "search" : "",
+        repositoryPolicyScopeFilter !== "all" ? "scope" : "",
+        repositoryModuleFilter !== "all" ? "module" : "",
+        repositoryTypeFilter !== "all" ? "type" : "",
+        repositoryAreaFilter !== "all" ? "area" : "",
+      ].filter(Boolean).length,
+    [
+      repositoryAreaFilter,
+      repositoryModuleFilter,
+      repositoryPolicyScopeFilter,
+      repositorySearch,
+      repositoryTypeFilter,
+    ],
+  )
+  const sectionNavigation = useMemo(
+    () => [
+      {
+        id: "registro" as const,
+        label: "Registro guiado",
+        description: "Builder, vigencia y aprobación",
+        metric: `${snapshot.underReview} en revisión`,
+        icon: PlusCircle,
+      },
+      {
+        id: "consulta" as const,
+        label: "Consulta y expediente",
+        description: "Madurez, evidencia y workflow",
+        metric: `${sortedPolicies.length} política(s)`,
+        icon: ShieldCheck,
+      },
+      {
+        id: "repositorio" as const,
+        label: "Repositorio documental",
+        description: "Políticas México y globales",
+        metric: `${repositoryDocuments.length} documento(s)`,
+        icon: FolderSearch,
+      },
+    ],
+    [repositoryDocuments.length, snapshot.underReview, sortedPolicies.length],
+  )
+  const activeSectionNavigation = sectionNavigation.find((item) => item.id === activeSection) || sectionNavigation[1]
   const navItems = useMemo(
     () =>
       [
         ...DATA_POLICIES_NAV.map((item) => {
-        if (item.href === "/data-policies/consulta") return { ...item, badge: sortedPolicies.length }
-        if (item.href === "/data-policies/registro") return { ...item, badge: snapshot.underReview }
-        return item
+        if (item.href === "/data-policies/consulta") return { ...item, id: "consulta", badge: sortedPolicies.length }
+        if (item.href === "/data-policies/registro") return { ...item, id: "registro", badge: snapshot.underReview }
+        return { ...item, id: "panorama" }
         }),
         {
+          id: "repositorio",
           href: "/data-policies?section=repositorio",
           label: "Repositorio",
           shortLabel: "Repositorio",
@@ -404,6 +495,52 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
     }
   }, [searchParams, sortedPolicies])
 
+  const scheduleSectionPanelScroll = useCallback(() => {
+    if (typeof window === "undefined") return
+
+    const scrollToActivePanel = (behavior: ScrollBehavior = "smooth") => {
+      if (sectionContentRef.current) {
+        scrollSectionPanelIntoView(sectionContentRef.current, behavior)
+      }
+    }
+
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => scrollToActivePanel())
+    })
+    window.setTimeout(scrollToActivePanel, 220)
+    window.setTimeout(scrollToActivePanel, 520)
+    window.setTimeout(() => scrollToActivePanel("auto"), 980)
+  }, [])
+
+  useEffect(() => {
+    if (!pendingSectionScrollRef.current) return
+    pendingSectionScrollRef.current = false
+    scheduleSectionPanelScroll()
+  }, [activeSection, scheduleSectionPanelScroll])
+
+  const handleSectionChange = useCallback(
+    (
+      section: PoliciesManagerSection,
+      options: { scroll?: boolean; updateUrl?: boolean } = {},
+    ) => {
+      const { scroll = true, updateUrl = true } = options
+      if (scroll) {
+        pendingSectionScrollRef.current = true
+      }
+      setActiveSection(section)
+
+      if (updateUrl && typeof window !== "undefined") {
+        window.history.replaceState(window.history.state, "", getSectionRoute(section))
+      }
+
+      if (scroll && section === activeSection) {
+        pendingSectionScrollRef.current = false
+        scheduleSectionPanelScroll()
+      }
+    },
+    [activeSection, scheduleSectionPanelScroll],
+  )
+
   const replacePolicy = (record: PolicyRecord) => {
     const exists = policies.some((item) => item.id === record.id)
     const next = exists ? policies.map((item) => (item.id === record.id ? record : item)) : [record, ...policies]
@@ -421,7 +558,7 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
     setWizardStep(1)
     setBuilderErrors([])
     setSubmissionComment("")
-    setActiveSection("registro")
+    handleSectionChange("registro")
   }
 
   const editPolicyInBuilder = (policy: PolicyRecord) => {
@@ -429,7 +566,7 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
     setWizardStep(1)
     setBuilderErrors([])
     setSubmissionComment("")
-    setActiveSection("registro")
+    handleSectionChange("registro")
   }
 
   const updateDraft = (updater: (current: PolicyRecord) => PolicyRecord) => {
@@ -643,7 +780,7 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
     const sent = sendPolicyToReview(baseRecord, getActor(), submissionComment)
     replacePolicy(sent)
     setDraft(sent)
-    setActiveSection("consulta")
+    handleSectionChange("consulta")
     toast({
       title: "PGDP enviada a aprobación",
       description: "El workflow real de 3 niveles quedó activado y sincronizado.",
@@ -876,6 +1013,7 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
             title: "Tablero y expediente PGDP",
             description: "Consulta madurez, evidencia y seguimiento documental.",
           }
+  const ActiveSectionIcon = activeSectionNavigation.icon
 
   return (
     <ArcoModuleShell
@@ -886,6 +1024,7 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
       pageTitle={pageCopy.title}
       pageDescription={pageCopy.description}
       navItems={navItems}
+      activeNavId={activeSection}
       headerBadges={[
         { label: `${snapshot.total} políticas`, tone: "neutral" },
         {
@@ -928,21 +1067,33 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
               </div>
             ) : null}
 
-            <div className="flex flex-wrap gap-3">
-              <Button onClick={startNewPolicy}>
+            <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <Button className="!mx-0 !max-w-none sm:!w-auto" onClick={startNewPolicy}>
                 Nueva PGDP
                 <PlusCircle className="ml-2 h-4 w-4" />
               </Button>
-              <Button variant="outline" onClick={() => setActiveSection("registro")}>
+              <Button
+                variant="outline"
+                className="!mx-0 !max-w-none sm:!w-auto"
+                onClick={() => handleSectionChange("registro")}
+              >
                 Abrir builder
               </Button>
-              <Button variant="outline" onClick={() => setActiveSection("consulta")}>
+              <Button
+                variant="outline"
+                className="!mx-0 !max-w-none sm:!w-auto"
+                onClick={() => handleSectionChange("consulta")}
+              >
                 Ver tablero y expediente
               </Button>
-              <Button variant="outline" onClick={() => setActiveSection("repositorio")}>
+              <Button
+                variant="outline"
+                className="!mx-0 !max-w-none sm:!w-auto"
+                onClick={() => handleSectionChange("repositorio")}
+              >
                 Abrir repositorio
               </Button>
-              <Button asChild variant="outline">
+              <Button asChild variant="outline" className="!mx-0 !max-w-none sm:!w-auto">
                 <Link href="/audit-alarms">Abrir recordatorios y alertas</Link>
               </Button>
             </div>
@@ -992,17 +1143,85 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
         </CardContent>
         </Card>
 
-        <div className="flex min-w-0 flex-wrap gap-3 overflow-x-auto pb-1">
-          <Button variant={activeSection === "registro" ? "default" : "outline"} onClick={() => setActiveSection("registro")}>
-            Registro guiado
-          </Button>
-          <Button variant={activeSection === "consulta" ? "default" : "outline"} onClick={() => setActiveSection("consulta")}>
-            Consulta y expediente
-          </Button>
-          <Button variant={activeSection === "repositorio" ? "default" : "outline"} onClick={() => setActiveSection("repositorio")}>
-            Repositorio documental
-          </Button>
+        <div className="sticky top-0 z-10 rounded-[28px] border border-[#d6e1f6] bg-white/95 p-2 shadow-sm backdrop-blur">
+          <div
+            role="tablist"
+            aria-label="Secciones de Políticas de Protección de Datos"
+            className="grid min-w-0 gap-2 md:grid-cols-3"
+          >
+            {sectionNavigation.map((item) => {
+              const Icon = item.icon
+              const selected = activeSection === item.id
+
+              return (
+                <button
+                  key={item.id}
+                  id={`policies-section-tab-${item.id}`}
+                  type="button"
+                  role="tab"
+                  aria-selected={selected}
+                  aria-controls={`policies-section-panel-${item.id}`}
+                  onClick={() => handleSectionChange(item.id)}
+                  className={cn(
+                    "group flex min-h-[96px] min-w-0 items-start gap-3 rounded-[22px] border p-4 text-left transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0a4abf] focus-visible:ring-offset-2",
+                    selected
+                      ? "border-[#0a4abf] bg-[#0a4abf] text-white shadow-[0_18px_40px_rgba(10,74,191,0.18)]"
+                      : "border-transparent bg-[#f8fbff] text-slate-700 hover:border-[#b9cff0] hover:bg-white",
+                  )}
+                >
+                  <span
+                    className={cn(
+                      "mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border transition-colors",
+                      selected
+                        ? "border-white/30 bg-white/15 text-white"
+                        : "border-[#d6e1f6] bg-white text-[#0a4abf] group-hover:border-[#9bb9e6]",
+                    )}
+                  >
+                    <Icon className="h-5 w-5" />
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-sm font-semibold leading-5">{item.label}</span>
+                    <span className={cn("mt-1 block text-xs leading-5", selected ? "text-blue-50" : "text-slate-500")}>
+                      {item.description}
+                    </span>
+                    <span
+                      className={cn(
+                        "mt-3 inline-flex rounded-full px-2.5 py-1 text-xs font-semibold",
+                        selected ? "bg-white/15 text-white" : "bg-white text-[#0a4abf]",
+                      )}
+                    >
+                      {item.metric}
+                    </span>
+                  </span>
+                </button>
+              )
+            })}
+          </div>
         </div>
+
+        <div
+          ref={sectionContentRef}
+          id={`policies-section-panel-${activeSection}`}
+          role="tabpanel"
+          tabIndex={-1}
+          aria-labelledby={`policies-section-tab-${activeSection}`}
+          className="scroll-mt-6 space-y-5 focus:outline-none"
+        >
+          <div className="flex min-w-0 flex-col gap-4 rounded-[28px] border border-[#d6e1f6] bg-[#f8fbff] p-5 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex min-w-0 items-start gap-3">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-white text-[#0a4abf] shadow-sm">
+                <ActiveSectionIcon className="h-5 w-5" />
+              </span>
+              <div className="min-w-0">
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#5f7698]">Vista activa</p>
+                <h2 className="mt-1 break-words text-2xl font-semibold text-slate-950">{pageCopy.title}</h2>
+                <p className="mt-1 max-w-3xl text-sm leading-6 text-slate-500">{pageCopy.description}</p>
+              </div>
+            </div>
+            <Badge variant="outline" className="w-fit border-[#b9cff0] bg-white text-[#0a4abf]">
+              {activeSectionNavigation.metric}
+            </Badge>
+          </div>
 
       {activeSection === "registro" ? (
         <div className="space-y-6">
@@ -1812,51 +2031,37 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
             </Card>
           </div>
 
-          <div className="grid min-w-0 gap-6 2xl:grid-cols-[minmax(280px,360px)_minmax(0,1fr)]">
+          <div className="min-w-0 space-y-6">
             <Card className="min-w-0 border-slate-200 shadow-sm">
               <CardHeader className="border-b border-slate-100">
-                <CardTitle className="flex items-center gap-2 text-xl text-slate-950">
-                  <FolderSearch className="h-5 w-5 text-primary" />
-                  Repositorio documental
-                </CardTitle>
-                <CardDescription>Búsqueda y filtros para políticas locales de México y políticas globales.</CardDescription>
+                <div className="flex min-w-0 flex-wrap items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <CardTitle className="flex items-center gap-2 text-xl text-slate-950">
+                      <ListFilter className="h-5 w-5 text-primary" />
+                      Filtros del repositorio
+                    </CardTitle>
+                    <CardDescription>Búsqueda y segmentación de políticas locales de México y políticas globales.</CardDescription>
+                  </div>
+                  <Badge variant="outline" className="border-slate-200 bg-slate-50 text-slate-600">
+                    {activeRepositoryFilterCount} filtro(s) activo(s)
+                  </Badge>
+                </div>
               </CardHeader>
-              <CardContent className="min-w-0 space-y-4 p-5">
-                <div className="min-w-0">
-                  <Label>Búsqueda</Label>
-                  <div className="relative mt-1">
-                    <Search className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
-                    <Input
-                      value={repositorySearch}
-                      onChange={(event) => setRepositorySearch(event.target.value)}
-                      placeholder="Título, área, tercero, aviso o fuente"
-                      className="pl-9"
-                    />
+              <CardContent className="min-w-0 space-y-5 p-5">
+                <div className="grid min-w-0 gap-4 xl:grid-cols-[minmax(260px,1.35fr)_minmax(180px,0.9fr)_minmax(180px,0.9fr)_minmax(180px,0.9fr)]">
+                  <div className="min-w-0">
+                    <Label>Búsqueda</Label>
+                    <div className="relative mt-1">
+                      <Search className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                      <Input
+                        value={repositorySearch}
+                        onChange={(event) => setRepositorySearch(event.target.value)}
+                        placeholder="Título, área, tercero, aviso o fuente"
+                        className="pl-9"
+                      />
+                    </div>
                   </div>
-                </div>
 
-                <div className="min-w-0 space-y-2">
-                  <Label>Alcance</Label>
-                  <div className="grid min-w-0 gap-2">
-                    {[
-                      { value: "all", label: "Todas" },
-                      { value: "mexico", label: "Políticas México" },
-                      { value: "global", label: "Políticas Globales" },
-                    ].map((option) => (
-                      <Button
-                        key={option.value}
-                        type="button"
-                        variant={repositoryPolicyScopeFilter === option.value ? "default" : "outline"}
-                        className="justify-start"
-                        onClick={() => setRepositoryPolicyScopeFilter(option.value as "all" | GrunenthalPolicyScope)}
-                      >
-                        {option.label}
-                      </Button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="grid min-w-0 gap-4 sm:grid-cols-2 2xl:grid-cols-1">
                   <div className="min-w-0">
                     <Label>Origen documental</Label>
                     <Select
@@ -1912,20 +2117,58 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
                   </div>
                 </div>
 
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="w-full"
-                  onClick={() => {
-                    setRepositorySearch("")
-                    setRepositoryPolicyScopeFilter("all")
-                    setRepositoryModuleFilter("all")
-                    setRepositoryTypeFilter("all")
-                    setRepositoryAreaFilter("all")
-                  }}
-                >
-                  Limpiar filtros
-                </Button>
+                <div className="flex min-w-0 flex-col gap-3 xl:flex-row xl:items-end xl:justify-between">
+                  <div className="min-w-0 flex-1 space-y-2">
+                    <Label>Alcance</Label>
+                    <div className="grid min-w-0 gap-2 sm:grid-cols-3">
+                      {[
+                        { value: "all", label: "Todas", count: repositoryDocuments.length },
+                        { value: "mexico", label: "Políticas México", count: policyScopeStats.mexico },
+                        { value: "global", label: "Políticas Globales", count: policyScopeStats.global },
+                      ].map((option) => (
+                        <button
+                          key={option.value}
+                          type="button"
+                          className={cn(
+                            "inline-flex min-h-11 w-full min-w-0 items-center rounded-2xl border px-3 py-2 text-left text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0a4abf] focus-visible:ring-offset-2 sm:justify-center",
+                            repositoryPolicyScopeFilter === option.value
+                              ? "border-[#0a4abf] bg-[#0a4abf] text-white shadow-sm"
+                              : "border-slate-200 bg-white text-slate-700 hover:border-[#b9cff0] hover:bg-[#f8fbff]",
+                          )}
+                          onClick={() => setRepositoryPolicyScopeFilter(option.value as "all" | GrunenthalPolicyScope)}
+                        >
+                          <span className="min-w-0 truncate">{option.label}</span>
+                          <span
+                            className={cn(
+                              "ml-2 rounded-full px-2 py-0.5 text-xs",
+                              repositoryPolicyScopeFilter === option.value
+                                ? "bg-white/20 text-white"
+                                : "bg-slate-100 text-slate-600",
+                            )}
+                          >
+                            {option.count}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <Button
+                    type="button"
+                    variant="outline"
+                    disabled={activeRepositoryFilterCount === 0}
+                    className="!mx-0 !max-w-none xl:w-auto"
+                    onClick={() => {
+                      setRepositorySearch("")
+                      setRepositoryPolicyScopeFilter("all")
+                      setRepositoryModuleFilter("all")
+                      setRepositoryTypeFilter("all")
+                      setRepositoryAreaFilter("all")
+                    }}
+                  >
+                    Limpiar filtros
+                  </Button>
+                </div>
               </CardContent>
             </Card>
 
@@ -1979,18 +2222,24 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
                             </div>
                           </div>
 
-                          <div className="flex min-w-0 flex-wrap items-center gap-2 xl:justify-end">
+                          <div className="grid min-w-0 gap-2 sm:grid-cols-2 xl:flex xl:items-center xl:justify-end">
                             <Button
                               type="button"
                               variant="outline"
+                              className="!mx-0 !max-w-none gap-2"
                               onClick={() => openRepositoryDocument(document)}
                               disabled={!canPreview}
                             >
-                              <Eye className="mr-2 h-4 w-4" />
+                              <Eye className="h-4 w-4" />
                               Ver
                             </Button>
-                            <Button type="button" variant="outline" onClick={() => downloadRepositoryDocument(document)}>
-                              <Download className="mr-2 h-4 w-4" />
+                            <Button
+                              type="button"
+                              variant="outline"
+                              className="!mx-0 !max-w-none gap-2"
+                              onClick={() => downloadRepositoryDocument(document)}
+                            >
+                              <Download className="h-4 w-4" />
                               Descargar
                             </Button>
                           </div>
@@ -2498,6 +2747,7 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
           </div>
         </div>
       )}
+        </div>
 
       <Dialog open={evidenceDialogOpen} onOpenChange={setEvidenceDialogOpen}>
         <DialogContent className="max-w-lg">
