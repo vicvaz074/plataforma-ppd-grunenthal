@@ -69,7 +69,7 @@ type BaseWorkspaceShellProps = {
   surfaceClassName?: string
 }
 
-type ArcoModuleShellProps = Omit<BaseWorkspaceShellProps, "activeNavId" | "onNavSelect"> & {
+type ArcoModuleShellProps = BaseWorkspaceShellProps & {
   navItems: ArcoModuleNavItem[]
 }
 

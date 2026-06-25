@@ -135,4 +135,27 @@ describe("repositorio documental Grünenthal", () => {
       ),
     )
   })
+
+  it("enriquece el archivo del repositorio con el PDF de preview oficial", () => {
+    const staleStoredFiles = repository.GRUNENTHAL_CURATED_POLICY_DOCUMENTS.map((document) => ({
+      id: document.fileId,
+      name: "archivo-viejo.docx",
+      type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      size: 1,
+      content: document.originalPath,
+      uploadDate: "2026-01-01T00:00:00.000Z",
+      category: document.category,
+      metadata: {},
+    }))
+
+    const documents = repository.buildGrunenthalCuratedPolicyDocuments(staleStoredFiles)
+    const previewable = documents.find((document) => document.previewPdfPath)
+
+    assert.ok(previewable, "debe existir al menos una política curada con preview PDF")
+    assert.equal(previewable.storedFile.metadata.previewPdfPath, previewable.previewPdfPath)
+    assert.equal(previewable.storedFile.metadata.previewMimeType, "application/pdf")
+    assert.equal(previewable.storedFile.content, previewable.originalPath)
+    assert.equal(previewable.storedFile.metadata.title, previewable.title)
+    assert.equal(previewable.storedFile.name, previewable.downloadName)
+  })
 })
