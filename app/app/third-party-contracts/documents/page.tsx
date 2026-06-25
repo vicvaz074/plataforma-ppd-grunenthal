@@ -67,6 +67,14 @@ import {
   GRUNENTHAL_THIRD_PARTY_MODEL_CLAUSES_PACKAGE,
   GRUNENTHAL_THIRD_PARTY_MODEL_CLAUSES_SOURCE,
 } from "@/lib/grunenthal-third-party-model-clauses"
+import {
+  GRUNENTHAL_GRT_CONTRACT_DOCUMENTS,
+  type GrunenthalGrtContractDocument,
+} from "@/lib/grunenthal-contracts-grt"
+import {
+  GRUNENTHAL_INDIVIDUAL_THIRD_PARTY_RECORDS,
+  type GrunenthalThirdPartyContractSeed,
+} from "@/lib/grunenthal-repository"
 import { normalizeGrunenthalContractParty } from "@/lib/grunenthal-contract-analysis-linking"
 import {
   getAuditReminderByReferenceKey,
@@ -76,6 +84,13 @@ import {
 import { generateAllNotifications } from "@/lib/notification-engine"
 import { SafeLink } from "@/components/SafeLink"
 import type { ContractMeta } from "../types"
+
+type ContractAttachment = ContractMeta["attachments"][number] & {
+  mimeType?: string
+  publicPath?: string
+  previewPdfPath?: string
+  size?: number
+}
 
 type LibraryDocument = {
   id: string
@@ -327,12 +342,243 @@ const normalizeContractText = normalizeGrunenthalContractParty
 const contractPartyKey = (contract: Pick<ContractMeta, "providerIdentity" | "thirdPartyName" | "contractorType">) =>
   normalizeContractText(contract.providerIdentity || contract.thirdPartyName || contract.contractorType || "")
 
+const seededFileId = (assetId: string) => `grunenthal-file-${assetId}`
+
+const getPrimaryContractAttachment = (contract: ContractMeta | null | undefined): ContractAttachment | null => {
+  if (!contract?.attachments.length) return null
+  const primaryAttachment = contract.attachments.find(
+    (attachment) => String(attachment.definition).toLowerCase() === "principal",
+  ) as ContractAttachment | undefined
+  if (primaryAttachment) return primaryAttachment
+
+  return (
+    contract.attachments.find((attachment) => {
+      const descriptor = `${attachment.definition} ${attachment.fileName}`.toLowerCase()
+      return !descriptor.includes("analisis") && !descriptor.includes("análisis") && !descriptor.includes("extracto")
+    }) ?? contract.attachments[0]
+  )
+}
+
+const supportingDocumentPattern = /\b(nda|confidencialidad|orden de compra|purchase order|oc)\b/i
+
+const isSupportingGrtDocument = (record: GrunenthalGrtContractDocument) =>
+  supportingDocumentPattern.test(`${record.sourceName} ${record.documentKind}`)
+
+const isSupportingContract = (contract: ContractMeta) =>
+  supportingDocumentPattern.test(
+    [
+      contract.contractTitle,
+      contract.contractType,
+      ...contract.attachments.map((attachment) => `${attachment.definition} ${attachment.fileName}`),
+    ]
+      .filter(Boolean)
+      .join(" "),
+  )
+
+const shouldReplaceLinkedContract = (
+  currentContract: ContractMeta | undefined,
+  nextContractIsSupportingDocument: boolean,
+) => {
+  if (!currentContract) return true
+  if (currentContract.metadata?.fallbackFromAnalysis) return true
+  if (isSupportingContract(currentContract) && !nextContractIsSupportingDocument) return true
+  if (!isSupportingContract(currentContract) && nextContractIsSupportingDocument) return false
+  return true
+}
+
+const buildPublicContractAttachment = (record: GrunenthalGrtContractDocument): ContractAttachment => ({
+  fileName: record.sourceName,
+  definition: "principal",
+  storageId: seededFileId(record.id),
+  category: "third-party-contract",
+  mimeType: record.mimeType,
+  publicPath: record.path,
+  previewPdfPath: record.extension !== "pdf" ? record.previewPdfPath : undefined,
+  size: record.size,
+})
+
+const clauseComplianceStatusFromIndividual = (record: GrunenthalThirdPartyContractSeed) => {
+  if (record.complianceStatus === "no-cumple") return "no_cumple"
+  if (record.complianceStatus === "no-aplica") return "no_aplica"
+  if (record.complianceStatus === "requiere-revision") return "requiere_revision"
+  return "cumple"
+}
+
+const clauseRegulationFromIndividual = (record: GrunenthalThirdPartyContractSeed) => {
+  if (record.complianceStatus === "cumple") {
+    return "Resultado del análisis de cláusulas: cumple con la LFPDPPP y su Reglamento."
+  }
+  if (record.complianceStatus === "no-aplica") {
+    return "Resultado del análisis de cláusulas: no se localizó cláusula relativa; se recomienda incorporar la cláusula aplicable."
+  }
+  if (record.complianceStatus === "requiere-revision") {
+    return "Resultado del análisis de cláusulas: requiere revisión conforme al documento fuente."
+  }
+  return "Resultado del análisis de cláusulas: no cumple con la LFPDPPP, conforme al documento fuente."
+}
+
+const findIndividualAnalysisForProvider = (providerIdentity: string) => {
+  const partyKey = normalizeContractText(providerIdentity)
+  return GRUNENTHAL_INDIVIDUAL_THIRD_PARTY_RECORDS.find(
+    (record) => normalizeContractText(record.providerIdentity) === partyKey,
+  )
+}
+
+const buildIndividualAnalysisAttachment = (record: GrunenthalThirdPartyContractSeed): ContractAttachment => ({
+  fileName: record.downloadName,
+  definition: "evidencia",
+  storageId: seededFileId(record.id),
+  category: record.category,
+  mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  publicPath: record.originalPath,
+  previewPdfPath: record.previewPdfPath,
+  size: 0,
+})
+
+const buildFallbackContractFromIndividualAnalysis = (record: GrunenthalThirdPartyContractSeed): ContractMeta => ({
+  id: `fallback-contract-${record.id}`,
+  created: "2026-01-01T00:00:00.000Z",
+  contractMode: "especifico",
+  contractTitle: record.contractTitle,
+  internalCode: record.internalCode,
+  contractType: "Análisis de relación con tercero",
+  contractStatus: "vigente",
+  contractorType: record.contractorType,
+  providerIdentity: record.providerIdentity,
+  thirdPartyTypes: [record.relationType],
+  thirdPartyName: record.thirdPartyName,
+  areas: [record.area],
+  serviceTypes: ["servicios_profesionales"],
+  treatmentPurpose: record.contractObject,
+  dataCategories: ["identificacion", "contacto", "laboral"],
+  dataVolume: "Variable",
+  relationType: record.relationType,
+  instrumentTypes: [record.recommendedInstrument],
+  formalized: "si",
+  baseLegal: ["relacion_juridica"],
+  guarantees: [record.recommendedInstrument],
+  contractValidity: "indefinida",
+  startDate: "2026-01-01",
+  expirationDate: "2026-12-31",
+  durationType: "anual",
+  reviewFrequency: "anual",
+  terminationClause: true,
+  communicationType: record.communicationType,
+  communicationDetails: record.contractObject,
+  clauseRegulation: clauseRegulationFromIndividual(record),
+  clauseType: record.sourceClauseType,
+  clauseComplianceStatus: clauseComplianceStatusFromIndividual(record),
+  clauseComplianceLabel: record.sourceComplianceLabel,
+  clauseComplianceNotes: record.sourceComplianceNotes,
+  complianceNeeds: record.sourceRecommendation,
+  evidenceAvailable: ["analisis", "extracto_individual"],
+  evidenceNotes: `Registro individual extraído del análisis de relaciones con terceros, líneas ${record.sourceLineRange}.`,
+  responsibleName: "Sofia Jaimes",
+  responsibleRole: "Administrador demo",
+  lastReview: "2026-01-01",
+  nextReview: "2026-12-31",
+  reminders: [],
+  linkedInventories: "RAT Grünenthal 2026",
+  riskLevel: record.riskLevel,
+  riskNotes: record.sourceRecommendation || record.recommendedInstrument,
+  versioningNotes: "Fallback de análisis generado desde el extracto individual del documento fuente.",
+  reviewLog: "Cargado desde Análisis de Relaciones Grünenthal.",
+  attachments: [buildIndividualAnalysisAttachment(record)],
+  metadata: {
+    sourceCompiledAssetId: record.sourceCompiledAssetId,
+    sourceLineRange: record.sourceLineRange,
+    sourceRelativePath: record.sourceRelativePath,
+    individualRecordId: record.id,
+    fallbackFromAnalysis: true,
+  },
+})
+
+const buildFallbackContractFromGrtDocument = (record: GrunenthalGrtContractDocument): ContractMeta => {
+  const analysisRecord = findIndividualAnalysisForProvider(record.providerIdentity)
+  const clauseComplianceStatus = analysisRecord
+    ? clauseComplianceStatusFromIndividual(analysisRecord)
+    : record.clauseComplianceStatus
+  const clauseComplianceLabel = analysisRecord?.sourceComplianceLabel ?? record.clauseComplianceLabel
+  const clauseType = analysisRecord?.sourceClauseType ?? record.clauseType
+  const sourceRecommendation = analysisRecord?.sourceRecommendation ?? record.recommendation
+  const sourceCriterion = analysisRecord?.sourceRecommendation ?? record.analysisSummary
+
+  return {
+    id: `fallback-contract-${record.id}`,
+    created: "2026-01-01T00:00:00.000Z",
+    contractMode: "especifico",
+    contractTitle: `${record.documentKind} · ${record.providerIdentity}`,
+    internalCode: `GRT-${record.id}`,
+    contractType: record.documentKind,
+    contractStatus: "vigente",
+    contractorType: record.relationType === "tercero" ? "tercero" : "proveedor",
+    providerIdentity: record.providerIdentity,
+    thirdPartyTypes: [record.relationType],
+    thirdPartyName: record.providerIdentity,
+    areas: [record.area],
+    serviceTypes: ["servicios_profesionales"],
+    treatmentPurpose: record.contractObject,
+    dataCategories: ["identificacion", "contacto", "laboral"],
+    dataVolume: "Variable",
+    relationType: record.relationType,
+    instrumentTypes: ["contrato"],
+    formalized: "si",
+    baseLegal: ["relacion_juridica"],
+    guarantees: ["contrato"],
+    contractValidity: "indefinida",
+    startDate: "2026-01-01",
+    expirationDate: "2026-12-31",
+    durationType: "anual",
+    reviewFrequency: "anual",
+    terminationClause: true,
+    communicationType: record.communicationType,
+    communicationDetails: record.contractObject,
+    clauseRegulation: sourceCriterion,
+    clauseType,
+    clauseComplianceStatus,
+    clauseComplianceLabel,
+    clauseComplianceNotes: analysisRecord?.sourceComplianceNotes ?? sourceCriterion,
+    complianceNeeds: sourceRecommendation,
+    evidenceAvailable: analysisRecord ? ["contrato", "analisis", "extracto_individual"] : ["contrato", "analisis"],
+    evidenceNotes: analysisRecord
+      ? `Contrato cargado desde Contratos GRt y vinculado al análisis de relaciones, líneas ${analysisRecord.sourceLineRange}.`
+      : `Contrato cargado desde la carpeta Contratos GRt: ${record.sourceName}.`,
+    responsibleName: "Sofia Jaimes",
+    responsibleRole: "Administrador demo",
+    lastReview: "2026-01-01",
+    nextReview: "2026-12-31",
+    reminders: [],
+    linkedInventories: "No vinculado en esta carga",
+    riskLevel: analysisRecord?.riskLevel ?? record.riskLevel,
+    riskNotes: sourceRecommendation || sourceCriterion,
+    versioningNotes: "Fallback de consulta generado desde Contratos GRt cuando el historial local no está disponible.",
+    reviewLog: "Cargado desde assets oficiales Grünenthal.",
+    attachments: [buildPublicContractAttachment(record)],
+    metadata: {
+      sourceFolder: GRT_CONTRACT_SOURCE_FOLDER,
+      sourceRelativePath: `Contratos GRt/${record.sourceName}`,
+      individualRecordId: analysisRecord?.id ?? record.id,
+      grtContractId: record.id,
+      originalPublicPath: record.path,
+      ...(analysisRecord
+        ? {
+            analysisRecordId: analysisRecord.id,
+            analysisSourceLineRange: analysisRecord.sourceLineRange,
+            sourceCompiledAssetId: analysisRecord.sourceCompiledAssetId,
+          }
+        : {}),
+      documentViewMode: record.extension !== "pdf" ? "pdf-preview" : "original",
+      ...(record.extension !== "pdf" ? { previewPdfPath: record.previewPdfPath } : {}),
+      analysisInModal: true,
+      fallbackFromAsset: true,
+    },
+  }
+}
+
 const isGrtHistoryContract = (contract: ContractMeta) => contract.metadata?.sourceFolder === GRT_CONTRACT_SOURCE_FOLDER
 
 const isCompiledAnalysisContract = (contract: ContractMeta) =>
   contract.metadata?.sourceCompiledAssetId === COMPILED_THIRD_PARTY_SOURCE_ID
-
-const isGrtSeededFile = (file: StoredFile) => file.metadata?.individualRecordType === "third-party-grt-contract"
 
 const communicationTypeLabels: Record<GrunenthalThirdPartyAnalysisMatrixRow["communicationType"], string> = {
   remision: "Remisión",
@@ -362,7 +608,6 @@ const getNextContractUpdateDate = (interval: AuditReminderRecurrenceInterval) =>
 
 export default function DocumentsAndClausesPage() {
   const { toast } = useToast()
-  const [uploadedContracts, setUploadedContracts] = useState<StoredFile[]>([])
   const [templateFiles, setTemplateFiles] = useState<StoredFile[]>([])
   const [contractHistory, setContractHistory] = useState<ContractMeta[]>([])
   const [userClauses, setUserClauses] = useState<ModelClause[]>([])
@@ -380,11 +625,6 @@ export default function DocumentsAndClausesPage() {
   const [isClauseDialogOpen, setIsClauseDialogOpen] = useState(false)
   const [clauseFormState, setClauseFormState] = useState({ title: "", category: "", text: "" })
   const [editingClauseId, setEditingClauseId] = useState<string | null>(null)
-  const [contractSearchTerm, setContractSearchTerm] = useState("")
-  const [contractModeFilter, setContractModeFilter] = useState("all")
-  const [communicationFilter, setCommunicationFilter] = useState("all")
-  const [statusFilter, setStatusFilter] = useState("all")
-  const [riskFilter, setRiskFilter] = useState("all")
   const [matrixSearchTerm, setMatrixSearchTerm] = useState("")
   const [matrixAreaFilter, setMatrixAreaFilter] = useState("all")
   const [matrixCommunicationFilter, setMatrixCommunicationFilter] = useState("all")
@@ -451,10 +691,6 @@ export default function DocumentsAndClausesPage() {
     }))
   }
 
-  const loadStoredContracts = () => {
-    setUploadedContracts(getFilesByCategory("third-party-contract"))
-  }
-
   const loadTemplateFiles = () => {
     setTemplateFiles(getFilesByCategory("third-party-template"))
   }
@@ -490,13 +726,11 @@ export default function DocumentsAndClausesPage() {
   }
 
   useEffect(() => {
-    loadStoredContracts()
     loadTemplateFiles()
     loadContractHistory()
     loadCustomClauses()
 
     const handleStorageChange = () => {
-      loadStoredContracts()
       loadTemplateFiles()
       loadContractHistory()
       loadCustomClauses()
@@ -781,9 +1015,6 @@ export default function DocumentsAndClausesPage() {
     })
   }
 
-  const getContractModeLabel = (mode: "marco" | "especifico") =>
-    mode === "marco" ? "Contrato marco" : "Contrato específico"
-
   const formatDate = (value: string) => {
     if (!value) return "No definido"
     const date = new Date(value)
@@ -793,39 +1024,32 @@ export default function DocumentsAndClausesPage() {
     return date.toLocaleDateString()
   }
 
-  const previewStoredContract = (contract: StoredFile) => {
-    if (!canOfferFilePreview(contract)) {
-      toast({
-        title: "Vista previa no disponible",
-        description: "Puedes descargar el contrato original desde esta misma tarjeta.",
-        variant: "destructive",
-      })
-      return
+  const resolveContractAttachment = (attachment: ContractAttachment) => {
+    if (attachment.storageId) {
+      const stored = getFileById(attachment.storageId)
+      if (stored) return stored
     }
 
-    setPreviewContractFile(contract)
-  }
-
-  const downloadStoredContract = (contract: StoredFile) => {
-    const link = document.createElement("a")
-    link.href = createFileURL(contract.content)
-    link.download = contract.name
-    link.target = "_blank"
-    link.rel = "noopener"
-    link.click()
-  }
-
-  const resolveContractAttachment = (attachment: ContractMeta["attachments"][number]) => {
-    if (!attachment.storageId) {
-      toast({
-        title: "Documento no disponible",
-        description: "El archivo no se encontró en el almacenamiento local.",
-        variant: "destructive",
-      })
-      return null
+    if (attachment.publicPath) {
+      return {
+        id: attachment.storageId || `public-${attachment.publicPath}`,
+        name: attachment.fileName,
+        type: attachment.mimeType || "application/pdf",
+        size: attachment.size || 0,
+        content: attachment.publicPath,
+        uploadDate: new Date().toISOString(),
+        category: attachment.category || "third-party-contract",
+        metadata: {
+          publicPath: attachment.publicPath,
+          sourceRelativePath: attachment.publicPath,
+          ...(attachment.previewPdfPath
+            ? { previewPdfPath: attachment.previewPdfPath, previewMimeType: "application/pdf" }
+            : {}),
+        },
+      }
     }
-    const stored = getFileById(attachment.storageId)
-    if (!stored) {
+
+    {
       toast({
         title: "Documento no disponible",
         description: "El archivo no se encontró en el almacenamiento local.",
@@ -833,10 +1057,9 @@ export default function DocumentsAndClausesPage() {
       })
       return null
     }
-    return stored
   }
 
-  const previewContractAttachment = (attachment: ContractMeta["attachments"][number]) => {
+  const previewContractAttachment = (attachment: ContractAttachment) => {
     const stored = resolveContractAttachment(attachment)
     if (!stored) return
 
@@ -853,7 +1076,7 @@ export default function DocumentsAndClausesPage() {
     setPreviewContractFile(stored)
   }
 
-  const downloadContractAttachment = (attachment: ContractMeta["attachments"][number]) => {
+  const downloadContractAttachment = (attachment: ContractAttachment) => {
     const stored = resolveContractAttachment(attachment)
     if (!stored) return
 
@@ -902,20 +1125,6 @@ export default function DocumentsAndClausesPage() {
     })
   }
 
-  const statusLabels: Record<ContractMeta["contractStatus"], string> = {
-    vigente: "Vigente",
-    por_vencer: "Por vencer",
-    vencido: "Vencido",
-    sin_definir: "Sin definir",
-  }
-
-  const statusVariants: Record<ContractMeta["contractStatus"], "default" | "secondary" | "outline" | "destructive"> = {
-    vigente: "default",
-    por_vencer: "secondary",
-    vencido: "destructive",
-    sin_definir: "outline",
-  }
-
   const riskVariants: Record<ContractMeta["riskLevel"], "default" | "secondary" | "outline" | "destructive"> = {
     bajo: "secondary",
     medio: "default",
@@ -928,7 +1137,7 @@ export default function DocumentsAndClausesPage() {
   > = {
     cumple: { label: "Cláusula cumple", variant: "secondary" },
     no_cumple: { label: "Cláusula no cumple", variant: "destructive" },
-    no_aplica: { label: "Cláusula N/A", variant: "outline" },
+    no_aplica: { label: "Agregar cláusula", variant: "outline" },
     requiere_revision: { label: "Cláusula en revisión", variant: "outline" },
   }
 
@@ -1019,16 +1228,29 @@ export default function DocumentsAndClausesPage() {
     })
   }, [contractHistory])
 
-  const visibleUploadedContracts = useMemo(
-    () => uploadedContracts.filter((contract) => !isGrtSeededFile(contract)),
-    [uploadedContracts],
-  )
-
   const contractByPartyKey = useMemo(() => {
     const contracts = new Map<string, ContractMeta>()
+    GRUNENTHAL_INDIVIDUAL_THIRD_PARTY_RECORDS.forEach((record) => {
+      const partyKey = normalizeContractText(record.providerIdentity)
+      if (partyKey && !contracts.has(partyKey)) {
+        contracts.set(partyKey, buildFallbackContractFromIndividualAnalysis(record))
+      }
+    })
+    GRUNENTHAL_GRT_CONTRACT_DOCUMENTS.forEach((record) => {
+      const partyKey = normalizeContractText(record.providerIdentity)
+      if (partyKey && shouldReplaceLinkedContract(contracts.get(partyKey), isSupportingGrtDocument(record))) {
+        contracts.set(partyKey, buildFallbackContractFromGrtDocument(record))
+      }
+    })
     visibleContractHistory.forEach((contract) => {
       const partyKey = contractPartyKey(contract)
-      if (partyKey && !contracts.has(partyKey)) {
+      if (
+        partyKey &&
+        contract.metadata?.sourceFolder === GRT_CONTRACT_SOURCE_FOLDER &&
+        shouldReplaceLinkedContract(contracts.get(partyKey), isSupportingContract(contract))
+      ) {
+        contracts.set(partyKey, contract)
+      } else if (partyKey && !contracts.has(partyKey)) {
         contracts.set(partyKey, contract)
       }
     })
@@ -1059,97 +1281,12 @@ export default function DocumentsAndClausesPage() {
     })
   }, [matrixAreaFilter, matrixCommunicationFilter, matrixSearchTerm])
 
-  const availableCommunicationTypes = useMemo(() => {
-    const types = new Set(visibleContractHistory.map((entry) => entry.communicationType).filter(Boolean))
-    return Array.from(types).sort()
-  }, [visibleContractHistory])
-
-  const availableStatuses = useMemo(() => {
-    const statuses = new Set(visibleContractHistory.map((entry) => entry.contractStatus))
-    return (Array.from(statuses) as ContractMeta["contractStatus"][]).sort()
-  }, [visibleContractHistory])
-
-  const availableRiskLevels = useMemo(() => {
-    const risks = new Set(visibleContractHistory.map((entry) => entry.riskLevel))
-    return (Array.from(risks) as ContractMeta["riskLevel"][]).sort()
-  }, [visibleContractHistory])
-
-  const filteredContractHistory = useMemo(() => {
-    const searchValue = contractSearchTerm.trim().toLowerCase()
-    return visibleContractHistory.filter((contract) => {
-      const matchesSearch =
-        !searchValue ||
-        [
-          contract.contractTitle ?? "",
-          contract.providerIdentity ?? "",
-          contract.contractorType ?? "",
-          contract.thirdPartyName ?? "",
-          contract.contractType ?? "",
-          contract.communicationType ?? "",
-          contract.treatmentPurpose ?? "",
-          contract.clauseRegulation ?? "",
-          contract.thirdPartyTypes.join(" "),
-          contract.areas.join(" "),
-        ]
-          .filter(Boolean)
-          .some((field) => field.toLowerCase().includes(searchValue))
-
-      const matchesMode = contractModeFilter === "all" || contract.contractMode === contractModeFilter
-      const matchesCommunication =
-        communicationFilter === "all" || contract.communicationType === communicationFilter
-      const matchesStatus = statusFilter === "all" || contract.contractStatus === statusFilter
-      const matchesRisk = riskFilter === "all" || contract.riskLevel === riskFilter
-
-      return matchesSearch && matchesMode && matchesCommunication && matchesStatus && matchesRisk
-    })
-  }, [
-    visibleContractHistory,
-    contractSearchTerm,
-    contractModeFilter,
-    communicationFilter,
-    statusFilter,
-    riskFilter,
-  ])
-
-  const filteredUploadedContracts = useMemo(() => {
-    const searchValue = contractSearchTerm.trim().toLowerCase()
-
-    return visibleUploadedContracts.filter((contract) => {
-      const metadata = contract.metadata ?? {}
-      const searchableFields = [
-        contract.name,
-        metadata.title,
-        metadata.displayName,
-        metadata.contractTitle,
-        metadata.providerIdentity,
-        metadata.thirdPartyName,
-        metadata.contractType,
-        metadata.contractObject,
-        metadata.communicationType,
-        metadata.relationType,
-        metadata.area,
-        metadata.analysisSummary,
-        metadata.recommendation,
-      ]
-        .filter(Boolean)
-        .join(" ")
-        .toLowerCase()
-
-      const matchesSearch = !searchValue || searchableFields.includes(searchValue)
-      const matchesCommunication =
-        communicationFilter === "all" || metadata.communicationType === communicationFilter
-      const matchesRisk = riskFilter === "all" || metadata.riskLevel === riskFilter
-
-      return matchesSearch && matchesCommunication && matchesRisk
-    })
-  }, [visibleUploadedContracts, contractSearchTerm, communicationFilter, riskFilter])
-
   const navItems = THIRD_PARTY_CONTRACTS_NAV.map((item) => {
     if (item.href === "/third-party-contracts/registration") {
       return { ...item, badge: visibleContractHistory.length }
     }
     if (item.href === "/third-party-contracts/documents") {
-      return { ...item, badge: templateFiles.length + visibleUploadedContracts.length }
+      return { ...item, badge: templateFiles.length + visibleContractHistory.length }
     }
     return item
   })
@@ -1164,7 +1301,7 @@ export default function DocumentsAndClausesPage() {
       pageDescription="Plantillas, cláusulas y contratos relacionados en una sola biblioteca."
       navItems={navItems}
       headerBadges={[
-        { label: `${templateFiles.length + visibleUploadedContracts.length} recursos`, tone: "neutral" },
+        { label: `${templateFiles.length + visibleContractHistory.length} recursos`, tone: "neutral" },
         { label: `${combinedClauses.length} cláusulas`, tone: "primary" },
       ]}
       actions={
@@ -1175,11 +1312,10 @@ export default function DocumentsAndClausesPage() {
       }
     >
       <Tabs defaultValue="documents" className="w-full">
-        <TabsList className="mb-8 grid h-auto w-full grid-cols-1 gap-2 rounded-2xl bg-[#edf4ff] p-1 sm:grid-cols-4">
+        <TabsList className="mb-8 grid h-auto w-full grid-cols-1 gap-2 rounded-2xl bg-[#edf4ff] p-1 sm:grid-cols-3">
           <TabsTrigger value="documents" className="text-xs sm:text-sm">Plantillas</TabsTrigger>
           <TabsTrigger value="clauses" className="text-xs sm:text-sm">Cláusulas</TabsTrigger>
-          <TabsTrigger value="matrix" className="text-xs sm:text-sm">Matriz</TabsTrigger>
-          <TabsTrigger value="uploaded" className="text-xs sm:text-sm">Contratos</TabsTrigger>
+          <TabsTrigger value="contracts" className="text-xs sm:text-sm">Contratos</TabsTrigger>
         </TabsList>
 
         <TabsContent value="documents" className="space-y-6">
@@ -1782,11 +1918,11 @@ export default function DocumentsAndClausesPage() {
           </Dialog>
         </TabsContent>
 
-        <TabsContent value="matrix" className="space-y-6">
+        <TabsContent value="contracts" className="space-y-6">
           <Card>
             <CardHeader className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
               <div className="min-w-0">
-                <CardTitle>Matriz del análisis de relaciones</CardTitle>
+                <CardTitle>Contratos analizados</CardTitle>
                 <CardDescription>
                   Vista interactiva de {GRUNENTHAL_THIRD_PARTY_ANALYSIS_MATRIX_SOURCE.sourceTable.toLowerCase()} del documento "{GRUNENTHAL_THIRD_PARTY_ANALYSIS_MATRIX_SOURCE.sourceDocument}".
                 </CardDescription>
@@ -1847,19 +1983,22 @@ export default function DocumentsAndClausesPage() {
 
               <div className="overflow-hidden rounded-lg border">
                 <div className="overflow-x-auto">
-                  <table className="w-full min-w-[980px] border-collapse text-sm">
+                  <table className="w-full min-w-[1180px] border-collapse text-sm">
                     <thead className="bg-muted/60 text-left text-xs uppercase text-muted-foreground">
                       <tr>
                         <th className="w-[140px] px-4 py-3 font-medium">Área</th>
                         <th className="w-[260px] px-4 py-3 font-medium">Tercero</th>
-                        <th className="px-4 py-3 font-medium">Contrato</th>
+                        <th className="px-4 py-3 font-medium">Objeto contractual</th>
                         <th className="w-[210px] px-4 py-3 font-medium">Comunicación</th>
-                        <th className="w-[140px] px-4 py-3 text-right font-medium">Acción</th>
+                        <th className="w-[230px] px-4 py-3 font-medium">Análisis de cláusula</th>
+                        <th className="w-[190px] px-4 py-3 text-right font-medium">Contrato</th>
                       </tr>
                     </thead>
                     <tbody>
                       {filteredMatrixRows.map((row) => {
                         const linkedContract = contractByPartyKey.get(normalizeContractText(row.thirdParty))
+                        const clauseBadge = linkedContract ? getClauseComplianceBadge(linkedContract) : null
+                        const contractAttachment = getPrimaryContractAttachment(linkedContract)
 
                         return (
                           <tr key={row.id} className="border-t align-top">
@@ -1879,19 +2018,59 @@ export default function DocumentsAndClausesPage() {
                                 </p>
                               </div>
                             </td>
+                            <td className="px-4 py-3">
+                              {linkedContract ? (
+                                <div className="space-y-2">
+                                  <Badge variant={clauseBadge?.variant ?? "outline"}>
+                                    {linkedContract.clauseComplianceLabel || clauseBadge?.label || "En análisis"}
+                                  </Badge>
+                                  {linkedContract.clauseType && (
+                                    <p className="break-words text-xs leading-5 text-muted-foreground">
+                                      {linkedContract.clauseType}
+                                    </p>
+                                  )}
+                                  <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="ghost"
+                                    className="h-8 px-2 text-xs"
+                                    onClick={() => setAnalysisContract(linkedContract)}
+                                  >
+                                    <ListChecks className="mr-2 h-3.5 w-3.5" />
+                                    Ver análisis
+                                  </Button>
+                                </div>
+                              ) : (
+                                <Badge variant="outline">Sin análisis</Badge>
+                              )}
+                            </td>
                             <td className="px-4 py-3 text-right">
-                              <Button
-                                type="button"
-                                size="sm"
-                                variant="outline"
-                                disabled={!linkedContract}
-                                onClick={() => {
-                                  if (linkedContract) setAnalysisContract(linkedContract)
-                                }}
-                              >
-                                <ListChecks className="mr-2 h-4 w-4" />
-                                Análisis
-                              </Button>
+                              {contractAttachment ? (
+                                <div className="flex flex-col items-stretch gap-2 sm:items-end">
+                                  <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="outline"
+                                    className="justify-center"
+                                    onClick={() => previewContractAttachment(contractAttachment)}
+                                  >
+                                    <Eye className="mr-2 h-4 w-4" />
+                                    Ver
+                                  </Button>
+                                  <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="ghost"
+                                    className="justify-center"
+                                    onClick={() => downloadContractAttachment(contractAttachment)}
+                                  >
+                                    <Download className="mr-2 h-4 w-4" />
+                                    Descargar
+                                  </Button>
+                                </div>
+                              ) : (
+                                <Badge variant="outline">Sin archivo</Badge>
+                              )}
                             </td>
                           </tr>
                         )
@@ -1905,308 +2084,6 @@ export default function DocumentsAndClausesPage() {
                   </div>
                 )}
               </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="uploaded" className="space-y-6">
-          <Card>
-            <CardHeader className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-              <div>
-                <CardTitle>Historial de contratos registrados</CardTitle>
-                <CardDescription>
-                  Visualiza toda la información guardada desde la sección "Registro de Contratos" y consulta el detalle cuando lo necesites.
-                </CardDescription>
-              </div>
-              <SafeLink href="/third-party-contracts/registration">
-                <Button variant="outline">Registrar un nuevo contrato</Button>
-              </SafeLink>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                <div className="relative w-full md:max-w-md">
-                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                  <Input
-                    value={contractSearchTerm}
-                    onChange={(event) => setContractSearchTerm(event.target.value)}
-                    placeholder="Buscar por proveedor, área o tipo de contrato"
-                    className="pl-9"
-                  />
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  <Select value={contractModeFilter} onValueChange={setContractModeFilter}>
-                    <SelectTrigger className="w-[200px]">
-                      <SelectValue placeholder="Tipo de registro" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Todos los modos</SelectItem>
-                      <SelectItem value="especifico">Contratos específicos</SelectItem>
-                      <SelectItem value="marco">Contratos marco</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Select value={communicationFilter} onValueChange={setCommunicationFilter}>
-                    <SelectTrigger className="w-[220px]">
-                      <SelectValue placeholder="Tipo de comunicación" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Todas las comunicaciones</SelectItem>
-                      {availableCommunicationTypes.map((type) => (
-                        <SelectItem key={type} value={type}>
-                          {type}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <Select value={statusFilter} onValueChange={setStatusFilter}>
-                    <SelectTrigger className="w-[200px]">
-                      <SelectValue placeholder="Estatus" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Todos los estatus</SelectItem>
-                      {availableStatuses.map((status) => (
-                        <SelectItem key={status} value={status}>
-                          {statusLabels[status]}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <Select value={riskFilter} onValueChange={setRiskFilter}>
-                    <SelectTrigger className="w-[200px]">
-                      <SelectValue placeholder="Nivel de riesgo" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Todos los riesgos</SelectItem>
-                      {availableRiskLevels.map((risk) => (
-                        <SelectItem key={risk} value={risk} className="capitalize">
-                          {risk}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              {filteredContractHistory.length > 0 ? (
-                <div className="grid grid-cols-1 gap-4">
-                  {filteredContractHistory.map((contract) => {
-                    const clauseBadge = getClauseComplianceBadge(contract)
-
-                    return (
-                      <Card key={contract.id} className="border-muted">
-                        <CardHeader className="pb-2">
-                          <div className="flex flex-wrap items-center gap-2 text-xs">
-                            <Badge variant="secondary">{getContractModeLabel(contract.contractMode)}</Badge>
-                            <Badge variant="outline">{contract.contractType}</Badge>
-                            <Badge variant="outline">{contract.communicationType}</Badge>
-                            <Badge variant={statusVariants[contract.contractStatus]}>
-                              {statusLabels[contract.contractStatus]}
-                            </Badge>
-                            {clauseBadge && <Badge variant={clauseBadge.variant}>{clauseBadge.label}</Badge>}
-                            <Badge variant={riskVariants[contract.riskLevel]} className="capitalize">
-                              Riesgo: {contract.riskLevel}
-                            </Badge>
-                          </div>
-                          <CardTitle className="text-lg">
-                            {contract.contractTitle || contract.providerIdentity || contract.contractorType || "Contrato registrado"}
-                          </CardTitle>
-                          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-                            <CardDescription>
-                              Registrado el {formatDate(contract.created)} · Vigencia {contract.contractValidity}
-                              {contract.responsibleName && ` · Responsable: ${contract.responsibleName}`}
-                            </CardDescription>
-                            <Button
-                              type="button"
-                              size="sm"
-                              variant="outline"
-                              className="w-full sm:w-auto"
-                              onClick={() => setAnalysisContract(contract)}
-                            >
-                              <ListChecks className="mr-2 h-4 w-4" />
-                              Ver análisis
-                            </Button>
-                          </div>
-                        </CardHeader>
-                        <CardContent className="space-y-2 text-sm">
-                          <p>
-                            <strong>Tercero:</strong> {contract.providerIdentity || contract.contractorType || contract.thirdPartyName}
-                          </p>
-                          {contract.thirdPartyTypes.length > 0 && (
-                            <p>
-                              <strong>Tipo de tercero:</strong> {contract.thirdPartyTypes.join(", ")}
-                            </p>
-                          )}
-                          <p>
-                            <strong>Áreas involucradas:</strong> {contract.areas.join(", ")}
-                          </p>
-                          <p>
-                            <strong>Período:</strong> {formatDate(contract.startDate)} a {formatDate(contract.expirationDate)}
-                          </p>
-                          <p>
-                            <strong>Volumen aproximado:</strong> {contract.dataVolume}
-                          </p>
-                          <p>
-                            <strong>Resultado de análisis:</strong> {contract.clauseComplianceLabel || contract.clauseRegulation}
-                          </p>
-                          {contract.clauseType && (
-                            <p>
-                              <strong>Cláusula revisada:</strong> {contract.clauseType}
-                            </p>
-                          )}
-                          <p>
-                            <strong>Criterio regulatorio:</strong> {contract.clauseRegulation}
-                          </p>
-                          {contract.complianceNeeds && (
-                            <p>
-                              <strong>Recomendación:</strong> {contract.complianceNeeds}
-                            </p>
-                          )}
-                          {contract.clauseComplianceNotes && (
-                            <p className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-amber-900">
-                              <strong>Nota de revisión:</strong> {contract.clauseComplianceNotes}
-                            </p>
-                          )}
-                          {contract.communicationDetails && (
-                            <p>
-                              <strong>Detalle de comunicación:</strong> {contract.communicationDetails}
-                            </p>
-                          )}
-                          <p>
-                            <strong>Recordatorios configurados:</strong> {contract.reminders.join(", ")} días antes del vencimiento
-                          </p>
-                          <div className="space-y-2">
-                            <p className="font-medium">Documentos asociados</p>
-                            {contract.attachments.length > 0 ? (
-                              <div className="grid gap-2 md:grid-cols-2">
-                                {contract.attachments.map((attachment) => (
-                                  <div
-                                    key={`${contract.id}-${attachment.storageId ?? attachment.fileName}`}
-                                    className="flex flex-wrap items-center justify-between gap-3 rounded-md border p-2"
-                                  >
-                                    <div className="min-w-0">
-                                      <p className="break-words text-sm font-medium">{attachment.fileName}</p>
-                                      <p className="text-xs text-muted-foreground">{attachment.definition}</p>
-                                    </div>
-                                    <div className="flex shrink-0 flex-wrap gap-2">
-                                      <Button size="sm" variant="outline" onClick={() => previewContractAttachment(attachment)}>
-                                        <Eye className="mr-2 h-4 w-4" />
-                                        Ver
-                                      </Button>
-                                      <Button size="sm" variant="outline" onClick={() => downloadContractAttachment(attachment)}>
-                                        <Download className="mr-2 h-4 w-4" />
-                                        Descargar
-                                      </Button>
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            ) : (
-                              <p className="text-sm text-muted-foreground">Sin documentos adjuntos en el registro.</p>
-                            )}
-                          </div>
-                        </CardContent>
-                      </Card>
-                    )
-                  })}
-                </div>
-              ) : (
-                <div className="rounded-md border border-dashed border-muted-foreground/40 p-8 text-center text-muted-foreground">
-                  Aún no hay contratos registrados. Dirígete a "Registro de Contratos" para crear tu primer registro.
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Archivos de contratos cargados</CardTitle>
-              <CardDescription>
-                Documentos guardados con la categoría "third-party-contract" disponibles para consulta rápida.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {filteredUploadedContracts.length > 0 ? (
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                  {filteredUploadedContracts.map((contract) => {
-                    const metadata = contract.metadata ?? {}
-                    const serviceTypes = Array.isArray(metadata.serviceTypes)
-                      ? metadata.serviceTypes
-                      : metadata.serviceTypes
-                      ? String(metadata.serviceTypes).split(",").map((item: string) => item.trim())
-                      : []
-                    const reminders = Array.isArray(metadata.reminders)
-                      ? metadata.reminders
-                      : metadata.reminders
-                      ? String(metadata.reminders).split(",").map((item: string) => item.trim())
-                      : []
-
-                    return (
-                      <Card key={contract.id} className="overflow-hidden">
-                        <CardHeader className="space-y-1 p-4">
-                          <CardTitle className="text-base">
-                            {(metadata.contractTitle as string) || contract.name}
-                          </CardTitle>
-                          <CardDescription className="text-xs">
-                            Subido el {formatDate(contract.uploadDate)}
-                          </CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-1 p-4 pt-0 text-sm">
-                          {metadata.providerIdentity && (
-                            <p>
-                              <strong>Proveedor:</strong> {metadata.providerIdentity as string}
-                            </p>
-                          )}
-                          {metadata.contractType && (
-                            <p>
-                              <strong>Tipo de contrato:</strong> {metadata.contractType as string}
-                            </p>
-                          )}
-                          {metadata.relationType && (
-                            <p>
-                              <strong>Relación jurídica:</strong> {metadata.relationType as string}
-                            </p>
-                          )}
-                          {serviceTypes.length > 0 && (
-                            <p>
-                              <strong>Servicios:</strong> {serviceTypes.join(", ")}
-                            </p>
-                          )}
-                          {metadata.validityPeriod && (
-                            <p>
-                              <strong>Vigencia:</strong> {metadata.validityPeriod as string}
-                            </p>
-                          )}
-                          {metadata.riskLevel && (
-                            <p>
-                              <strong>Riesgo:</strong> {metadata.riskLevel as string}
-                            </p>
-                          )}
-                          {reminders.length > 0 && (
-                            <p>
-                              <strong>Recordatorios:</strong> {reminders.join(", ")}
-                            </p>
-                          )}
-                        </CardContent>
-                        <CardFooter className="flex flex-wrap justify-end gap-2 p-4 pt-0">
-                          <Button variant="outline" size="sm" onClick={() => previewStoredContract(contract)}>
-                            <Eye className="mr-2 h-4 w-4" />
-                            Ver documento
-                          </Button>
-                          <Button variant="outline" size="sm" onClick={() => downloadStoredContract(contract)}>
-                            <Download className="mr-2 h-4 w-4" />
-                            Descargar
-                          </Button>
-                        </CardFooter>
-                      </Card>
-                    )
-                  })}
-                </div>
-              ) : (
-                <div className="rounded-md border border-dashed border-muted-foreground/40 p-8 text-center text-muted-foreground">
-                  {uploadedContracts.length > 0
-                    ? "Los contratos de Contratos GRt se consultan desde el historial, con análisis y documento original en el mismo modal."
-                    : "No hay archivos de contratos en esta categoría todavía. Registra un contrato e incluye el documento para verlo aquí."}
-                </div>
-              )}
             </CardContent>
           </Card>
         </TabsContent>

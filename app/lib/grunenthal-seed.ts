@@ -655,7 +655,7 @@ function clauseRegulationFor(record: GrunenthalThirdPartyContractSeed) {
   }
 
   if (record.complianceStatus === "no-aplica") {
-    return "Resultado del análisis de cláusulas: N/A en la fuente; no se localizó cláusula relativa y se recomienda incorporarla."
+    return "Resultado del análisis de cláusulas: no se localizó cláusula relativa y se recomienda incorporarla."
   }
 
   if (record.complianceStatus === "requiere-revision") {
@@ -671,7 +671,7 @@ function riskNotesFor(record: GrunenthalThirdPartyContractSeed) {
   }
 
   if (record.complianceStatus === "no-aplica") {
-    return "Revisión requerida: el análisis fuente marca N/A porque no localizó cláusula relativa; debe incorporarse el instrumento recomendado."
+    return "Revisión requerida: el análisis fuente no localizó cláusula relativa; debe incorporarse el instrumento recomendado."
   }
 
   if (record.complianceStatus === "requiere-revision") {
@@ -801,6 +801,11 @@ function buildGrtThirdPartyContract(record: GrunenthalGrtContractDocument, index
   const analysisLink = findGrunenthalContractAnalysisLink(record)
   const analysisRecord = analysisLink.analysisRecord
   const matrixRow = analysisLink.matrixRow
+  const clauseComplianceStatus = analysisRecord ? clauseComplianceStatusFor(analysisRecord) : record.clauseComplianceStatus
+  const clauseComplianceLabel = analysisRecord?.sourceComplianceLabel ?? record.clauseComplianceLabel
+  const clauseType = analysisRecord?.sourceClauseType ?? record.clauseType
+  const sourceRecommendation = analysisRecord?.sourceRecommendation ?? record.recommendation
+  const sourceCriterion = analysisRecord?.sourceRecommendation ?? record.analysisSummary
   const attachments = [
     {
       fileName: record.sourceName,
@@ -857,12 +862,12 @@ function buildGrtThirdPartyContract(record: GrunenthalGrtContractDocument, index
     terminationClause: true,
     communicationType: record.communicationType,
     communicationDetails: record.contractObject,
-    clauseRegulation: record.analysisSummary,
-    clauseType: record.clauseType,
-    clauseComplianceStatus: record.clauseComplianceStatus,
-    clauseComplianceLabel: record.clauseComplianceLabel,
-    clauseComplianceNotes: record.analysisSummary,
-    complianceNeeds: record.recommendation,
+    clauseRegulation: sourceCriterion,
+    clauseType,
+    clauseComplianceStatus,
+    clauseComplianceLabel,
+    clauseComplianceNotes: analysisRecord?.sourceComplianceNotes ?? sourceCriterion,
+    complianceNeeds: sourceRecommendation,
     evidenceAvailable: analysisRecord ? ["contrato", "analisis", "extracto_individual"] : ["contrato"],
     evidenceNotes: analysisRecord
       ? `Contrato físico cargado desde Contratos GRt y vinculado al análisis de relaciones, líneas ${analysisRecord.sourceLineRange}.`
@@ -873,8 +878,8 @@ function buildGrtThirdPartyContract(record: GrunenthalGrtContractDocument, index
     nextReview: "2026-12-31",
     reminders: [],
     linkedInventories: "No vinculado en esta carga",
-    riskLevel: record.riskLevel,
-    riskNotes: riskNotesForGrt(record),
+    riskLevel: analysisRecord?.riskLevel ?? record.riskLevel,
+    riskNotes: analysisRecord ? riskNotesFor(analysisRecord) : riskNotesForGrt(record),
     versioningNotes: "Carga directa desde carpeta Contratos GRt con documento original y análisis en modal.",
     reviewLog: "Creado por Admin para demo Grünenthal 2026.",
     attachments,

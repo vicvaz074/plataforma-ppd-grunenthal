@@ -1038,7 +1038,7 @@ export default function ContractRegistrationPage() {
   > = {
     cumple: { label: "Cláusula cumple", variant: "secondary" },
     no_cumple: { label: "Cláusula no cumple", variant: "destructive" },
-    no_aplica: { label: "Cláusula N/A", variant: "outline" },
+    no_aplica: { label: "Agregar cláusula", variant: "outline" },
     requiere_revision: { label: "Cláusula en revisión", variant: "outline" },
   };
   const getClauseComplianceBadge = (contract: ContractMeta) => {

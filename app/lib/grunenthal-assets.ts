@@ -747,7 +747,7 @@ export const GRUNENTHAL_DOCUMENT_MANIFEST: GrunenthalAsset[] = [
     "displayName": "AnálisisDeRelacionesGrünenthal ",
     "path": "/client/grunenthal/third-party-contracts/analisisderelacionesgrunenthal.docx",
     "type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    "size": 176296,
+    "size": 149099,
     "module": "third-party-contracts",
     "category": "third-party-contract",
     "folder": "third-party-contracts",

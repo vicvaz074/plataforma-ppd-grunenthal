@@ -154,177 +154,199 @@ const THIRD_PARTY_CLAUSE_ANALYSIS_BY_INDEX: Record<number, ThirdPartyClauseAnaly
     clauseType: "(1) Vigésima Primera. Protección de Datos Personales",
     complianceLabel: "No cumple",
     recommendation:
-      "La cláusula no cumple con los requisitos de la LFPDPPP. Se sugiere emplear la cláusula C2 del Manual de Relaciones con Terceros y/o los apéndices CM-2 o C-2.",
+      "La cláusula no cumple con los requisitos de la LFPDPPP. En su lugar, se sugiere emplear la cláusula C2 del Manual de Relaciones con Terceros y/o en su caso, los apéndices 2 CM-2 o 3 C-2 del mismo donde el Responsable Receptor garantiza la legalidad de la transferencia de datos personales.",
   },
   2: {
     clauseType: "(1) Vigésima. Protección de Datos Personales",
     complianceLabel: "No cumple",
     recommendation:
-      "Las cláusulas no cumplen con los requisitos de la LFPDPPP y su Reglamento. Se sugiere emplear la cláusula C1 del Manual de Relaciones con Terceros y/o los apéndices CM-1 o C-1.",
+      "Las cláusulas no cumplen con los requisitos de la LFPDPPP y su Reglamento. Se sugiere emplear la cláusula C1 del Manual de Relaciones con Terceros y/o en su caso, los apéndices 2 CM-1 o 3 C-1 del mismo donde se delimitan con amplio detalle las obligaciones del Encargado.",
   },
   3: {
     clauseType: "(1) Vigésima. Protección de Datos Personales",
     complianceLabel: "No cumple",
     recommendation:
-      "La cláusula no cumple con los requisitos de la LFPDPPP. Se sugiere emplear la cláusula C2 del Manual de Relaciones con Terceros y/o los apéndices CM-2 o C-2.",
+      "La cláusula no cumple con los requisitos de la LFPDPPP. En su lugar, se sugiere emplear la cláusula C2 del Manual de Relaciones con Terceros y/o en su caso, los apéndices 2 CM-2 o 3 C-2 del mismo donde el Responsable Receptor garantiza la legalidad de la transferencia de datos personales.",
   },
   4: {
     clauseType: "(1) Vigésima. Protección de Datos Personales",
     complianceLabel: "Sí cumple",
-    recommendation: "La cláusula cumple con los requisitos de la LFPDPPP y su Reglamento.",
+    recommendation: "La cláusula si cumplen con los requisitos de la LFPDPPP y su Reglamento.",
   },
   5: {
     clauseType: "(1) Addendum to MSA. (2) Addendum to MSA for MyVeeva for Doctors",
     complianceLabel: "No cumple",
     recommendation:
-      "La cláusula no cumple con los requisitos de la LFPDPPP. Se sugiere emplear la cláusula C2 del Manual de Relaciones con Terceros y/o los apéndices CM-2 o C-2.",
+      "La cláusula no cumple con los requisitos de la LFPDPPP. En su lugar, se sugiere emplear la cláusula C2 del Manual de Relaciones con Terceros y/o en su caso, los apéndices 2 CM-2 o 3 C-2 del mismo donde el Responsable Receptor garantiza la legalidad de la transferencia de datos personales.",
   },
   6: {
     clauseType: "No se encontró cláusula relativa.",
-    complianceLabel: "N/A",
+    complianceLabel: "Agregar cláusula",
     recommendation:
-      "El análisis no localizó cláusula relativa. Se sugiere incorporar la cláusula C2 del Manual de Relaciones con Terceros y/o los apéndices CM-2 o C-2.",
-    notes: "El documento fuente marca la columna de cumplimiento como N/A, no como incumplimiento directo.",
+      "Las cláusulas no cumplen con los requisitos de la LFPDPPP Se sugiere emplear la cláusula C2 del Manual de Relaciones con Terceros y/o en su caso, los apéndices 2 CM-2 o 3 C-2 del mismo donde se establece la relación entre las partes y sus obligaciones respectivas.",
+    notes: "El documento fuente no localizó cláusula relativa; se requiere agregar la cláusula aplicable.",
   },
   7: {
-    clauseType: "Standard Contractual Clauses (Controller to Processor) del Cloud Agreement",
+    clauseType: "Standard Contractual Clauses (Controller to Processor) Del Cloud Agreement",
     complianceLabel: "Sí cumple",
-    recommendation: "La cláusula cumple con los requisitos de la LFPDPPP y su Reglamento.",
+    recommendation: "La cláusula si cumplen con los requisitos de la LFPDPPP y su Reglamento.",
   },
   8: {
     clauseType: "(1) Vigésimo. Protección de datos personales",
     complianceLabel: "No cumple",
     recommendation:
-      "La falta de cláusula o instrumento jurídico puede implicar una violación al principio de responsabilidad. Se sugiere emplear la cláusula C1 y/o los apéndices CM-1 o C-1.",
+      "La falta de cláusula o instrumento jurídico puede implicar una violación al principio de responsabilidad establecido por la LFPDPPP. Se sugiere emplear la cláusula C1 del Manual de Relaciones con Terceros y/o en su caso, los apéndices 2 CM-1 o 3 C-1 del mismo donde se delimitan con amplio detalle las obligaciones del Encargado.",
   },
   9: {
     clauseType: "(1) Vigésima Segunda. Protección de Datos Personales.",
     complianceLabel: "No cumple",
     recommendation:
-      "Las cláusulas no cumplen con los requisitos de la LFPDPPP. Se sugiere emplear la cláusula C1 y/o los apéndices CM-1 o C-1.",
+      "Las cláusulas no cumplen con los requisitos de la LFPDPPP. Se sugiere emplear la cláusula C1 del Manual de Relaciones con Terceros y/o en su caso, los apéndices 2 CM-1 o 3 C-1 del mismo donde se delimitan con amplio detalle las obligaciones del Encargado.",
   },
   10: {
     clauseType: "(1) Vigésima Segunda. Protección de Datos Personales.",
     complianceLabel: "No cumple",
     recommendation:
-      "Las cláusulas no cumplen con los requisitos de la LFPDPPP. Se sugiere emplear la cláusula C1 y/o los apéndices CM-1 o C-1.",
+      "Las cláusulas no cumplen con los requisitos de la LFPDPPP. Se sugiere emplear la cláusula C1 del Manual de Relaciones con Terceros y/o en su caso, los apéndices 2 CM-1 o 3 C-1 del mismo donde se delimitan con amplio detalle las obligaciones del Encargado.",
   },
   11: {
-    clauseType: "No se encontró cláusula relativa.",
+    clauseType: "No se encontró cláusula relativa",
     complianceLabel: "No cumple",
     recommendation:
-      "Para la gestión de flota se sugiere cláusula C1 y/o apéndices CM-1 o C-1. Para el derecho de adquisición se sugiere cláusula C2 y/o apéndices CM-2 o C-2.",
+      "El contrato maestro que regula la gestión de flota no cumple con los requisitos de la LFPDPPP. Se sugiere emplear la cláusula C1 del Manual de Relaciones con Terceros y/o en su caso, los apéndices 2 CM-1 o 3 C-1 del mismo donde se delimitan con amplio detalle las obligaciones del Encargado. Respecto al Anexo II del Derecho de Adquisión, no cumple con los requisitos de la LFPDPPP. Se sugiere emplear también la cláusula C2 del Manual de Relaciones con Terceros y/o en su caso, los apéndices 2 CM-2 o 3 C-2 del mismo donde se delimitan con amplio detalle las obligaciones del Tercero que recibirá datos personales con motivo de una Transferencia",
   },
   12: {
     clauseType: "Vigésima. Protección de Datos Personales",
     complianceLabel: "No cumple",
     recommendation:
-      "Se sugieren cláusulas C1/CM-1/C-1 para remisión y C2/CM-2/C-2 para transferencia de datos de empleados del proveedor.",
+      "Las cláusulas no cumplen con los requisitos de la LFPDPPP. Se sugiere emplear las cláusulas C1 del Manual de Relaciones con Terceros y/o en su caso los apéndices 2 CM-1 o 3 C-1 para regular la remisión de datos personales. Se sugiere emplear la cláusula C2 del Manual de Relaciones con Terceros y/o en su caso los apéndices 2 CM-2 o 3C-2 para regular la transferencia de datos personales de empleados del proveedor.",
   },
   13: {
     clauseType: "§ 2 Geheimhaltung / Datenschutz",
     complianceLabel: "No cumple",
-    recommendation: "Se sugiere emplear la cláusula C2 y/o los apéndices CM-2 o C-2.",
+    recommendation:
+      "La cláusula no cumple con los requisitos de la LFPDPPP. En su lugar, se sugiere emplear la cláusula C2 del Manual de Relaciones con Terceros y/o en su caso, los apéndices 2 CM-2 o 3 C-2 del mismo donde el Responsable Receptor garantiza la legalidad de la transferencia de datos personales.",
   },
   14: {
     clauseType: "(1) Vigésima Segunda. Protección de Datos Personales.",
     complianceLabel: "No cumple",
-    recommendation: "Se sugiere emplear la cláusula C1 y/o los apéndices CM-1 o C-1.",
+    recommendation:
+      "Las cláusulas no cumplen con los requisitos de la LFPDPPP. Se sugiere emplear la cláusula C1 del Manual de Relaciones con Terceros y/o en su caso, los apéndices 2 CM-1 o 3 C-1 del mismo donde se delimitan con amplio detalle las obligaciones del Encargado.",
   },
   15: {
-    clauseType: "(1) Vigésima. Protección de Datos Personales.",
+    clauseType: "(1). Vigésima. Protección de Datos Personales.",
     complianceLabel: "No cumple",
     recommendation:
-      "Se sugieren cláusulas C1/CM-1/C-1 para remisión y C2/CM-2/C-2 para transferencia de datos de empleados del proveedor.",
+      "Las cláusulas no cumplen con los requisitos de la LFPDPPP. Se sugiere emplear las cláusulas C1 del Manual de Relaciones con Terceros y/o en su caso los apéndices 2 CM-1 o 3 C-1 para regular la remisión de datos personales. Se sugiere emplear la cláusula C2 del Manual de Relaciones con Terceros y/o en su caso los apéndices 2 CM-2 o 3 C-2 para regular la transferencia de datos personales de empleados del proveedor.",
   },
   16: {
-    clauseType: "(1) Vigésima Tercera. Datos Personales",
-    complianceLabel: "No cumple",
-    recommendation: "Se sugiere emplear la cláusula C2 y/o los apéndices CM-2 o C-2.",
-  },
-  17: {
-    clauseType: "(1) Vigésima Primera. Protección de Datos Personales. (2) Anexo 3. Contrato de Procesamiento de Datos. (3) Convenio de Confidencialidad.",
+    clauseType: "(1). Vigésima Tercera. Datos Personales",
     complianceLabel: "No cumple",
     recommendation:
-      "La cláusula y anexo tratan la comunicación como remisión, pero el análisis indica que debe regularse como transferencia. Se sugiere emplear cláusula C2 y/o apéndices CM-2 o C-2.",
+      "Las cláusulas no cumplen con los requisitos de la LFPDPPP. Se sugiere emplear la cláusula C2 del Manual de Relaciones con Terceros y/o en su caso, los apéndices 2 CM-2 o 3 C-2 del mismo donde se establece la relación entre las partes y sus obligaciones respectivas.",
+  },
+  17: {
+    clauseType: "(1). Vigésima Primera. Protección de Datos Personales. (2). Anexo 3. Contrato de Procesamiento de Datos. (3) Convenio de Confidencialidad.",
+    complianceLabel: "No cumple",
+    recommendation:
+      "La cláusula y anexo establecen que la comunicación de datos es una remisión, lo cual es incorrecto, ya que al ofrecer servicios Telemedicina y otros servicios independientes y ajenos a Grünenthal se debe de considerar como una transferencia de datos personales. Se sugiere emplear la cláusula C2 del Manual de Relaciones con Terceros y/o en su caso, los apéndices 2 CM-2 o 3 C-2 del mismo donde se establece la relación entre las partes y sus obligaciones respectivas.",
   },
   18: {
-    clauseType: "(1) Vigésima Protección de Datos Personales. (2) Anexo 3 Acuerdo Complementario de Protección de Datos",
+    clauseType: "(1). Vigésima Protección de Datos Personales. (2). Anexo 3 Acuerdo Complementario de Protección de Datos",
     complianceLabel: "Sí cumple",
-    recommendation: "La cláusula cumple con los requisitos de la LFPDPPP y su Reglamento.",
+    recommendation: "La cláusula si cumplen con los requisitos de la LFPDPPP y su Reglamento.",
   },
   19: {
     clauseType: "(1) Confidencialidad",
     complianceLabel: "No cumple",
     recommendation:
-      "La cláusula y anexo tratan la comunicación como remisión, pero el análisis indica que debe regularse como transferencia. Se sugiere cláusula C2 y/o apéndices CM-2 o C-2.",
+      "La cláusula y anexo establecen que la comunicación de datos es una remisión, lo cual es incorrecto, ya que al tener que cumplir obligaciones en materia de prevención de lavado de dinero de manera independiente a GRT se deberá de establecer como transferencia de datos personales. Se sugiere emplear la cláusula C2 del Manual de Relaciones con Terceros y/o en su caso, los apéndices 2 CM-2 o 3 C-2 del mismo donde se establece la relación entre las partes y sus obligaciones respectivas.",
   },
   20: {
-    clauseType: "(1) Artículo 6 Confidencialidad",
+    clauseType: "(1) Artículo 6 Confidenciallidad",
     complianceLabel: "No cumple",
-    recommendation: "Se sugiere emplear la cláusula C2 y/o los apéndices CM-2 o C-2.",
+    recommendation:
+      "La cláusula no cumple con los requisitos de la LFPDPPP. Se sugiere emplear la cláusula C2 del Manual de Relaciones con Terceros y/o en su caso, los apéndices 2 CM-2 o 3 C-2 del mismo donde se establece la relación entre las partes y sus obligaciones respectivas.",
   },
   21: {
-    clauseType: "Trigésima tercera. Confidencialidad y protección de datos personales",
+    clauseType: "TRIGÉSIMA TERCERA. CONFIDENCIALIDAD YPROTECCIÓN ED DATOS PERSONALES",
     complianceLabel: "No cumple",
-    recommendation: "Se sugiere emplear la cláusula C2 y/o los apéndices CM-2 o C-2.",
+    recommendation:
+      "La cláusula no cumple con los requisitos de la LFPDPPP. Se sugiere emplear la cláusula C2 del Manual de Relaciones con Terceros y/o en su caso, los apéndices 2 CM-2 o 3 C-2 del mismo donde se establece la relación entre las partes y sus obligaciones respectivas.",
   },
   22: {
-    clauseType: "(1) Artículo 6 - Confidencialidad - Publicidad",
+    clauseType: "(1) ARTICULO 6 - CONFIDENCIALIDAD - PUBLICIDAD",
     complianceLabel: "No cumple",
-    recommendation: "Se sugiere emplear la cláusula C2 y/o los apéndices CM-2 o C-2.",
+    recommendation:
+      "La cláusula no cumple con los requisitos de la LFPDPPP. Se sugiere emplear la cláusula C2 del Manual de Relaciones con Terceros y/o en su caso, los apéndices 2 CM-2 o 3 C-2 del mismo donde se establece la relación entre las partes y sus obligaciones respectivas.",
   },
   23: {
-    clauseType: "(1) Artículo 6 - Confidencialidad - Publicidad",
+    clauseType: "(1) ARTICULO 6 - CONFIDENCIALIDAD - PUBLICIDAD",
     complianceLabel: "No cumple",
-    recommendation: "Se sugiere emplear la cláusula C1 y/o los apéndices CM-1 o C-1.",
+    recommendation:
+      "Las cláusulas no cumplen con los requisitos de la LFPDPPP. Se sugiere emplear la cláusula C1 del Manual de Relaciones con Terceros y/o en su caso, los apéndices 2 CM-1 o 3 C-1 del mismo donde se delimitan con amplio detalle las obligaciones del Encargado.",
   },
   24: {
     clauseType: "(1) Décima octava. Privacidad de Datos Personales",
     complianceLabel: "No cumple",
-    recommendation: "Se sugiere emplear la cláusula C1 y/o los apéndices CM-1 o C-1.",
+    recommendation:
+      "Las cláusulas no cumplen con los requisitos de la LFPDPPP. Se sugiere emplear la cláusula C1 del Manual de Relaciones con Terceros y/o en su caso, los apéndices 2 CM-1 o 3 C-1 del mismo donde se delimitan con amplio detalle las obligaciones del Encargado",
   },
   25: {
-    clauseType: "(1) Vigésima Protección de Datos Personales",
-    complianceLabel: "No cumple",
-    recommendation: "Se sugiere emplear la cláusula C1 y/o los apéndices CM-1 o C-1.",
+    clauseType: "(1) Décima primera (2) Décima tercera.",
+    complianceLabel: "N/A",
+    recommendation:
+      "Se sugiere emplear la cláusula C4 del Manual de Relaciones con Terceros donde se delimitan con amplio detalle las obligaciones de los trabajadores en materia de datos personales.",
   },
   26: {
-    clauseType: "(1) Octava. Protección de Datos Personales",
-    complianceLabel: "No cumple",
-    recommendation: "Se sugiere emplear la cláusula C2 y/o los apéndices CM-2 o C-2.",
+    clauseType: "(1) Décima primera (2) Décima tercera.",
+    complianceLabel: "N/A",
+    recommendation:
+      "Se sugiere emplear la cláusula C4 del Manual de Relaciones con Terceros donde se delimitan con amplio detalle las obligaciones de los trabajadores en materia de datos personales.",
   },
   27: {
-    clauseType: "(1) Vigésima primera. Manejo de Datos Personales",
-    complianceLabel: "Sí cumple",
+    clauseType: "(1) Vigésima Protección de Datos Personales",
+    complianceLabel: "No cumple",
     recommendation:
-      "La columna de recomendación del documento fuente contiene texto de no cumplimiento, aunque la columna de cumplimiento dice Sí cumple.",
-    notes: "Revisión recomendada por contradicción interna del análisis fuente.",
+      "Las cláusulas no cumplen con los requisitos de la LFPDPPP. Se sugiere emplear la cláusula C1 del Manual de Relaciones con Terceros y/o en su caso, los apéndices 2 CM-1 o 3 C-1 del mismo donde se delimitan con amplio detalle las obligaciones del Encargado",
   },
   28: {
-    clauseType: "(1) Data Processing Agreement for Cloud Services",
-    complianceLabel: "Sí cumple",
-    recommendation: "La cláusula cumple con los requisitos de la LFPDPPP y su Reglamento.",
+    clauseType: "(1) Octava. Protección de Datos Personales",
+    complianceLabel: "No cumple",
+    recommendation:
+      "La cláusula no cumple con los requisitos de la LFPDPPP. Se sugiere emplear la cláusula C2 del Manual de Relaciones con Terceros y/o en su caso, los apéndices 2 CM-2 o 3 C-2 del mismo donde se establece la relación entre las partes y sus obligaciones respectivas.",
   },
   29: {
-    clauseType: "(1) Apéndice 3 - Cláusulas Contractuales Tipo (Encargados del Tratamiento)",
-    complianceLabel: "Sí cumple",
-    recommendation: "La cláusula cumple con los requisitos de la LFPDPPP y su Reglamento.",
+    clauseType: "(1) VIGÉSIMA PRIMERA. MANEJO DE DATOS PERSONALES",
+    complianceLabel: "No cumple",
+    recommendation:
+      "La cláusula no cumple con los requisitos de la LFPDPPP. Se sugiere emplear la cláusula C2 del Manual de Relaciones con Terceros y/o en su caso, los apéndices 2 CM-2 o 3 C-2 del mismo donde se establece la relación entre las partes y sus obligaciones respectivas",
+    notes: "El documento fuente marca No cumple y exige cláusula C2.",
   },
   30: {
-    clauseType: "(1) Acuerdo de procesamiento de datos para servicios SAP Cloud",
+    clauseType: "(1) DATA PROCESSING AGREEMENT FOR CLOUD SERVICES",
     complianceLabel: "Sí cumple",
-    recommendation: "La cláusula cumple con los requisitos de la LFPDPPP y su Reglamento.",
+    recommendation: "La cláusula si cumplen con los requisitos de la LFPDPPP y su Reglamento.",
   },
   31: {
-    clauseType: "(1) Data Processing Addendum",
+    clauseType: "(1) Apéndice 3 – Cláusulas Contractuales Tipo (Encargados del Tratamiento)",
     complianceLabel: "Sí cumple",
-    recommendation: "La cláusula cumple con los requisitos de la LFPDPPP y su Reglamento.",
+    recommendation: "La cláusula si cumplen con los requisitos de la LFPDPPP y su Reglamento",
   },
   32: {
+    clauseType: "(1) Acuerdo de procesamiento de datos para servicios SAP CLOUD",
+    complianceLabel: "Sí cumple",
+    recommendation: "La cláusula si cumplen con los requisitos de la LFPDPPP y su Reglamento",
+  },
+  33: {
+    clauseType: "(1) DATA PROCESSING ADDENDUM",
+    complianceLabel: "Sí cumple",
+    recommendation: "La cláusula si cumplen con los requisitos de la LFPDPPP y su Reglamento",
+  },
+  34: {
     clauseType: "(1) Agreement on Data Protection",
     complianceLabel: "Sí cumple",
-    recommendation: "La cláusula cumple con los requisitos de la LFPDPPP y su Reglamento.",
+    recommendation: "La cláusula si cumplen con los requisitos de la LFPDPPP y su Reglamento",
   },
 }
 
@@ -517,6 +539,7 @@ export const GRUNENTHAL_INDIVIDUAL_PRIVACY_NOTICE_RECORDS: GrunenthalPrivacyNoti
 
 function contract(seed: {
   index: number
+  analysisIndex?: number
   providerIdentity: string
   area: string
   contractObject: string
@@ -529,7 +552,7 @@ function contract(seed: {
 }): GrunenthalThirdPartyContractSeed {
   const internalCode = `GRT-TER-2026-${String(seed.index).padStart(3, "0")}`
   const slug = `${internalCode.toLowerCase()}-${slugify(seed.providerIdentity).slice(0, 70)}`
-  const clauseAnalysis = THIRD_PARTY_CLAUSE_ANALYSIS_BY_INDEX[seed.index]
+  const clauseAnalysis = THIRD_PARTY_CLAUSE_ANALYSIS_BY_INDEX[seed.analysisIndex ?? seed.index]
   const relationType =
     seed.communicationType === "remision"
       ? "encargado"
@@ -618,14 +641,14 @@ export const GRUNENTHAL_INDIVIDUAL_THIRD_PARTY_RECORDS: GrunenthalThirdPartyCont
   contract({ index: 22, providerIdentity: "DHL EXPRESS MEXICO SA DE CV", area: "HUMAN RESOURCES", contractObject: "Compra general de productos y mensajería nacional.", communicationType: "transferencia", complianceStatus: "no-cumple", lineStart: 494, lineEnd: 503 }),
   contract({ index: 23, providerIdentity: "CUESTA Y LLACA SC", area: "HUMAN RESOURCES", contractObject: "Trámite migratorio.", communicationType: "remision", complianceStatus: "no-cumple", lineStart: 504, lineEnd: 512 }),
   contract({ index: 24, providerIdentity: "SAFE DATA RESOURCES, S.A. DE C.V.", area: "HUMAN RESOURCES", contractObject: "Contrato de depósito.", communicationType: "remision", complianceStatus: "no-cumple", lineStart: 513, lineEnd: 520 }),
-  contract({ index: 25, providerIdentity: "SINEFARMA, S.A. DE C.V.", area: "INVESTIGACIÓN DE MERCADOS", contractObject: "Servicios de marketing.", communicationType: "remision", complianceStatus: "no-cumple", lineStart: 546, lineEnd: 554 }),
-  contract({ index: 26, providerIdentity: "Agencias, Asociaciones e Instituciones de Salud", area: "PRIMARY CARE", contractObject: "Contrato de patrocinio.", communicationType: "transferencia", complianceStatus: "no-cumple", lineStart: 565, lineEnd: 572 }),
-  contract({ index: 27, providerIdentity: "UPS SCS (MÉXICO), S.A. DE C.V.", area: "SUPPLY", contractObject: "Almacenamiento, embalaje, surtido, empaque, preparación de pedidos y órdenes de entrega.", communicationType: "transferencia", complianceStatus: "requiere-revision", lineStart: 584, lineEnd: 591, riskLevel: "medio" }),
-  contract({ index: 28, providerIdentity: "CONCUR TECHNOLOGIES, INC.", area: "GLOBALES", contractObject: "Servicios de nube.", communicationType: "remision", complianceStatus: "cumple", lineStart: 603, lineEnd: 608 }),
-  contract({ index: 29, providerIdentity: "MICROSOFT CORPORATION", area: "GLOBALES", contractObject: "Licencia para uso de software y servicios en línea.", communicationType: "remision", complianceStatus: "cumple", lineStart: 609, lineEnd: 614 }),
-  contract({ index: 30, providerIdentity: "SAP SE", area: "GLOBALES", contractObject: "Servicios de nube.", communicationType: "remision", complianceStatus: "cumple", lineStart: 615, lineEnd: 620 }),
-  contract({ index: 31, providerIdentity: "SALESFORCE, INC.", area: "GLOBALES", contractObject: "Servicios de software.", communicationType: "remision", complianceStatus: "cumple", lineStart: 621, lineEnd: 626 }),
-  contract({ index: 32, providerIdentity: "EVERSANA, IRELAND, LIMITED", area: "GLOBALES", contractObject: "Servicios vinculados al acuerdo de protección de datos.", communicationType: "remision", complianceStatus: "cumple", lineStart: 627, lineEnd: 632 }),
+  contract({ index: 25, analysisIndex: 27, providerIdentity: "SINEFARMA, S.A. DE C.V.", area: "INVESTIGACIÓN DE MERCADOS", contractObject: "Servicios de marketing.", communicationType: "remision", complianceStatus: "no-cumple", lineStart: 546, lineEnd: 554 }),
+  contract({ index: 26, analysisIndex: 28, providerIdentity: "Agencias, Asociaciones e Instituciones de Salud", area: "PRIMARY CARE", contractObject: "Contrato de patrocinio.", communicationType: "transferencia", complianceStatus: "no-cumple", lineStart: 565, lineEnd: 572 }),
+  contract({ index: 27, analysisIndex: 29, providerIdentity: "UPS SCS (MÉXICO), S.A. DE C.V.", area: "SUPPLY", contractObject: "Almacenamiento, embalaje, surtido, empaque, preparación de pedidos y órdenes de entrega.", communicationType: "transferencia", complianceStatus: "no-cumple", lineStart: 584, lineEnd: 591, riskLevel: "medio" }),
+  contract({ index: 28, analysisIndex: 30, providerIdentity: "CONCUR TECHNOLOGIES, INC.", area: "GLOBALES", contractObject: "Servicios de nube.", communicationType: "remision", complianceStatus: "cumple", lineStart: 603, lineEnd: 608 }),
+  contract({ index: 29, analysisIndex: 31, providerIdentity: "MICROSOFT CORPORATION", area: "GLOBALES", contractObject: "Licencia para uso de software y servicios en línea.", communicationType: "remision", complianceStatus: "cumple", lineStart: 609, lineEnd: 614 }),
+  contract({ index: 30, analysisIndex: 32, providerIdentity: "SAP SE", area: "GLOBALES", contractObject: "Servicios de nube.", communicationType: "remision", complianceStatus: "cumple", lineStart: 615, lineEnd: 620 }),
+  contract({ index: 31, analysisIndex: 33, providerIdentity: "SALESFORCE, INC.", area: "GLOBALES", contractObject: "Servicios de software.", communicationType: "remision", complianceStatus: "cumple", lineStart: 621, lineEnd: 626 }),
+  contract({ index: 32, analysisIndex: 34, providerIdentity: "EVERSANA, IRELAND, LIMITED", area: "GLOBALES", contractObject: "Servicios vinculados al acuerdo de protección de datos.", communicationType: "remision", complianceStatus: "cumple", lineStart: 627, lineEnd: 632 }),
 ]
 
 function laborPolicy(seed: {
