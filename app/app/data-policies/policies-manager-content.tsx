@@ -16,6 +16,7 @@ import {
 } from "recharts"
 import {
   ArrowRight,
+  ChevronDown,
   CheckCircle2,
   Download,
   Eye,
@@ -307,6 +308,7 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
   const [repositoryModuleFilter, setRepositoryModuleFilter] = useState("all")
   const [repositoryTypeFilter, setRepositoryTypeFilter] = useState("all")
   const [repositoryAreaFilter, setRepositoryAreaFilter] = useState("all")
+  const [repositoryAdvancedFiltersOpen, setRepositoryAdvancedFiltersOpen] = useState(false)
   const [repositoryPreviewFile, setRepositoryPreviewFile] = useState<StoredFile | null>(null)
   const [builderErrors, setBuilderErrors] = useState<string[]>([])
   const [submissionComment, setSubmissionComment] = useState("")
@@ -431,6 +433,27 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
       repositoryTypeFilter,
     ],
   )
+  const repositoryScopeOptions = useMemo(
+    () => [
+      { value: "all" as const, label: "Todas", count: repositoryDocuments.length },
+      { value: "mexico" as const, label: "MX", count: policyScopeStats.mexico },
+      { value: "global" as const, label: "Global", count: policyScopeStats.global },
+    ],
+    [policyScopeStats.global, policyScopeStats.mexico, repositoryDocuments.length],
+  )
+  const showRepositoryAdvancedFilters =
+    repositoryAdvancedFiltersOpen ||
+    repositoryModuleFilter !== "all" ||
+    repositoryTypeFilter !== "all" ||
+    repositoryAreaFilter !== "all"
+  const resetRepositoryFilters = useCallback(() => {
+    setRepositorySearch("")
+    setRepositoryPolicyScopeFilter("all")
+    setRepositoryModuleFilter("all")
+    setRepositoryTypeFilter("all")
+    setRepositoryAreaFilter("all")
+    setRepositoryAdvancedFiltersOpen(false)
+  }, [])
   const sectionNavigation = useMemo(
     () => [
       {
@@ -1039,26 +1062,41 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
         </Button>
       }
     >
-      <div className="mx-auto flex min-w-0 w-full max-w-[1600px] flex-col gap-6">
-        <Card className="overflow-hidden border-slate-200 shadow-sm">
-        <CardContent className="grid min-w-0 gap-6 p-6 xl:grid-cols-[1.5fr_1fr] lg:p-8">
-          <div className="min-w-0 space-y-4">
-            <div className="flex flex-wrap items-center gap-2">
-              <Badge variant="outline" className="border-primary/20 bg-primary/5 text-primary">
-                Políticas de Protección de Datos · PGDP
-              </Badge>
-              <Badge variant="outline" className="border-slate-200 bg-slate-50 text-slate-600">
-                LFPDPPP · RLFPDPPP · PAPDP
-              </Badge>
-            </div>
-            <div className="space-y-2">
-              <h1 className="text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
-                Gobernanza de Políticas de Protección de Datos
-              </h1>
-              <p className="max-w-4xl text-sm leading-6 text-slate-500 sm:text-base">
-                El módulo opera sobre una PGDP viva: builder guiado, workflow de aprobación, expediente de evidencias,
-                sincronización con recordatorios y reutilización directa desde ARCO sin duplicar archivos.
-              </p>
+      <div className="mx-auto flex min-w-0 w-full max-w-[1600px] flex-col gap-4">
+        <Card className="border-slate-200 shadow-sm">
+          <CardContent className="space-y-4 p-4 sm:p-5 lg:p-6">
+            <div className="flex min-w-0 flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
+              <div className="min-w-0 space-y-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  <Badge variant="outline" className="border-primary/20 bg-primary/5 text-primary">
+                    Políticas de Protección de Datos · PGDP
+                  </Badge>
+                  <Badge variant="outline" className="border-slate-200 bg-slate-50 text-slate-600">
+                    LFPDPPP · RLFPDPPP · PAPDP
+                  </Badge>
+                </div>
+                <h1 className="break-words text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl">
+                  Gobernanza de Políticas de Protección de Datos
+                </h1>
+                <p className="max-w-4xl text-sm leading-6 text-slate-500">
+                  Builder, expediente y repositorio documental en una vista de trabajo compacta.
+                </p>
+              </div>
+
+              <div className="grid min-w-0 grid-cols-3 gap-2 xl:min-w-[460px]">
+                {[
+                  { label: "Madurez", value: `${snapshot.score}/100` },
+                  { label: "Evidencia", value: snapshot.publishedWithEvidence },
+                  { label: "Repositorio", value: repositoryDocuments.length },
+                ].map((item) => (
+                  <div key={item.label} className="rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 sm:px-4 sm:py-3">
+                    <p className="break-words text-[10px] uppercase leading-4 tracking-[0.12em] text-slate-500 sm:text-xs">
+                      {item.label}
+                    </p>
+                    <p className="mt-1 text-xl font-semibold text-slate-950 sm:text-2xl">{item.value}</p>
+                  </div>
+                ))}
+              </div>
             </div>
 
             {primaryPolicy && primaryPolicy.status === "EXPIRED" ? (
@@ -1067,137 +1105,53 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
               </div>
             ) : null}
 
-            <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-              <Button className="!mx-0 !max-w-none sm:!w-auto" onClick={startNewPolicy}>
-                Nueva PGDP
-                <PlusCircle className="ml-2 h-4 w-4" />
-              </Button>
-              <Button
-                variant="outline"
-                className="!mx-0 !max-w-none sm:!w-auto"
-                onClick={() => handleSectionChange("registro")}
-              >
-                Abrir builder
-              </Button>
-              <Button
-                variant="outline"
-                className="!mx-0 !max-w-none sm:!w-auto"
-                onClick={() => handleSectionChange("consulta")}
-              >
-                Ver tablero y expediente
-              </Button>
-              <Button
-                variant="outline"
-                className="!mx-0 !max-w-none sm:!w-auto"
-                onClick={() => handleSectionChange("repositorio")}
-              >
-                Abrir repositorio
-              </Button>
-              <Button asChild variant="outline" className="!mx-0 !max-w-none sm:!w-auto">
-                <Link href="/audit-alarms">Abrir recordatorios y alertas</Link>
-              </Button>
-            </div>
-          </div>
+            <div
+              role="tablist"
+              aria-label="Secciones de Políticas de Protección de Datos"
+              className="grid min-w-0 gap-1 rounded-[22px] border border-[#d6e1f6] bg-[#f8fbff] p-1 sm:grid-cols-3"
+            >
+              {sectionNavigation.map((item) => {
+                const Icon = item.icon
+                const selected = activeSection === item.id
 
-          <div className="grid min-w-0 gap-3 sm:grid-cols-2 lg:grid-cols-1">
-            <div className="rounded-[24px] border border-slate-200 bg-slate-50/90 p-5">
-              <div className="flex items-center justify-between">
-                <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Madurez del programa</p>
-                <span className="rounded-full border border-slate-200 bg-white px-2 py-1 text-xs text-slate-600">
-                  {snapshot.score}/100
-                </span>
-              </div>
-              <div className="mt-5 flex items-end gap-3">
-                <span className="text-5xl text-slate-950">{snapshot.publishedWithEvidence}</span>
-                <span className="pb-2 text-sm text-slate-500">vigentes con evidencia mínima</span>
-              </div>
-              <p className="mt-3 text-sm text-slate-500">
-                {snapshot.total} política(s) registradas, {snapshot.expiringSoon} con revisión o vigencia dentro de 90 días.
-              </p>
-            </div>
-
-            <div className="rounded-[24px] border border-slate-200 bg-white p-5">
-              <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Workflow activo</p>
-              <div className="mt-4 flex items-end gap-3">
-                <span className="text-4xl text-slate-950">{snapshot.underReview}</span>
-                <span className="pb-1 text-sm text-slate-500">flujo(s) en revisión</span>
-              </div>
-              <p className="mt-3 text-sm text-slate-500">
-                {snapshot.blockedWorkflow} bloqueado(s); el módulo publica recordatorios reales al centro común.
-              </p>
-            </div>
-
-            <div className="rounded-[24px] border border-slate-200 bg-white p-5">
-              <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Integración con ARCO</p>
-              <div className="mt-4 flex items-end gap-3">
-                <span className="text-4xl text-slate-950">
-                  {sortedPolicies.filter((policy) => policy.linkedModules.some((linked) => linked.moduleId === "arco-rights" && linked.active)).length}
-                </span>
-                <span className="pb-1 text-sm text-slate-500">política(s) reutilizable(s)</span>
-              </div>
-              <p className="mt-3 text-sm text-slate-500">
-                ARCO consume la PGDP publicada por referencia, sin volver a cargar un archivo separado.
-              </p>
-            </div>
-          </div>
-        </CardContent>
-        </Card>
-
-        <div className="sticky top-0 z-10 rounded-[28px] border border-[#d6e1f6] bg-white/95 p-2 shadow-sm backdrop-blur">
-          <div
-            role="tablist"
-            aria-label="Secciones de Políticas de Protección de Datos"
-            className="grid min-w-0 gap-2 md:grid-cols-3"
-          >
-            {sectionNavigation.map((item) => {
-              const Icon = item.icon
-              const selected = activeSection === item.id
-
-              return (
-                <button
-                  key={item.id}
-                  id={`policies-section-tab-${item.id}`}
-                  type="button"
-                  role="tab"
-                  aria-selected={selected}
-                  aria-controls={`policies-section-panel-${item.id}`}
-                  onClick={() => handleSectionChange(item.id)}
-                  className={cn(
-                    "group flex min-h-[96px] min-w-0 items-start gap-3 rounded-[22px] border p-4 text-left transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0a4abf] focus-visible:ring-offset-2",
-                    selected
-                      ? "border-[#0a4abf] bg-[#0a4abf] text-white shadow-[0_18px_40px_rgba(10,74,191,0.18)]"
-                      : "border-transparent bg-[#f8fbff] text-slate-700 hover:border-[#b9cff0] hover:bg-white",
-                  )}
-                >
-                  <span
+                return (
+                  <button
+                    key={item.id}
+                    id={`policies-section-tab-${item.id}`}
+                    type="button"
+                    role="tab"
+                    aria-selected={selected}
+                    aria-controls={`policies-section-panel-${item.id}`}
+                    onClick={() => handleSectionChange(item.id)}
                     className={cn(
-                      "mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border transition-colors",
+                      "group flex min-h-[58px] min-w-0 items-center gap-3 rounded-[18px] px-3 py-2 text-left transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0a4abf] focus-visible:ring-offset-2 sm:px-4",
                       selected
-                        ? "border-white/30 bg-white/15 text-white"
-                        : "border-[#d6e1f6] bg-white text-[#0a4abf] group-hover:border-[#9bb9e6]",
+                        ? "bg-[#0a4abf] text-white shadow-sm"
+                        : "text-slate-600 hover:bg-white hover:text-slate-950",
                     )}
                   >
-                    <Icon className="h-5 w-5" />
-                  </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="block text-sm font-semibold leading-5">{item.label}</span>
-                    <span className={cn("mt-1 block text-xs leading-5", selected ? "text-blue-50" : "text-slate-500")}>
-                      {item.description}
-                    </span>
                     <span
                       className={cn(
-                        "mt-3 inline-flex rounded-full px-2.5 py-1 text-xs font-semibold",
-                        selected ? "bg-white/15 text-white" : "bg-white text-[#0a4abf]",
+                        "flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl border transition-colors",
+                        selected
+                          ? "border-white/25 bg-white/15 text-white"
+                          : "border-[#d6e1f6] bg-white text-[#0a4abf]",
                       )}
                     >
-                      {item.metric}
+                      <Icon className="h-4 w-4" />
                     </span>
-                  </span>
-                </button>
-              )
-            })}
-          </div>
-        </div>
+                    <span className="min-w-0 flex-1">
+                      <span className="block min-w-0 break-words text-sm font-semibold leading-5">{item.label}</span>
+                      <span className={cn("block min-w-0 break-words text-xs", selected ? "text-blue-50" : "text-slate-500")}>
+                        {item.metric}
+                      </span>
+                    </span>
+                  </button>
+                )
+              })}
+            </div>
+          </CardContent>
+        </Card>
 
         <div
           ref={sectionContentRef}
@@ -1205,16 +1159,16 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
           role="tabpanel"
           tabIndex={-1}
           aria-labelledby={`policies-section-tab-${activeSection}`}
-          className="scroll-mt-6 space-y-5 focus:outline-none"
+          className="scroll-mt-4 space-y-4 focus:outline-none"
         >
-          <div className="flex min-w-0 flex-col gap-4 rounded-[28px] border border-[#d6e1f6] bg-[#f8fbff] p-5 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex min-w-0 flex-col gap-3 rounded-[22px] border border-[#d6e1f6] bg-white p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
             <div className="flex min-w-0 items-start gap-3">
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-white text-[#0a4abf] shadow-sm">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-[#f8fbff] text-[#0a4abf]">
                 <ActiveSectionIcon className="h-5 w-5" />
               </span>
               <div className="min-w-0">
-                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#5f7698]">Vista activa</p>
-                <h2 className="mt-1 break-words text-2xl font-semibold text-slate-950">{pageCopy.title}</h2>
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#5f7698]">Vista activa</p>
+                <h2 className="mt-1 break-words text-xl font-semibold text-slate-950 sm:text-2xl">{pageCopy.title}</h2>
                 <p className="mt-1 max-w-3xl text-sm leading-6 text-slate-500">{pageCopy.description}</p>
               </div>
             </div>
@@ -2004,71 +1958,133 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
           </div>
         </div>
       ) : activeSection === "repositorio" ? (
-        <div className="min-w-0 space-y-6">
-          <div className="grid min-w-0 gap-4 md:grid-cols-3">
-            <Card className="min-w-0 border-slate-200 shadow-sm">
-              <CardContent className="p-5">
-                <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Políticas México</p>
-                <p className="mt-3 text-4xl text-slate-950">{policyScopeStats.mexico}</p>
-                <p className="mt-2 text-sm text-slate-500">Políticas locales, manuales y evidencias operativas.</p>
-              </CardContent>
-            </Card>
-            <Card className="min-w-0 border-slate-200 shadow-sm">
-              <CardContent className="p-5">
-                <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Políticas Globales</p>
-                <p className="mt-3 text-4xl text-slate-950">{policyScopeStats.global}</p>
-                <p className="mt-2 text-sm text-slate-500">Lineamientos globales aplicables al programa local.</p>
-              </CardContent>
-            </Card>
-            <Card className="min-w-0 border-slate-200 shadow-sm">
-              <CardContent className="p-5">
-                <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Repositorio curado</p>
-                <p className="mt-3 text-4xl text-slate-950">{repositoryDocuments.length}</p>
-                <p className="mt-2 text-sm text-slate-500">
-                  De {GRUNENTHAL_CURATED_POLICY_DOCUMENTS.length} definidos y {allRepositoryDocuments.length} recursos fuente.
+        <div className="min-w-0 space-y-4">
+          <Card className="min-w-0 border-slate-200 shadow-sm">
+            <CardContent className="flex min-w-0 flex-col gap-4 p-4 lg:flex-row lg:items-center lg:justify-between">
+              <div className="min-w-0">
+                <p className="text-xs uppercase tracking-[0.14em] text-slate-500">Repositorio curado</p>
+                <p className="mt-1 break-words text-sm text-slate-600">
+                  {repositoryDocuments.length} documentos visibles de {GRUNENTHAL_CURATED_POLICY_DOCUMENTS.length} definidos y {allRepositoryDocuments.length} recursos fuente.
                 </p>
-              </CardContent>
-            </Card>
-          </div>
-
-          <div className="min-w-0 space-y-6">
-            <Card className="min-w-0 border-slate-200 shadow-sm">
-              <CardHeader className="border-b border-slate-100">
-                <div className="flex min-w-0 flex-wrap items-start justify-between gap-3">
-                  <div className="min-w-0">
-                    <CardTitle className="flex items-center gap-2 text-xl text-slate-950">
-                      <ListFilter className="h-5 w-5 text-primary" />
-                      Filtros del repositorio
-                    </CardTitle>
-                    <CardDescription>Búsqueda y segmentación de políticas locales de México y políticas globales.</CardDescription>
-                  </div>
-                  <Badge variant="outline" className="border-slate-200 bg-slate-50 text-slate-600">
-                    {activeRepositoryFilterCount} filtro(s) activo(s)
-                  </Badge>
+              </div>
+              <div className="grid min-w-0 grid-cols-3 gap-2 lg:min-w-[460px]">
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 sm:px-4 sm:py-3">
+                  <p className="break-words text-[10px] uppercase leading-4 tracking-[0.12em] text-slate-500 sm:text-xs">México</p>
+                  <p className="mt-1 text-xl font-semibold text-slate-950 sm:text-2xl">{policyScopeStats.mexico}</p>
                 </div>
-              </CardHeader>
-              <CardContent className="min-w-0 space-y-5 p-5">
-                <div className="grid min-w-0 gap-4 xl:grid-cols-[minmax(260px,1.35fr)_minmax(180px,0.9fr)_minmax(180px,0.9fr)_minmax(180px,0.9fr)]">
-                  <div className="min-w-0">
-                    <Label>Búsqueda</Label>
-                    <div className="relative mt-1">
-                      <Search className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
-                      <Input
-                        value={repositorySearch}
-                        onChange={(event) => setRepositorySearch(event.target.value)}
-                        placeholder="Título, área, tercero, aviso o fuente"
-                        className="pl-9"
-                      />
-                    </div>
-                  </div>
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 sm:px-4 sm:py-3">
+                  <p className="break-words text-[10px] uppercase leading-4 tracking-[0.12em] text-slate-500 sm:text-xs">Globales</p>
+                  <p className="mt-1 text-xl font-semibold text-slate-950 sm:text-2xl">{policyScopeStats.global}</p>
+                </div>
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 sm:px-4 sm:py-3">
+                  <p className="break-words text-[10px] uppercase leading-4 tracking-[0.12em] text-slate-500 sm:text-xs">Filtrados</p>
+                  <p className="mt-1 text-xl font-semibold text-slate-950 sm:text-2xl">{filteredRepositoryDocuments.length}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
+          <Card className="min-w-0 overflow-hidden border-slate-200 shadow-sm">
+            <CardHeader className="min-w-0 border-b border-slate-100">
+              <div className="flex min-w-0 flex-wrap items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <CardTitle className="text-2xl text-slate-950">Documentos disponibles</CardTitle>
+                  <CardDescription>
+                    {filteredRepositoryDocuments.length} de {repositoryDocuments.length} políticas curadas listas para consulta.
+                  </CardDescription>
+                </div>
+                <Badge variant="outline" className="border-primary/20 bg-primary/5 text-primary">
+                  {activeRepositoryFilterCount} filtro(s) activo(s)
+                </Badge>
+              </div>
+            </CardHeader>
+            <CardContent className="min-w-0 space-y-4 p-4 sm:p-5">
+              <div className="grid min-w-0 gap-3 xl:grid-cols-[minmax(260px,1fr)_minmax(300px,auto)_auto_auto] xl:items-end">
+                <div className="min-w-0">
+                  <Label>Búsqueda</Label>
+                  <div className="relative mt-1">
+                    <Search className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                    <Input
+                      value={repositorySearch}
+                      onChange={(event) => setRepositorySearch(event.target.value)}
+                      placeholder="Título, área, tercero, aviso o fuente"
+                      className="pl-9"
+                    />
+                  </div>
+                </div>
+
+                <div className="min-w-0">
+                  <Label>Alcance</Label>
+                  <div className="mt-1 grid min-w-0 grid-cols-3 gap-1 rounded-2xl border border-slate-200 bg-slate-50 p-1">
+                    {repositoryScopeOptions.map((option) => (
+                      <button
+                        key={option.value}
+                        type="button"
+                        className={cn(
+                          "inline-flex min-h-10 min-w-0 items-center justify-center gap-1 rounded-xl px-1.5 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0a4abf] focus-visible:ring-offset-2 sm:px-2 sm:text-sm",
+                          repositoryPolicyScopeFilter === option.value
+                            ? "bg-[#0a4abf] text-white shadow-sm"
+                            : "text-slate-600 hover:bg-white hover:text-slate-950",
+                        )}
+                        onClick={() => setRepositoryPolicyScopeFilter(option.value)}
+                      >
+                        <span className="min-w-0 leading-4">{option.label}</span>
+                        <span
+                          className={cn(
+                            "rounded-full px-1.5 py-0.5 text-[11px]",
+                            repositoryPolicyScopeFilter === option.value
+                              ? "bg-white/20 text-white"
+                              : "bg-white text-slate-500",
+                          )}
+                        >
+                          {option.count}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <Button
+                  type="button"
+                  variant={showRepositoryAdvancedFilters ? "default" : "outline"}
+                  className="!mx-0 !max-w-none gap-2"
+                  aria-expanded={showRepositoryAdvancedFilters}
+                  aria-controls="repository-advanced-filters"
+                  onClick={() => setRepositoryAdvancedFiltersOpen((current) => !current)}
+                >
+                  <ListFilter className="h-4 w-4" />
+                  Filtros
+                  <ChevronDown
+                    className={cn(
+                      "h-4 w-4 transition-transform",
+                      showRepositoryAdvancedFilters ? "rotate-180" : "",
+                    )}
+                  />
+                </Button>
+
+                <Button
+                  type="button"
+                  variant="outline"
+                  disabled={activeRepositoryFilterCount === 0}
+                  className="!mx-0 !max-w-none"
+                  onClick={resetRepositoryFilters}
+                >
+                  Limpiar
+                </Button>
+              </div>
+
+              {showRepositoryAdvancedFilters ? (
+                <div
+                  id="repository-advanced-filters"
+                  className="grid min-w-0 gap-3 rounded-[20px] border border-slate-200 bg-slate-50 p-4 md:grid-cols-3"
+                >
                   <div className="min-w-0">
                     <Label>Origen documental</Label>
                     <Select
                       value={repositoryModuleFilter}
                       onValueChange={setRepositoryModuleFilter}
                     >
-                      <SelectTrigger className="mt-1">
+                      <SelectTrigger className="mt-1 bg-white">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -2085,7 +2101,7 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
                   <div className="min-w-0">
                     <Label>Tipo</Label>
                     <Select value={repositoryTypeFilter} onValueChange={setRepositoryTypeFilter}>
-                      <SelectTrigger className="mt-1">
+                      <SelectTrigger className="mt-1 bg-white">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -2102,7 +2118,7 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
                   <div className="min-w-0">
                     <Label>Área</Label>
                     <Select value={repositoryAreaFilter} onValueChange={setRepositoryAreaFilter}>
-                      <SelectTrigger className="mt-1">
+                      <SelectTrigger className="mt-1 bg-white">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -2116,78 +2132,40 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
                     </Select>
                   </div>
                 </div>
+              ) : null}
 
-                <div className="flex min-w-0 flex-col gap-3 xl:flex-row xl:items-end xl:justify-between">
-                  <div className="min-w-0 flex-1 space-y-2">
-                    <Label>Alcance</Label>
-                    <div className="grid min-w-0 gap-2 sm:grid-cols-3">
-                      {[
-                        { value: "all", label: "Todas", count: repositoryDocuments.length },
-                        { value: "mexico", label: "Políticas México", count: policyScopeStats.mexico },
-                        { value: "global", label: "Políticas Globales", count: policyScopeStats.global },
-                      ].map((option) => (
-                        <button
-                          key={option.value}
-                          type="button"
-                          className={cn(
-                            "inline-flex min-h-11 w-full min-w-0 items-center rounded-2xl border px-3 py-2 text-left text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0a4abf] focus-visible:ring-offset-2 sm:justify-center",
-                            repositoryPolicyScopeFilter === option.value
-                              ? "border-[#0a4abf] bg-[#0a4abf] text-white shadow-sm"
-                              : "border-slate-200 bg-white text-slate-700 hover:border-[#b9cff0] hover:bg-[#f8fbff]",
-                          )}
-                          onClick={() => setRepositoryPolicyScopeFilter(option.value as "all" | GrunenthalPolicyScope)}
-                        >
-                          <span className="min-w-0 truncate">{option.label}</span>
-                          <span
-                            className={cn(
-                              "ml-2 rounded-full px-2 py-0.5 text-xs",
-                              repositoryPolicyScopeFilter === option.value
-                                ? "bg-white/20 text-white"
-                                : "bg-slate-100 text-slate-600",
-                            )}
-                          >
-                            {option.count}
-                          </span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <Button
-                    type="button"
-                    variant="outline"
-                    disabled={activeRepositoryFilterCount === 0}
-                    className="!mx-0 !max-w-none xl:w-auto"
-                    onClick={() => {
-                      setRepositorySearch("")
-                      setRepositoryPolicyScopeFilter("all")
-                      setRepositoryModuleFilter("all")
-                      setRepositoryTypeFilter("all")
-                      setRepositoryAreaFilter("all")
-                    }}
-                  >
-                    Limpiar filtros
-                  </Button>
+              {activeRepositoryFilterCount > 0 ? (
+                <div className="flex min-w-0 flex-wrap items-center gap-2 text-xs text-slate-500">
+                  <span className="font-medium text-slate-700">Filtros activos:</span>
+                  {repositorySearch.trim() ? (
+                    <Badge variant="outline" className="max-w-full truncate border-slate-200 bg-white text-slate-600">
+                      Búsqueda: {repositorySearch.trim()}
+                    </Badge>
+                  ) : null}
+                  {repositoryPolicyScopeFilter !== "all" ? (
+                    <Badge variant="outline" className="border-slate-200 bg-white text-slate-600">
+                      {repositoryPolicyScopeFilter === "mexico" ? "Políticas México" : "Políticas Globales"}
+                    </Badge>
+                  ) : null}
+                  {repositoryModuleFilter !== "all" ? (
+                    <Badge variant="outline" className="border-slate-200 bg-white text-slate-600">
+                      {repositoryModuleLabel(repositoryModuleFilter)}
+                    </Badge>
+                  ) : null}
+                  {repositoryTypeFilter !== "all" ? (
+                    <Badge variant="outline" className="border-slate-200 bg-white text-slate-600">
+                      {repositoryTypeFilter}
+                    </Badge>
+                  ) : null}
+                  {repositoryAreaFilter !== "all" ? (
+                    <Badge variant="outline" className="border-slate-200 bg-white text-slate-600">
+                      {repositoryAreaFilter}
+                    </Badge>
+                  ) : null}
                 </div>
-              </CardContent>
-            </Card>
+              ) : null}
 
-            <Card className="min-w-0 overflow-hidden border-slate-200 shadow-sm">
-              <CardHeader className="min-w-0 border-b border-slate-100">
-                <div className="flex min-w-0 flex-wrap items-start justify-between gap-3">
-                  <div className="min-w-0">
-                    <CardTitle className="text-2xl text-slate-950">Documentos disponibles</CardTitle>
-                    <CardDescription>
-                      {filteredRepositoryDocuments.length} de {repositoryDocuments.length} políticas curadas listas para consulta.
-                    </CardDescription>
-                  </div>
-                  <Badge variant="outline" className="border-primary/20 bg-primary/5 text-primary">
-                    México / Global
-                  </Badge>
-                </div>
-              </CardHeader>
-              <CardContent className="min-w-0 space-y-3 p-4 sm:p-6">
-                {filteredRepositoryDocuments.length === 0 ? (
+              {filteredRepositoryDocuments.length === 0 ? (
                   <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-4 py-12 text-center text-sm text-slate-500">
                     No hay documentos que coincidan con los filtros actuales.
                   </div>
@@ -2251,7 +2229,6 @@ export function PoliciesManager({ initialSection = "registro" }: PoliciesManager
               </CardContent>
             </Card>
           </div>
-        </div>
       ) : (
         <div className="min-w-0 space-y-6">
           <div className="grid min-w-0 gap-6 2xl:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)]">

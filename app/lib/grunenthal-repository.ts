@@ -894,12 +894,35 @@ export const GRUNENTHAL_REPOSITORY_DOCUMENTS: GrunenthalRepositoryDocument[] = [
   ...GRUNENTHAL_LABOR_POLICY_REPOSITORY_DOCUMENTS.map(repositoryDocumentFromIndividual),
 ]
 
+function repositoryStoredFileFor(
+  document: GrunenthalRepositoryDocument,
+  storedFile: StoredFile,
+): StoredFile {
+  return {
+    ...storedFile,
+    name: document.downloadName || storedFile.name,
+    content: document.originalPath || storedFile.content,
+    category: document.category || storedFile.category,
+    metadata: {
+      ...storedFile.metadata,
+      title: document.title,
+      displayName: document.title,
+      publicPath: document.originalPath,
+      originalPath: document.originalPath,
+      sourceRelativePath: document.sourceRelativePath || document.sourceLabel,
+      ...(document.previewPdfPath
+        ? { previewPdfPath: document.previewPdfPath, previewMimeType: "application/pdf" }
+        : {}),
+    },
+  }
+}
+
 export function buildGrunenthalRepositoryDocuments(storedFiles: StoredFile[]): GrunenthalRepositoryDocumentWithFile[] {
   const filesById = new Map(storedFiles.map((file) => [file.id, file]))
 
   return GRUNENTHAL_REPOSITORY_DOCUMENTS.flatMap((document) => {
     const storedFile = filesById.get(document.fileId)
-    return storedFile ? [{ ...document, storedFile }] : []
+    return storedFile ? [{ ...document, storedFile: repositoryStoredFileFor(document, storedFile) }] : []
   })
 }
 
@@ -910,6 +933,6 @@ export function buildGrunenthalCuratedPolicyDocuments(
 
   return GRUNENTHAL_CURATED_POLICY_DOCUMENTS.flatMap((document) => {
     const storedFile = filesById.get(document.fileId)
-    return storedFile ? [{ ...document, storedFile }] : []
+    return storedFile ? [{ ...document, storedFile: repositoryStoredFileFor(document, storedFile) }] : []
   })
 }

@@ -20,6 +20,8 @@ describe("UI /data-policies repositorio", () => {
     assert.match(source, /Repositorio documental/)
     assert.match(source, /Ver/)
     assert.match(source, /Descargar/)
+    assert.match(source, /setRepositoryPreviewFile\(document\.storedFile\)/)
+    assert.match(source, /link\.download = document\.downloadName \|\| document\.storedFile\.name/)
   })
 
   it("diferencia políticas México y políticas Globales en el repositorio", () => {
@@ -42,15 +44,19 @@ describe("UI /data-policies repositorio", () => {
     assert.match(source, /Vista activa/)
   })
 
-  it("hace que los filtros de alcance ocupen el ancho disponible", () => {
+  it("usa una barra compacta con filtros avanzados desplegables", () => {
     const source = fs.readFileSync(sourcePath, "utf8")
 
-    assert.match(source, /Filtros del repositorio/)
+    assert.match(source, /repositoryAdvancedFiltersOpen/)
+    assert.match(source, /showRepositoryAdvancedFilters/)
+    assert.match(source, /repositoryScopeOptions/)
+    assert.match(source, /resetRepositoryFilters/)
     assert.match(source, /activeRepositoryFilterCount/)
-    assert.match(source, /!max-w-none/)
-    assert.match(source, /inline-flex min-h-11 w-full min-w-0/)
-    assert.match(source, /sm:grid-cols-3/)
-    assert.match(source, /xl:grid-cols-\[minmax\(260px,1\.35fr\)_minmax\(180px,0\.9fr\)_minmax\(180px,0\.9fr\)_minmax\(180px,0\.9fr\)\]/)
+    assert.match(source, /aria-expanded=\{showRepositoryAdvancedFilters\}/)
+    assert.match(source, /repository-advanced-filters/)
+    assert.match(source, /xl:grid-cols-\[minmax\(260px,1fr\)_minmax\(300px,auto\)_auto_auto\]/)
+    assert.match(source, /grid min-w-0 grid-cols-3 gap-1/)
+    assert.match(source, /Filtros activos:/)
   })
 
   it("usa contenedores responsivos para evitar que consulta se vea comprimida", () => {
