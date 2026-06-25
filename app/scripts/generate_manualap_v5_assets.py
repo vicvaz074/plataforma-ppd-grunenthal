@@ -32,6 +32,7 @@ NOTICE_SLICES = [
     ("aviso-empleados-proveedores", 240, 308),
     ("aviso-proveedores-persona-fisica", 309, 371),
     ("aviso-visitantes-cctv", 372, 435),
+    ("e-1-aviso-privacidad-simplificado-visitantes", 431, 435),
     ("aviso-healthcare-professional", 436, 521),
     ("aviso-healthcare-professional-educacion-medica", 522, 598),
     ("aviso-farmacovigilancia", 599, 663),

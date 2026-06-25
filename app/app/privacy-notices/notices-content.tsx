@@ -915,7 +915,7 @@ export function PrivacyNoticesContent({ section }: PrivacyNoticesContentProps) {
                 </div>
                 <div className="min-w-0">
                   <h2 className="text-base font-semibold text-slate-950">
-                    Insumo fuente ManualAP v5
+                    Insumo fuente ManualAP
                   </h2>
                   <p className="mt-1 text-sm text-slate-600">
                     Compilado oficial de avisos de privacidad Grünenthal. La vista previa usa PDF y la descarga conserva el Word original.

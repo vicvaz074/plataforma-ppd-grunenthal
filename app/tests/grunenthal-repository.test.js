@@ -22,7 +22,7 @@ describe("repositorio documental Grünenthal", () => {
   })
 
   it("declara avisos, contratos y recursos laborales individuales con trazabilidad", () => {
-    assert.equal(repository.GRUNENTHAL_INDIVIDUAL_PRIVACY_NOTICE_RECORDS.length, 11)
+    assert.equal(repository.GRUNENTHAL_INDIVIDUAL_PRIVACY_NOTICE_RECORDS.length, 12)
     assert.equal(repository.GRUNENTHAL_INDIVIDUAL_THIRD_PARTY_RECORDS.length, 32)
     assert.equal(repository.GRUNENTHAL_LABOR_POLICY_REPOSITORY_DOCUMENTS.length, 2)
 
@@ -55,6 +55,14 @@ describe("repositorio documental Grünenthal", () => {
     assert.ok(
       repository.GRUNENTHAL_INDIVIDUAL_PRIVACY_NOTICE_RECORDS.some((record) => record.slug === "aviso-plataformas"),
       "debe declararse el aviso individual general para plataformas",
+    )
+    assert.ok(
+      repository.GRUNENTHAL_INDIVIDUAL_PRIVACY_NOTICE_RECORDS.some(
+        (record) =>
+          record.slug === "e-1-aviso-privacidad-simplificado-visitantes" &&
+          record.title === "E-1 Aviso de Privacidad Simplificado para Visitantes",
+      ),
+      "debe declararse el aviso simplificado E-1 de visitantes como individual",
     )
     const allIndividualDocuments = [
       ...repository.GRUNENTHAL_INDIVIDUAL_PRIVACY_NOTICE_RECORDS,

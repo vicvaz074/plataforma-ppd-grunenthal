@@ -136,7 +136,7 @@ describe("personalización Grünenthal", () => {
     }
 
     const individualNotices = storedFiles.filter((file) => file.metadata?.individualRecordType === "privacy-notice")
-    assert.equal(individualNotices.length, 11)
+    assert.equal(individualNotices.length, 12)
     assert.equal(individualNotices.every((file) => file.category === "privacy-notice"), true)
     assert.equal(
       individualNotices.every((file) => file.metadata?.createdBy === "Legal"),
@@ -149,6 +149,7 @@ describe("personalización Grünenthal", () => {
       "Aviso de Privacidad Integral para Empleados de Proveedores",
       "Aviso de Privacidad Integral para Proveedores Persona Física",
       "Aviso de Privacidad para Visitantes y CCTV",
+      "E-1 Aviso de Privacidad Simplificado para Visitantes",
     ]) {
       assert.ok(
         individualNotices.some((file) => file.metadata?.noticeName === noticeName),
