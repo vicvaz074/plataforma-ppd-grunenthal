@@ -2092,8 +2092,6 @@ export default function DocumentsAndClausesPage() {
 
               <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
                 <span>{filteredMatrixRows.length} resultados visibles</span>
-                <span className="hidden sm:inline">·</span>
-                <span>Fuente: {GRUNENTHAL_THIRD_PARTY_ANALYSIS_MATRIX_SOURCE.title}</span>
               </div>
 
               <div className="overflow-hidden rounded-lg border">
