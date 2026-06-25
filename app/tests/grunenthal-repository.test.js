@@ -158,4 +158,32 @@ describe("repositorio documental Grünenthal", () => {
     assert.equal(previewable.storedFile.metadata.title, previewable.title)
     assert.equal(previewable.storedFile.name, previewable.downloadName)
   })
+
+  it("usa previews fieles renderizados desde los Office originales", () => {
+    const previewablePolicies = repository.GRUNENTHAL_CURATED_POLICY_DOCUMENTS.filter(
+      (document) => document.previewPdfPath,
+    )
+
+    assert.equal(previewablePolicies.length, 18)
+
+    for (const document of previewablePolicies) {
+      const originalPath = path.join(publicDir, document.originalPath)
+      const previewPath = path.join(publicDir, document.previewPdfPath)
+      const previewContent = fs.readFileSync(previewPath)
+      const previewMetadata = previewContent.toString("latin1")
+
+      assert.ok(fs.existsSync(originalPath), `falta documento original: ${document.originalPath}`)
+      assert.equal(previewContent.subarray(0, 5).toString("ascii"), "%PDF-", `preview PDF invalido: ${document.previewPdfPath}`)
+      assert.match(
+        previewMetadata,
+        /LibreOffice/i,
+        `el preview debe venir del Office original: ${document.previewPdfPath}`,
+      )
+      assert.doesNotMatch(
+        previewMetadata,
+        /jsPDF/i,
+        `el preview no debe ser una copia reconstruida por jsPDF: ${document.previewPdfPath}`,
+      )
+    }
+  })
 })
