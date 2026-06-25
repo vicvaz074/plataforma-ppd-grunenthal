@@ -301,16 +301,16 @@ describe("personalización Grünenthal", () => {
     const withoutSourcePdf = subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfStatus === "sin-pdf")
     const validationReport = ratData.GRUNENTHAL_RAT_VALIDATION_REPORT
 
-    assert.equal(withSourcePdf.length, 33)
-    assert.equal(withoutSourcePdf.length, 2)
+    assert.equal(withSourcePdf.length, 35)
+    assert.equal(withoutSourcePdf.length, 0)
     assert.equal(validationReport.canonicalInventoryCount, 15)
     assert.equal(validationReport.canonicalSubInventoryCount, 35)
-    assert.equal(validationReport.missingPdfCount, 2)
+    assert.equal(validationReport.missingPdfCount, 0)
     assert.equal(validationReport.unmatchedPdfCount, 0)
     assert.equal(validationReport.fieldMismatchCount, 0)
     assert.equal(
       subInventories.filter((subInventory) => subInventory.grunenthalValidationStatus === "verificado").length,
-      33,
+      35,
     )
     assert.equal(
       subInventories.some((subInventory) => subInventory.databaseName === "Ranking de efectividad"),
@@ -324,8 +324,12 @@ describe("personalización Grünenthal", () => {
     assert.equal(openDataVeeva.responsibleArea, "COMEX")
     assert.equal(openDataVeeva.processingSystemName, "OPEN DATA (Veeva)")
     assert.equal(openDataVeeva.personalData.length, 11)
-    assert.equal(openDataVeeva.grunenthalSourcePdfStatus, "sin-pdf")
-    assert.equal(openDataVeeva.grunenthalValidationStatus, "pendiente-revision")
+    assert.equal(openDataVeeva.grunenthalSourcePdfStatus, "vinculado")
+    assert.equal(openDataVeeva.grunenthalValidationStatus, "verificado")
+    assert.match(
+      openDataVeeva.grunenthalSourcePdfPath,
+      /\/client\/grunenthal\/rat\/comex\/inventario-comex-open-data-veeva-registro-de-medicos\.pdf$/,
+    )
 
     const xeomeenReport = subInventories.find((subInventory) =>
       subInventory.databaseName === "Reporte de Distribuidores Xeomeen"
@@ -333,8 +337,12 @@ describe("personalización Grünenthal", () => {
     assert.ok(xeomeenReport, "debe cargarse Reporte de Distribuidores Xeomeen dentro de Ventas Internas")
     assert.equal(xeomeenReport.responsibleArea, "Ventas Internas")
     assert.equal(xeomeenReport.personalData.length, 13)
-    assert.equal(xeomeenReport.grunenthalSourcePdfStatus, "sin-pdf")
-    assert.equal(xeomeenReport.grunenthalValidationStatus, "pendiente-revision")
+    assert.equal(xeomeenReport.grunenthalSourcePdfStatus, "vinculado")
+    assert.equal(xeomeenReport.grunenthalValidationStatus, "verificado")
+    assert.match(
+      xeomeenReport.grunenthalSourcePdfPath,
+      /\/client\/grunenthal\/rat\/ventas-internas\/inventario-ventas-internas-reporte-de-distribuidores-xeomeen\.pdf$/,
+    )
   })
 
   it("reemplaza inventarios locales viejos y limpia progreso RAT al migrar la versión", async () => {
@@ -363,8 +371,8 @@ describe("personalización Grünenthal", () => {
     assert.equal(inventories.some((inventory) => inventory.id === "inventario-viejo"), false)
     assert.equal(global.localStorage.getItem("inventories_progress"), null)
     assert.equal(
-      subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfStatus === "vinculado").length === 33 &&
-        subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfStatus === "sin-pdf").length === 2,
+      subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfStatus === "vinculado").length === 35 &&
+        subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfStatus === "sin-pdf").length === 0,
       true,
     )
   })
