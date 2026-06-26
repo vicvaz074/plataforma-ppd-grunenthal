@@ -591,3 +591,57 @@ export const normalizeInventoryForForm = (
       : "pendiente",
   }
 }
+
+type PrepareInventorySaveOptions = {
+  inventories: Inventory[]
+  formData: Inventory
+  editingInventoryId: string | null
+  actorName: string
+  now?: string
+  idFactory?: () => string
+}
+
+export const prepareInventorySave = ({
+  inventories,
+  formData,
+  editingInventoryId,
+  actorName,
+  now = new Date().toISOString(),
+  idFactory = () => `inventory-${Date.now()}`,
+}: PrepareInventorySaveOptions): {
+  inventory: Inventory
+  inventories: Inventory[]
+  operation: "created" | "updated"
+} => {
+  const existingIndex = editingInventoryId
+    ? inventories.findIndex((inventory) => inventory.id === editingInventoryId)
+    : -1
+  const isUpdatingExisting = existingIndex >= 0
+  const existingInventory = isUpdatingExisting ? inventories[existingIndex] : undefined
+  const inventoryId = isUpdatingExisting ? editingInventoryId! : idFactory()
+
+  const inventory = normalizeInventoryForForm({
+    ...formData,
+    id: inventoryId,
+    subInventories: formData.subInventories.map((sub) => ({
+      ...sub,
+      personalData: (sub.personalData || []).map((data) => ({
+        ...data,
+        category: data.category || "Sin categoría",
+      })),
+    })),
+    createdAt: existingInventory?.createdAt || formData.createdAt || now,
+    updatedAt: now,
+    createdBy: existingInventory?.createdBy || formData.createdBy || actorName,
+    updatedBy: actorName,
+    status: "completado",
+  })
+
+  return {
+    inventory,
+    inventories: isUpdatingExisting
+      ? inventories.map((item, index) => (index === existingIndex ? inventory : item))
+      : [...inventories, inventory],
+    operation: isUpdatingExisting ? "updated" : "created",
+  }
+}

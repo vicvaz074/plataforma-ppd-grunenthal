@@ -101,4 +101,63 @@ describe("normalización de inventarios RAT para edición", () => {
     assert.deepEqual(sub.personalData[0].purposesPrimary, ["Identificación"])
     assert.deepEqual(sub.personalData[0].purposesSecondary, ["Comunicaciones"])
   })
+
+  it("crea un inventario nuevo cuando el borrador trae un id que no existe", async () => {
+    const { createDefaultInventory, prepareInventorySave } = await importModule("app/rat/utils/inventory-normalization.ts")
+
+    const existing = createDefaultInventory()
+    existing.id = "inventory-existente"
+    existing.databaseName = "Área existente"
+
+    const draft = createDefaultInventory()
+    draft.id = "inventory-borrador"
+    draft.databaseName = "Dirección General"
+
+    const result = prepareInventorySave({
+      inventories: [existing],
+      formData: draft,
+      editingInventoryId: "inventory-borrador",
+      actorName: "Legal",
+      now: "2026-06-25T00:00:00.000Z",
+      idFactory: () => "inventory-nuevo",
+    })
+
+    assert.equal(result.operation, "created")
+    assert.equal(result.inventories.length, 2)
+    assert.equal(result.inventories[1].id, "inventory-nuevo")
+    assert.equal(result.inventories[1].databaseName, "Dirección General")
+    assert.equal(result.inventories[1].status, "completado")
+    assert.equal(result.inventories[1].createdBy, "Legal")
+    assert.equal(result.inventories[1].updatedBy, "Legal")
+  })
+
+  it("actualiza el inventario cuando el id de edición sí existe", async () => {
+    const { createDefaultInventory, prepareInventorySave } = await importModule("app/rat/utils/inventory-normalization.ts")
+
+    const existing = createDefaultInventory()
+    existing.id = "inventory-existente"
+    existing.databaseName = "Área existente"
+    existing.createdBy = "Usuario original"
+
+    const formData = {
+      ...existing,
+      databaseName: "Área actualizada",
+    }
+
+    const result = prepareInventorySave({
+      inventories: [existing],
+      formData,
+      editingInventoryId: "inventory-existente",
+      actorName: "Legal",
+      now: "2026-06-25T00:00:00.000Z",
+      idFactory: () => "inventory-no-debe-usarse",
+    })
+
+    assert.equal(result.operation, "updated")
+    assert.equal(result.inventories.length, 1)
+    assert.equal(result.inventories[0].id, "inventory-existente")
+    assert.equal(result.inventories[0].databaseName, "Área actualizada")
+    assert.equal(result.inventories[0].createdBy, "Usuario original")
+    assert.equal(result.inventories[0].updatedBy, "Legal")
+  })
 })
