@@ -16,15 +16,14 @@ import {
 } from "lucide-react"
 import { InventoryForm } from "../components/inventory-form"
 import { InventoryList } from "../components/inventory-list"
-import type { Inventory, SubInventory } from "../types"
+import type { Inventory } from "../types"
 import { parseRatExcel } from "../utils/parseRatExcel"
+import { createInventoryFromRatImport } from "../utils/rat-import"
 import {
   createDefaultInventory,
-  createDefaultSubInventory,
   normalizeInventoryForForm,
 } from "../utils/inventory-normalization"
 
-const defaultSubInventory = (): SubInventory => createDefaultSubInventory()
 const defaultInventory = (): Inventory => createDefaultInventory()
 
 export default function RegistroPage() {
@@ -37,6 +36,7 @@ export default function RegistroPage() {
     React.SetStateAction<"menu" | "view" | "create">
   >
   const [hasSavedProgress, setHasSavedProgress] = useState(false)
+  const [inventoriesLoaded, setInventoriesLoaded] = useState(false)
 
   // --- CARGA DE LOCALSTORAGE CON SANITIZACIÓN ---
   useEffect(() => {
@@ -52,11 +52,13 @@ export default function RegistroPage() {
         localStorage.removeItem("inventories")
       }
     }
+    setInventoriesLoaded(true)
   }, [])
 
   useEffect(() => {
+    if (!inventoriesLoaded) return
     localStorage.setItem("inventories", JSON.stringify(inventories))
-  }, [inventories])
+  }, [inventories, inventoriesLoaded])
 
   useEffect(() => {
     if (typeof window === "undefined") return
@@ -94,37 +96,12 @@ export default function RegistroPage() {
     try {
       const parsed = await parseRatExcel(file)
       if (parsed.length === 0) throw new Error("No se encontraron bases de datos")
-      const subs: SubInventory[] = parsed.map((p, idx) => ({
-        ...defaultSubInventory(),
-        ...p,
-        id: `${Date.now()}_${idx}`,
-        personalData: (p.personalData ?? []).map((d: any) => ({
-          ...d,
-          category: d.category || "Sin categoría",
-        })),
-        privacyNoticeFile: undefined,
-        consentFile: undefined,
-        transferConsentFile: undefined,
-        privacyNoticeFileId: undefined,
-        consentFileId: undefined,
-        transferConsentFileId: undefined,
-        privacyNoticeFileName: undefined,
-        consentFileName: undefined,
-        transferConsentFileName: undefined,
-      }))
-      const databaseName =
-        subs.length === 1
-          ? subs[0].databaseName
-          : subs.map((s) => s.databaseName).join(" / ")
-      const newInv: Inventory = {
-        ...defaultInventory(),
-        subInventories: subs,
-        databaseName,
-      }
-      setFormData(normalizeInventoryForForm(newInv))
+      setFormData(createInventoryFromRatImport(parsed))
       setEditingInventoryId(null)
       setMode("create")
-    } catch {
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Archivo no compatible"
+      window.alert(`No se pudo importar el inventario. ${message}`)
     } finally {
       if (fileInputRef.current) fileInputRef.current.value = ""
     }
@@ -136,8 +113,13 @@ export default function RegistroPage() {
     if (!saved) return
     try {
       const parsed = JSON.parse(saved) as Inventory
-      setFormData(normalizeInventoryForForm(parsed))
-      setEditingInventoryId(parsed.id ?? null)
+      const normalized = normalizeInventoryForForm(parsed)
+      setFormData(normalized)
+      setEditingInventoryId(
+        inventories.some((inventory) => inventory.id === normalized.id)
+          ? normalized.id
+          : null,
+      )
       setMode("create")
     } catch {
       // Si hay un error al parsear, limpiar el progreso guardado
@@ -297,5 +279,3 @@ export default function RegistroPage() {
     </motion.div>
   )
 }
-
-

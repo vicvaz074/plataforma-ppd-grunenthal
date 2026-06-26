@@ -22,10 +22,12 @@ import { StepperNav } from "./stepper-nav"
 import { saveFile } from "@/lib/fileStorage"
 import { parseRatExcel } from "../utils/parseRatExcel"
 import { parseExcelOrCsvManual } from "../utils/fileParserManual"
+import { createInventoryFromRatImport } from "../utils/rat-import"
 import {
   DEFAULT_REPORT_ACCENT_COLOR,
   createDefaultInventory,
   normalizeInventoryForForm,
+  prepareInventorySave,
 } from "../utils/inventory-normalization"
 
 const normalizePurposeDisplay = (value: unknown): string | null => {
@@ -470,51 +472,28 @@ export function InventoryForm({
     try {
       const parsed = await parseRatExcel(file)
       if (parsed.length === 0) throw new Error("No se encontraron bases de datos")
-      const subs: SubInventory[] = parsed.map((p, idx) => ({
-        ...defaultSubInventory(),
-        ...p,
-        id: `${Date.now()}_${idx}`,
-        personalData: (p.personalData ?? []).map((d: any) => ({
-          ...d,
-          category: d.category || "Sin categoría"
-        })),
-        privacyNoticeFile: undefined,
-        consentFile: undefined,
-        transferConsentFile: undefined,
-        transferContractFile: undefined,
-        privacyNoticeFileId: undefined,
-        consentFileId: undefined,
-        transferConsentFileId: undefined,
-        transferContractFileId: undefined,
-        privacyNoticeFileName: undefined,
-        consentFileName: undefined,
-        transferConsentFileName: undefined,
-        transferContractFileName: undefined,
-      }))
-      const databaseName = subs.length === 1
-        ? subs[0].databaseName
-        : subs.map(s => s.databaseName).join(" / ")
       if (parsed.length === 1 && !editingInventoryId) {
+        const imported = createInventoryFromRatImport(parsed, {
+          baseInventory: formData,
+          id: formData.id,
+        })
         setFormData((f) => ({
           ...f,
-          subInventories: subs,
-          databaseName,
-          responsible: f.responsible || defaultInventory().responsible,
+          subInventories: imported.subInventories,
+          databaseName: imported.databaseName,
+          responsible: f.responsible || imported.responsible || defaultInventory().responsible,
         }))
         setStep(13)
       } else {
-        const newInv: Inventory = {
-          ...defaultInventory(),
+        const newInv = createInventoryFromRatImport(parsed, {
           id: Date.now().toString(),
-          subInventories: subs,
-          createdAt: new Date().toISOString(),
-          databaseName,
-        }
+        })
         setInventories((all) => [...all, newInv])
         setMode("view")
       }
     } catch (err: any) {
-      // Puedes agregar un mensaje de error visual si lo deseas
+      const message = err instanceof Error ? err.message : "Archivo no compatible"
+      alert(`No se pudo importar el inventario. ${message}`)
     } finally {
       setImportingFull(false)
       if (fileInputRef.current) fileInputRef.current.value = ""
@@ -1324,31 +1303,12 @@ export function InventoryForm({
       typeof window !== "undefined"
         ? localStorage.getItem("userName") || "Usuario actual"
         : "Usuario actual"
-    // Corrige categorías antes de guardar definitivo
-    const invCopy: Inventory = {
-      ...formData,
-      subInventories: formData.subInventories.map((sub) => ({
-        ...sub,
-        personalData: (sub.personalData || []).map((d) => ({
-          ...d,
-          category: d.category || "Sin categoría",
-        })),
-      })),
-      createdAt: formData.createdAt ?? new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      createdBy: formData.createdBy || currentUserName,
-      updatedBy: currentUserName,
-      status: "completado",
-    }
-    let updated: Inventory[]
-    if (editingInventoryId) {
-      updated = inventories.map((i) =>
-        i.id === editingInventoryId ? invCopy : i
-      )
-    } else {
-      invCopy.id = Date.now().toString()
-      updated = [...inventories, invCopy]
-    }
+    const { inventories: updated } = prepareInventorySave({
+      inventories,
+      formData,
+      editingInventoryId,
+      actorName: currentUserName,
+    })
     setInventories(updated)
     localStorage.setItem("inventories", JSON.stringify(updated))
     if (typeof window !== "undefined") {
