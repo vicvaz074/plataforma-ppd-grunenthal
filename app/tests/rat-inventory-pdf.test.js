@@ -174,6 +174,49 @@ describe("generación PDF de inventarios RAT", () => {
     )
   })
 
+  it("planea dos descargas PDF fuente para Plataformas Grünenthal", async () => {
+    const sourcePdfs = await importModule("app/rat/utils/inventory-source-pdfs.ts")
+    const ratData = await importModule("lib/grunenthal-rat-data.ts")
+    const inventory = ratData.GRUNENTHAL_RAT_INVENTORIES.find(
+      (item) => item.id === "grunenthal-rat-area-plataformas-grunenthal",
+    )
+
+    assert.ok(inventory, "debe existir el inventario Plataformas Grünenthal")
+
+    const plan = sourcePdfs.createInventoryPdfDownloadPlan(inventory)
+
+    assert.equal(plan.sourcePdfs.length, 2)
+    assert.equal(plan.generatedInventories.length, 0)
+    assert.equal(plan.totalPdfDownloads, 2)
+    assert.deepEqual(
+      plan.sourcePdfs.map((download) => download.subInventoryName).sort(),
+      ["Beyond / Connect", "Formulario de Contacto Página GRT"].sort(),
+    )
+    assert.ok(
+      plan.sourcePdfs.some((download) =>
+        download.url.endsWith(
+          "/client/grunenthal/rat/plataformas-grunenthal/inventario-plataformas-grunenthal-beyond-connect.pdf",
+        ),
+      ),
+      "Beyond / Connect debe descargarse como PDF público vinculado",
+    )
+    assert.ok(
+      plan.sourcePdfs.some((download) =>
+        download.url.endsWith(
+          "/client/grunenthal/rat/plataformas-grunenthal/inventario-plataformas-grunenthal-formulario-de-contacto-pagina-grt.pdf",
+        ),
+      ),
+      "Formulario de Contacto Página GRT debe descargarse como PDF público vinculado",
+    )
+    assert.equal(
+      plan.sourcePdfs.every((download) =>
+        fs.existsSync(path.join(appDir, "public", download.url.replace(/^\//, ""))),
+      ),
+      true,
+      "los PDFs públicos de Plataformas Grünenthal deben existir en public",
+    )
+  })
+
   it("aclara que el respaldo masivo de inventarios es JSON y reserva la descarga PDF a las filas", () => {
     const source = fs.readFileSync(
       path.join(appDir, "app/rat/components/inventory-list.tsx"),
