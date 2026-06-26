@@ -26,6 +26,7 @@ import {
   DEFAULT_REPORT_ACCENT_COLOR,
   createDefaultInventory,
   normalizeInventoryForForm,
+  prepareInventorySave,
 } from "../utils/inventory-normalization"
 
 const normalizePurposeDisplay = (value: unknown): string | null => {
@@ -1324,31 +1325,12 @@ export function InventoryForm({
       typeof window !== "undefined"
         ? localStorage.getItem("userName") || "Usuario actual"
         : "Usuario actual"
-    // Corrige categorías antes de guardar definitivo
-    const invCopy: Inventory = {
-      ...formData,
-      subInventories: formData.subInventories.map((sub) => ({
-        ...sub,
-        personalData: (sub.personalData || []).map((d) => ({
-          ...d,
-          category: d.category || "Sin categoría",
-        })),
-      })),
-      createdAt: formData.createdAt ?? new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      createdBy: formData.createdBy || currentUserName,
-      updatedBy: currentUserName,
-      status: "completado",
-    }
-    let updated: Inventory[]
-    if (editingInventoryId) {
-      updated = inventories.map((i) =>
-        i.id === editingInventoryId ? invCopy : i
-      )
-    } else {
-      invCopy.id = Date.now().toString()
-      updated = [...inventories, invCopy]
-    }
+    const { inventories: updated } = prepareInventorySave({
+      inventories,
+      formData,
+      editingInventoryId,
+      actorName: currentUserName,
+    })
     setInventories(updated)
     localStorage.setItem("inventories", JSON.stringify(updated))
     if (typeof window !== "undefined") {

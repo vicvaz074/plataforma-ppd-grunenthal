@@ -37,6 +37,7 @@ export default function RegistroPage() {
     React.SetStateAction<"menu" | "view" | "create">
   >
   const [hasSavedProgress, setHasSavedProgress] = useState(false)
+  const [inventoriesLoaded, setInventoriesLoaded] = useState(false)
 
   // --- CARGA DE LOCALSTORAGE CON SANITIZACIÓN ---
   useEffect(() => {
@@ -52,11 +53,13 @@ export default function RegistroPage() {
         localStorage.removeItem("inventories")
       }
     }
+    setInventoriesLoaded(true)
   }, [])
 
   useEffect(() => {
+    if (!inventoriesLoaded) return
     localStorage.setItem("inventories", JSON.stringify(inventories))
-  }, [inventories])
+  }, [inventories, inventoriesLoaded])
 
   useEffect(() => {
     if (typeof window === "undefined") return
@@ -136,8 +139,13 @@ export default function RegistroPage() {
     if (!saved) return
     try {
       const parsed = JSON.parse(saved) as Inventory
-      setFormData(normalizeInventoryForForm(parsed))
-      setEditingInventoryId(parsed.id ?? null)
+      const normalized = normalizeInventoryForForm(parsed)
+      setFormData(normalized)
+      setEditingInventoryId(
+        inventories.some((inventory) => inventory.id === normalized.id)
+          ? normalized.id
+          : null,
+      )
       setMode("create")
     } catch {
       // Si hay un error al parsear, limpiar el progreso guardado
@@ -297,5 +305,4 @@ export default function RegistroPage() {
     </motion.div>
   )
 }
-
 
