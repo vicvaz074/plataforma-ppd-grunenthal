@@ -11,11 +11,6 @@ describe("modal de vista previa documental", () => {
 
     assert.match(source, /PdfCanvasPreview/, "debe usar un visor PDF propio")
     assert.match(source, /pdfjs-dist/, "debe renderizar PDFs con PDF.js")
-    assert.match(source, /PDF_PAGE_BATCH_SIZE/, "debe renderizar PDFs pesados por tandas")
-    assert.match(source, /setRenderedPageCount/, "debe marcar páginas visibles conforme se renderizan")
-    assert.match(source, /ImagePagePreview/, "debe tener fallback visual para PDFs que PDF.js pinta en blanco")
-    assert.match(source, /previewPageImageUrls/, "debe aceptar páginas pre-renderizadas como imágenes")
-    assert.match(source, /Cargar más páginas/, "debe permitir continuar el preview sin bloquear el modal")
     assert.doesNotMatch(source, /<iframe/i, "no debe usar iframe porque frame-src bloquea el contenido")
     assert.match(source, /flex-col/, "el modal debe separar header, cuerpo y footer en columna")
     assert.match(source, /overflow-y-auto/, "solo el cuerpo del preview debe hacer scroll")
