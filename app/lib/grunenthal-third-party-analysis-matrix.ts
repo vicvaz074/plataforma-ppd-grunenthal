@@ -12,7 +12,7 @@ export const GRUNENTHAL_THIRD_PARTY_ANALYSIS_MATRIX_SOURCE = {
   title: "Contratos analizados por Davara Abogado",
   sourceDocument: "Análisis de Relaciones Grünenthal",
   sourceTable: "Tabla resumen de contratos analizados",
-  lastUpdated: "21 de octubre de 2025",
+  lastUpdated: "29 de junio de 2026",
 } as const
 
 export const GRUNENTHAL_THIRD_PARTY_ANALYSIS_MATRIX: GrunenthalThirdPartyAnalysisMatrixRow[] = [
@@ -319,6 +319,33 @@ export const GRUNENTHAL_THIRD_PARTY_ANALYSIS_MATRIX: GrunenthalThirdPartyAnalysi
     "area": "GLOBALES",
     "thirdParty": "EVERSANA, IRELAND, LIMITED",
     "contract": "Contrato de prestación de servicios de",
+    "communication": "Remisión",
+    "communicationType": "remision"
+  },
+  {
+    "id": "grt-analysis-matrix-035-vimeo",
+    "sourceRow": 46,
+    "area": "GLOBALES",
+    "thirdParty": "VIMEO",
+    "contract": "Términos de Uso de plataforma para la creación y divulgación de videos",
+    "communication": "Transferencia",
+    "communicationType": "transferencia"
+  },
+  {
+    "id": "grt-analysis-matrix-036-gptw-deutschland-gmbh",
+    "sourceRow": 47,
+    "area": "GLOBALES",
+    "thirdParty": "GPTW Deutschland GmbH",
+    "contract": "Contrato de servicios para la certificación como Great Place To Work",
+    "communication": "Transferencias",
+    "communicationType": "transferencia"
+  },
+  {
+    "id": "grt-analysis-matrix-037-master-control-inc",
+    "sourceRow": 48,
+    "area": "GLOBALES",
+    "thirdParty": "MASTER CONTROL INC.",
+    "contract": "Contrato de licencia de uso de software y prestación de servicios de capacitación.",
     "communication": "Remisión",
     "communicationType": "remision"
   }

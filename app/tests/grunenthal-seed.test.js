@@ -210,10 +210,10 @@ describe("personalización Grünenthal", () => {
 
     const grtContractFiles = storedFiles.filter((file) => file.metadata?.individualRecordType === "third-party-grt-contract")
     const grtHistoryContracts = contracts.filter((contract) => contract.metadata?.sourceFolder === "Contratos GRt")
-    assert.equal(grtContracts.GRUNENTHAL_GRT_CONTRACT_DOCUMENTS.length, 38)
-    assert.equal(grtContractFiles.length, 38)
-    assert.equal(grtHistoryContracts.length, 38)
-    assert.equal(contracts.length, 38)
+    assert.equal(grtContracts.GRUNENTHAL_GRT_CONTRACT_DOCUMENTS.length, 41)
+    assert.equal(grtContractFiles.length, 41)
+    assert.equal(grtHistoryContracts.length, 41)
+    assert.equal(contracts.length, 41)
     assert.equal(
       grtContractFiles.every((file) => {
         const publicPath = file.content.startsWith("/") ? file.content.slice(1) : file.content
@@ -247,7 +247,7 @@ describe("personalización Grünenthal", () => {
     )
     assert.equal(
       grtHistoryContracts.filter((contract) => contract.metadata?.analysisRecordId).length,
-      34,
+      35,
       "los contratos físicos con contraparte en el análisis deben quedar enriquecidos con el registro fuente",
     )
     const haysContract = grtHistoryContracts.find((contract) => contract.providerIdentity?.includes("HAYS"))
@@ -257,6 +257,25 @@ describe("personalización Grünenthal", () => {
     assert.ok(haysContract.metadata?.analysisMatrixRowId, "debe enlazar la fila de la matriz del análisis")
     assert.ok(
       haysContract.attachments?.some((attachment) => attachment.storageId === "grunenthal-file-grunenthal-third-party-contract-013"),
+      "debe anexar el extracto individual del análisis junto al contrato físico",
+    )
+    const negociosContract = grtHistoryContracts.find(
+      (contract) => contract.providerIdentity === "NEGOCIOS DE INNOVACIÓN FARMACÉUTICA, S.C.",
+    )
+    assert.ok(negociosContract, "debe sembrarse Negocios de Innovación con su contrato físico")
+    assert.equal(negociosContract.metadata?.analysisSourceLineRange, "256-265")
+    assert.ok(
+      negociosContract.attachments?.some(
+        (attachment) =>
+          attachment.storageId ===
+          "grunenthal-file-grunenthal-grt-contract-021-9-convenio-consultores-y-asesores-fpm-s-c-firmado",
+      ),
+      "debe anexar el PDF físico de Consultores y Asesores FPM",
+    )
+    assert.ok(
+      negociosContract.attachments?.some(
+        (attachment) => attachment.storageId === "grunenthal-file-grunenthal-third-party-contract-002",
+      ),
       "debe anexar el extracto individual del análisis junto al contrato físico",
     )
     assert.equal(

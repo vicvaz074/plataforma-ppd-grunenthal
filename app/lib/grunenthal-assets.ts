@@ -743,16 +743,16 @@ export const GRUNENTHAL_DOCUMENT_MANIFEST: GrunenthalAsset[] = [
   },
   {
     "id": "grunenthal-third-party-contracts-analisisderelacionesgrunenthal",
-    "name": "AnálisisDeRelacionesGrünenthal .docx",
-    "displayName": "AnálisisDeRelacionesGrünenthal ",
+    "name": "AnálisisDeRelacionesGrünenthal  29-06-26.docx",
+    "displayName": "AnálisisDeRelacionesGrünenthal 29-06-26",
     "path": "/client/grunenthal/third-party-contracts/analisisderelacionesgrunenthal.docx",
     "type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    "size": 149099,
+    "size": 151184,
     "module": "third-party-contracts",
     "category": "third-party-contract",
     "folder": "third-party-contracts",
     "extension": "docx",
-    "sourceRelativePath": "PolíticasGRT_Davara/Relaciones con Terceros/AnálisisDeRelacionesGrünenthal .docx"
+    "sourceRelativePath": "PolíticasGRT_Davara/Relaciones con Terceros/AnálisisDeRelacionesGrünenthal  29-06-26.docx"
   },
   {
     "id": "grunenthal-third-party-contracts-manualderelaciones-grunenthal-davara-v2",

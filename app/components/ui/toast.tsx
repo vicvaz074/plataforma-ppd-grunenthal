@@ -1,4 +1,7 @@
+"use client"
+
 import * as React from "react"
+import { createPortal } from "react-dom"
 import * as ToastPrimitives from "@radix-ui/react-toast"
 import { cva, type VariantProps } from "class-variance-authority"
 import { X } from "lucide-react"
@@ -10,16 +13,26 @@ const ToastProvider = ToastPrimitives.Provider
 const ToastViewport = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Viewport>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitives.Viewport>
->(({ className, ...props }, ref) => (
-  <ToastPrimitives.Viewport
-    ref={ref}
-    className={cn(
-      "pointer-events-none fixed top-0 z-[10000] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-0 sm:right-0 sm:top-auto sm:flex-col md:max-w-[420px]",
-      className,
-    )}
-    {...props}
-  />
-))
+>(({ className, ...props }, ref) => {
+  const [portalContainer, setPortalContainer] = React.useState<HTMLElement | null>(null)
+
+  React.useEffect(() => {
+    setPortalContainer(document.body)
+  }, [])
+
+  const viewport = (
+    <ToastPrimitives.Viewport
+      ref={ref}
+      className={cn(
+        "pointer-events-none fixed top-0 z-[10000] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-0 sm:right-0 sm:top-auto sm:flex-col md:max-w-[420px]",
+        className,
+      )}
+      {...props}
+    />
+  )
+
+  return portalContainer ? createPortal(viewport, portalContainer) : viewport
+})
 ToastViewport.displayName = ToastPrimitives.Viewport.displayName
 
 const toastVariants = cva(
