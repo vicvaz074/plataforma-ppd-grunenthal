@@ -54,6 +54,7 @@ const readSourcePdf = (
     ? getStoredFileById(subInventory.grunenthalSourcePdfFileId)
     : undefined
   const source = storedFile?.content || subInventory.grunenthalSourcePdfPath || ""
+  const configuredDownloadName = subInventory.grunenthalSourcePdfDownloadName?.trim()
 
   if (!source || !PDF_EXTENSION_PATTERN.test(source)) {
     return null
@@ -69,10 +70,12 @@ const readSourcePdf = (
       subInventoryId: subInventory.id,
       subInventoryName: subInventory.databaseName,
       url,
-      downloadName: getPdfFileNameFromSource(
-        source,
-        storedFile?.name || subInventory.databaseName || "inventario",
-      ),
+      downloadName:
+        configuredDownloadName ||
+        getPdfFileNameFromSource(
+          source,
+          storedFile?.name || subInventory.databaseName || "inventario",
+        ),
     } satisfies InventorySourcePdfDownload
   } catch {
     return null

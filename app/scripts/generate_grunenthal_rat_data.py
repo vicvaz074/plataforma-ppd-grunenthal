@@ -37,6 +37,24 @@ SEEDED_AT = "2026-01-01T00:00:00.000Z"
 ACCENT_COLOR = "#40BB6A"
 CLIENT_NAME = "Grünenthal"
 
+SUB_INVENTORY_NAME_OVERRIDES = {
+    "grunenthal-rat-inventario-flotilla-informacion-solicitada-a-empleado-por-correo": "Compraventa-vehículo empleados",
+    "grunenthal-rat-inventario-human-resources-checklist-de-documentacion": "Checklist documentación de nuevos empleados",
+    "grunenthal-rat-inventario-human-resources-cedula-de-datos": "MyView",
+    "grunenthal-rat-inventario-human-resources-formato-de-alta-proveedor": "Empleados de proveedores",
+    "grunenthal-rat-inventario-medical-lista-de-requerimientos-hcp-profesional-de-salud-nacional": "Lista de requerimientos contratación HCP (Profesional de salud nacional)",
+    "grunenthal-rat-inventario-medical-lista-de-requerimientos-hcp-profesionales-de-la-salud-extranjero": "Lista de requerimientos contratación HCP (Profesionales de la salud extranjero)",
+}
+
+PDF_DOWNLOAD_NAME_OVERRIDES = {
+    "grunenthal-rat-inventario-flotilla-informacion-solicitada-a-empleado-por-correo": "inventario-flotilla-compraventa-vehiculo-empleados.pdf",
+    "grunenthal-rat-inventario-human-resources-checklist-de-documentacion": "inventario-human-resources-checklist-documentacion-de-nuevos-empleados.pdf",
+    "grunenthal-rat-inventario-human-resources-cedula-de-datos": "inventario-human-resources-myview.pdf",
+    "grunenthal-rat-inventario-human-resources-formato-de-alta-proveedor": "inventario-human-resources-empleados-de-proveedores.pdf",
+    "grunenthal-rat-inventario-medical-lista-de-requerimientos-hcp-profesional-de-salud-nacional": "inventario-medical-lista-de-requerimientos-contratacion-hcp-profesional-de-salud-nacional.pdf",
+    "grunenthal-rat-inventario-medical-lista-de-requerimientos-hcp-profesionales-de-la-salud-extranjero": "inventario-medical-lista-de-requerimientos-contratacion-hcp-profesionales-de-la-salud-extranjero.pdf",
+}
+
 VALIDATED_FIELDS = [
     "databaseName",
     "responsible",
@@ -569,6 +587,7 @@ def parse_pdf(asset: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
     sub_name = (
         clean_cell(sub_match.group(1)) if sub_match else ""
     ) or other.get("Nombre de la base de datos") or asset.get("ratPdfTitle", asset["displayName"])
+    sub_name = SUB_INVENTORY_NAME_OVERRIDES.get(sub_id, sub_name)
     sub = empty_sub_inventory(sub_id, sub_name, area)
 
     top_name = clean_cell(title_match.group(1)) if title_match else initial.get("Nombre de la base de datos", sub_name)
@@ -712,6 +731,9 @@ def parse_pdf(asset: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
     sub["riskLevel"] = risk_value(risk.get("Nivel de riesgo más alto identificado", ""))
     sub["grunenthalSourcePdfFileId"] = f"grunenthal-file-{asset['id']}"
     sub["grunenthalSourcePdfPath"] = asset["path"]
+    download_name = PDF_DOWNLOAD_NAME_OVERRIDES.get(asset["id"])
+    if download_name:
+        sub["grunenthalSourcePdfDownloadName"] = download_name
     sub["grunenthalSourcePdfStatus"] = "vinculado"
     sub["grunenthalValidationStatus"] = "verificado"
     sub["grunenthalValidationFields"] = VALIDATED_FIELDS
@@ -882,6 +904,8 @@ def render_ts(inventories: list[dict[str, Any]], links: list[dict[str, Any]]) ->
 
 def next_link_pdf_name(asset_id: str, links: list[dict[str, Any]]) -> str:
     _ = links
+    if asset_id in PDF_DOWNLOAD_NAME_OVERRIDES:
+        return PDF_DOWNLOAD_NAME_OVERRIDES[asset_id]
     text = ASSETS_TS.read_text(encoding="utf-8")
     pattern = r'\{\n(?:[^{}]|\n)*?"id": "' + re.escape(asset_id) + r'"(?:[^{}]|\n)*?\n  \}'
     match = re.search(pattern, text)

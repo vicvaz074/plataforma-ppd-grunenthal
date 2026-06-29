@@ -244,6 +244,7 @@ export interface SubInventory {
   riskLevel?: RiskLevel | string
   grunenthalSourcePdfFileId?: string
   grunenthalSourcePdfPath?: string
+  grunenthalSourcePdfDownloadName?: string
   grunenthalSourcePdfStatus?: string
   grunenthalValidationStatus?: string
   grunenthalValidationFields?: string[] | readonly string[]

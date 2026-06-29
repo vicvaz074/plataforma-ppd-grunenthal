@@ -5,6 +5,7 @@ const path = require("node:path")
 const { pathToFileURL } = require("node:url")
 
 const appDir = path.join(__dirname, "..")
+const projectRoot = path.join(appDir, "..")
 
 async function importModule(relativePath) {
   const imported = await import(pathToFileURL(path.join(appDir, relativePath)).href)
@@ -126,6 +127,114 @@ describe("generación PDF de inventarios RAT", () => {
       downloads.every((download) => download.downloadName.startsWith("inventario-direccion-general-")),
       true,
     )
+  })
+
+  it("expone los nombres actualizados de subinventarios Grünenthal", async () => {
+    const ratData = await importModule("lib/grunenthal-rat-data.ts")
+    const sourcePdfs = await importModule("app/rat/utils/inventory-source-pdfs.ts")
+    const expectedNamesById = new Map([
+      [
+        "grunenthal-rat-inventario-flotilla-informacion-solicitada-a-empleado-por-correo",
+        "Compraventa-vehículo empleados",
+      ],
+      [
+        "grunenthal-rat-inventario-human-resources-checklist-de-documentacion",
+        "Checklist documentación de nuevos empleados",
+      ],
+      ["grunenthal-rat-inventario-human-resources-cedula-de-datos", "MyView"],
+      ["grunenthal-rat-inventario-human-resources-formato-de-alta-proveedor", "Empleados de proveedores"],
+      [
+        "grunenthal-rat-inventario-medical-lista-de-requerimientos-hcp-profesional-de-salud-nacional",
+        "Lista de requerimientos contratación HCP (Profesional de salud nacional)",
+      ],
+      [
+        "grunenthal-rat-inventario-medical-lista-de-requerimientos-hcp-profesionales-de-la-salud-extranjero",
+        "Lista de requerimientos contratación HCP (Profesionales de la salud extranjero)",
+      ],
+    ])
+    const expectedDownloadNamesById = new Map([
+      [
+        "grunenthal-rat-inventario-flotilla-informacion-solicitada-a-empleado-por-correo",
+        "inventario-flotilla-compraventa-vehiculo-empleados.pdf",
+      ],
+      [
+        "grunenthal-rat-inventario-human-resources-checklist-de-documentacion",
+        "inventario-human-resources-checklist-documentacion-de-nuevos-empleados.pdf",
+      ],
+      ["grunenthal-rat-inventario-human-resources-cedula-de-datos", "inventario-human-resources-myview.pdf"],
+      [
+        "grunenthal-rat-inventario-human-resources-formato-de-alta-proveedor",
+        "inventario-human-resources-empleados-de-proveedores.pdf",
+      ],
+      [
+        "grunenthal-rat-inventario-medical-lista-de-requerimientos-hcp-profesional-de-salud-nacional",
+        "inventario-medical-lista-de-requerimientos-contratacion-hcp-profesional-de-salud-nacional.pdf",
+      ],
+      [
+        "grunenthal-rat-inventario-medical-lista-de-requerimientos-hcp-profesionales-de-la-salud-extranjero",
+        "inventario-medical-lista-de-requerimientos-contratacion-hcp-profesionales-de-la-salud-extranjero.pdf",
+      ],
+    ])
+    const subInventoriesById = new Map(
+      ratData.GRUNENTHAL_RAT_INVENTORIES.flatMap((inventory) =>
+        inventory.subInventories.map((subInventory) => [subInventory.id, subInventory.databaseName]),
+      ),
+    )
+    const pdfLinksBySubInventoryId = new Map(
+      ratData.GRUNENTHAL_RAT_PDF_LINKS.map((link) => [link.subInventoryId, link.subInventoryName]),
+    )
+    const sourceDownloadsById = new Map(
+      ratData.GRUNENTHAL_RAT_INVENTORIES.flatMap((inventory) =>
+        sourcePdfs.collectInventorySourcePdfs(inventory).map((download) => [download.subInventoryId, download]),
+      ),
+    )
+
+    for (const [id, expectedName] of expectedNamesById) {
+      assert.equal(subInventoriesById.get(id), expectedName)
+      assert.equal(pdfLinksBySubInventoryId.get(id), expectedName)
+      assert.equal(sourceDownloadsById.get(id)?.downloadName, expectedDownloadNamesById.get(id))
+    }
+  })
+
+  it("mantiene los PDF fuente RAT con solo nombres actualizados", () => {
+    const pdfExpectations = [
+      [
+        "app/public/client/grunenthal/rat/flotilla/inventario-flotilla-informacion-solicitada-a-empleado-por-correo.pdf",
+        "Compraventa-vehículo empleados",
+        "Información solicitada a empleado por",
+      ],
+      [
+        "app/public/client/grunenthal/rat/hr/inventario-human-resources-checklist-de-documentacion.pdf",
+        "Checklist documentación",
+        "Checklist de documentación",
+      ],
+      [
+        "app/public/client/grunenthal/rat/hr/inventario-human-resources-cedula-de-datos.pdf",
+        "Human resources - MyView",
+        "Human resources - Cédula de Datos",
+      ],
+      [
+        "app/public/client/grunenthal/rat/hr/inventario-human-resources-formato-de-alta-proveedor.pdf",
+        "Human Resources - Empleados de proveedores",
+        "Human Resources - Formato de alta proveedor",
+      ],
+      [
+        "app/public/client/grunenthal/rat/medical/inventario-medical-lista-de-requerimientos-hcp-profesional-de-salud-nacional.pdf",
+        "Lista de requerimientos contratación HCP",
+        "Lista de requerimientos HCP",
+      ],
+      [
+        "app/public/client/grunenthal/rat/medical/inventario-medical-lista-de-requerimientos-hcp-profesionales-de-la-salud-extranjero.pdf",
+        "Lista de requerimientos contratación HCP",
+        "Lista de requerimientos HCP",
+      ],
+    ]
+
+    for (const [relativePath, expectedText, oldText] of pdfExpectations) {
+      const pdfContent = fs.readFileSync(path.join(projectRoot, relativePath), "latin1")
+      assert.match(pdfContent, new RegExp(expectedText.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")))
+      assert.doesNotMatch(pdfContent, new RegExp(oldText.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")))
+    }
   })
 
   it("planea cuatro descargas PDF para COMEX, incluyendo un PDF generado por subinventario sin fuente", async () => {
