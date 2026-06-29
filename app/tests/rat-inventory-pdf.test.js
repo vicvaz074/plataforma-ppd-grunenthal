@@ -101,6 +101,28 @@ describe("generación PDF de inventarios RAT", () => {
     assert.match(source, /head:\s*\[\[title\]\]/)
   })
 
+  it("conserva cada finalidad en una fila del PDF y omite la tabla de otros campos", async () => {
+    const pdf = await importModule("app/rat/utils/inventory-pdf.ts")
+    const source = fs.readFileSync(
+      path.join(appDir, "app/rat/utils/inventory-pdf.ts"),
+      "utf8",
+    )
+
+    assert.equal(typeof pdf.buildPurposeTableRows, "function")
+    assert.deepEqual(
+      pdf.buildPurposeTableRows([
+        "Primera línea del mismo párrafo\nsegunda línea del mismo párrafo",
+        "Otra finalidad completa",
+      ]),
+      [
+        ["Primera línea del mismo párrafo\nsegunda línea del mismo párrafo"],
+        ["Otra finalidad completa"],
+      ],
+    )
+    assert.match(source, /const body = buildPurposeTableRows\(purposes\)/)
+    assert.doesNotMatch(source, /Otros datos capturados/)
+  })
+
   it("prefiere los PDFs fuente vinculados para descargar inventarios Grünenthal", async () => {
     const sourcePdfs = await importModule("app/rat/utils/inventory-source-pdfs.ts")
     const ratData = await importModule("lib/grunenthal-rat-data.ts")
@@ -349,15 +371,14 @@ describe("generación PDF de inventarios RAT", () => {
     )
   })
 
-  it("oculta metadatos internos y arreglos técnicos de archivos en otros datos del PDF", () => {
+  it("no renderiza la tabla catch-all de otros datos al final del PDF", () => {
     const source = fs.readFileSync(
       path.join(appDir, "app/rat/utils/inventory-pdf.ts"),
       "utf8",
     )
 
-    assert.match(source, /isInternalPdfMetadataField/)
-    assert.match(source, /key\.startsWith\("grunenthal"\)/)
-    assert.match(source, /key\.endsWith\("FileIds"\)/)
-    assert.match(source, /key\.endsWith\("FileNames"\)/)
+    assert.doesNotMatch(source, /const remaining = Object\.keys\(sub\)/)
+    assert.doesNotMatch(source, /const otherData/)
+    assert.doesNotMatch(source, /Otros datos capturados/)
   })
 })
