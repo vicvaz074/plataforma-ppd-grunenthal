@@ -43,6 +43,7 @@ import {
 } from "lucide-react"
 import { useToast } from "@/components/ui/use-toast"
 import { FilePreviewDialog } from "@/components/file-preview-dialog"
+import { buildContractAnalysisModalDetails } from "./contract-analysis-modal"
 import {
   deleteFile,
   getFilesByCategory,
@@ -91,6 +92,7 @@ type ContractAttachment = ContractMeta["attachments"][number] & {
   mimeType?: string
   publicPath?: string
   previewPdfPath?: string
+  previewPageImagePaths?: string[]
   size?: number
 }
 
@@ -367,6 +369,7 @@ const buildPublicContractAttachment = (record: GrunenthalGrtContractDocument): C
   mimeType: record.mimeType,
   publicPath: record.path,
   previewPdfPath: record.extension !== "pdf" ? record.previewPdfPath : undefined,
+  previewPageImagePaths: record.previewPageImagePaths,
   size: record.size,
 })
 
@@ -542,6 +545,7 @@ const buildFallbackContractFromGrtDocument = (record: GrunenthalGrtContractDocum
         : {}),
       documentViewMode: record.extension !== "pdf" ? "pdf-preview" : "original",
       ...(record.extension !== "pdf" ? { previewPdfPath: record.previewPdfPath } : {}),
+      ...(record.previewPageImagePaths ? { previewPageImagePaths: record.previewPageImagePaths } : {}),
       analysisInModal: true,
       fallbackFromAsset: true,
     },
@@ -610,6 +614,10 @@ export default function DocumentsAndClausesPage() {
   const [scheduleUpdateReminder, setScheduleUpdateReminder] = useState(false)
   const [updateReminderInterval, setUpdateReminderInterval] =
     useState<AuditReminderRecurrenceInterval>("annual")
+  const analysisModalDetails = useMemo(
+    () => (analysisContract ? buildContractAnalysisModalDetails(analysisContract) : null),
+    [analysisContract],
+  )
 
   const filledTemplateText = useMemo(() => {
     if (!activeTemplate?.baseTemplate) return ""
@@ -1114,6 +1122,7 @@ export default function DocumentsAndClausesPage() {
           ...(attachment.previewPdfPath
             ? { previewPdfPath: attachment.previewPdfPath, previewMimeType: "application/pdf" }
             : {}),
+          ...(attachment.previewPageImagePaths ? { previewPageImagePaths: attachment.previewPageImagePaths } : {}),
         },
       }
     }
@@ -2046,9 +2055,6 @@ export default function DocumentsAndClausesPage() {
                 <Badge variant="secondary">
                   {GRUNENTHAL_THIRD_PARTY_ANALYSIS_MATRIX.length} registros
                 </Badge>
-                <Badge variant="outline">
-                  Actualizado: {GRUNENTHAL_THIRD_PARTY_ANALYSIS_MATRIX_SOURCE.lastUpdated}
-                </Badge>
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -2215,7 +2221,7 @@ export default function DocumentsAndClausesPage() {
         }}
       >
         <DialogContent className="!flex max-h-[86vh] !w-[min(1040px,calc(100vw_-_2rem))] !max-w-[1040px] flex-col gap-0 overflow-hidden rounded-[24px] border-slate-200 p-0 shadow-2xl">
-          {analysisContract && (
+          {analysisContract && analysisModalDetails && (
             <>
               <DialogHeader className="shrink-0 border-b bg-background py-4 pl-5 pr-16 text-left sm:pl-6">
                 <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-start">
@@ -2250,26 +2256,28 @@ export default function DocumentsAndClausesPage() {
                       </div>
                       <div className="flex flex-col gap-3 text-sm leading-relaxed">
                         <p>
-                          <strong>Resultado:</strong>{" "}
-                          {analysisContract.clauseComplianceLabel || analysisContract.clauseRegulation}
+                          <strong>Resultado:</strong> {analysisModalDetails.result}
                         </p>
-                        {analysisContract.clauseType && (
+                        {analysisModalDetails.clauseType && (
                           <p>
-                            <strong>Cláusula revisada:</strong> {analysisContract.clauseType}
+                            <strong>Cláusula revisada:</strong> {analysisModalDetails.clauseType}
                           </p>
                         )}
-                        <p>
-                          <strong>Criterio:</strong> {analysisContract.clauseRegulation}
-                        </p>
-                        {analysisContract.complianceNeeds && (
+                        {analysisModalDetails.criterion && (
                           <p>
-                            <strong>Recomendación:</strong> {analysisContract.complianceNeeds}
+                            <strong>Criterio:</strong> {analysisModalDetails.criterion}
                           </p>
                         )}
-                        {analysisContract.clauseComplianceNotes && (
-                          <p className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-amber-900">
-                            <strong>Nota:</strong> {analysisContract.clauseComplianceNotes}
+                        {analysisModalDetails.recommendation && (
+                          <p>
+                            <strong>Recomendación:</strong> {analysisModalDetails.recommendation}
                           </p>
+                        )}
+                        {analysisModalDetails.note && (
+                          <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-amber-950 shadow-sm">
+                            <p className="text-xs font-semibold uppercase text-amber-800">Nota de cumplimiento</p>
+                            <p className="mt-1">{analysisModalDetails.note}</p>
+                          </div>
                         )}
                       </div>
                     </div>
@@ -2332,9 +2340,9 @@ export default function DocumentsAndClausesPage() {
                       <strong>Fuente:</strong>{" "}
                       {(analysisContract.metadata?.sourceFolder as string) || "Historial de contratos"}
                     </p>
-                    {analysisContract.riskNotes && (
+                    {analysisModalDetails.riskNote && (
                       <p className="rounded-md bg-muted px-3 py-2">
-                        <strong>Riesgo:</strong> {analysisContract.riskNotes}
+                        <strong>Riesgo:</strong> {analysisModalDetails.riskNote}
                       </p>
                     )}
                     <div className="flex flex-col gap-3 rounded-lg border bg-muted/20 p-3">
