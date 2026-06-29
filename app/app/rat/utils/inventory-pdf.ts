@@ -176,6 +176,12 @@ const normalizePurposes = (purposes?: string[]) =>
         .filter((purpose): purpose is string => Boolean(purpose))
     : [];
 
+export const buildPurposeTableRows = (purposes: string[]): Array<[string]> =>
+  purposes
+    .map((purpose) => normalizePdfCellText(purpose))
+    .filter((purpose) => purpose.trim().length > 0)
+    .map((purpose) => [purpose]);
+
 const normalizePurposeKey = (purpose?: string | null) => {
   if (typeof purpose !== "string") return "__EMPTY__";
   const trimmed = purpose.trim().replace(/\s+/g, " ");
@@ -803,15 +809,6 @@ const getField = (obj: any, key: string) => {
   return normalizePdfCellText(formatValue(key, obj[key]));
 };
 
-const isInternalPdfMetadataField = (key: string) =>
-  key.startsWith("grunenthal") ||
-  key.endsWith("File") ||
-  key.endsWith("Files") ||
-  key.endsWith("FileId") ||
-  key.endsWith("FileIds") ||
-  key.endsWith("FileName") ||
-  key.endsWith("FileNames");
-
 const normalizeAggregateValueKey = (value: string) =>
   value
     .normalize("NFD")
@@ -873,10 +870,7 @@ export const generateInventoryPDF = (
   };
 
   const renderPurposeTable = (title: string, purposes: string[]) => {
-    const body = purposes
-      .map((purpose) => normalizePdfCellText(purpose))
-      .filter((purpose) => purpose.trim().length > 0)
-      .map((purpose) => [purpose]);
+    const body = buildPurposeTableRows(purposes);
 
     if (body.length === 0) return;
 
@@ -1627,45 +1621,6 @@ export const generateInventoryPDF = (
         }
       }
     });
-
-    const remaining = Object.keys(sub).filter(
-      (k) =>
-        k !== "personalData" &&
-        k !== "id" &&
-        k !== "secondaryPurposesConsent" &&
-        k !== "additionalAccesses" &&
-        k !== "additionalTransfers" &&
-        !usedFields.has(k) &&
-        !k.startsWith("showOther") &&
-        !isInternalPdfMetadataField(k),
-    );
-    const otherData: [string, string][] = [];
-    remaining.forEach((key) => {
-      const formatted = getField(sub as any, key);
-      if (formatted !== "No lo completó") {
-        otherData.push([FIELD_LABELS[key] || humanize(key), formatted]);
-      }
-    });
-    if (otherData.length > 0) {
-      const otherDataStartY = renderTableTitle("Otros datos capturados");
-      autoTable(doc, {
-        startY: otherDataStartY,
-        head: [["Otros datos capturados", "Respuesta"]],
-        body: otherData,
-        styles: { fontSize: 10, cellPadding: 2 },
-        headStyles: {
-          fillColor: rgbArray(accentRgb),
-          textColor: accentTextColor,
-          fontSize: 11,
-          fontStyle: "bold",
-        },
-        columnStyles: {
-          0: { cellWidth: 62 },
-          1: { cellWidth: 116 },
-        },
-        margin: { left: 16, right: 14 },
-      });
-    }
 
     if (idx < inventory.subInventories.length - 1) {
       doc.addPage();
