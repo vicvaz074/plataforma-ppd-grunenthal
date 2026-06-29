@@ -9830,7 +9830,7 @@ export const GRUNENTHAL_RAT_INVENTORIES: Inventory[] = [
       },
       {
         "id": "grunenthal-rat-inventario-flotilla-informacion-solicitada-a-empleado-por-correo",
-        "databaseName": "Información solicitada a empleado por Correo",
+        "databaseName": "Compraventa-vehículo empleados",
         "otherConsentException": "",
         "otherConsentMechanism": "",
         "otherConsentType": "",
@@ -10195,6 +10195,7 @@ export const GRUNENTHAL_RAT_INVENTORIES: Inventory[] = [
         "riskLevel": "medio",
         "grunenthalSourcePdfFileId": "grunenthal-file-grunenthal-rat-inventario-flotilla-informacion-solicitada-a-empleado-por-correo",
         "grunenthalSourcePdfPath": "/client/grunenthal/rat/flotilla/inventario-flotilla-informacion-solicitada-a-empleado-por-correo.pdf",
+        "grunenthalSourcePdfDownloadName": "inventario-flotilla-compraventa-vehiculo-empleados.pdf",
         "grunenthalSourcePdfStatus": "vinculado",
         "grunenthalValidationStatus": "verificado",
         "grunenthalValidationFields": [
@@ -10864,7 +10865,7 @@ export const GRUNENTHAL_RAT_INVENTORIES: Inventory[] = [
       },
       {
         "id": "grunenthal-rat-inventario-human-resources-checklist-de-documentacion",
-        "databaseName": "Checklist de documentación",
+        "databaseName": "Checklist documentación de nuevos empleados",
         "otherConsentException": "",
         "otherConsentMechanism": "",
         "otherConsentType": "",
@@ -11606,6 +11607,7 @@ export const GRUNENTHAL_RAT_INVENTORIES: Inventory[] = [
         "riskLevel": "medio",
         "grunenthalSourcePdfFileId": "grunenthal-file-grunenthal-rat-inventario-human-resources-checklist-de-documentacion",
         "grunenthalSourcePdfPath": "/client/grunenthal/rat/hr/inventario-human-resources-checklist-de-documentacion.pdf",
+        "grunenthalSourcePdfDownloadName": "inventario-human-resources-checklist-documentacion-de-nuevos-empleados.pdf",
         "grunenthalSourcePdfStatus": "vinculado",
         "grunenthalValidationStatus": "verificado",
         "grunenthalValidationFields": [
@@ -11644,7 +11646,7 @@ export const GRUNENTHAL_RAT_INVENTORIES: Inventory[] = [
       },
       {
         "id": "grunenthal-rat-inventario-human-resources-cedula-de-datos",
-        "databaseName": "Cédula de Datos",
+        "databaseName": "MyView",
         "otherConsentException": "",
         "otherConsentMechanism": "",
         "otherConsentType": "",
@@ -15346,6 +15348,7 @@ export const GRUNENTHAL_RAT_INVENTORIES: Inventory[] = [
         "riskLevel": "medio",
         "grunenthalSourcePdfFileId": "grunenthal-file-grunenthal-rat-inventario-human-resources-cedula-de-datos",
         "grunenthalSourcePdfPath": "/client/grunenthal/rat/hr/inventario-human-resources-cedula-de-datos.pdf",
+        "grunenthalSourcePdfDownloadName": "inventario-human-resources-myview.pdf",
         "grunenthalSourcePdfStatus": "vinculado",
         "grunenthalValidationStatus": "verificado",
         "grunenthalValidationFields": [
@@ -15384,7 +15387,7 @@ export const GRUNENTHAL_RAT_INVENTORIES: Inventory[] = [
       },
       {
         "id": "grunenthal-rat-inventario-human-resources-formato-de-alta-proveedor",
-        "databaseName": "Formato de alta proveedor",
+        "databaseName": "Empleados de proveedores",
         "otherConsentException": "",
         "otherConsentMechanism": "",
         "otherConsentType": "",
@@ -16039,6 +16042,7 @@ export const GRUNENTHAL_RAT_INVENTORIES: Inventory[] = [
         "riskLevel": "medio",
         "grunenthalSourcePdfFileId": "grunenthal-file-grunenthal-rat-inventario-human-resources-formato-de-alta-proveedor",
         "grunenthalSourcePdfPath": "/client/grunenthal/rat/hr/inventario-human-resources-formato-de-alta-proveedor.pdf",
+        "grunenthalSourcePdfDownloadName": "inventario-human-resources-empleados-de-proveedores.pdf",
         "grunenthalSourcePdfStatus": "vinculado",
         "grunenthalValidationStatus": "verificado",
         "grunenthalValidationFields": [
@@ -17937,7 +17941,7 @@ export const GRUNENTHAL_RAT_INVENTORIES: Inventory[] = [
       },
       {
         "id": "grunenthal-rat-inventario-medical-lista-de-requerimientos-hcp-profesional-de-salud-nacional",
-        "databaseName": "Lista de requerimientos HCP (Profesional de salud nacional)",
+        "databaseName": "Lista de requerimientos contratación HCP (Profesional de salud nacional)",
         "otherConsentException": "",
         "otherConsentMechanism": "",
         "otherConsentType": "",
@@ -18330,6 +18334,7 @@ export const GRUNENTHAL_RAT_INVENTORIES: Inventory[] = [
         "riskLevel": "medio",
         "grunenthalSourcePdfFileId": "grunenthal-file-grunenthal-rat-inventario-medical-lista-de-requerimientos-hcp-profesional-de-salud-nacional",
         "grunenthalSourcePdfPath": "/client/grunenthal/rat/medical/inventario-medical-lista-de-requerimientos-hcp-profesional-de-salud-nacional.pdf",
+        "grunenthalSourcePdfDownloadName": "inventario-medical-lista-de-requerimientos-contratacion-hcp-profesional-de-salud-nacional.pdf",
         "grunenthalSourcePdfStatus": "vinculado",
         "grunenthalValidationStatus": "verificado",
         "grunenthalValidationFields": [
@@ -18368,7 +18373,7 @@ export const GRUNENTHAL_RAT_INVENTORIES: Inventory[] = [
       },
       {
         "id": "grunenthal-rat-inventario-medical-lista-de-requerimientos-hcp-profesionales-de-la-salud-extranjero",
-        "databaseName": "Lista de requerimientos HCP (Profesionales de la salud extranjero)",
+        "databaseName": "Lista de requerimientos contratación HCP (Profesionales de la salud extranjero)",
         "otherConsentException": "",
         "otherConsentMechanism": "",
         "otherConsentType": "",
@@ -18679,6 +18684,7 @@ export const GRUNENTHAL_RAT_INVENTORIES: Inventory[] = [
         "riskLevel": "medio",
         "grunenthalSourcePdfFileId": "grunenthal-file-grunenthal-rat-inventario-medical-lista-de-requerimientos-hcp-profesionales-de-la-salud-extranjero",
         "grunenthalSourcePdfPath": "/client/grunenthal/rat/medical/inventario-medical-lista-de-requerimientos-hcp-profesionales-de-la-salud-extranjero.pdf",
+        "grunenthalSourcePdfDownloadName": "inventario-medical-lista-de-requerimientos-contratacion-hcp-profesionales-de-la-salud-extranjero.pdf",
         "grunenthalSourcePdfStatus": "vinculado",
         "grunenthalValidationStatus": "verificado",
         "grunenthalValidationFields": [
@@ -22676,7 +22682,7 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
     "inventoryId": "grunenthal-rat-area-flotilla",
     "inventoryName": "Flotilla",
     "subInventoryId": "grunenthal-rat-inventario-flotilla-informacion-solicitada-a-empleado-por-correo",
-    "subInventoryName": "Información solicitada a empleado por Correo",
+    "subInventoryName": "Compraventa-vehículo empleados",
     "publicPath": "/client/grunenthal/rat/flotilla/inventario-flotilla-informacion-solicitada-a-empleado-por-correo.pdf",
     "matchScore": 1,
     "validatedFields": [
@@ -22802,7 +22808,7 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
     "inventoryId": "grunenthal-rat-area-hr",
     "inventoryName": "HR",
     "subInventoryId": "grunenthal-rat-inventario-human-resources-formato-de-alta-proveedor",
-    "subInventoryName": "Formato de alta proveedor",
+    "subInventoryName": "Empleados de proveedores",
     "publicPath": "/client/grunenthal/rat/hr/inventario-human-resources-formato-de-alta-proveedor.pdf",
     "matchScore": 1,
     "validatedFields": [
@@ -22844,7 +22850,7 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
     "inventoryId": "grunenthal-rat-area-hr",
     "inventoryName": "HR",
     "subInventoryId": "grunenthal-rat-inventario-human-resources-cedula-de-datos",
-    "subInventoryName": "Cédula de Datos",
+    "subInventoryName": "MyView",
     "publicPath": "/client/grunenthal/rat/hr/inventario-human-resources-cedula-de-datos.pdf",
     "matchScore": 1,
     "validatedFields": [
@@ -22886,7 +22892,7 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
     "inventoryId": "grunenthal-rat-area-hr",
     "inventoryName": "HR",
     "subInventoryId": "grunenthal-rat-inventario-human-resources-checklist-de-documentacion",
-    "subInventoryName": "Checklist de documentación",
+    "subInventoryName": "Checklist documentación de nuevos empleados",
     "publicPath": "/client/grunenthal/rat/hr/inventario-human-resources-checklist-de-documentacion.pdf",
     "matchScore": 1,
     "validatedFields": [
@@ -23054,7 +23060,7 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
     "inventoryId": "grunenthal-rat-area-medical",
     "inventoryName": "Medical",
     "subInventoryId": "grunenthal-rat-inventario-medical-lista-de-requerimientos-hcp-profesional-de-salud-nacional",
-    "subInventoryName": "Lista de requerimientos HCP (Profesional de salud nacional)",
+    "subInventoryName": "Lista de requerimientos contratación HCP (Profesional de salud nacional)",
     "publicPath": "/client/grunenthal/rat/medical/inventario-medical-lista-de-requerimientos-hcp-profesional-de-salud-nacional.pdf",
     "matchScore": 1,
     "validatedFields": [
@@ -23096,7 +23102,7 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
     "inventoryId": "grunenthal-rat-area-medical",
     "inventoryName": "Medical",
     "subInventoryId": "grunenthal-rat-inventario-medical-lista-de-requerimientos-hcp-profesionales-de-la-salud-extranjero",
-    "subInventoryName": "Lista de requerimientos HCP (Profesionales de la salud extranjero)",
+    "subInventoryName": "Lista de requerimientos contratación HCP (Profesionales de la salud extranjero)",
     "publicPath": "/client/grunenthal/rat/medical/inventario-medical-lista-de-requerimientos-hcp-profesionales-de-la-salud-extranjero.pdf",
     "matchScore": 1,
     "validatedFields": [
@@ -24228,9 +24234,9 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     },
     {
       "assetId": "grunenthal-rat-inventario-flotilla-informacion-solicitada-a-empleado-por-correo",
-      "pdfName": "inventario_Flotilla_-_Información_solicitada_a_empleado_por_Correo.pdf",
+      "pdfName": "inventario-flotilla-compraventa-vehiculo-empleados.pdf",
       "inventoryName": "Flotilla",
-      "subInventoryName": "Información solicitada a empleado por Correo",
+      "subInventoryName": "Compraventa-vehículo empleados",
       "status": "verificado",
       "matchScore": 1,
       "validatedFields": [
@@ -24351,9 +24357,9 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     },
     {
       "assetId": "grunenthal-rat-inventario-human-resources-formato-de-alta-proveedor",
-      "pdfName": "inventario_Human_Resources_-_Formato_de_alta_proveedor.pdf",
+      "pdfName": "inventario-human-resources-empleados-de-proveedores.pdf",
       "inventoryName": "HR",
-      "subInventoryName": "Formato de alta proveedor",
+      "subInventoryName": "Empleados de proveedores",
       "status": "verificado",
       "matchScore": 1,
       "validatedFields": [
@@ -24392,9 +24398,9 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     },
     {
       "assetId": "grunenthal-rat-inventario-human-resources-cedula-de-datos",
-      "pdfName": "inventario_Human_resources_-_Cédula_de_Datos.pdf",
+      "pdfName": "inventario-human-resources-myview.pdf",
       "inventoryName": "HR",
-      "subInventoryName": "Cédula de Datos",
+      "subInventoryName": "MyView",
       "status": "verificado",
       "matchScore": 1,
       "validatedFields": [
@@ -24433,9 +24439,9 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     },
     {
       "assetId": "grunenthal-rat-inventario-human-resources-checklist-de-documentacion",
-      "pdfName": "inventario_Human_resources_-_Checklist_de_documentación.pdf",
+      "pdfName": "inventario-human-resources-checklist-documentacion-de-nuevos-empleados.pdf",
       "inventoryName": "HR",
-      "subInventoryName": "Checklist de documentación",
+      "subInventoryName": "Checklist documentación de nuevos empleados",
       "status": "verificado",
       "matchScore": 1,
       "validatedFields": [
@@ -24597,9 +24603,9 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     },
     {
       "assetId": "grunenthal-rat-inventario-medical-lista-de-requerimientos-hcp-profesional-de-salud-nacional",
-      "pdfName": "inventario_Medical_-_Lista_de_requerimientos_HCP_(Profesional_de_salud_nacional)_.pdf",
+      "pdfName": "inventario-medical-lista-de-requerimientos-contratacion-hcp-profesional-de-salud-nacional.pdf",
       "inventoryName": "Medical",
-      "subInventoryName": "Lista de requerimientos HCP (Profesional de salud nacional)",
+      "subInventoryName": "Lista de requerimientos contratación HCP (Profesional de salud nacional)",
       "status": "verificado",
       "matchScore": 1,
       "validatedFields": [
@@ -24638,9 +24644,9 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     },
     {
       "assetId": "grunenthal-rat-inventario-medical-lista-de-requerimientos-hcp-profesionales-de-la-salud-extranjero",
-      "pdfName": "inventario_Medical_-_Lista_de_requerimientos_HCP_(Profesionales_de_la_salud_extranjero).pdf",
+      "pdfName": "inventario-medical-lista-de-requerimientos-contratacion-hcp-profesionales-de-la-salud-extranjero.pdf",
       "inventoryName": "Medical",
-      "subInventoryName": "Lista de requerimientos HCP (Profesionales de la salud extranjero)",
+      "subInventoryName": "Lista de requerimientos contratación HCP (Profesionales de la salud extranjero)",
       "status": "verificado",
       "matchScore": 1,
       "validatedFields": [
