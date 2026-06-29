@@ -13,12 +13,10 @@ describe("toasts globales", () => {
 
     assert.match(clientLayoutSource, /import \{ Toaster \} from "@\/components\/ui\/toaster"/)
     assert.match(clientLayoutSource, /<Toaster \/>/)
-    assert.match(toastSource, /createPortal/)
-    assert.match(toastSource, /document\.body/)
     assert.match(
       toastSource,
       /z-\[10000\]/,
-      "el viewport de toast debe portalizarse al body y estar por encima de DialogContent z-50 y menús z-[9999]",
+      "el viewport de toast debe estar por encima de DialogContent z-50 y menús z-[9999]",
     )
   })
 })

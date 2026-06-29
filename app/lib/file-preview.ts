@@ -6,7 +6,6 @@ export type FilePreviewDescriptor = {
   title: string
   fileUrl: string
   previewUrl: string
-  previewPageImageUrls?: string[]
   kind: FilePreviewKind
   previewKind: FilePreviewKind
   canEmbed: boolean
@@ -53,14 +52,6 @@ function canEmbedKind(kind: FilePreviewKind) {
 function stringMetadataValue(file: StoredFile, key: string) {
   const value = file.metadata?.[key]
   return typeof value === "string" && value.trim() ? value : undefined
-}
-
-function stringArrayMetadataValue(file: StoredFile, key: string) {
-  const value = file.metadata?.[key]
-  if (!Array.isArray(value)) return undefined
-
-  const strings = value.filter((item): item is string => typeof item === "string" && item.trim().length > 0)
-  return strings.length ? strings : undefined
 }
 
 function previewCandidateFor(file: StoredFile, fallbackUrl: string) {
@@ -111,13 +102,11 @@ export function buildFilePreviewDescriptor(file: StoredFile): FilePreviewDescrip
   const extension = getFileExtension(file).toUpperCase() || "ARCHIVO"
   const title =
     String(file.metadata?.noticeName || file.metadata?.title || file.metadata?.displayName || file.name || "Documento")
-  const previewPageImageUrls = stringArrayMetadataValue(file, "previewPageImagePaths")?.map(createFileURL)
 
   return {
     title,
     fileUrl,
     previewUrl: preview.url,
-    previewPageImageUrls,
     kind,
     previewKind: preview.kind,
     canEmbed: preview.kind !== "json" && canEmbedKind(preview.kind),

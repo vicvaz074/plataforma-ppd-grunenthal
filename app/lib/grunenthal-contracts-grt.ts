@@ -8,7 +8,6 @@ export type GrunenthalGrtContractDocument = {
   displayName: string
   path: string
   previewPdfPath: string
-  previewPageImagePaths?: string[]
   extension: "pdf" | "docx"
   mimeType: string
   size: number
@@ -25,14 +24,6 @@ export type GrunenthalGrtContractDocument = {
   riskLevel: ContractMeta["riskLevel"]
   documentKind: string
 }
-
-const MASTER_CONTROL_PREVIEW_IMAGE_PATHS = Array.from(
-  { length: 50 },
-  (_, index) =>
-    `/client/grunenthal/third-party-contracts/contratos-grt/previews/contract-mastercontrol/page-${String(
-      index + 1,
-    ).padStart(2, "0")}.jpg`,
-)
 
 export const GRUNENTHAL_GRT_CONTRACT_DOCUMENTS: GrunenthalGrtContractDocument[] = [
   {
@@ -483,20 +474,18 @@ export const GRUNENTHAL_GRT_CONTRACT_DOCUMENTS: GrunenthalGrtContractDocument[] 
     extension: "pdf",
     mimeType: "application/pdf",
     size: 379102,
-    providerIdentity: "NEGOCIOS DE INNOVACIÓN FARMACÉUTICA, S.C.",
-    area: "COMEX",
-    contractObject: "Servicios legales, consultoría, mercadotecnia, asesoría, marcas, inteligencia competitiva y capacitación.",
+    providerIdentity: "CONSULTORES Y ASESORES FPM, S.C.",
+    area: "Medical / COMEX",
+    contractObject: "Adendum a contrato de prestación de servicios.",
     communicationType: "remision",
     relationType: "encargado",
-    clauseComplianceStatus: "no_cumple",
-    clauseComplianceLabel: "No cumple",
-    clauseType: "(1) Vigésima. Protección de Datos Personales",
-    analysisSummary:
-      "Las cláusulas no cumplen con los requisitos de la LFPDPPP y su Reglamento. Se sugiere emplear la cláusula C1 del Manual de Relaciones con Terceros y/o en su caso, los apéndices 2 CM-1 o 3 C-1 del mismo donde se delimitan con amplio detalle las obligaciones del Encargado.",
-    recommendation:
-      "Las cláusulas no cumplen con los requisitos de la LFPDPPP y su Reglamento. Se sugiere emplear la cláusula C1 del Manual de Relaciones con Terceros y/o en su caso, los apéndices 2 CM-1 o 3 C-1 del mismo donde se delimitan con amplio detalle las obligaciones del Encargado.",
+    clauseComplianceStatus: "requiere_revision",
+    clauseComplianceLabel: "Requiere revisión",
+    clauseType: "Adendum contractual",
+    analysisSummary: "Se trata de una prórroga/adendum; debe revisarse contra el contrato principal para confirmar cláusulas de datos.",
+    recommendation: "Vincular contrato principal y dictamen de cláusula C1/CM-1.",
     riskLevel: "medio",
-    documentKind: "Adendum contractual",
+    documentKind: "Adendum",
   },
   {
     id: "grunenthal-grt-contract-022-an-eversana-company-is-requesting-your-signat-1",
@@ -955,80 +944,5 @@ export const GRUNENTHAL_GRT_CONTRACT_DOCUMENTS: GrunenthalGrtContractDocument[] 
     recommendation: "Usar cláusula C2 o apéndice CM-2.",
     riskLevel: "medio",
     documentKind: "Contrato firmado",
-  },
-  {
-    id: "grunenthal-grt-contract-041-terminos-de-servicio-de-vimeo",
-    slug: "terminos-de-servicio-de-vimeo",
-    sourceName: "Términos de servicio de Vimeo.pdf",
-    fileName: "terminos-de-servicio-de-vimeo.pdf",
-    displayName: "Términos de servicio de Vimeo",
-    path: "/client/grunenthal/third-party-contracts/contratos-grt/terminos-de-servicio-de-vimeo.pdf",
-    previewPdfPath: "/client/grunenthal/third-party-contracts/contratos-grt/terminos-de-servicio-de-vimeo.pdf",
-    extension: "pdf",
-    mimeType: "application/pdf",
-    size: 489020,
-    providerIdentity: "VIMEO",
-    area: "Globales",
-    contractObject: "Términos de Uso de plataforma para la creación y divulgación de videos.",
-    communicationType: "transferencia",
-    relationType: "tercero",
-    clauseComplianceStatus: "cumple",
-    clauseComplianceLabel: "Sí cumple",
-    clauseType: "(1) Privacy policy",
-    analysisSummary: "La cláusula si cumplen con los requisitos de la LFPDPPP.",
-    recommendation: "La cláusula si cumplen con los requisitos de la LFPDPPP.",
-    riskLevel: "bajo",
-    documentKind: "Términos de uso",
-  },
-  {
-    id: "grunenthal-grt-contract-042-gptw-grunenthal-av-vertrag",
-    slug: "gptw-grunenthal-av-vertrag",
-    sourceName: "GPTW_Grünenthal_AV-Vertrag (1).pdf",
-    fileName: "gptw-grunenthal-av-vertrag.pdf",
-    displayName: "GPTW Grünenthal AV-Vertrag",
-    path: "/client/grunenthal/third-party-contracts/contratos-grt/gptw-grunenthal-av-vertrag.pdf",
-    previewPdfPath: "/client/grunenthal/third-party-contracts/contratos-grt/gptw-grunenthal-av-vertrag.pdf",
-    extension: "pdf",
-    mimeType: "application/pdf",
-    size: 10889968,
-    providerIdentity: "GPTW Deutschland GmbH",
-    area: "Globales",
-    contractObject: "Servicios para la certificación como Great Place To Work.",
-    communicationType: "transferencia",
-    relationType: "tercero",
-    clauseComplianceStatus: "no_cumple",
-    clauseComplianceLabel: "No cumple",
-    clauseType: "(1) Auftragsverarbeitungsvertrag",
-    analysisSummary:
-      "El contrato regula una remisión de datos personales, como el responsable trata los datos personales de manera independiente de Grünenthal, con el objetivo de funcionar como un certificador independiente, se debe de considerar una transferencia.",
-    recommendation:
-      "El contrato regula una remisión de datos personales, como el responsable trata los datos personales de manera independiente de Grünenthal, con el objetivo de funcionar como un certificador independiente, se debe de considerar una transferencia.",
-    riskLevel: "medio",
-    documentKind: "Contrato de servicios",
-  },
-  {
-    id: "grunenthal-grt-contract-043-contract-mastercontrol",
-    slug: "contract-mastercontrol",
-    sourceName: "Contract+MasterControl.pdf",
-    fileName: "contract-mastercontrol.pdf",
-    displayName: "Contract MasterControl",
-    path: "/client/grunenthal/third-party-contracts/contratos-grt/contract-mastercontrol.pdf",
-    previewPdfPath: "/client/grunenthal/third-party-contracts/contratos-grt/contract-mastercontrol.pdf",
-    previewPageImagePaths: MASTER_CONTROL_PREVIEW_IMAGE_PATHS,
-    extension: "pdf",
-    mimeType: "application/pdf",
-    size: 8814242,
-    providerIdentity: "MASTER CONTROL INC.",
-    area: "Globales",
-    contractObject: "Licencia de uso de software y prestación de servicios de capacitación.",
-    communicationType: "remision",
-    relationType: "encargado",
-    clauseComplianceStatus: "cumple",
-    clauseComplianceLabel: "Sí cumple",
-    clauseType: "(1) Data Processing Addendum",
-    analysisSummary: "La cláusula si cumplen con los requisitos de la LFPDPPP.",
-    recommendation: "La cláusula si cumplen con los requisitos de la LFPDPPP.",
-    riskLevel: "bajo",
-    documentKind: "Contrato de licencia",
   },
 ]
