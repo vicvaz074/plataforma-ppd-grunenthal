@@ -285,6 +285,7 @@ function buildGrtContractStoredFile(record: GrunenthalGrtContractDocument): Stor
       ...(usesGeneratedPdfPreview
         ? { previewPdfPath: record.previewPdfPath, previewMimeType: "application/pdf" }
         : {}),
+      ...(record.previewPageImagePaths ? { previewPageImagePaths: record.previewPageImagePaths } : {}),
       folder: "third-party-contracts/contratos-grt",
       extension: record.extension,
       title: record.displayName,
@@ -899,6 +900,7 @@ function buildGrtThirdPartyContract(record: GrunenthalGrtContractDocument, index
       ...(matrixRow ? { analysisMatrixRowId: matrixRow.id } : {}),
       documentViewMode: usesGeneratedPdfPreview ? "pdf-preview" : "original",
       ...(usesGeneratedPdfPreview ? { previewPdfPath: record.previewPdfPath } : {}),
+      ...(record.previewPageImagePaths ? { previewPageImagePaths: record.previewPageImagePaths } : {}),
       analysisInModal: true,
       createdBy: "Admin",
       createdAt: SEEDED_AT,

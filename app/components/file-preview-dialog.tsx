@@ -26,10 +26,62 @@ type PreviewLoadState = {
   message?: string
 }
 
+const PDF_PAGE_BATCH_SIZE = 8
+
+function ImagePagePreview({ pages, title }: { pages: string[]; title: string }) {
+  const [pageLimit, setPageLimit] = React.useState(PDF_PAGE_BATCH_SIZE)
+
+  React.useEffect(() => {
+    setPageLimit(PDF_PAGE_BATCH_SIZE)
+  }, [pages])
+
+  const visiblePages = pages.slice(0, pageLimit)
+  const canLoadMorePages = pageLimit < pages.length
+  const loadMorePages = () => {
+    setPageLimit((currentPageLimit) => Math.min(pages.length, currentPageLimit + PDF_PAGE_BATCH_SIZE))
+  }
+
+  return (
+    <div className="overflow-hidden rounded-[18px] border border-slate-200 bg-muted/20 shadow-inner">
+      <div className="min-h-[340px] bg-slate-100 px-2 py-3">
+        {visiblePages.map((pageSrc, index) => (
+          <div
+            key={pageSrc}
+            className="flex justify-center border-b border-slate-200/80 bg-slate-100/70 p-3 last:border-b-0 sm:p-5"
+          >
+            <img
+              src={pageSrc}
+              alt={`${title}, página ${index + 1}`}
+              className="max-w-full rounded-sm bg-white shadow-sm"
+              loading={index < 2 ? "eager" : "lazy"}
+            />
+          </div>
+        ))}
+      </div>
+      {canLoadMorePages ? (
+        <div className="flex justify-center border-t border-slate-200 bg-background px-4 py-3">
+          <Button type="button" variant="outline" size="sm" onClick={loadMorePages}>
+            Cargar más páginas ({visiblePages.length} de {pages.length})
+          </Button>
+        </div>
+      ) : null}
+    </div>
+  )
+}
+
 function PdfCanvasPreview({ src, title }: { src: string; title: string }) {
   const pagesRef = React.useRef<HTMLDivElement | null>(null)
   const renderTokenRef = React.useRef(0)
   const [state, setState] = React.useState<PreviewLoadState>({ status: "idle" })
+  const [pageLimit, setPageLimit] = React.useState(PDF_PAGE_BATCH_SIZE)
+  const [totalPages, setTotalPages] = React.useState(0)
+  const [renderedPageCount, setRenderedPageCount] = React.useState(0)
+
+  React.useEffect(() => {
+    setPageLimit(PDF_PAGE_BATCH_SIZE)
+    setTotalPages(0)
+    setRenderedPageCount(0)
+  }, [src])
 
   React.useEffect(() => {
     const host = pagesRef.current
@@ -41,6 +93,7 @@ function PdfCanvasPreview({ src, title }: { src: string; title: string }) {
     const renderToken = renderTokenRef.current + 1
     renderTokenRef.current = renderToken
     host.innerHTML = ""
+    setRenderedPageCount(0)
     setState({ status: "loading" })
 
     async function renderPdf() {
@@ -56,8 +109,10 @@ function PdfCanvasPreview({ src, title }: { src: string; title: string }) {
         if (cancelled || renderTokenRef.current !== renderToken) return
 
         const hostWidth = Math.max(300, Math.min(782, hostElement.clientWidth || 736))
+        const pagesToRender = Math.min(pdf.numPages, pageLimit)
+        setTotalPages(pdf.numPages)
 
-        for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber += 1) {
+        for (let pageNumber = 1; pageNumber <= pagesToRender; pageNumber += 1) {
           if (cancelled || renderTokenRef.current !== renderToken) return
 
           const page = await pdf.getPage(pageNumber)
@@ -87,6 +142,13 @@ function PdfCanvasPreview({ src, title }: { src: string; title: string }) {
             viewport,
             transform: outputScale !== 1 ? [outputScale, 0, 0, outputScale, 0, 0] : undefined,
           }).promise
+
+          if (!cancelled && renderTokenRef.current === renderToken) {
+            setRenderedPageCount(pageNumber)
+            if (pageNumber === 1) {
+              setState({ status: "ready" })
+            }
+          }
         }
 
         if (!cancelled && renderTokenRef.current === renderToken) {
@@ -108,11 +170,17 @@ function PdfCanvasPreview({ src, title }: { src: string; title: string }) {
       cancelled = true
       loadingTask?.destroy?.().catch(() => undefined)
     }
-  }, [src, title])
+  }, [pageLimit, src, title])
+
+  const visiblePageTarget = totalPages > 0 ? Math.min(totalPages, pageLimit) : 0
+  const canLoadMorePages = totalPages > visiblePageTarget && renderedPageCount >= visiblePageTarget
+  const loadMorePages = () => {
+    setPageLimit((currentPageLimit) => Math.min(totalPages || currentPageLimit, currentPageLimit + PDF_PAGE_BATCH_SIZE))
+  }
 
   return (
     <div className="relative overflow-hidden rounded-[18px] border border-slate-200 bg-muted/20 shadow-inner">
-      {state.status === "loading" ? (
+      {state.status === "loading" && renderedPageCount === 0 ? (
         <div className="absolute inset-x-0 top-0 z-10 border-b bg-background/95 px-4 py-2 text-xs font-medium text-muted-foreground">
           Preparando documento...
         </div>
@@ -124,7 +192,16 @@ function PdfCanvasPreview({ src, title }: { src: string; title: string }) {
           <p className="mt-1 max-w-md text-sm text-muted-foreground">{state.message}</p>
         </div>
       ) : (
-        <div ref={pagesRef} className="min-h-[340px] bg-slate-100 px-2 py-3" />
+        <>
+          <div ref={pagesRef} className="min-h-[340px] bg-slate-100 px-2 py-3" />
+          {canLoadMorePages ? (
+            <div className="flex justify-center border-t border-slate-200 bg-background px-4 py-3">
+              <Button type="button" variant="outline" size="sm" onClick={loadMorePages}>
+                Cargar más páginas ({renderedPageCount} de {totalPages})
+              </Button>
+            </div>
+          ) : null}
+        </>
       )}
     </div>
   )
@@ -243,10 +320,14 @@ export function FilePreviewDialog({ file, open, onOpenChange }: FilePreviewDialo
       )
     }
 
-    if (preview.previewKind === "image") {
-      return (
-        <div className="flex min-h-[360px] items-center justify-center rounded-md border bg-background p-4">
-          <img
+      if (preview.previewPageImageUrls?.length) {
+        return <ImagePagePreview pages={preview.previewPageImageUrls} title={preview.title} />
+      }
+
+      if (preview.previewKind === "image") {
+        return (
+          <div className="flex min-h-[360px] items-center justify-center rounded-md border bg-background p-4">
+            <img
             src={preview.previewUrl}
             alt={preview.title}
             className="max-h-full max-w-full object-contain"
