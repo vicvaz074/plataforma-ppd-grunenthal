@@ -67,6 +67,8 @@ import {
   GRUNENTHAL_THIRD_PARTY_MODEL_CLAUSES,
   GRUNENTHAL_THIRD_PARTY_MODEL_CLAUSES_PACKAGE,
   GRUNENTHAL_THIRD_PARTY_MODEL_CLAUSES_SOURCE,
+  GRUNENTHAL_THIRD_PARTY_MODEL_CONTRACTS,
+  GRUNENTHAL_THIRD_PARTY_MODEL_CONTRACTS_SOURCE,
 } from "@/lib/grunenthal-third-party-model-clauses"
 import {
   GRUNENTHAL_GRT_CONTRACT_DOCUMENTS,
@@ -127,6 +129,13 @@ type TemplateRepositoryItem = {
   description: string
   usage: string
   placeholders: string[]
+  sourceDocument?: {
+    fileName: string
+    publicPath: string
+    previewPdfPath: string
+    mimeType: string
+    size?: number
+  }
   assetId?: string
   baseTemplate?: string
   baseDownloadName?: string
@@ -209,79 +218,43 @@ const defaultUtilityDocuments: LibraryDocument[] = [
   },
 ]
 
-const templateRepository: TemplateRepositoryItem[] = [
-  {
-    id: "template-remision",
-    title: "Contrato de Remisión (R→E)",
-    description: "Base: \"Contrato Modelo de Remisión de Datos Personales (Responsable–Persona Encargada)\"",
-    usage: "Utilizar cuando un proveedor trata datos personales por cuenta del responsable como encargado del tratamiento (DPA).",
-    placeholders: [
-      "{RAZON_SOCIAL_RESPONSABLE}",
-      "{RAZON_SOCIAL_ENCARGADO}",
-      "{OBJETO_SERVICIO}",
-      "{SISTEMAS_INVOLUCRADOS}",
-      "{FINALIDADES}",
-      "{PLAZO_BLOQUEO}",
-      "{CONTACTO_INCIDENTES}",
-    ],
-    assetId: "12d935e1-965f-4e94-99ce-cea9799",
-    baseDownloadName: "Contrato_Remision_Modelo.txt",
-    baseTemplate: `CONTRATO DE REMISIÓN DE DATOS PERSONALES\n\nENTRE: {RAZON_SOCIAL_RESPONSABLE}, en lo sucesivo el "Responsable", y {RAZON_SOCIAL_ENCARGADO}, en adelante el "Encargado".\n\n1. OBJETO. El Responsable encomienda al Encargado el tratamiento de datos personales estrictamente para {FINALIDADES} dentro del servicio {OBJETO_SERVICIO}.\n2. ALCANCE Y SISTEMAS. El tratamiento se realizará dentro de los sistemas y aplicaciones autorizados: {SISTEMAS_INVOLUCRADOS}.\n3. MEDIDAS DE SEGURIDAD. El Encargado aplicará medidas técnicas, administrativas y físicas alineadas al Documento de Seguridad vigente, permitirá auditorías y mantendrá una bitácora de cumplimiento.\n4. SUBENCARGADOS. El Encargado no contratará subencargados sin autorización previa y por escrito del Responsable, debiendo imponer obligaciones equivalentes.\n5. INCIDENTES. Cualquier vulneración o incidente de seguridad deberá notificarse al Responsable a través de {CONTACTO_INCIDENTES} dentro de las 24 horas siguientes a su detección.\n6. TERMINACIÓN. A la terminación del servicio, el Encargado bloqueará, devolverá o suprimirá los datos personales en un plazo máximo de {PLAZO_BLOQUEO} y entregará evidencia documental.\n7. VIGENCIA Y JURISDICCIÓN. Este contrato se mantendrá vigente mientras subsista la prestación del servicio y estará sujeto a las leyes aplicables.\n\nLas partes firman de conformidad.`,
+const modelContractRepositoryItems: TemplateRepositoryItem[] = GRUNENTHAL_THIRD_PARTY_MODEL_CONTRACTS.map(
+  (contract) => ({
+    id: contract.id,
+    title: contract.title,
+    description: `${contract.type} oficial del Apéndice 2 del Manual de Relaciones con Terceros.`,
+    usage: contract.usage,
+    placeholders: [],
+    sourceDocument: {
+      fileName: contract.docxDownloadName,
+      publicPath: `/${contract.docxPath}`,
+      previewPdfPath: `/${contract.previewPdfPath}`,
+      mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    },
+    baseDownloadName: contract.textDownloadName,
+    baseTemplate: contract.text,
     metadata: {
-      tipo: "Remisión",
+      tipo: contract.communicationType,
       ambito: "Nacional",
-      riesgo: "medio",
-      categorias: ["Identificativos", "Laborales", "Tecnológicos"],
-      titulares: ["Empleados", "Proveedores"],
+      riesgo: contract.communicationType === "Transferencia" ? "alto" : "medio",
+      categorias: ["Identificativos", "Contacto", "Laborales"],
+      titulares: ["Empleados", "Proveedores", "Terceros"],
       baseJuridica: ["Relación contractual", "Obligación legal"],
-      garantias: ["Contrato DPA", "Cláusulas de seguridad"],
-      owner: "Jurídico / Cumplimiento",
-      aprobadores: ["Legal", "DPO", "Seguridad"],
-      ultimaRevision: "2024-10-01",
-      proximaRevision: "2025-04-01",
+      garantias: ["Contrato modelo", "Cláusulas de protección de datos"],
+      owner: "Legal",
+      aprobadores: ["Legal", "Datos Personales"],
+      ultimaRevision: "2025-10-21",
+      proximaRevision: "2026-04-21",
     },
     notes: [
-      "Incluye obligación de notificar incidentes ≤24h y autorización para subencargados",
-      "Referenciar el Documento de Seguridad del encargado y mecanismos de supervisión",
+      contract.sourceLabel,
+      "Documento individual derivado del manual fuente; el DOCX y su preview PDF conservan el formato del archivo original.",
     ],
-  },
-  {
-    id: "template-transferencia",
-    title: "Contrato de Transferencia (R→R)",
-    description: "Base: \"Contrato Modelo de Transferencia de Datos Personales (Responsable–Responsable)\"",
-    usage: "Aplica cuando se comunica información a otro responsable, como empresas del mismo grupo o aliados comerciales.",
-    placeholders: [
-      "{RAZON_SOCIAL_TRANSFERENTE}",
-      "{RAZON_SOCIAL_RECEPTOR}",
-      "{CATEGORIAS_DATOS}",
-      "{TIPO_CONSENTIMIENTO}",
-      "{FINALIDADES}",
-      "{URL_AVISO}",
-      "{PAIS_DESTINO}",
-      "{CONTACTO_ARCO}",
-      "{CONTACTO_INCIDENTES}",
-    ],
-    assetId: "286d088d-faa9-43e1-9182-afc94de",
-    baseDownloadName: "Contrato_Transferencia_Modelo.txt",
-    baseTemplate: `CONTRATO DE TRANSFERENCIA DE DATOS PERSONALES\n\nPARTES: {RAZON_SOCIAL_TRANSFERENTE} (el "Transferente") y {RAZON_SOCIAL_RECEPTOR} (el "Receptor").\n\n1. OBJETO. El Transferente autoriza la comunicación de los datos {CATEGORIAS_DATOS} para las finalidades consentidas {FINALIDADES}.\n2. CONSENTIMIENTO. Los titulares fueron informados mediante el aviso de privacidad disponible en {URL_AVISO} y otorgaron consentimiento {TIPO_CONSENTIMIENTO}.\n3. GARANTÍAS. El Receptor aplicará salvaguardas equivalentes, incluyendo cláusulas contractuales tipo, políticas internas y mecanismos de supervisión continua.\n4. DERECHOS ARCO. Las partes coordinarán la atención de solicitudes a través de {CONTACTO_ARCO} y compartirán las evidencias correspondientes.\n5. TRANSFERENCIA INTERNACIONAL. Cuando aplique, la transferencia se realizará hacia {PAIS_DESTINO} cumpliendo con las obligaciones establecidas por la autoridad competente.\n6. INCIDENTES. El Receptor notificará incidentes al Transferente y al {CONTACTO_INCIDENTES} en un plazo no mayor a 24 horas desde su detección.\n7. VIGENCIA. Este contrato permanecerá vigente hasta la finalización de las finalidades descritas o hasta que se revoque el consentimiento.\n\nFirmado por ambas partes en aceptación de obligaciones y responsabilidades.`,
-    metadata: {
-      tipo: "Transferencia",
-      ambito: "Internacional",
-      riesgo: "alto",
-      categorias: ["Identificativos", "Financieros", "Salud"],
-      titulares: ["Clientes", "Usuarios de app"],
-      baseJuridica: ["Consentimiento", "Relación contractual"],
-      garantias: ["SCCs", "BCRs", "Contrato DPA"],
-      owner: "Dirección General",
-      aprobadores: ["Legal", "DPO", "Seguridad"],
-      ultimaRevision: "2024-11-15",
-      proximaRevision: "2025-05-15",
-    },
-    notes: [
-      "Documentar la base legal aplicable y las garantías complementarias",
-      "Definir la coordinación para atender derechos ARCO y auditorías conjuntas",
-    ],
-  },
+  }),
+)
+
+const templateRepository: TemplateRepositoryItem[] = [
+  ...modelContractRepositoryItems,
   {
     id: "template-apendices",
     title: "Apéndices y cláusulas modelo insertables",
@@ -633,6 +606,7 @@ export default function DocumentsAndClausesPage() {
   const [matrixAreaFilter, setMatrixAreaFilter] = useState("all")
   const [matrixCommunicationFilter, setMatrixCommunicationFilter] = useState("all")
   const [isTemplateFillDialogOpen, setIsTemplateFillDialogOpen] = useState(false)
+  const [templateDialogMode, setTemplateDialogMode] = useState<"fill" | "text">("fill")
   const [activeTemplate, setActiveTemplate] = useState<TemplateRepositoryItem | null>(null)
   const [templatePlaceholderValues, setTemplatePlaceholderValues] = useState<Record<string, string>>({})
   const [previewContractFile, setPreviewContractFile] = useState<StoredFile | null>(null)
@@ -680,6 +654,7 @@ export default function DocumentsAndClausesPage() {
   const resetTemplateFill = () => {
     setTemplatePlaceholderValues({})
     setActiveTemplate(null)
+    setTemplateDialogMode("fill")
   }
 
   const openTemplateFillDialog = (template: TemplateRepositoryItem) => {
@@ -688,6 +663,14 @@ export default function DocumentsAndClausesPage() {
       initialValues[placeholder] = ""
     })
     setTemplatePlaceholderValues(initialValues)
+    setTemplateDialogMode("fill")
+    setActiveTemplate(template)
+    setIsTemplateFillDialogOpen(true)
+  }
+
+  const openTemplateTextDialog = (template: TemplateRepositoryItem) => {
+    setTemplatePlaceholderValues({})
+    setTemplateDialogMode("text")
     setActiveTemplate(template)
     setIsTemplateFillDialogOpen(true)
   }
@@ -883,6 +866,87 @@ export default function DocumentsAndClausesPage() {
     })
   }
 
+  const modelContractStoredFile = (template: TemplateRepositoryItem): StoredFile | null => {
+    if (!template.sourceDocument) return null
+
+    return {
+      id: `public-${template.id}`,
+      name: template.sourceDocument.fileName,
+      type: template.sourceDocument.mimeType,
+      size: template.sourceDocument.size ?? 0,
+      content: template.sourceDocument.publicPath,
+      uploadDate: new Date().toISOString(),
+      category: "third-party-template",
+      metadata: {
+        title: template.title,
+        publicPath: template.sourceDocument.publicPath,
+        sourceRelativePath: template.sourceDocument.publicPath,
+        previewPdfPath: template.sourceDocument.previewPdfPath,
+        previewMimeType: "application/pdf",
+      },
+    }
+  }
+
+  const previewModelContractDocument = (template: TemplateRepositoryItem) => {
+    const stored = modelContractStoredFile(template)
+    if (!stored) {
+      toast({
+        title: "Documento no disponible",
+        description: "Este contrato modelo no tiene un archivo fuente asociado.",
+        variant: "destructive",
+      })
+      return
+    }
+
+    if (!canOfferFilePreview(stored)) {
+      toast({
+        title: "Vista previa no disponible",
+        description: "Puedes descargar el documento original desde esta misma ficha.",
+        variant: "destructive",
+      })
+      return
+    }
+
+    setAnalysisContract(null)
+    setPreviewContractFile(stored)
+  }
+
+  const downloadModelContractDocx = (template: TemplateRepositoryItem) => {
+    if (!template.sourceDocument) {
+      toast({
+        title: "Documento no disponible",
+        description: "Este contrato modelo no tiene un archivo DOCX asociado.",
+        variant: "destructive",
+      })
+      return
+    }
+
+    const link = document.createElement("a")
+    link.href = createFileURL(template.sourceDocument.publicPath)
+    link.download = template.sourceDocument.fileName
+    link.target = "_blank"
+    link.rel = "noopener"
+    link.click()
+  }
+
+  const downloadModelContractText = (template: TemplateRepositoryItem) => {
+    if (!template.baseTemplate) {
+      toast({
+        title: "Texto no disponible",
+        description: "Este contrato modelo no tiene una versión de texto asociada.",
+        variant: "destructive",
+      })
+      return
+    }
+
+    const fileName = template.baseDownloadName || `${template.title.replace(/\s+/g, "_")}.txt`
+    triggerTextDownload(template.baseTemplate, fileName)
+    toast({
+      title: "Texto descargado",
+      description: `Descargando ${fileName}`,
+    })
+  }
+
   const downloadDocument = (resource: DocumentResource) => {
     if (resource.source === "custom" && resource.downloadUrl) {
       const link = document.createElement("a")
@@ -931,6 +995,11 @@ export default function DocumentsAndClausesPage() {
         description: "Completa los campos o adjunta un formato base para generar el documento.",
         variant: "destructive",
       })
+      return
+    }
+
+    if (templateDialogMode === "text") {
+      downloadModelContractText(activeTemplate)
       return
     }
 
@@ -1299,6 +1368,7 @@ export default function DocumentsAndClausesPage() {
     }
     return item
   })
+  const isTemplateTextDialog = templateDialogMode === "text"
 
   return (
     <ArcoModuleShell
@@ -1346,7 +1416,8 @@ export default function DocumentsAndClausesPage() {
             <CardHeader>
               <CardTitle>Repositorio guiado de plantillas oficiales</CardTitle>
               <CardDescription>
-                Fichas listas con metadatos auditables, variables parametrizables y recomendaciones para cada tipo de contrato o cláusula.
+                Contratos modelo del Apéndice 2, cláusulas validadas y fichas listas con metadatos auditables.
+                Fuente: {GRUNENTHAL_THIRD_PARTY_MODEL_CONTRACTS_SOURCE}.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -1375,16 +1446,18 @@ export default function DocumentsAndClausesPage() {
                           <p className="font-medium">Uso recomendado</p>
                           <p>{item.usage}</p>
                         </div>
-                        <div className="space-y-2 text-sm">
-                          <p className="font-medium">Variables disponibles</p>
-                          <div className="flex flex-wrap gap-2">
-                            {item.placeholders.map((placeholder) => (
-                              <code key={placeholder} className="rounded bg-muted px-2 py-1 text-xs">
-                                {placeholder}
-                              </code>
-                            ))}
+                        {item.placeholders.length > 0 && (
+                          <div className="space-y-2 text-sm">
+                            <p className="font-medium">Variables disponibles</p>
+                            <div className="flex flex-wrap gap-2">
+                              {item.placeholders.map((placeholder) => (
+                                <code key={placeholder} className="rounded bg-muted px-2 py-1 text-xs">
+                                  {placeholder}
+                                </code>
+                              ))}
+                            </div>
                           </div>
-                        </div>
+                        )}
                         <div className="grid gap-2 text-sm md:grid-cols-2">
                           <div>
                             <p className="font-medium">Categorías de datos</p>
@@ -1434,25 +1507,54 @@ export default function DocumentsAndClausesPage() {
                         )}
                         <div className="flex flex-col gap-2 border-t border-dashed border-muted-foreground/30 pt-4 text-xs md:flex-row md:items-center md:justify-between">
                           <div className="flex flex-wrap items-center gap-2">
-                            {item.assetId && (
+                            {item.sourceDocument ? (
+                              <Badge variant="secondary">Contrato modelo</Badge>
+                            ) : item.assetId ? (
                               <Badge variant="outline" className="font-mono text-[10px] uppercase">
                                 Ficha {item.assetId}
                               </Badge>
+                            ) : null}
+                            {item.placeholders.length > 0 ? (
+                              <Badge variant="outline" className="capitalize">
+                                Variables: {item.placeholders.length}
+                              </Badge>
+                            ) : (
+                              <Badge variant="outline">Texto oficial</Badge>
                             )}
-                            <Badge variant="outline" className="capitalize">
-                              Variables: {item.placeholders.length}
-                            </Badge>
                           </div>
                           <div className="flex flex-wrap gap-2">
-                            <Button size="sm" onClick={() => openTemplateFillDialog(item)}>
-                              <FileText className="mr-2 h-4 w-4" />
-                              Llenar plantilla
-                            </Button>
-                            {item.baseTemplate && (
-                              <Button size="sm" variant="outline" onClick={() => downloadTemplateBase(item)}>
-                                <Download className="mr-2 h-4 w-4" />
-                                Descargar base
-                              </Button>
+                            {item.sourceDocument ? (
+                              <>
+                                <Button size="sm" variant="outline" onClick={() => previewModelContractDocument(item)}>
+                                  <Eye className="mr-2 h-4 w-4" />
+                                  Ver documento
+                                </Button>
+                                <Button size="sm" variant="outline" onClick={() => openTemplateTextDialog(item)}>
+                                  <FileText className="mr-2 h-4 w-4" />
+                                  Ver texto
+                                </Button>
+                                <Button size="sm" variant="ghost" onClick={() => downloadModelContractDocx(item)}>
+                                  <Download className="mr-2 h-4 w-4" />
+                                  Descargar DOCX
+                                </Button>
+                                <Button size="sm" variant="ghost" onClick={() => downloadModelContractText(item)}>
+                                  <Download className="mr-2 h-4 w-4" />
+                                  Descargar TXT
+                                </Button>
+                              </>
+                            ) : (
+                              <>
+                                <Button size="sm" onClick={() => openTemplateFillDialog(item)}>
+                                  <FileText className="mr-2 h-4 w-4" />
+                                  Llenar plantilla
+                                </Button>
+                                {item.baseTemplate && (
+                                  <Button size="sm" variant="outline" onClick={() => downloadTemplateBase(item)}>
+                                    <Download className="mr-2 h-4 w-4" />
+                                    Descargar base
+                                  </Button>
+                                )}
+                              </>
                             )}
                           </div>
                         </div>
@@ -1681,10 +1783,16 @@ export default function DocumentsAndClausesPage() {
             <DialogContent className="max-w-3xl">
               <DialogHeader>
                 <DialogTitle>
-                  {activeTemplate ? `Personalizar ${activeTemplate.title}` : "Personalizar plantilla"}
+                  {isTemplateTextDialog
+                    ? "Texto del contrato modelo"
+                    : activeTemplate
+                      ? `Personalizar ${activeTemplate.title}`
+                      : "Personalizar plantilla"}
                 </DialogTitle>
                 <DialogDescription>
-                  Completa los campos clave para generar un documento listo para compartir con el tercero.
+                  {isTemplateTextDialog
+                    ? "Consulta, copia o descarga el texto base del manual fuente."
+                    : "Completa los campos clave para generar un documento listo para compartir con el tercero."}
                 </DialogDescription>
               </DialogHeader>
 
@@ -1697,36 +1805,42 @@ export default function DocumentsAndClausesPage() {
                     </div>
                     <div className="space-y-1 text-xs text-muted-foreground">
                       {activeTemplate.assetId && <p>Ficha: {activeTemplate.assetId}</p>}
-                      <p>Variables disponibles: {activeTemplatePlaceholders.length}</p>
+                      <p>
+                        {isTemplateTextDialog
+                          ? "Texto oficial derivado del Apéndice 2"
+                          : `Variables disponibles: ${activeTemplatePlaceholders.length}`}
+                      </p>
                     </div>
                   </div>
 
-                  <div className="grid gap-4 md:grid-cols-2">
-                    {activeTemplatePlaceholders.length > 0 ? (
-                      activeTemplatePlaceholders.map((placeholder) => {
-                        const cleanLabel = placeholder.replace(/[{}]/g, "").replace(/_/g, " ")
-                        const inputId = `placeholder-${placeholder.replace(/[{}]/g, "").toLowerCase()}`
-                        return (
-                          <div key={placeholder} className="space-y-1">
-                            <Label htmlFor={inputId}>{cleanLabel}</Label>
-                            <Input
-                              id={inputId}
-                              value={templatePlaceholderValues[placeholder] ?? ""}
-                              onChange={(event) => handlePlaceholderInput(placeholder, event.target.value)}
-                              placeholder={`Ingresa el valor para ${cleanLabel.toLowerCase()}`}
-                            />
-                          </div>
-                        )
-                      })
-                    ) : (
-                      <p className="text-muted-foreground">
-                        Esta plantilla no cuenta con variables. Puedes descargarla directamente desde el repositorio.
-                      </p>
-                    )}
-                  </div>
+                  {!isTemplateTextDialog && (
+                    <div className="grid gap-4 md:grid-cols-2">
+                      {activeTemplatePlaceholders.length > 0 ? (
+                        activeTemplatePlaceholders.map((placeholder) => {
+                          const cleanLabel = placeholder.replace(/[{}]/g, "").replace(/_/g, " ")
+                          const inputId = `placeholder-${placeholder.replace(/[{}]/g, "").toLowerCase()}`
+                          return (
+                            <div key={placeholder} className="space-y-1">
+                              <Label htmlFor={inputId}>{cleanLabel}</Label>
+                              <Input
+                                id={inputId}
+                                value={templatePlaceholderValues[placeholder] ?? ""}
+                                onChange={(event) => handlePlaceholderInput(placeholder, event.target.value)}
+                                placeholder={`Ingresa el valor para ${cleanLabel.toLowerCase()}`}
+                              />
+                            </div>
+                          )
+                        })
+                      ) : (
+                        <p className="text-muted-foreground">
+                          Esta plantilla no cuenta con variables. Puedes descargarla directamente desde el repositorio.
+                        </p>
+                      )}
+                    </div>
+                  )}
 
                   <div className="space-y-2">
-                    <Label>Vista previa generada</Label>
+                    <Label>{isTemplateTextDialog ? "Texto del contrato modelo" : "Vista previa generada"}</Label>
                     <Textarea
                       value={filledTemplateText || activeTemplate.baseTemplate || "Completa los campos para ver el resultado."}
                       readOnly
@@ -1744,7 +1858,7 @@ export default function DocumentsAndClausesPage() {
                         setIsTemplateFillDialogOpen(false)
                       }}
                     >
-                      Cancelar
+                      {isTemplateTextDialog ? "Cerrar" : "Cancelar"}
                     </Button>
                     <div className="flex flex-wrap gap-2">
                       <Button
@@ -1755,7 +1869,8 @@ export default function DocumentsAndClausesPage() {
                         <Copy className="mr-2 h-4 w-4" /> Copiar texto
                       </Button>
                       <Button type="button" onClick={downloadFilledTemplate}>
-                        <Download className="mr-2 h-4 w-4" /> Descargar documento
+                        <Download className="mr-2 h-4 w-4" />
+                        {isTemplateTextDialog ? "Descargar TXT" : "Descargar documento"}
                       </Button>
                     </div>
                   </DialogFooter>
@@ -1983,8 +2098,6 @@ export default function DocumentsAndClausesPage() {
 
               <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
                 <span>{filteredMatrixRows.length} resultados visibles</span>
-                <span className="hidden sm:inline">·</span>
-                <span>Fuente: {GRUNENTHAL_THIRD_PARTY_ANALYSIS_MATRIX_SOURCE.title}</span>
               </div>
 
               <div className="overflow-hidden rounded-lg border">

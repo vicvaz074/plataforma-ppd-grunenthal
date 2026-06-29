@@ -7,6 +7,13 @@ export type GrunenthalThirdPartyModelClause = {
   isCustom?: boolean
 }
 
+export {
+  GRUNENTHAL_THIRD_PARTY_MODEL_CONTRACTS,
+  GRUNENTHAL_THIRD_PARTY_MODEL_CONTRACTS_PACKAGE,
+  GRUNENTHAL_THIRD_PARTY_MODEL_CONTRACTS_SOURCE,
+  type GrunenthalThirdPartyModelContract,
+} from "./grunenthal-third-party-model-contracts"
+
 export const GRUNENTHAL_THIRD_PARTY_MODEL_CLAUSES_SOURCE =
   "Manual de Relaciones con Terceros de Grünenthal, Apéndice 1. Cláusulas modelo de protección de datos personales"
 

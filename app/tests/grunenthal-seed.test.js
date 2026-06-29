@@ -101,10 +101,10 @@ describe("personalización Grünenthal", () => {
       repository.GRUNENTHAL_LABOR_POLICY_REPOSITORY_DOCUMENTS.length +
       grtContracts.GRUNENTHAL_GRT_CONTRACT_DOCUMENTS.length
 
-    assert.equal(inventories.length, 15)
+    assert.equal(inventories.length, 16)
     assert.equal(
       inventories.reduce((total, inventory) => total + inventory.subInventories.length, 0),
-      35,
+      37,
     )
     assert.equal(storedFiles.length, assets.GRUNENTHAL_DOCUMENT_MANIFEST.length + individualDocumentCount)
     assert.equal(new Set(storedFiles.map((file) => file.id)).size, storedFiles.length)
@@ -136,7 +136,7 @@ describe("personalización Grünenthal", () => {
     }
 
     const individualNotices = storedFiles.filter((file) => file.metadata?.individualRecordType === "privacy-notice")
-    assert.equal(individualNotices.length, 11)
+    assert.equal(individualNotices.length, 12)
     assert.equal(individualNotices.every((file) => file.category === "privacy-notice"), true)
     assert.equal(
       individualNotices.every((file) => file.metadata?.createdBy === "Legal"),
@@ -149,6 +149,7 @@ describe("personalización Grünenthal", () => {
       "Aviso de Privacidad Integral para Empleados de Proveedores",
       "Aviso de Privacidad Integral para Proveedores Persona Física",
       "Aviso de Privacidad para Visitantes y CCTV",
+      "E-1 Aviso de Privacidad Simplificado para Visitantes",
     ]) {
       assert.ok(
         individualNotices.some((file) => file.metadata?.noticeName === noticeName),
@@ -319,16 +320,16 @@ describe("personalización Grünenthal", () => {
     const withoutSourcePdf = subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfStatus === "sin-pdf")
     const validationReport = ratData.GRUNENTHAL_RAT_VALIDATION_REPORT
 
-    assert.equal(withSourcePdf.length, 33)
-    assert.equal(withoutSourcePdf.length, 2)
-    assert.equal(validationReport.canonicalInventoryCount, 15)
-    assert.equal(validationReport.canonicalSubInventoryCount, 35)
-    assert.equal(validationReport.missingPdfCount, 2)
+    assert.equal(withSourcePdf.length, 37)
+    assert.equal(withoutSourcePdf.length, 0)
+    assert.equal(validationReport.canonicalInventoryCount, 16)
+    assert.equal(validationReport.canonicalSubInventoryCount, 37)
+    assert.equal(validationReport.missingPdfCount, 0)
     assert.equal(validationReport.unmatchedPdfCount, 0)
     assert.equal(validationReport.fieldMismatchCount, 0)
     assert.equal(
       subInventories.filter((subInventory) => subInventory.grunenthalValidationStatus === "verificado").length,
-      33,
+      37,
     )
     assert.equal(
       subInventories.some((subInventory) => subInventory.databaseName === "Ranking de efectividad"),
@@ -342,8 +343,12 @@ describe("personalización Grünenthal", () => {
     assert.equal(openDataVeeva.responsibleArea, "COMEX")
     assert.equal(openDataVeeva.processingSystemName, "OPEN DATA (Veeva)")
     assert.equal(openDataVeeva.personalData.length, 11)
-    assert.equal(openDataVeeva.grunenthalSourcePdfStatus, "sin-pdf")
-    assert.equal(openDataVeeva.grunenthalValidationStatus, "pendiente-revision")
+    assert.equal(openDataVeeva.grunenthalSourcePdfStatus, "vinculado")
+    assert.equal(openDataVeeva.grunenthalValidationStatus, "verificado")
+    assert.match(
+      openDataVeeva.grunenthalSourcePdfPath,
+      /\/client\/grunenthal\/rat\/comex\/inventario-comex-open-data-veeva-registro-de-medicos\.pdf$/,
+    )
 
     const xeomeenReport = subInventories.find((subInventory) =>
       subInventory.databaseName === "Reporte de Distribuidores Xeomeen"
@@ -351,8 +356,50 @@ describe("personalización Grünenthal", () => {
     assert.ok(xeomeenReport, "debe cargarse Reporte de Distribuidores Xeomeen dentro de Ventas Internas")
     assert.equal(xeomeenReport.responsibleArea, "Ventas Internas")
     assert.equal(xeomeenReport.personalData.length, 13)
-    assert.equal(xeomeenReport.grunenthalSourcePdfStatus, "sin-pdf")
-    assert.equal(xeomeenReport.grunenthalValidationStatus, "pendiente-revision")
+    assert.equal(xeomeenReport.grunenthalSourcePdfStatus, "vinculado")
+    assert.equal(xeomeenReport.grunenthalValidationStatus, "verificado")
+    assert.match(
+      xeomeenReport.grunenthalSourcePdfPath,
+      /\/client\/grunenthal\/rat\/ventas-internas\/inventario-ventas-internas-reporte-de-distribuidores-xeomeen\.pdf$/,
+    )
+
+    const plataformas = inventories.find((inventory) => inventory.databaseName === "Plataformas Grünenthal")
+    assert.ok(plataformas, "debe cargarse el área Plataformas Grünenthal")
+    assert.equal(plataformas.subInventories.length, 2)
+
+    const beyondConnect = plataformas.subInventories.find((subInventory) => subInventory.databaseName === "Beyond / Connect")
+    assert.ok(beyondConnect, "debe cargarse Beyond / Connect dentro de Plataformas Grünenthal")
+    assert.equal(beyondConnect.responsibleArea, "Plataformas Grünenthal")
+    assert.equal(beyondConnect.personalData.length, 10)
+    assert.equal(beyondConnect.grunenthalSourcePdfStatus, "vinculado")
+    assert.equal(beyondConnect.grunenthalValidationStatus, "verificado")
+    assert.match(
+      beyondConnect.grunenthalSourcePdfPath,
+      /\/client\/grunenthal\/rat\/plataformas-grunenthal\/inventario-plataformas-grunenthal-beyond-connect\.pdf$/,
+    )
+
+    const contactoGrt = plataformas.subInventories.find(
+      (subInventory) => subInventory.databaseName === "Formulario de Contacto Página GRT",
+    )
+    assert.ok(contactoGrt, "debe cargarse Formulario de Contacto Página GRT dentro de Plataformas Grünenthal")
+    assert.equal(contactoGrt.responsibleArea, "Plataformas Grünenthal")
+    assert.equal(contactoGrt.personalData.length, 9)
+    assert.equal(contactoGrt.grunenthalSourcePdfStatus, "vinculado")
+    assert.equal(contactoGrt.grunenthalValidationStatus, "verificado")
+    assert.match(
+      contactoGrt.grunenthalSourcePdfPath,
+      /\/client\/grunenthal\/rat\/plataformas-grunenthal\/inventario-plataformas-grunenthal-formulario-de-contacto-pagina-grt\.pdf$/,
+    )
+
+    assert.equal(
+      plataformas.subInventories.every((subInventory) =>
+        subInventory.personalData.every((field) =>
+          field.purposesPrimary.every((purpose) => !purpose.trim().startsWith("•")),
+        ),
+      ),
+      true,
+      "las finalidades de Plataformas Grünenthal deben guardarse sin viñetas crudas para el PDF",
+    )
   })
 
   it("reemplaza inventarios locales viejos y limpia progreso RAT al migrar la versión", async () => {
@@ -376,13 +423,13 @@ describe("personalización Grünenthal", () => {
     const inventories = JSON.parse(global.localStorage.getItem("inventories") || "[]")
     const subInventories = inventories.flatMap((inventory) => inventory.subInventories)
 
-    assert.equal(inventories.length, 15)
-    assert.equal(subInventories.length, 35)
+    assert.equal(inventories.length, 16)
+    assert.equal(subInventories.length, 37)
     assert.equal(inventories.some((inventory) => inventory.id === "inventario-viejo"), false)
     assert.equal(global.localStorage.getItem("inventories_progress"), null)
     assert.equal(
-      subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfStatus === "vinculado").length === 33 &&
-        subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfStatus === "sin-pdf").length === 2,
+      subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfStatus === "vinculado").length === 37 &&
+        subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfStatus === "sin-pdf").length === 0,
       true,
     )
   })

@@ -249,17 +249,18 @@ describe("generación PDF de inventarios RAT", () => {
 
     const plan = sourcePdfs.createInventoryPdfDownloadPlan(inventory)
 
-    assert.equal(plan.sourcePdfs.length, 3)
-    assert.equal(plan.generatedInventories.length, 1)
+    assert.equal(plan.sourcePdfs.length, 4)
+    assert.equal(plan.generatedInventories.length, 0)
     assert.equal(plan.totalPdfDownloads, 4)
-    assert.equal(plan.generatedInventories[0].databaseName, "Open Data (Veeva) - Registro de Médicos")
-    assert.deepEqual(
-      plan.generatedInventories[0].subInventories.map((subInventory) => subInventory.databaseName),
-      ["Open Data (Veeva) - Registro de Médicos"],
+    assert.ok(
+      plan.sourcePdfs.some((download) =>
+        download.url.endsWith("/client/grunenthal/rat/comex/inventario-comex-open-data-veeva-registro-de-medicos.pdf"),
+      ),
+      "Open Data Veeva debe descargarse como PDF público vinculado",
     )
   })
 
-  it("planea PDF generado para Reporte de Distribuidores Xeomeen dentro de Ventas Internas", async () => {
+  it("planea PDF fuente para Reporte de Distribuidores Xeomeen dentro de Ventas Internas", async () => {
     const sourcePdfs = await importModule("app/rat/utils/inventory-source-pdfs.ts")
     const ratData = await importModule("lib/grunenthal-rat-data.ts")
     const inventory = ratData.GRUNENTHAL_RAT_INVENTORIES.find(
@@ -269,15 +270,59 @@ describe("generación PDF de inventarios RAT", () => {
     assert.ok(inventory, "debe existir el inventario Ventas Internas")
 
     const plan = sourcePdfs.createInventoryPdfDownloadPlan(inventory)
-    const generatedNames = plan.generatedInventories.map((item) => item.databaseName)
-
-    assert.equal(plan.sourcePdfs.length, 1)
-    assert.equal(plan.generatedInventories.length, 1)
+    assert.equal(plan.sourcePdfs.length, 2)
+    assert.equal(plan.generatedInventories.length, 0)
     assert.equal(plan.totalPdfDownloads, 2)
-    assert.deepEqual(generatedNames, ["Reporte de Distribuidores Xeomeen"])
+    assert.ok(
+      plan.sourcePdfs.some((download) =>
+        download.url.endsWith(
+          "/client/grunenthal/rat/ventas-internas/inventario-ventas-internas-reporte-de-distribuidores-xeomeen.pdf",
+        ),
+      ),
+      "Reporte de Distribuidores Xeomeen debe descargarse como PDF público vinculado",
+    )
+  })
+
+  it("planea dos descargas PDF fuente para Plataformas Grünenthal", async () => {
+    const sourcePdfs = await importModule("app/rat/utils/inventory-source-pdfs.ts")
+    const ratData = await importModule("lib/grunenthal-rat-data.ts")
+    const inventory = ratData.GRUNENTHAL_RAT_INVENTORIES.find(
+      (item) => item.id === "grunenthal-rat-area-plataformas-grunenthal",
+    )
+
+    assert.ok(inventory, "debe existir el inventario Plataformas Grünenthal")
+
+    const plan = sourcePdfs.createInventoryPdfDownloadPlan(inventory)
+
+    assert.equal(plan.sourcePdfs.length, 2)
+    assert.equal(plan.generatedInventories.length, 0)
+    assert.equal(plan.totalPdfDownloads, 2)
     assert.deepEqual(
-      plan.generatedInventories[0].subInventories.map((subInventory) => subInventory.databaseName),
-      ["Reporte de Distribuidores Xeomeen"],
+      plan.sourcePdfs.map((download) => download.subInventoryName).sort(),
+      ["Beyond / Connect", "Formulario de Contacto Página GRT"].sort(),
+    )
+    assert.ok(
+      plan.sourcePdfs.some((download) =>
+        download.url.endsWith(
+          "/client/grunenthal/rat/plataformas-grunenthal/inventario-plataformas-grunenthal-beyond-connect.pdf",
+        ),
+      ),
+      "Beyond / Connect debe descargarse como PDF público vinculado",
+    )
+    assert.ok(
+      plan.sourcePdfs.some((download) =>
+        download.url.endsWith(
+          "/client/grunenthal/rat/plataformas-grunenthal/inventario-plataformas-grunenthal-formulario-de-contacto-pagina-grt.pdf",
+        ),
+      ),
+      "Formulario de Contacto Página GRT debe descargarse como PDF público vinculado",
+    )
+    assert.equal(
+      plan.sourcePdfs.every((download) =>
+        fs.existsSync(path.join(appDir, "public", download.url.replace(/^\//, ""))),
+      ),
+      true,
+      "los PDFs públicos de Plataformas Grünenthal deben existir en public",
     )
   })
 

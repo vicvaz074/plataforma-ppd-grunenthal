@@ -9,7 +9,7 @@ export type GrunenthalThirdPartyAnalysisMatrixRow = {
 }
 
 export const GRUNENTHAL_THIRD_PARTY_ANALYSIS_MATRIX_SOURCE = {
-  title: "Contratos analizados por Davara Abogado",
+  title: "Análisis de Relaciones Grünenthal",
   sourceDocument: "Análisis de Relaciones Grünenthal",
   sourceTable: "Tabla resumen de contratos analizados",
   lastUpdated: "29 de junio de 2026",
