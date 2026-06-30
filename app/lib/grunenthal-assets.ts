@@ -911,6 +911,21 @@ export const GRUNENTHAL_DOCUMENT_MANIFEST: GrunenthalAsset[] = [
     "sourceRelativePath": "PolíticasGlobalesGRT/GRT_PROC_7000_Retention of personal data_EN_released in MCL es-419  davara v1.docx"
   },
   {
+    "id": "grunenthal-rat-inventario-farmacovigilancia-casos-reportados-argus-oracle",
+    "name": "inventario_Casos_Reportados_Argus_Oracle.pdf",
+    "displayName": "inventario_Casos_Reportados_Argus_Oracle",
+    "path": "/client/grunenthal/rat/farmacovigilancia/inventario-farmacovigilancia-casos-reportados-argus-oracle.pdf",
+    "type": "application/pdf",
+    "size": 69663,
+    "module": "rat",
+    "category": "rat-inventory",
+    "folder": "rat/farmacovigilancia",
+    "extension": "pdf",
+    "sourceRelativePath": "InventariosDatos Personales/Farmacovigilancia/inventario_Casos_Reportados_Argus_Oracle.pdf",
+    "ratAreaFolder": "Farmacovigilancia",
+    "ratPdfTitle": "Farmacovigilancia - Casos Reportados (Argus - Oracle)"
+  },
+  {
     "id": "grunenthal-rat-inventarios-rat-export",
     "name": "inventarios-rat-2025-11-20T00-19-05-360Z (2).json",
     "displayName": "inventarios-rat-2025-11-20T00-19-05-360Z (2)",

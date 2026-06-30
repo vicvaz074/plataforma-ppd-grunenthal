@@ -69,7 +69,7 @@ describe("personalización Grünenthal", () => {
   })
 
   it("declara los assets públicos de Grünenthal y todos existen en public", () => {
-    assert.equal(assets.GRUNENTHAL_DOCUMENT_MANIFEST.length, 63)
+    assert.equal(assets.GRUNENTHAL_DOCUMENT_MANIFEST.length, 64)
     assert.equal(assets.GRUNENTHAL_LOGO.path, "/client/grunenthal/brand/grunenthal-logo-green.png")
     assert.equal(assets.GRUNENTHAL_LOGO.whiteFilter, "brightness(0) invert(1)")
     assert.equal(assets.GRUNENTHAL_LOGO.blackFilter, "brightness(0)")
@@ -102,11 +102,11 @@ describe("personalización Grünenthal", () => {
       repository.GRUNENTHAL_LABOR_POLICY_REPOSITORY_DOCUMENTS.length +
       grtContracts.GRUNENTHAL_GRT_CONTRACT_DOCUMENTS.length
 
-    assert.equal(inventories.length, 18)
-    assert.equal(seedState.version, "2026.2.8")
+    assert.equal(inventories.length, 19)
+    assert.equal(seedState.version, "2026.2.9")
     assert.equal(
       inventories.reduce((total, inventory) => total + inventory.subInventories.length, 0),
-      45,
+      46,
     )
     assert.equal(storedFiles.length, assets.GRUNENTHAL_DOCUMENT_MANIFEST.length + individualDocumentCount)
     assert.equal(new Set(storedFiles.map((file) => file.id)).size, storedFiles.length)
@@ -193,7 +193,7 @@ describe("personalización Grünenthal", () => {
     )
 
     const ratPdfs = storedFiles.filter((file) => file.category === "rat-inventory")
-    assert.equal(ratPdfs.length, 33)
+    assert.equal(ratPdfs.length, 34)
     assert.equal(
       ratPdfs.every((file) => file.metadata?.client === "Grünenthal" && file.metadata?.module === "rat"),
       true,
@@ -322,16 +322,16 @@ describe("personalización Grünenthal", () => {
     const withoutSourcePdf = subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfStatus === "sin-pdf")
     const validationReport = ratData.GRUNENTHAL_RAT_VALIDATION_REPORT
 
-    assert.equal(withSourcePdf.length, 37)
+    assert.equal(withSourcePdf.length, 38)
     assert.equal(withoutSourcePdf.length, 8)
-    assert.equal(validationReport.canonicalInventoryCount, 18)
-    assert.equal(validationReport.canonicalSubInventoryCount, 45)
+    assert.equal(validationReport.canonicalInventoryCount, 19)
+    assert.equal(validationReport.canonicalSubInventoryCount, 46)
     assert.equal(validationReport.missingPdfCount, 8)
     assert.equal(validationReport.unmatchedPdfCount, 0)
     assert.equal(validationReport.fieldMismatchCount, 0)
     assert.equal(
       subInventories.filter((subInventory) => subInventory.grunenthalValidationStatus === "verificado").length,
-      37,
+      38,
     )
     assert.equal(
       subInventories.some((subInventory) => subInventory.databaseName === "Ranking de efectividad"),
@@ -414,6 +414,73 @@ describe("personalización Grünenthal", () => {
     for (const field of masterControl.personalData) {
       assert.deepEqual(field.purposesPrimary, masterControlPurposesPrimary)
       assert.deepEqual(field.purposesSecondary, masterControlPurposesSecondary)
+    }
+
+    const argusPurposesPrimary = [
+      "Identificación y registro: Identificar y registrar internamente el evento adverso relacionado con productos de Grünenthal.",
+      "Verificación de información: Verificar la información que usted nos proporcione para comprender el caso de manera adecuada.",
+      "Comunicación con el reportante: Contactarlo en caso de requerir información adicional que permita entender mejor el evento adverso reportado.",
+      "Seguridad y vigilancia de medicamentos: Detectar, evaluar, comprender y prevenir eventos adversos u otros problemas relacionados con nuestros medicamentos, en apego a la normativa sanitaria aplicable.",
+      "Investigación y mejora continua: Realizar las investigaciones necesarias y mejorar nuestros productos, así como los procesos vinculados con su producción, distribución, transporte y/o almacenamiento.",
+      "Seguimiento del caso: Dar continuidad al reporte hasta su cierre, conforme a los procedimientos internos de farmacovigilancia.",
+      "Análisis estadístico: Generar información estadística para la mejora de los sistemas internos de seguridad de los medicamentos.",
+      "Reporte a autoridades sanitarias: Enviar las notificaciones y reportes correspondientes a la autoridad sanitaria competente dentro de los plazos establecidos.",
+      "Prevención de fraudes: Prevenir e investigar fraudes o actividades ilícitas que puedan derivarse de reportes falsos.",
+      "Cumplimiento normativo: Cumplir con las obligaciones previstas en la legislación nacional e internacional aplicable a la farmacovigilancia y atender requerimientos de autoridades competentes.",
+    ]
+    const farmacovigilancia = inventories.find((inventory) => inventory.databaseName === "Farmacovigilancia")
+    assert.ok(farmacovigilancia, "debe cargarse el área Farmacovigilancia")
+    assert.equal(farmacovigilancia.subInventories.length, 1)
+
+    const argus = farmacovigilancia.subInventories.find(
+      (subInventory) => subInventory.id === "grunenthal-rat-inventario-farmacovigilancia-casos-reportados-argus-oracle",
+    )
+    assert.ok(argus, "debe registrar Casos Reportados (Argus - Oracle)")
+    assert.equal(argus.databaseName, "Casos Reportados (Argus - Oracle)")
+    assert.equal(argus.responsibleArea, "Farmacovigilancia")
+    assert.equal(argus.riskLevel, "alto")
+    assert.deepEqual(argus.holderTypes, ["Otro"])
+    assert.equal(argus.otherHolderType, "Reportantes.")
+    assert.deepEqual(
+      argus.personalData.map((field) => field.name),
+      [
+        "Nombre del Reportante",
+        "Nombre del persona con efecto adverso",
+        "Iniciales",
+        "Correo electrónico",
+        "Teléfono",
+        "Género",
+        "Edad",
+        "Producto",
+        "Descripción del efecto",
+        "Fecha de toma de medicamento",
+        "Fecha de inicio de efecto adverso",
+        "Duración del efecto adverso",
+      ],
+    )
+    assert.equal(argus.personalData.find((field) => field.name === "Descripción del efecto")?.riesgo, "alto")
+    assert.equal(argus.dataTransfer, "si")
+    assert.equal(argus.transferRecipient, "Autoridades Competentes")
+    assert.equal(argus.dataRemission, "si")
+    assert.equal(argus.remissionRecipient, "Argus")
+    assert.equal(argus.grunenthalSourcePdfStatus, "vinculado")
+    assert.equal(argus.grunenthalValidationStatus, "verificado")
+    assert.match(
+      argus.grunenthalSourcePdfPath,
+      /\/client\/grunenthal\/rat\/farmacovigilancia\/inventario-farmacovigilancia-casos-reportados-argus-oracle\.pdf$/,
+    )
+    assert.equal(
+      argus.personalData.every((field) =>
+        field.purposesPrimary.length === 10 &&
+        field.purposesSecondary.length === 0 &&
+        field.purposesPrimary.every((purpose) => !purpose.trim().startsWith("•")),
+      ),
+      true,
+      "las finalidades de Argus deben conservarse completas y sin viñetas crudas para el PDF",
+    )
+    for (const field of argus.personalData) {
+      assert.deepEqual(field.purposesPrimary, argusPurposesPrimary)
+      assert.deepEqual(field.purposesSecondary, [])
     }
 
     const comex = inventories.find((inventory) => inventory.databaseName === "COMEX")
@@ -614,12 +681,12 @@ describe("personalización Grünenthal", () => {
     const inventories = JSON.parse(global.localStorage.getItem("inventories") || "[]")
     const subInventories = inventories.flatMap((inventory) => inventory.subInventories)
 
-    assert.equal(inventories.length, 18)
-    assert.equal(subInventories.length, 45)
+    assert.equal(inventories.length, 19)
+    assert.equal(subInventories.length, 46)
     assert.equal(inventories.some((inventory) => inventory.id === "inventario-viejo"), false)
     assert.equal(global.localStorage.getItem("inventories_progress"), null)
     assert.equal(
-      subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfStatus === "vinculado").length === 37 &&
+      subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfStatus === "vinculado").length === 38 &&
         subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfStatus === "sin-pdf").length === 8,
       true,
     )
