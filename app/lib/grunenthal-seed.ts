@@ -20,7 +20,7 @@ import {
   GRUNENTHAL_INDIVIDUAL_PRIVACY_NOTICE_RECORDS,
   GRUNENTHAL_INDIVIDUAL_THIRD_PARTY_RECORDS,
   GRUNENTHAL_LABOR_POLICY_REPOSITORY_DOCUMENTS,
-  PRIVACY_NOTICE_SOURCE_ASSET_ID,
+  PRIVACY_NOTICE_COMPILED_SOURCE_ASSET_IDS,
   getGrunenthalRepositoryFileId,
   type GrunenthalLaborPolicySeed,
   type GrunenthalPrivacyNoticeSeed,
@@ -37,7 +37,7 @@ import {
 import type { StoredFile } from "@/lib/fileStorage"
 import type { Inventory } from "@/app/rat/types"
 
-export const GRUNENTHAL_SEED_VERSION = "2026.2.12"
+export const GRUNENTHAL_SEED_VERSION = "2026.2.13"
 export const GRUNENTHAL_SEED_STATE_KEY = "grunenthal_seed_state_v1"
 
 const STORED_FILES_KEY = "storedFiles"
@@ -118,7 +118,7 @@ function staticPreviewPathForAsset(asset: GrunenthalAsset) {
 function buildStoredFile(asset: GrunenthalAsset): StoredFile {
   const previewPath = staticPreviewPathForAsset(asset)
   const isArcoTemplate = asset.id === ARCO_TEMPLATE_ASSET_ID
-  const category = asset.id === PRIVACY_NOTICE_SOURCE_ASSET_ID ? "privacy-policy" : asset.category
+  const category = PRIVACY_NOTICE_COMPILED_SOURCE_ASSET_IDS.includes(asset.id) ? "privacy-policy" : asset.category
 
   return {
     id: seededFileId(asset.id),

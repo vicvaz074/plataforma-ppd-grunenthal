@@ -83,9 +83,15 @@ export type GrunenthalLaborPolicySeed = IndividualDocumentBase & {
 
 export type GrunenthalPolicyScope = "mexico" | "global"
 
-export const PRIVACY_NOTICE_SOURCE_ASSET_ID = "grunenthal-privacy-notices-manualap-grunentha-davara-v5"
+export const PRIVACY_NOTICE_SOURCE_ASSET_ID = "grunenthal-privacy-notices-manualap-grunentha-davara-v6"
+export const PRIVACY_NOTICE_PLATFORMS_SOURCE_ASSET_ID = "grunenthal-privacy-notices-manualap-grunentha-davara-v5"
+export const PRIVACY_NOTICE_COMPILED_SOURCE_ASSET_IDS = [
+  PRIVACY_NOTICE_SOURCE_ASSET_ID,
+  PRIVACY_NOTICE_PLATFORMS_SOURCE_ASSET_ID,
+]
 const THIRD_PARTY_ANALYSIS_SOURCE_ASSET_ID = "grunenthal-third-party-contracts-analisisderelacionesgrunenthal"
-const PRIVACY_SOURCE_RELATIVE_PATH = "ManualAP_Grünentha Davara v5.docx"
+const PRIVACY_SOURCE_RELATIVE_PATH = "ManualAP_Grünentha Davara v6.docx"
+const PRIVACY_PLATFORMS_SOURCE_RELATIVE_PATH = "ManualAP_Grünentha Davara v5.docx"
 const THIRD_PARTY_SOURCE_RELATIVE_PATH =
   "PolíticasGRT_Davara/Relaciones con Terceros/AnálisisDeRelacionesGrünenthal .docx"
 const ALLOWED_REPOSITORY_MODULES = new Set<GrunenthalRepositoryModule>([
@@ -114,7 +120,7 @@ function previewPathForAsset(asset: GrunenthalAsset) {
 }
 
 function repositoryCategoryForAsset(asset: GrunenthalAsset) {
-  if (asset.id === PRIVACY_NOTICE_SOURCE_ASSET_ID) return "privacy-policy"
+  if (PRIVACY_NOTICE_COMPILED_SOURCE_ASSET_IDS.includes(asset.id)) return "privacy-policy"
   if (asset.id === "grunenthal-third-party-contracts-1-cuestionario-de-proveedores") return "third-party-template"
   return asset.category
 }
@@ -362,8 +368,12 @@ function privacyNotice(seed: {
   applicableNotices: string[]
   dispositionMethods: string[]
   evidenceNotes: string
+  sourceCompiledAssetId?: string
+  sourceRelativePath?: string
 }): GrunenthalPrivacyNoticeSeed {
   const id = `grunenthal-privacy-notice-${seed.slug}`
+  const sourceCompiledAssetId = seed.sourceCompiledAssetId || PRIVACY_NOTICE_SOURCE_ASSET_ID
+  const sourceRelativePath = seed.sourceRelativePath || PRIVACY_SOURCE_RELATIVE_PATH
   return {
     id,
     title: seed.title,
@@ -372,9 +382,9 @@ function privacyNotice(seed: {
     category: "privacy-notice",
     type: "Aviso de privacidad",
     area: seed.area,
-    sourceCompiledAssetId: PRIVACY_NOTICE_SOURCE_ASSET_ID,
+    sourceCompiledAssetId,
     sourceLabel: "ManualAP Grünenthal",
-    sourceRelativePath: PRIVACY_SOURCE_RELATIVE_PATH,
+    sourceRelativePath,
     lineStart: seed.lineStart,
     lineEnd: seed.lineEnd,
     sourceLineRange: `${seed.lineStart}-${seed.lineEnd}`,
@@ -547,6 +557,21 @@ export const GRUNENTHAL_INDIVIDUAL_PRIVACY_NOTICE_RECORDS: GrunenthalPrivacyNoti
     applicableNotices: ["integral_general", "campanas_formularios"],
     dispositionMethods: ["sitio_web", "antes_obtencion"],
     evidenceNotes: "Extraído del compilado ManualAP como aviso individual general para plataformas digitales.",
+    sourceCompiledAssetId: PRIVACY_NOTICE_PLATFORMS_SOURCE_ASSET_ID,
+    sourceRelativePath: PRIVACY_PLATFORMS_SOURCE_RELATIVE_PATH,
+  }),
+  privacyNotice({
+    slug: "aviso-publico-general",
+    title: "Aviso de Privacidad Integral General para Público General",
+    area: "Público general",
+    lineStart: 747,
+    lineEnd: 814,
+    holderCategories: ["usuarios_plataformas", "consultores", "clientes_usuarios_finales"],
+    noticeTypes: ["integral"],
+    responsibleAreas: ["tecnologia", "comunicacion", "juridico"],
+    applicableNotices: ["integral_general", "campanas_formularios"],
+    dispositionMethods: ["sitio_web", "antes_obtencion"],
+    evidenceNotes: "Extraído del compilado ManualAP como aviso individual general para público general.",
   }),
 ]
 

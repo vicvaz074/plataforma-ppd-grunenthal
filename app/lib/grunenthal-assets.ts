@@ -625,6 +625,19 @@ export const GRUNENTHAL_DOCUMENT_MANIFEST: GrunenthalAsset[] = [
     "sourceRelativePath": "ManualAP_Grünentha Davara v5.docx"
   },
   {
+    "id": "grunenthal-privacy-notices-manualap-grunentha-davara-v6",
+    "name": "ManualAP_Grünentha Davara v6.docx",
+    "displayName": "ManualAP_Grünentha Davara v6",
+    "path": "/client/grunenthal/privacy-notices/manualap-grunentha-davara-v6.docx",
+    "type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "size": 165781,
+    "module": "privacy-notices",
+    "category": "privacy-notice",
+    "folder": "privacy-notices",
+    "extension": "docx",
+    "sourceRelativePath": "ManualAP_Grünentha Davara v6.docx"
+  },
+  {
     "id": "grunenthal-dpo-acta-designacion-de-miembros-del-departamento-de-datos-personales-de-grunenthal",
     "name": "Acta designación de miembros del Departamento de Datos Personales de Grünenthal.docx",
     "displayName": "Acta designación de miembros del Departamento de Datos Personales de Grünenthal",

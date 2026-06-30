@@ -36,7 +36,7 @@ describe("PDF soporte de avisos de privacidad", () => {
         name: "Aviso Dirección General Grünenthal.docx",
         type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         size: 0,
-        content: "/client/grunenthal/privacy-notices/manualap-grunentha-davara-v5.docx",
+        content: "/client/grunenthal/privacy-notices/manualap-grunentha-davara-v6.docx",
         uploadDate: "2026-01-01T00:00:00.000Z",
         category: "privacy-notice",
         metadata: {
