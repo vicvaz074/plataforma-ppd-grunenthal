@@ -102,11 +102,11 @@ describe("personalización Grünenthal", () => {
       repository.GRUNENTHAL_LABOR_POLICY_REPOSITORY_DOCUMENTS.length +
       grtContracts.GRUNENTHAL_GRT_CONTRACT_DOCUMENTS.length
 
-    assert.equal(inventories.length, 17)
-    assert.equal(seedState.version, "2026.2.6")
+    assert.equal(inventories.length, 18)
+    assert.equal(seedState.version, "2026.2.7")
     assert.equal(
       inventories.reduce((total, inventory) => total + inventory.subInventories.length, 0),
-      43,
+      45,
     )
     assert.equal(storedFiles.length, assets.GRUNENTHAL_DOCUMENT_MANIFEST.length + individualDocumentCount)
     assert.equal(new Set(storedFiles.map((file) => file.id)).size, storedFiles.length)
@@ -323,10 +323,10 @@ describe("personalización Grünenthal", () => {
     const validationReport = ratData.GRUNENTHAL_RAT_VALIDATION_REPORT
 
     assert.equal(withSourcePdf.length, 37)
-    assert.equal(withoutSourcePdf.length, 6)
-    assert.equal(validationReport.canonicalInventoryCount, 17)
-    assert.equal(validationReport.canonicalSubInventoryCount, 43)
-    assert.equal(validationReport.missingPdfCount, 6)
+    assert.equal(withoutSourcePdf.length, 8)
+    assert.equal(validationReport.canonicalInventoryCount, 18)
+    assert.equal(validationReport.canonicalSubInventoryCount, 45)
+    assert.equal(validationReport.missingPdfCount, 8)
     assert.equal(validationReport.unmatchedPdfCount, 0)
     assert.equal(validationReport.fieldMismatchCount, 0)
     assert.equal(
@@ -490,6 +490,43 @@ describe("personalización Grünenthal", () => {
       true,
       "las finalidades de Compliance deben guardarse sin viñetas crudas para el PDF",
     )
+
+    const legal = inventories.find((inventory) => inventory.databaseName === "Legal")
+    assert.ok(legal, "debe cargarse el área Legal")
+    assert.equal(legal.subInventories.length, 2)
+
+    const eContract = legal.subInventories.find(
+      (subInventory) =>
+        subInventory.databaseName === "Plataforma de administración de contratos (eContract)",
+    )
+    assert.ok(eContract, "debe cargarse Plataforma de administración de contratos (eContract) dentro de Legal")
+    assert.equal(eContract.responsibleArea, "Legal")
+    assert.equal(eContract.processingSystemName, "")
+    assert.equal(eContract.personalData.length, 3)
+    assert.equal(eContract.grunenthalSourcePdfStatus, "sin-pdf")
+    assert.equal(eContract.grunenthalValidationStatus, "pendiente-revision")
+
+    const eCompany = legal.subInventories.find(
+      (subInventory) =>
+        subInventory.databaseName === "Plataforma de administracion de compañías (eCompany)",
+    )
+    assert.ok(eCompany, "debe cargarse Plataforma de administracion de compañías (eCompany) dentro de Legal")
+    assert.equal(eCompany.responsibleArea, "")
+    assert.equal(eCompany.processingSystemName, "eCompany")
+    assert.equal(eCompany.personalData.length, 3)
+    assert.equal(eCompany.grunenthalSourcePdfStatus, "sin-pdf")
+    assert.equal(eCompany.grunenthalValidationStatus, "pendiente-revision")
+    assert.equal(
+      [eContract, eCompany].every((subInventory) =>
+        subInventory.personalData.every((field) =>
+          field.purposesPrimary.length === 17 &&
+          field.purposesSecondary.length === 4 &&
+          field.purposesPrimary.every((purpose) => !purpose.trim().startsWith("•")),
+        ),
+      ),
+      true,
+      "las finalidades de Legal deben conservarse completas y sin viñetas crudas para el PDF",
+    )
   })
 
   it("reemplaza inventarios locales viejos y limpia progreso RAT al migrar la versión", async () => {
@@ -513,13 +550,13 @@ describe("personalización Grünenthal", () => {
     const inventories = JSON.parse(global.localStorage.getItem("inventories") || "[]")
     const subInventories = inventories.flatMap((inventory) => inventory.subInventories)
 
-    assert.equal(inventories.length, 17)
-    assert.equal(subInventories.length, 43)
+    assert.equal(inventories.length, 18)
+    assert.equal(subInventories.length, 45)
     assert.equal(inventories.some((inventory) => inventory.id === "inventario-viejo"), false)
     assert.equal(global.localStorage.getItem("inventories_progress"), null)
     assert.equal(
       subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfStatus === "vinculado").length === 37 &&
-        subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfStatus === "sin-pdf").length === 6,
+        subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfStatus === "sin-pdf").length === 8,
       true,
     )
   })
