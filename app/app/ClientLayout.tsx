@@ -12,6 +12,7 @@ import { Sidebar } from "@/components/sidebar"
 import { Header } from "@/components/header"
 import { Toaster } from "@/components/ui/toaster"
 import { isSessionValid, startInactivityMonitor, onSessionExpired, destroySession } from "@/lib/session"
+import { ensureBrowserStorageEvents } from "@/lib/browser-storage-events"
 import { seedGrunenthalDemoData } from "@/lib/grunenthal-seed"
 
 function AppShell({ authed, children }: { authed: boolean; children: React.ReactNode }) {
@@ -48,6 +49,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     setHydrated(true)
+    ensureBrowserStorageEvents()
     seedGrunenthalDemoData().catch((error) => {
       console.error("No se pudo inicializar la demo Grünenthal:", error)
     })

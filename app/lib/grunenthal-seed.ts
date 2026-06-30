@@ -5,7 +5,6 @@ import {
   type GrunenthalAsset,
 } from "@/lib/grunenthal-assets"
 import {
-  GRUNENTHAL_LOGO_DATA_URL,
   GRUNENTHAL_RAT_INVENTORIES,
   GRUNENTHAL_RAT_PDF_LINKS,
   GRUNENTHAL_RAT_SOURCE_EXPORTED_AT,
@@ -344,7 +343,7 @@ function buildSeededInventories(): SeededInventory[] {
   return GRUNENTHAL_RAT_INVENTORIES.map((inventory) => ({
     ...inventory,
     responsible: inventory.responsible || GRUNENTHAL_CLIENT_NAME,
-    companyLogoDataUrl: GRUNENTHAL_LOGO_DATA_URL,
+    companyLogoDataUrl: undefined,
     companyLogoFileName: "grunenthal-logo-green.png",
     companyLogoPublicPath: GRUNENTHAL_LOGO.path,
     reportAccentColor: inventory.reportAccentColor || "#40BB6A",

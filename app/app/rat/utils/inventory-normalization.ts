@@ -629,15 +629,19 @@ export const normalizeInventoryForForm = (
 ): Inventory => {
   const source = isRecord(value) ? value : {}
   const now = new Date().toISOString()
+  const companyLogoDataUrl = cleanText(source.companyLogoDataUrl)
+  const companyLogoPublicPath = cleanText(source.companyLogoPublicPath)
   return {
     ...createDefaultInventory(),
     ...source,
     id: cleanText(source.id) || "inventory-new",
     databaseName: cleanText(source.databaseName),
     responsible: cleanText(source.responsible) || DEFAULT_REPORT_RESPONSIBLE,
-    companyLogoDataUrl: cleanText(source.companyLogoDataUrl) || DEFAULT_REPORT_LOGO_DATA_URL,
+    companyLogoDataUrl:
+      companyLogoDataUrl ||
+      (companyLogoPublicPath ? undefined : DEFAULT_REPORT_LOGO_DATA_URL),
     companyLogoFileName: cleanText(source.companyLogoFileName) || DEFAULT_REPORT_LOGO_FILE_NAME,
-    companyLogoPublicPath: cleanText(source.companyLogoPublicPath) || DEFAULT_REPORT_LOGO_PUBLIC_PATH,
+    companyLogoPublicPath: companyLogoPublicPath || DEFAULT_REPORT_LOGO_PUBLIC_PATH,
     reportAccentColor: cleanText(source.reportAccentColor) || DEFAULT_REPORT_ACCENT_COLOR,
     subInventories: Array.isArray(source.subInventories)
       ? source.subInventories.map(normalizeSubInventoryForForm)

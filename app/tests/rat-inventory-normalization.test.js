@@ -173,6 +173,20 @@ describe("normalización de inventarios RAT para edición", () => {
     ])
   })
 
+  it("conserva inventarios sembrados con logo público sin regenerar base64 al editar", async () => {
+    const { normalizeInventoryForForm } = await importModule("app/rat/utils/inventory-normalization.ts")
+
+    const normalized = normalizeInventoryForForm({
+      id: "inventory-public-logo",
+      databaseName: "Área con logo público",
+      companyLogoPublicPath: "/client/grunenthal/brand/grunenthal-logo-green.png",
+      subInventories: [],
+    })
+
+    assert.equal(normalized.companyLogoDataUrl, undefined)
+    assert.equal(normalized.companyLogoPublicPath, "/client/grunenthal/brand/grunenthal-logo-green.png")
+  })
+
   it("crea un inventario nuevo cuando el borrador trae un id que no existe", async () => {
     const { createDefaultInventory, prepareInventorySave } = await importModule("app/rat/utils/inventory-normalization.ts")
 

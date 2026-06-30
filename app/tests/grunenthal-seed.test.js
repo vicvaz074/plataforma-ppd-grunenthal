@@ -108,6 +108,15 @@ describe("personalización Grünenthal", () => {
       inventories.reduce((total, inventory) => total + inventory.subInventories.length, 0),
       49,
     )
+    assert.equal(
+      inventories.every(
+        (inventory) =>
+          !inventory.companyLogoDataUrl &&
+          inventory.companyLogoPublicPath === "/client/grunenthal/brand/grunenthal-logo-green.png",
+      ),
+      true,
+      "los inventarios sembrados deben referenciar el logo público sin duplicar el base64 en localStorage",
+    )
     assert.equal(storedFiles.length, assets.GRUNENTHAL_DOCUMENT_MANIFEST.length + individualDocumentCount)
     assert.equal(new Set(storedFiles.map((file) => file.id)).size, storedFiles.length)
     assert.equal(
