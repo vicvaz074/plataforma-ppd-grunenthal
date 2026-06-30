@@ -103,10 +103,10 @@ describe("personalización Grünenthal", () => {
       grtContracts.GRUNENTHAL_GRT_CONTRACT_DOCUMENTS.length
 
     assert.equal(inventories.length, 19)
-    assert.equal(seedState.version, "2026.2.11")
+    assert.equal(seedState.version, "2026.2.12")
     assert.equal(
       inventories.reduce((total, inventory) => total + inventory.subInventories.length, 0),
-      48,
+      49,
     )
     assert.equal(storedFiles.length, assets.GRUNENTHAL_DOCUMENT_MANIFEST.length + individualDocumentCount)
     assert.equal(new Set(storedFiles.map((file) => file.id)).size, storedFiles.length)
@@ -323,10 +323,10 @@ describe("personalización Grünenthal", () => {
     const validationReport = ratData.GRUNENTHAL_RAT_VALIDATION_REPORT
 
     assert.equal(withSourcePdf.length, 38)
-    assert.equal(withoutSourcePdf.length, 10)
+    assert.equal(withoutSourcePdf.length, 11)
     assert.equal(validationReport.canonicalInventoryCount, 19)
-    assert.equal(validationReport.canonicalSubInventoryCount, 48)
-    assert.equal(validationReport.missingPdfCount, 10)
+    assert.equal(validationReport.canonicalSubInventoryCount, 49)
+    assert.equal(validationReport.missingPdfCount, 11)
     assert.equal(validationReport.unmatchedPdfCount, 0)
     assert.equal(validationReport.fieldMismatchCount, 0)
     assert.equal(
@@ -404,6 +404,55 @@ describe("personalización Grünenthal", () => {
           item.expectedFileName === "inventario-it-gestion-de-tickets-ivanti.pdf",
       ),
       "el reporte debe marcar el subinventario IT nuevo como pendiente de PDF fuente",
+    )
+
+    const compras = inventories.find((inventory) => inventory.id === "grunenthal-rat-area-compras")
+    const concur = subInventories.find(
+      (subInventory) => subInventory.id === "grunenthal-rat-inventario-compras-concur",
+    )
+    const bcdTravel = subInventories.find(
+      (subInventory) =>
+        subInventory.id === "grunenthal-rat-inventario-compras-gestion-de-viajes-bcd",
+    )
+    const comparableInventory = (subInventory) => {
+      const copy = JSON.parse(JSON.stringify(subInventory))
+      delete copy.id
+      delete copy.databaseName
+      delete copy.grunenthalSourcePdfFileId
+      delete copy.grunenthalSourcePdfPath
+      delete copy.grunenthalSourcePdfDownloadName
+      delete copy.grunenthalSourcePdfStatus
+      delete copy.grunenthalValidationStatus
+      delete copy.grunenthalValidationFields
+      delete copy.grunenthalValidationMismatches
+      copy.privacyNoticeFileIds = copy.privacyNoticeFileIds?.map((_, index) => `aviso-${index + 1}`)
+      copy.privacyNoticeFileId = copy.privacyNoticeFileId ? "aviso-1" : copy.privacyNoticeFileId
+      copy.additionalAccesses = copy.additionalAccesses?.map(({ id, ...access }) => access)
+      copy.personalData = copy.personalData?.map(({ id, ...field }) => field)
+      return copy
+    }
+
+    assert.ok(compras, "debe existir el inventario Compras")
+    assert.equal(compras.subInventories.length, 4)
+    assert.ok(concur, "debe existir Concur dentro de Compras")
+    assert.ok(bcdTravel, "debe duplicar Concur como Gestión de Viajes (BCD) dentro de Compras")
+    assert.equal(bcdTravel.databaseName, "Gestión de Viajes (BCD)")
+    assert.deepEqual(comparableInventory(bcdTravel), comparableInventory(concur))
+    assert.equal(bcdTravel.privacyNoticeFileId, "grunenthal-rat-inventario-compras-gestion-de-viajes-bcd-aviso-01")
+    assert.equal(bcdTravel.additionalAccesses[0].id, "grunenthal-rat-inventario-compras-gestion-de-viajes-bcd-acceso-001")
+    assert.equal(bcdTravel.personalData[0].id, "grunenthal-rat-inventario-compras-gestion-de-viajes-bcd-dato-001")
+    assert.equal(bcdTravel.grunenthalSourcePdfStatus, "sin-pdf")
+    assert.equal(bcdTravel.grunenthalValidationStatus, "pendiente-revision")
+    assert.equal(bcdTravel.grunenthalSourcePdfFileId, undefined)
+    assert.equal(bcdTravel.grunenthalSourcePdfPath, undefined)
+    assert.ok(
+      validationReport.missingPdfs.some(
+        (item) =>
+          item.inventoryName === "Compras" &&
+          item.subInventoryName === "Gestión de Viajes (BCD)" &&
+          item.expectedFileName === "inventario-compras-gestion-de-viajes-bcd.pdf",
+      ),
+      "el reporte debe marcar Gestión de Viajes (BCD) como pendiente de PDF fuente",
     )
 
     const medical = inventories.find((inventory) => inventory.id === "grunenthal-rat-area-medical")
@@ -791,12 +840,12 @@ describe("personalización Grünenthal", () => {
     const subInventories = inventories.flatMap((inventory) => inventory.subInventories)
 
     assert.equal(inventories.length, 19)
-    assert.equal(subInventories.length, 48)
+    assert.equal(subInventories.length, 49)
     assert.equal(inventories.some((inventory) => inventory.id === "inventario-viejo"), false)
     assert.equal(global.localStorage.getItem("inventories_progress"), null)
     assert.equal(
       subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfStatus === "vinculado").length === 38 &&
-        subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfStatus === "sin-pdf").length === 10,
+        subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfStatus === "sin-pdf").length === 11,
       true,
     )
   })

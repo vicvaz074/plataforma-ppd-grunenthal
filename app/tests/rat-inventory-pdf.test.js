@@ -384,6 +384,37 @@ describe("generación PDF de inventarios RAT", () => {
     )
   })
 
+  it("planea descargas PDF para Compras generando Gestión de Viajes BCD con nombre propio", async () => {
+    const sourcePdfs = await importModule("app/rat/utils/inventory-source-pdfs.ts")
+    const inventoryPdf = await importModule("app/rat/utils/inventory-pdf.ts")
+    const ratData = await importModule("lib/grunenthal-rat-data.ts")
+    const inventory = ratData.GRUNENTHAL_RAT_INVENTORIES.find(
+      (item) => item.id === "grunenthal-rat-area-compras",
+    )
+
+    assert.ok(inventory, "debe existir el inventario Compras")
+
+    const plan = sourcePdfs.createInventoryPdfDownloadPlan(inventory)
+    const generatedInventory = plan.generatedInventories[0]
+    const generatedSubInventory = generatedInventory?.subInventories[0]
+
+    assert.equal(plan.sourcePdfs.length, 3)
+    assert.equal(plan.generatedInventories.length, 1)
+    assert.equal(plan.totalPdfDownloads, 4)
+    assert.deepEqual(
+      plan.sourcePdfs.map((item) => item.subInventoryName).sort(),
+      ["Base de datos de titulares sin tarjeta corporativa", "Concur", "Sistema Oro"].sort(),
+    )
+    assert.equal(generatedInventory.databaseName, "Gestión de Viajes (BCD)")
+    assert.equal(
+      generatedSubInventory.id,
+      "grunenthal-rat-inventario-compras-gestion-de-viajes-bcd",
+    )
+    assert.equal(generatedSubInventory.grunenthalSourcePdfFileId, undefined)
+    assert.equal(generatedSubInventory.grunenthalSourcePdfPath, undefined)
+    assert.equal(inventoryPdf.buildInventoryPdfFileName(generatedInventory.databaseName), "inventario_Gestion_de_Viajes_BCD.pdf")
+  })
+
   it("mantiene los PDF fuente RAT con solo nombres actualizados", () => {
     const pdfExpectations = [
       [
