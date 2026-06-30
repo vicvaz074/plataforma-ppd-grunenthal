@@ -261,6 +261,45 @@ describe("generación PDF de inventarios RAT", () => {
     }
   })
 
+  it("registra el PDF fuente corregido de Gestión de Evaluaciones (MasterControl)", async () => {
+    const ratData = await importModule("lib/grunenthal-rat-data.ts")
+    const sourcePdfs = await importModule("app/rat/utils/inventory-source-pdfs.ts")
+    const inventory = ratData.GRUNENTHAL_RAT_INVENTORIES.find(
+      (item) => item.id === "grunenthal-rat-area-entrenamiento",
+    )
+
+    assert.ok(inventory, "debe existir el inventario Entrenamiento")
+
+    const subInventory = inventory.subInventories.find(
+      (item) => item.id === "grunenthal-rat-inventario-entrenamiento-master-evaluaciones",
+    )
+    const plan = sourcePdfs.createInventoryPdfDownloadPlan(inventory)
+    const download = plan.sourcePdfs.find(
+      (item) => item.subInventoryId === "grunenthal-rat-inventario-entrenamiento-master-evaluaciones",
+    )
+
+    assert.ok(subInventory, "debe existir el subinventario MasterControl")
+    assert.equal(subInventory.databaseName, "Gestión de Evaluaciones (MasterControl)")
+    assert.equal(subInventory.responsibleArea, "Calidad")
+    assert.equal(subInventory.processingSystemName, "MasterControl")
+    assert.ok(download, "debe exponer PDF fuente para MasterControl")
+    assert.equal(download.subInventoryName, "Gestión de Evaluaciones (MasterControl)")
+    assert.equal(download.downloadName, "inventario-entrenamiento-gestion-de-evaluaciones-mastercontrol.pdf")
+    assert.equal(
+      fs.existsSync(path.join(appDir, "public", download.url.replace(/^\//, ""))),
+      true,
+      "el PDF público corregido de MasterControl debe existir",
+    )
+
+    const pdfContent = fs.readFileSync(
+      path.join(projectRoot, "app/public/client/grunenthal/rat/entrenamiento/inventario-entrenamiento-master-evaluaciones.pdf"),
+      "latin1",
+    )
+    assert.match(pdfContent, /Gesti[oó]n de Evaluaciones/)
+    assert.doesNotMatch(pdfContent, /Finalidades primarias registradas/)
+    assert.doesNotMatch(pdfContent, /Master Evaluaciones/)
+  })
+
   it("mantiene los PDF fuente RAT con solo nombres actualizados", () => {
     const pdfExpectations = [
       [

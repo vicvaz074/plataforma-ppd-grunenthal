@@ -103,7 +103,7 @@ describe("personalización Grünenthal", () => {
       grtContracts.GRUNENTHAL_GRT_CONTRACT_DOCUMENTS.length
 
     assert.equal(inventories.length, 18)
-    assert.equal(seedState.version, "2026.2.7")
+    assert.equal(seedState.version, "2026.2.8")
     assert.equal(
       inventories.reduce((total, inventory) => total + inventory.subInventories.length, 0),
       45,
@@ -351,6 +351,70 @@ describe("personalización Grünenthal", () => {
       openDataVeeva.grunenthalSourcePdfPath,
       /\/client\/grunenthal\/rat\/comex\/inventario-comex-open-data-veeva-registro-de-medicos\.pdf$/,
     )
+
+    const masterControlPurposesPrimary = [
+      "Identificación y registro: Identificarlo y registrarlo como colaborador de Grünenthal, darlo de alta en los sistemas internos, asignarle un correo institucional y generar su credencial de empleado.",
+      "Expediente laboral: Crear, actualizar y conservar su expediente laboral, así como administrar la información relacionada con su trayectoria en la empresa.",
+      "Gestión de nómina y prestaciones: Administrar el pago de nómina, prestaciones laborales, caja de ahorro, seguros, pensiones, vales, viáticos, viajes de negocio y demás beneficios que correspondan.",
+      "Evaluación y desarrollo profesional: Elaborar perfiles laborales, evaluar su desempeño y gestionar actividades de capacitación, entrenamiento, reconocimientos y premios.",
+      "Acceso a instalaciones: Controlar su ingreso a las instalaciones y, en su caso, asignarle un espacio de estacionamiento.",
+      "Comunicación interna: Mantener comunicaciones estrictamente relacionadas con asuntos laborales.",
+      "Gestión de vehículos corporativos: Administrar la asignación, uso y control de vehículos corporativos y, en su caso, gestionar procedimientos de compra del vehículo por parte del colaborador.",
+      "Validación de información: Solicitar y verificar referencias personales o laborales, así como corroborar la veracidad de la información proporcionada por usted durante la relación laboral.",
+      "Atención a emergencias: Contactar a las personas que usted designe como contactos de emergencia cuando sea necesario.",
+      "Salud ocupacional: Realizar estudios médicos, evaluaciones periódicas y pruebas (incluyendo alcoholemia y consumo de sustancias) para mantener un entorno laboral seguro.",
+      "Uso y seguridad de sistemas: Gestionar, verificar, monitorear e investigar el uso y la seguridad de la información a la que tiene acceso como parte de sus funciones laborales, así como el uso correcto de los dispositivos proporcionados como herramientas de trabajo, incluyendo sistemas computacionales, redes, correo electrónico, Internet, teléfonos celulares y cualquier otro dispositivo habilitado para el cumplimiento de sus funciones. Para estos efectos, Grünenthal podrá acceder y monitorear dichas herramientas, así como los sistemas de seguridad y cámaras de CCTV.",
+      "Seguridad física: Proteger la integridad de las personas y los bienes ubicados dentro de nuestras instalaciones mediante controles internos de seguridad, cámaras de videovigilancia (CCTV) y otros dispositivos tecnológicos.",
+      "Auditorías: Realizar auditorías internas o externas que permitan verificar el cumplimiento de obligaciones laborales, legales, de seguridad y de políticas internas.",
+      "Investigaciones internas: Realizar investigaciones derivadas de denuncias, incidentes o posibles violaciones a la ley o a políticas internas.",
+      "Eventos corporativos: En su caso, invitarlo y gestionar su viaje y hospedaje para participar en eventos organizados por Grünenthal.",
+      "Cumplimiento de políticas internas: Dar cumplimiento a las obligaciones y procedimientos establecidos en políticas y lineamientos internos de Grünenthal.",
+      "Cumplimiento normativo: Dar cumplimiento a la legislación aplicable y atender requerimientos de autoridades competentes en los casos legalmente previstos",
+    ]
+    const masterControlPurposesSecondary = [
+      "Comunicaciones no laborales: Enviar información general que no esté directamente relacionada con la relación laboral.",
+      "Eventos y actividades voluntarias: Gestionar su participación voluntaria en eventos corporativos, campañas de salud, actividades deportivas, sociales u otras iniciativas organizadas por Grünenthal.",
+      "Encuestas de clima laboral: Realizar estudios y encuestas para mejorar el ambiente laboral dentro de la organización.",
+      "Contenido y reconocimientos públicos: Crear contenido con fines informativos o publicitarios para redes sociales o plataformas internas, así como reconocer públicamente logros laborales o personales, celebraciones y otros acontecimientos destacables.",
+    ]
+    const masterControl = subInventories.find(
+      (subInventory) => subInventory.id === "grunenthal-rat-inventario-entrenamiento-master-evaluaciones",
+    )
+    assert.ok(masterControl, "debe registrar Gestión de Evaluaciones (MasterControl)")
+    assert.equal(masterControl.databaseName, "Gestión de Evaluaciones (MasterControl)")
+    assert.equal(masterControl.responsibleArea, "Calidad")
+    assert.equal(masterControl.processingSystemName, "MasterControl")
+    assert.deepEqual(
+      masterControl.personalData.map((field) => field.name),
+      [
+        "Nombre",
+        "Número de empleado",
+        "Correo electrónico",
+        "Capacitaciones asignadas",
+        "Capacitaciones completadas",
+        "Evaluación",
+      ],
+    )
+    assert.equal(masterControl.grunenthalSourcePdfStatus, "vinculado")
+    assert.equal(masterControl.grunenthalValidationStatus, "verificado")
+    assert.match(
+      masterControl.grunenthalSourcePdfPath,
+      /\/client\/grunenthal\/rat\/entrenamiento\/inventario-entrenamiento-master-evaluaciones\.pdf$/,
+    )
+    assert.equal(
+      masterControl.personalData.every((field) =>
+        field.purposesPrimary.length === 17 &&
+        field.purposesSecondary.length === 4 &&
+        field.purposesPrimary.every((purpose) => !purpose.trim().startsWith("•")) &&
+        field.purposesSecondary.every((purpose) => !purpose.trim().startsWith("•")),
+      ),
+      true,
+      "las finalidades de MasterControl deben conservarse completas y sin viñetas crudas para el PDF",
+    )
+    for (const field of masterControl.personalData) {
+      assert.deepEqual(field.purposesPrimary, masterControlPurposesPrimary)
+      assert.deepEqual(field.purposesSecondary, masterControlPurposesSecondary)
+    }
 
     const comex = inventories.find((inventory) => inventory.databaseName === "COMEX")
     assert.ok(comex, "debe cargarse el área COMEX")
