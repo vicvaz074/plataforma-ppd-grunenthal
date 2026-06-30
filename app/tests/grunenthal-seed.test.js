@@ -102,11 +102,11 @@ describe("personalización Grünenthal", () => {
       repository.GRUNENTHAL_LABOR_POLICY_REPOSITORY_DOCUMENTS.length +
       grtContracts.GRUNENTHAL_GRT_CONTRACT_DOCUMENTS.length
 
-    assert.equal(inventories.length, 19)
-    assert.equal(seedState.version, "2026.2.13")
+    assert.equal(inventories.length, 20)
+    assert.equal(seedState.version, "2026.2.14")
     assert.equal(
       inventories.reduce((total, inventory) => total + inventory.subInventories.length, 0),
-      49,
+      50,
     )
     assert.equal(storedFiles.length, assets.GRUNENTHAL_DOCUMENT_MANIFEST.length + individualDocumentCount)
     assert.equal(new Set(storedFiles.map((file) => file.id)).size, storedFiles.length)
@@ -330,10 +330,10 @@ describe("personalización Grünenthal", () => {
     const validationReport = ratData.GRUNENTHAL_RAT_VALIDATION_REPORT
 
     assert.equal(withSourcePdf.length, 38)
-    assert.equal(withoutSourcePdf.length, 11)
-    assert.equal(validationReport.canonicalInventoryCount, 19)
-    assert.equal(validationReport.canonicalSubInventoryCount, 49)
-    assert.equal(validationReport.missingPdfCount, 11)
+    assert.equal(withoutSourcePdf.length, 12)
+    assert.equal(validationReport.canonicalInventoryCount, 20)
+    assert.equal(validationReport.canonicalSubInventoryCount, 50)
+    assert.equal(validationReport.missingPdfCount, 12)
     assert.equal(validationReport.unmatchedPdfCount, 0)
     assert.equal(validationReport.fieldMismatchCount, 0)
     assert.equal(
@@ -823,6 +823,60 @@ describe("personalización Grünenthal", () => {
       true,
       "las finalidades de Legal deben conservarse completas y sin viñetas crudas para el PDF",
     )
+
+    const finanzas = inventories.find((inventory) => inventory.databaseName === "Finanzas")
+    assert.ok(finanzas, "debe cargarse el área Finanzas")
+    assert.equal(finanzas.subInventories.length, 1)
+
+    const corporateCards = finanzas.subInventories.find(
+      (subInventory) =>
+        subInventory.databaseName === "Gestión de Tarjetas Corporativas (SAP Concur)",
+    )
+    assert.ok(corporateCards, "debe cargarse Gestión de Tarjetas Corporativas (SAP Concur) dentro de Finanzas")
+    assert.equal(corporateCards.responsibleArea, "Finanzas")
+    assert.deepEqual(corporateCards.holderTypes, ["Empleados"])
+    assert.equal(corporateCards.holdersVolume, "<500")
+    assert.equal(corporateCards.consentRequired, true)
+    assert.equal(corporateCards.personalData.length, 13)
+    assert.deepEqual(
+      corporateCards.personalData.map((field) => field.name),
+      [
+        "Nombre",
+        "Correo",
+        "Número de empleado",
+        "Área",
+        "Puesto",
+        "Tipo de tarjeta",
+        "Número de tarjeta",
+        "Últimos dígitos de tarjeta",
+        "Banco emisor",
+        "Límite autorizado",
+        "Fecha de Emisión/Caducidad",
+        "Estatus de tarjeta",
+        "Historial de movimientos",
+      ],
+    )
+    assert.equal(
+      corporateCards.personalData.every(
+        (field) =>
+          field.purposesPrimary.length === 2 &&
+          field.purposesSecondary.length === 0 &&
+          field.purposesPrimary.every((purpose) => !purpose.trim().startsWith("•")),
+      ),
+      true,
+      "las finalidades de Finanzas deben guardarse como párrafos completos y sin viñetas crudas",
+    )
+    assert.equal(corporateCards.grunenthalSourcePdfStatus, "sin-pdf")
+    assert.equal(corporateCards.grunenthalValidationStatus, "pendiente-revision")
+    assert.ok(
+      validationReport.missingPdfs.some(
+        (item) =>
+          item.inventoryName === "Finanzas" &&
+          item.subInventoryName === "Gestión de Tarjetas Corporativas (SAP Concur)" &&
+          item.expectedFileName === "inventario-finanzas-gestion-de-tarjetas-corporativas-sap-concur.pdf",
+      ),
+      "el reporte debe marcar el subinventario Finanzas nuevo como pendiente de PDF fuente",
+    )
   })
 
   it("reemplaza inventarios locales viejos y limpia progreso RAT al migrar la versión", async () => {
@@ -846,13 +900,13 @@ describe("personalización Grünenthal", () => {
     const inventories = JSON.parse(global.localStorage.getItem("inventories") || "[]")
     const subInventories = inventories.flatMap((inventory) => inventory.subInventories)
 
-    assert.equal(inventories.length, 19)
-    assert.equal(subInventories.length, 49)
+    assert.equal(inventories.length, 20)
+    assert.equal(subInventories.length, 50)
     assert.equal(inventories.some((inventory) => inventory.id === "inventario-viejo"), false)
     assert.equal(global.localStorage.getItem("inventories_progress"), null)
     assert.equal(
       subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfStatus === "vinculado").length === 38 &&
-        subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfStatus === "sin-pdf").length === 11,
+        subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfStatus === "sin-pdf").length === 12,
       true,
     )
   })
