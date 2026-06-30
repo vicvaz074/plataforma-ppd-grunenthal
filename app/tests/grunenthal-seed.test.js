@@ -103,10 +103,10 @@ describe("personalización Grünenthal", () => {
       grtContracts.GRUNENTHAL_GRT_CONTRACT_DOCUMENTS.length
 
     assert.equal(inventories.length, 20)
-    assert.equal(seedState.version, "2026.2.14")
+    assert.equal(seedState.version, "2026.2.15")
     assert.equal(
       inventories.reduce((total, inventory) => total + inventory.subInventories.length, 0),
-      50,
+      49,
     )
     assert.equal(storedFiles.length, assets.GRUNENTHAL_DOCUMENT_MANIFEST.length + individualDocumentCount)
     assert.equal(new Set(storedFiles.map((file) => file.id)).size, storedFiles.length)
@@ -319,6 +319,33 @@ describe("personalización Grünenthal", () => {
     assert.equal(sofia.role, "admin")
     assert.equal(sofia.approved, true)
     assert.equal(Object.values(sofia.modulePermissions).every(Boolean), true)
+
+    const dpoHistory = JSON.parse(global.localStorage.getItem("dpo-accreditation-history") || "[]")
+    assert.equal(dpoHistory.length, 9)
+    assert.deepEqual(
+      dpoHistory.map((record) => record.dpoName).sort(),
+      [
+        "Departamento de Datos Personales Grünenthal",
+        "Representante de COMEX",
+        "Representante de Compliance",
+        "Representante de Digital",
+        "Representante de Dirección General",
+        "Representante de Legal",
+        "Representante de Medical",
+        "Representante de Recursos Humanos",
+        "Representante de TI",
+      ].sort(),
+    )
+    assert.equal(
+      dpoHistory.every(
+        (record) =>
+          record.dpoRole === "oficial" &&
+          record.designationDate === "2026-05-08" &&
+          /Acta de designación/.test(record.notes),
+      ),
+      true,
+      "los representantes DPO deben sembrarse con la fecha y soporte del acta",
+    )
   })
 
   it("mapea cada PDF RAT fuente a un subinventario verificado", async () => {
@@ -329,21 +356,30 @@ describe("personalización Grünenthal", () => {
     const withoutSourcePdf = subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfStatus === "sin-pdf")
     const validationReport = ratData.GRUNENTHAL_RAT_VALIDATION_REPORT
 
-    assert.equal(withSourcePdf.length, 38)
+    assert.equal(withSourcePdf.length, 37)
     assert.equal(withoutSourcePdf.length, 12)
     assert.equal(validationReport.canonicalInventoryCount, 20)
-    assert.equal(validationReport.canonicalSubInventoryCount, 50)
+    assert.equal(validationReport.canonicalSubInventoryCount, 49)
+    assert.equal(validationReport.mappedPdfCount, 37)
     assert.equal(validationReport.missingPdfCount, 12)
     assert.equal(validationReport.unmatchedPdfCount, 0)
     assert.equal(validationReport.fieldMismatchCount, 0)
     assert.equal(
       subInventories.filter((subInventory) => subInventory.grunenthalValidationStatus === "verificado").length,
-      38,
+      37,
     )
     assert.equal(
       subInventories.some((subInventory) => subInventory.databaseName === "Ranking de efectividad"),
       true,
     )
+    const digital = inventories.find((inventory) => inventory.databaseName === "Digital")
+    assert.ok(digital, "debe cargarse el área Digital")
+    assert.deepEqual(
+      digital.subInventories.map((subInventory) => subInventory.databaseName),
+      ["Salesforce Marketing"],
+      "Digital ya no debe conservar Registro Beyond porque se mantiene Beyond / Connect en Plataformas Grünenthal",
+    )
+
     const openDataVeeva = subInventories.find((subInventory) =>
       subInventory.databaseName.includes("Open Data") &&
       subInventory.databaseName.includes("Veeva"),
@@ -901,11 +937,11 @@ describe("personalización Grünenthal", () => {
     const subInventories = inventories.flatMap((inventory) => inventory.subInventories)
 
     assert.equal(inventories.length, 20)
-    assert.equal(subInventories.length, 50)
+    assert.equal(subInventories.length, 49)
     assert.equal(inventories.some((inventory) => inventory.id === "inventario-viejo"), false)
     assert.equal(global.localStorage.getItem("inventories_progress"), null)
     assert.equal(
-      subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfStatus === "vinculado").length === 38 &&
+      subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfStatus === "vinculado").length === 37 &&
         subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfStatus === "sin-pdf").length === 12,
       true,
     )

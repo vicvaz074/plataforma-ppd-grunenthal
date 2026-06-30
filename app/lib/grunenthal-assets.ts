@@ -643,7 +643,7 @@ export const GRUNENTHAL_DOCUMENT_MANIFEST: GrunenthalAsset[] = [
     "displayName": "Acta designación de miembros del Departamento de Datos Personales de Grünenthal",
     "path": "/client/grunenthal/dpo/acta-designacion-de-miembros-del-departamento-de-datos-personales-de-grunenthal.docx",
     "type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    "size": 66212,
+    "size": 72437,
     "module": "dpo",
     "category": "dpo-reference",
     "folder": "dpo",
