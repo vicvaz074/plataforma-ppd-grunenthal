@@ -22,7 +22,7 @@ describe("repositorio documental Grünenthal", () => {
   })
 
   it("declara avisos, contratos y recursos laborales individuales con trazabilidad", () => {
-    assert.equal(repository.GRUNENTHAL_INDIVIDUAL_PRIVACY_NOTICE_RECORDS.length, 12)
+    assert.equal(repository.GRUNENTHAL_INDIVIDUAL_PRIVACY_NOTICE_RECORDS.length, 13)
     assert.equal(repository.GRUNENTHAL_INDIVIDUAL_THIRD_PARTY_RECORDS.length, 32)
     assert.equal(repository.GRUNENTHAL_LABOR_POLICY_REPOSITORY_DOCUMENTS.length, 2)
 
@@ -65,8 +65,12 @@ describe("repositorio documental Grünenthal", () => {
 
     const knownAssetIds = new Set(assets.GRUNENTHAL_DOCUMENT_MANIFEST.map((asset) => asset.id))
     assert.ok(
+      knownAssetIds.has("grunenthal-privacy-notices-manualap-grunentha-davara-v6"),
+      "debe existir el ManualAP v6 como fuente compilada",
+    )
+    assert.ok(
       knownAssetIds.has("grunenthal-privacy-notices-manualap-grunentha-davara-v5"),
-      "debe existir el ManualAP v5 como fuente compilada",
+      "debe conservarse el ManualAP v5 como fuente compilada de plataformas",
     )
     assert.equal(
       knownAssetIds.has("grunenthal-privacy-notices-manualap-grunentha-davara-v3"),
@@ -74,8 +78,26 @@ describe("repositorio documental Grünenthal", () => {
       "el ManualAP v3 no debe quedar expuesto como fuente vigente",
     )
     assert.ok(
-      repository.GRUNENTHAL_INDIVIDUAL_PRIVACY_NOTICE_RECORDS.some((record) => record.slug === "aviso-plataformas"),
-      "debe declararse el aviso individual general para plataformas",
+      repository.GRUNENTHAL_INDIVIDUAL_PRIVACY_NOTICE_RECORDS.some(
+        (record) =>
+          record.slug === "aviso-publico-general" &&
+          record.title === "Aviso de Privacidad Integral General para Público General" &&
+          record.originalPath.endsWith("/privacy-notices/individual/aviso-publico-general.docx") &&
+          record.previewPdfPath.endsWith("/privacy-notices/individual/aviso-publico-general-preview.pdf") &&
+          record.sourceCompiledAssetId === "grunenthal-privacy-notices-manualap-grunentha-davara-v6",
+      ),
+      "debe declararse el AP individual para público general",
+    )
+    assert.ok(
+      repository.GRUNENTHAL_INDIVIDUAL_PRIVACY_NOTICE_RECORDS.some(
+        (record) =>
+          record.slug === "aviso-plataformas" &&
+          record.title === "Aviso de Privacidad Integral General para Plataformas" &&
+          record.originalPath.endsWith("/privacy-notices/individual/aviso-plataformas.docx") &&
+          record.previewPdfPath.endsWith("/privacy-notices/individual/aviso-plataformas-preview.pdf") &&
+          record.sourceCompiledAssetId === "grunenthal-privacy-notices-manualap-grunentha-davara-v5",
+      ),
+      "debe conservarse el aviso individual general para plataformas",
     )
     assert.ok(
       repository.GRUNENTHAL_INDIVIDUAL_PRIVACY_NOTICE_RECORDS.some(

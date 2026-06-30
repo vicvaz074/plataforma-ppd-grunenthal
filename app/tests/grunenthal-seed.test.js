@@ -69,7 +69,7 @@ describe("personalización Grünenthal", () => {
   })
 
   it("declara los assets públicos de Grünenthal y todos existen en public", () => {
-    assert.equal(assets.GRUNENTHAL_DOCUMENT_MANIFEST.length, 64)
+    assert.equal(assets.GRUNENTHAL_DOCUMENT_MANIFEST.length, 65)
     assert.equal(assets.GRUNENTHAL_LOGO.path, "/client/grunenthal/brand/grunenthal-logo-green.png")
     assert.equal(assets.GRUNENTHAL_LOGO.whiteFilter, "brightness(0) invert(1)")
     assert.equal(assets.GRUNENTHAL_LOGO.blackFilter, "brightness(0)")
@@ -103,7 +103,7 @@ describe("personalización Grünenthal", () => {
       grtContracts.GRUNENTHAL_GRT_CONTRACT_DOCUMENTS.length
 
     assert.equal(inventories.length, 19)
-    assert.equal(seedState.version, "2026.2.12")
+    assert.equal(seedState.version, "2026.2.13")
     assert.equal(
       inventories.reduce((total, inventory) => total + inventory.subInventories.length, 0),
       49,
@@ -121,7 +121,7 @@ describe("personalización Grünenthal", () => {
     const wordAssets = assets.GRUNENTHAL_DOCUMENT_MANIFEST.filter((asset) =>
       ["docx", "docm"].includes(asset.extension),
     )
-    assert.equal(wordAssets.length, 22)
+    assert.equal(wordAssets.length, 23)
 
     for (const asset of wordAssets) {
       const storedFile = storedFiles.find((file) => file.id === `grunenthal-file-${asset.id}`)
@@ -138,7 +138,7 @@ describe("personalización Grünenthal", () => {
     }
 
     const individualNotices = storedFiles.filter((file) => file.metadata?.individualRecordType === "privacy-notice")
-    assert.equal(individualNotices.length, 12)
+    assert.equal(individualNotices.length, 13)
     assert.equal(individualNotices.every((file) => file.category === "privacy-notice"), true)
     assert.equal(
       individualNotices.every((file) => file.metadata?.createdBy === "Legal"),
@@ -152,6 +152,8 @@ describe("personalización Grünenthal", () => {
       "Aviso de Privacidad Integral para Proveedores Persona Física",
       "Aviso de Privacidad para Visitantes y CCTV",
       "E-1 Aviso de Privacidad Simplificado para Visitantes",
+      "Aviso de Privacidad Integral General para Plataformas",
+      "Aviso de Privacidad Integral General para Público General",
     ]) {
       assert.ok(
         individualNotices.some((file) => file.metadata?.noticeName === noticeName),
@@ -164,10 +166,15 @@ describe("personalización Grünenthal", () => {
       "cada aviso individual debe descargar DOCX y previsualizar PDF",
     )
 
-    const compiledPrivacyManual = storedFiles.find(
+    const compiledPrivacyManualV5 = storedFiles.find(
       (file) => file.metadata?.grunenthalAssetId === "grunenthal-privacy-notices-manualap-grunentha-davara-v5",
     )
-    assert.equal(compiledPrivacyManual?.category, "privacy-policy")
+    assert.equal(compiledPrivacyManualV5?.category, "privacy-policy")
+
+    const compiledPrivacyManualV6 = storedFiles.find(
+      (file) => file.metadata?.grunenthalAssetId === "grunenthal-privacy-notices-manualap-grunentha-davara-v6",
+    )
+    assert.equal(compiledPrivacyManualV6?.category, "privacy-policy")
     assert.equal(
       storedFiles.some((file) => file.metadata?.grunenthalAssetId === "grunenthal-privacy-notices-manualap-grunentha-davara-v3"),
       false,
