@@ -22883,6 +22883,351 @@ export const GRUNENTHAL_RAT_INVENTORIES: Inventory[] = [
     "status": "completado",
     "grunenthalSeedVersion": "2026.3.0",
     "grunenthalSourceExportedAt": "2026-06-26T00:38:40.679Z"
+  },
+  {
+    "id": "grunenthal-rat-area-compliance",
+    "databaseName": "Compliance",
+    "responsible": "Grünenthal",
+    "companyLogoFileName": "grunenthal-logo-green.png",
+    "reportAccentColor": "#40BB6A",
+    "subInventories": [
+      {
+        "id": "grunenthal-rat-inventario-compliance-gestion-de-linea-de-etica-ehs",
+        "databaseName": "Gestión de Linea de Ética (EHS)",
+        "holderTypes": [
+          "Empleados"
+        ],
+        "otherHolderType": "",
+        "otherLegalBasis": "",
+        "holdersVolume": "<500",
+        "accessibility": "A1",
+        "environment": "E2",
+        "responsibleArea": "Compliance",
+        "showOtherResponsibleArea": true,
+        "obtainingMethod": "directo",
+        "showOtherObtainingMethod": false,
+        "obtainingSource": "",
+        "otherConsentException": "",
+        "otherConsentMechanism": "",
+        "otherConsentType": "",
+        "privacyNoticeFiles": [],
+        "privacyNoticeFileIds": [
+          "grunenthal-rat-inventario-compliance-gestion-de-linea-de-etica-ehs-aviso-01"
+        ],
+        "privacyNoticeFileNames": [
+          "Aviso de Privacidad Integral para Empleados.docx"
+        ],
+        "privacyNoticeFileId": "grunenthal-rat-inventario-compliance-gestion-de-linea-de-etica-ehs-aviso-01",
+        "privacyNoticeFileName": "Aviso de Privacidad Integral para Empleados.docx",
+        "consentRequired": false,
+        "consentException": [
+          "Una disposición jurídica así lo disponga"
+        ],
+        "consentMechanism": "",
+        "consentType": "",
+        "tacitDescription": "",
+        "secondaryConsentType": "",
+        "secondaryConsentMechanism": "",
+        "secondaryTacitDescription": "",
+        "secondaryExpresoForm": "",
+        "secondaryExpresoEscritoForm": "",
+        "secondaryPurposesConsent": {
+          "Comunicaciones no laborales: Enviar información general que no esté directamente relacionada con la relación laboral.": {
+            "consentType": "tacito",
+            "consentMechanism": "aviso_de_privacidad",
+            "exceptions": []
+          },
+          "Eventos y actividades voluntarias: Gestionar su participación voluntaria en eventos corporativos, campañas de salud, actividades deportivas, sociales u otras iniciativas organizadas por Grünenthal.": {
+            "consentType": "tacito",
+            "consentMechanism": "aviso_de_privacidad",
+            "exceptions": []
+          },
+          "Encuestas de clima laboral: Realizar estudios y encuestas para mejorar el ambiente laboral dentro de la organización.": {
+            "consentType": "tacito",
+            "consentMechanism": "aviso_de_privacidad",
+            "exceptions": []
+          },
+          "Contenido y reconocimientos públicos: Crear contenido con fines informativos o publicitarios para redes sociales o plataformas internas, así como reconocer públicamente logros laborales o personales, celebraciones y otros acontecimientos destacables.": {
+            "consentType": "tacito",
+            "consentMechanism": "aviso_de_privacidad",
+            "exceptions": []
+          }
+        },
+        "processingArea": [
+          "Otros"
+        ],
+        "otherProcessingArea": "Compliance",
+        "showOtherProcessingArea": false,
+        "processingSystem": "electronico",
+        "processingSystemName": "EHS",
+        "processingDescription": [
+          "Obtencion",
+          "Uso",
+          "Divulgacion",
+          "Almacenamiento",
+          "Bloqueo",
+          "Supresión"
+        ],
+        "accessDescription": [
+          "Visualización",
+          "Edición",
+          "Descarga"
+        ],
+        "otherAccessDescription": "",
+        "dataLifecyclePrivileges": "",
+        "additionalAccesses": [
+          {
+            "id": "grunenthal-rat-inventario-compliance-gestion-de-linea-de-etica-ehs-acceso-001",
+            "area": "N/A",
+            "showOtherArea": true,
+            "privileges": [
+              "Otros"
+            ],
+            "otherPrivilege": "N/A",
+            "role": "",
+            "otherRole": ""
+          }
+        ],
+        "additionalAreas": [],
+        "additionalAreasAccess": [],
+        "otherAdditionalAreasAccess": "",
+        "showOtherAdditionalAreasAccess": false,
+        "additionalAreasLegalBasis": [],
+        "otherAdditionalAreasLegalBasis": "",
+        "additionalAreasPurposes": [],
+        "otherAdditionalAreasPurposes": "",
+        "storageMethod": "Otro",
+        "otherStorageMethod": "EHS",
+        "physicalLocation": "N/A",
+        "backupPeriodicity": "N/A",
+        "isBackedUp": false,
+        "backupDescription": "",
+        "backupResponsible": "",
+        "showOtherBackupResponsible": false,
+        "conservationTerm": "1 año",
+        "showOtherConservationTerm": false,
+        "conservationJustification": [
+          "Existencia de disposición legal",
+          "Consentimiento vigente"
+        ],
+        "otherConservationJustification": "",
+        "conservationJustificationDetail": "",
+        "conservationLegalBasis": "804 de la Ley Federal del Trabajo",
+        "blockingTime": "2 años",
+        "showOtherBlockingTime": false,
+        "legalPrescription": [
+          "Laboral"
+        ],
+        "otherLegalPrescription": "",
+        "blockingLegalDisposition": "Artículo 519 de la Ley Federal del Trabajo",
+        "additionalConservations": [],
+        "additionalBlockings": [],
+        "showOtherProcessingTime": false,
+        "processingTime": "",
+        "postRelationshipProcessing": "",
+        "legalConservation": [],
+        "otherLegalConservation": "",
+        "deletionMethods": [
+          "Otros"
+        ],
+        "otherDeletionMethod": "Borrado de Archivos",
+        "deletionMethod": "",
+        "dataTransfer": "si",
+        "transferRecipient": "Autoridades Competentes",
+        "transferPurposes": "Cumplimiento de obligaciones legales y/o requerimientos.",
+        "transferConsentRequired": false,
+        "transferExceptions": [
+          "Cuando lo establezca una ley o tratado internacional."
+        ],
+        "transferConsentType": "",
+        "transferTacitDescription": "",
+        "transferExpresoForm": "",
+        "transferOtherExpresoForm": "",
+        "transferExpresoEscritoForm": "",
+        "transferOtherExpresoEscritoForm": "",
+        "transferLegalInstrument": [
+          "Otro"
+        ],
+        "otherTransferLegalInstrument": "N/A",
+        "transferInAP": true,
+        "additionalTransfers": [],
+        "dataRemission": "si",
+        "remissionRecipient": "Plataforma EHS",
+        "remissionPurposes": [
+          "Provisión de servicios"
+        ],
+        "otherRemissionPurpose": "",
+        "remissionLegalInstrument": [
+          "Otro"
+        ],
+        "otherRemissionLegalInstrument": "Instrumento jurídico vinculante",
+        "additionalRemissions": [],
+        "personalData": [
+          {
+            "id": "grunenthal-rat-inventario-compliance-gestion-de-linea-de-etica-ehs-dato-001",
+            "name": "Nombre",
+            "category": "Identificación",
+            "proporcionalidad": true,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Identificación y registro: Identificarlo y registrarlo como colaborador de Grünenthal darlo de alta en los sistemas internos asignarle un correo institucional y generar su credencial de empleado.",
+              "Gestión de nómina y prestaciones: Administrar el pago de nómina prestaciones laborales caja de ahorro seguros pensiones vales viáticos viajes de negocio y demás beneficios que correspondan.",
+              "Evaluación y desarrollo profesional: Elaborar perfiles laborales evaluar su desempeño y gestionar actividades de capacitación entrenamiento reconocimientos y premios.",
+              "Acceso a instalaciones: Controlar su ingreso a las instalaciones y en su caso asignarle un espacio de estacionamiento.",
+              "Comunicación interna: Mantener comunicaciones estrictamente relacionadas con asuntos laborales.",
+              "Gestión de vehículos corporativos: Administrar la asignación uso y control de vehículos corporativos y gestionar procedimientos de compra del vehículo por parte del colaborador.",
+              "Validación de información: Solicitar y verificar referencias personales o laborales así como corroborar la veracidad de la información proporcionada por usted durante la relación laboral.",
+              "Atención a emergencias: Contactar a las personas que usted designe como contactos de emergencia cuando sea necesario.",
+              "Salud ocupacional: Realizar estudios médicos evaluaciones periódicas y pruebas (incluyendo alcoholemia y consumo de sustancias) para mantener un entorno laboral seguro.",
+              "Uso y seguridad de sistemas: Gestionar verificar monitorear e investigar el uso y la seguridad de la información a la que tiene acceso como parte de sus funciones laborales así como el uso correcto de los dispositivos proporcionados como herramientas de trabajo incluyendo sistemas computacionales redes correo electrónico Internet teléfonos celulares y cualquier otro dispositivo habilitado para el cumplimiento de sus funciones. Para estos efectos Grünenthal podrá acceder y monitorear dichas herramientas así como los sistemas de seguridad y cámaras de CCTV.",
+              "Seguridad física: Proteger la integridad de las personas y los bienes ubicados dentro de nuestras instalaciones mediante controles internos de seguridad cámaras de videovigilancia (CCTV) y otros dispositivos tecnológicos.",
+              "Auditorías: Realizar auditorías internas o externas que permitan verificar el cumplimiento de obligaciones laborales legales de seguridad y de políticas internas.",
+              "Investigaciones internas: Realizar investigaciones derivadas de denuncias incidentes o posibles violaciones a la ley o a políticas internas.",
+              "Eventos corporativos: En su caso invitarlo y gestionar su viaje y hospedaje para participar en eventos organizados por Grünenthal.",
+              "Cumplimiento de políticas internas: Dar cumplimiento a las obligaciones y procedimientos establecidos en políticas y lineamientos internos de Grünenthal.",
+              "Cumplimiento normativo: Dar cumplimiento a la legislación aplicable y atender requerimientos de autoridades competentes en los casos legalmente previstos"
+            ],
+            "purposesSecondary": [
+              "Comunicaciones no laborales: Enviar información general que no esté directamente relacionada con la relación laboral.",
+              "Eventos y actividades voluntarias: Gestionar su participación voluntaria en eventos corporativos campañas de salud actividades deportivas sociales u otras iniciativas organizadas por Grünenthal.",
+              "Encuestas de clima laboral: Realizar estudios y encuestas para mejorar el ambiente laboral dentro de la organización.",
+              "Contenido y reconocimientos públicos: Crear contenido con fines informativos o publicitarios para redes sociales o plataformas internas así como reconocer públicamente logros laborales o personales celebraciones y otros acontecimientos destacables."
+            ]
+          },
+          {
+            "id": "grunenthal-rat-inventario-compliance-gestion-de-linea-de-etica-ehs-dato-002",
+            "name": "Puesto Laboral",
+            "category": "Información laboral",
+            "proporcionalidad": true,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Identificación y registro: Identificarlo y registrarlo como colaborador de Grünenthal darlo de alta en los sistemas internos asignarle un correo institucional y generar su credencial de empleado.",
+              "Gestión de nómina y prestaciones: Administrar el pago de nómina prestaciones laborales caja de ahorro seguros pensiones vales viáticos viajes de negocio y demás beneficios que correspondan.",
+              "Evaluación y desarrollo profesional: Elaborar perfiles laborales evaluar su desempeño y gestionar actividades de capacitación entrenamiento reconocimientos y premios.",
+              "Acceso a instalaciones: Controlar su ingreso a las instalaciones y en su caso asignarle un espacio de estacionamiento.",
+              "Comunicación interna: Mantener comunicaciones estrictamente relacionadas con asuntos laborales.",
+              "Gestión de vehículos corporativos: Administrar la asignación uso y control de vehículos corporativos y gestionar procedimientos de compra del vehículo por parte del colaborador.",
+              "Validación de información: Solicitar y verificar referencias personales o laborales así como corroborar la veracidad de la información proporcionada por usted durante la relación laboral.",
+              "Atención a emergencias: Contactar a las personas que usted designe como contactos de emergencia cuando sea necesario.",
+              "Salud ocupacional: Realizar estudios médicos evaluaciones periódicas y pruebas (incluyendo alcoholemia y consumo de sustancias) para mantener un entorno laboral seguro.",
+              "Uso y seguridad de sistemas: Gestionar verificar monitorear e investigar el uso y la seguridad de la información a la que tiene acceso como parte de sus funciones laborales así como el uso correcto de los dispositivos proporcionados como herramientas de trabajo incluyendo sistemas computacionales redes correo electrónico Internet teléfonos celulares y cualquier otro dispositivo habilitado para el cumplimiento de sus funciones. Para estos efectos Grünenthal podrá acceder y monitorear dichas herramientas así como los sistemas de seguridad y cámaras de CCTV.",
+              "Seguridad física: Proteger la integridad de las personas y los bienes ubicados dentro de nuestras instalaciones mediante controles internos de seguridad cámaras de videovigilancia (CCTV) y otros dispositivos tecnológicos.",
+              "Auditorías: Realizar auditorías internas o externas que permitan verificar el cumplimiento de obligaciones laborales legales de seguridad y de políticas internas.",
+              "Investigaciones internas: Realizar investigaciones derivadas de denuncias incidentes o posibles violaciones a la ley o a políticas internas.",
+              "Eventos corporativos: En su caso invitarlo y gestionar su viaje y hospedaje para participar en eventos organizados por Grünenthal.",
+              "Cumplimiento de políticas internas: Dar cumplimiento a las obligaciones y procedimientos establecidos en políticas y lineamientos internos de Grünenthal.",
+              "Cumplimiento normativo: Dar cumplimiento a la legislación aplicable y atender requerimientos de autoridades competentes en los casos legalmente previstos"
+            ],
+            "purposesSecondary": [
+              "Comunicaciones no laborales: Enviar información general que no esté directamente relacionada con la relación laboral.",
+              "Eventos y actividades voluntarias: Gestionar su participación voluntaria en eventos corporativos campañas de salud actividades deportivas sociales u otras iniciativas organizadas por Grünenthal.",
+              "Encuestas de clima laboral: Realizar estudios y encuestas para mejorar el ambiente laboral dentro de la organización.",
+              "Contenido y reconocimientos públicos: Crear contenido con fines informativos o publicitarios para redes sociales o plataformas internas así como reconocer públicamente logros laborales o personales celebraciones y otros acontecimientos destacables."
+            ]
+          },
+          {
+            "id": "grunenthal-rat-inventario-compliance-gestion-de-linea-de-etica-ehs-dato-003",
+            "name": "Subsidiaria",
+            "category": "Información laboral",
+            "proporcionalidad": true,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Identificación y registro: Identificarlo y registrarlo como colaborador de Grünenthal darlo de alta en los sistemas internos asignarle un correo institucional y generar su credencial de empleado.",
+              "Gestión de nómina y prestaciones: Administrar el pago de nómina prestaciones laborales caja de ahorro seguros pensiones vales viáticos viajes de negocio y demás beneficios que correspondan.",
+              "Evaluación y desarrollo profesional: Elaborar perfiles laborales evaluar su desempeño y gestionar actividades de capacitación entrenamiento reconocimientos y premios.",
+              "Acceso a instalaciones: Controlar su ingreso a las instalaciones y en su caso asignarle un espacio de estacionamiento.",
+              "Comunicación interna: Mantener comunicaciones estrictamente relacionadas con asuntos laborales.",
+              "Gestión de vehículos corporativos: Administrar la asignación uso y control de vehículos corporativos y gestionar procedimientos de compra del vehículo por parte del colaborador.",
+              "Validación de información: Solicitar y verificar referencias personales o laborales así como corroborar la veracidad de la información proporcionada por usted durante la relación laboral.",
+              "Atención a emergencias: Contactar a las personas que usted designe como contactos de emergencia cuando sea necesario.",
+              "Salud ocupacional: Realizar estudios médicos evaluaciones periódicas y pruebas (incluyendo alcoholemia y consumo de sustancias) para mantener un entorno laboral seguro.",
+              "Uso y seguridad de sistemas: Gestionar verificar monitorear e investigar el uso y la seguridad de la información a la que tiene acceso como parte de sus funciones laborales así como el uso correcto de los dispositivos proporcionados como herramientas de trabajo incluyendo sistemas computacionales redes correo electrónico Internet teléfonos celulares y cualquier otro dispositivo habilitado para el cumplimiento de sus funciones. Para estos efectos Grünenthal podrá acceder y monitorear dichas herramientas así como los sistemas de seguridad y cámaras de CCTV.",
+              "Seguridad física: Proteger la integridad de las personas y los bienes ubicados dentro de nuestras instalaciones mediante controles internos de seguridad cámaras de videovigilancia (CCTV) y otros dispositivos tecnológicos.",
+              "Auditorías: Realizar auditorías internas o externas que permitan verificar el cumplimiento de obligaciones laborales legales de seguridad y de políticas internas.",
+              "Investigaciones internas: Realizar investigaciones derivadas de denuncias incidentes o posibles violaciones a la ley o a políticas internas.",
+              "Eventos corporativos: En su caso invitarlo y gestionar su viaje y hospedaje para participar en eventos organizados por Grünenthal.",
+              "Cumplimiento de políticas internas: Dar cumplimiento a las obligaciones y procedimientos establecidos en políticas y lineamientos internos de Grünenthal.",
+              "Cumplimiento normativo: Dar cumplimiento a la legislación aplicable y atender requerimientos de autoridades competentes en los casos legalmente previstos"
+            ],
+            "purposesSecondary": [
+              "Comunicaciones no laborales: Enviar información general que no esté directamente relacionada con la relación laboral.",
+              "Eventos y actividades voluntarias: Gestionar su participación voluntaria en eventos corporativos campañas de salud actividades deportivas sociales u otras iniciativas organizadas por Grünenthal.",
+              "Encuestas de clima laboral: Realizar estudios y encuestas para mejorar el ambiente laboral dentro de la organización.",
+              "Contenido y reconocimientos públicos: Crear contenido con fines informativos o publicitarios para redes sociales o plataformas internas así como reconocer públicamente logros laborales o personales celebraciones y otros acontecimientos destacables."
+            ]
+          },
+          {
+            "id": "grunenthal-rat-inventario-compliance-gestion-de-linea-de-etica-ehs-dato-004",
+            "name": "Correo electrónico",
+            "category": "Contacto",
+            "proporcionalidad": true,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Identificación y registro: Identificarlo y registrarlo como colaborador de Grünenthal darlo de alta en los sistemas internos asignarle un correo institucional y generar su credencial de empleado.",
+              "Gestión de nómina y prestaciones: Administrar el pago de nómina prestaciones laborales caja de ahorro seguros pensiones vales viáticos viajes de negocio y demás beneficios que correspondan.",
+              "Evaluación y desarrollo profesional: Elaborar perfiles laborales evaluar su desempeño y gestionar actividades de capacitación entrenamiento reconocimientos y premios.",
+              "Acceso a instalaciones: Controlar su ingreso a las instalaciones y en su caso asignarle un espacio de estacionamiento.",
+              "Comunicación interna: Mantener comunicaciones estrictamente relacionadas con asuntos laborales.",
+              "Gestión de vehículos corporativos: Administrar la asignación uso y control de vehículos corporativos y gestionar procedimientos de compra del vehículo por parte del colaborador.",
+              "Validación de información: Solicitar y verificar referencias personales o laborales así como corroborar la veracidad de la información proporcionada por usted durante la relación laboral.",
+              "Atención a emergencias: Contactar a las personas que usted designe como contactos de emergencia cuando sea necesario.",
+              "Salud ocupacional: Realizar estudios médicos evaluaciones periódicas y pruebas (incluyendo alcoholemia y consumo de sustancias) para mantener un entorno laboral seguro.",
+              "Uso y seguridad de sistemas: Gestionar verificar monitorear e investigar el uso y la seguridad de la información a la que tiene acceso como parte de sus funciones laborales así como el uso correcto de los dispositivos proporcionados como herramientas de trabajo incluyendo sistemas computacionales redes correo electrónico Internet teléfonos celulares y cualquier otro dispositivo habilitado para el cumplimiento de sus funciones. Para estos efectos Grünenthal podrá acceder y monitorear dichas herramientas así como los sistemas de seguridad y cámaras de CCTV.",
+              "Seguridad física: Proteger la integridad de las personas y los bienes ubicados dentro de nuestras instalaciones mediante controles internos de seguridad cámaras de videovigilancia (CCTV) y otros dispositivos tecnológicos.",
+              "Auditorías: Realizar auditorías internas o externas que permitan verificar el cumplimiento de obligaciones laborales legales de seguridad y de políticas internas.",
+              "Investigaciones internas: Realizar investigaciones derivadas de denuncias incidentes o posibles violaciones a la ley o a políticas internas.",
+              "Eventos corporativos: En su caso invitarlo y gestionar su viaje y hospedaje para participar en eventos organizados por Grünenthal.",
+              "Cumplimiento de políticas internas: Dar cumplimiento a las obligaciones y procedimientos establecidos en políticas y lineamientos internos de Grünenthal.",
+              "Cumplimiento normativo: Dar cumplimiento a la legislación aplicable y atender requerimientos de autoridades competentes en los casos legalmente previstos"
+            ],
+            "purposesSecondary": [
+              "Comunicaciones no laborales: Enviar información general que no esté directamente relacionada con la relación laboral.",
+              "Eventos y actividades voluntarias: Gestionar su participación voluntaria en eventos corporativos campañas de salud actividades deportivas sociales u otras iniciativas organizadas por Grünenthal.",
+              "Encuestas de clima laboral: Realizar estudios y encuestas para mejorar el ambiente laboral dentro de la organización.",
+              "Contenido y reconocimientos públicos: Crear contenido con fines informativos o publicitarios para redes sociales o plataformas internas así como reconocer públicamente logros laborales o personales celebraciones y otros acontecimientos destacables."
+            ]
+          },
+          {
+            "id": "grunenthal-rat-inventario-compliance-gestion-de-linea-de-etica-ehs-dato-005",
+            "name": "Situación que Denuncia",
+            "category": "Otros datos sensibles",
+            "proporcionalidad": true,
+            "riesgo": "alto",
+            "purposesPrimary": [
+              "Identificación y registro: Identificarlo y registrarlo como colaborador de Grünenthal darlo de alta en los sistemas internos asignarle un correo institucional y generar su credencial de empleado.",
+              "Gestión de nómina y prestaciones: Administrar el pago de nómina prestaciones laborales caja de ahorro seguros pensiones vales viáticos viajes de negocio y demás beneficios que correspondan.",
+              "Evaluación y desarrollo profesional: Elaborar perfiles laborales evaluar su desempeño y gestionar actividades de capacitación entrenamiento reconocimientos y premios.",
+              "Acceso a instalaciones: Controlar su ingreso a las instalaciones y en su caso asignarle un espacio de estacionamiento.",
+              "Comunicación interna: Mantener comunicaciones estrictamente relacionadas con asuntos laborales.",
+              "Gestión de vehículos corporativos: Administrar la asignación uso y control de vehículos corporativos y gestionar procedimientos de compra del vehículo por parte del colaborador.",
+              "Validación de información: Solicitar y verificar referencias personales o laborales así como corroborar la veracidad de la información proporcionada por usted durante la relación laboral.",
+              "Atención a emergencias: Contactar a las personas que usted designe como contactos de emergencia cuando sea necesario.",
+              "Salud ocupacional: Realizar estudios médicos evaluaciones periódicas y pruebas (incluyendo alcoholemia y consumo de sustancias) para mantener un entorno laboral seguro.",
+              "Uso y seguridad de sistemas: Gestionar verificar monitorear e investigar el uso y la seguridad de la información a la que tiene acceso como parte de sus funciones laborales así como el uso correcto de los dispositivos proporcionados como herramientas de trabajo incluyendo sistemas computacionales redes correo electrónico Internet teléfonos celulares y cualquier otro dispositivo habilitado para el cumplimiento de sus funciones. Para estos efectos Grünenthal podrá acceder y monitorear dichas herramientas así como los sistemas de seguridad y cámaras de CCTV.",
+              "Seguridad física: Proteger la integridad de las personas y los bienes ubicados dentro de nuestras instalaciones mediante controles internos de seguridad cámaras de videovigilancia (CCTV) y otros dispositivos tecnológicos.",
+              "Auditorías: Realizar auditorías internas o externas que permitan verificar el cumplimiento de obligaciones laborales legales de seguridad y de políticas internas.",
+              "Investigaciones internas: Realizar investigaciones derivadas de denuncias incidentes o posibles violaciones a la ley o a políticas internas.",
+              "Eventos corporativos: En su caso invitarlo y gestionar su viaje y hospedaje para participar en eventos organizados por Grünenthal.",
+              "Cumplimiento de políticas internas: Dar cumplimiento a las obligaciones y procedimientos establecidos en políticas y lineamientos internos de Grünenthal.",
+              "Cumplimiento normativo: Dar cumplimiento a la legislación aplicable y atender requerimientos de autoridades competentes en los casos legalmente previstos"
+            ],
+            "purposesSecondary": [
+              "Comunicaciones no laborales: Enviar información general que no esté directamente relacionada con la relación laboral.",
+              "Eventos y actividades voluntarias: Gestionar su participación voluntaria en eventos corporativos campañas de salud actividades deportivas sociales u otras iniciativas organizadas por Grünenthal.",
+              "Encuestas de clima laboral: Realizar estudios y encuestas para mejorar el ambiente laboral dentro de la organización.",
+              "Contenido y reconocimientos públicos: Crear contenido con fines informativos o publicitarios para redes sociales o plataformas internas así como reconocer públicamente logros laborales o personales celebraciones y otros acontecimientos destacables."
+            ]
+          }
+        ]
+      }
+    ],
+    "riskLevel": "",
+    "createdAt": "2026-06-29T23:35:21.988Z",
+    "updatedAt": "2026-06-29T23:59:40.269Z",
+    "createdBy": "Sofia Jaimes",
+    "updatedBy": "Sofia Jaimes",
+    "status": "completado",
+    "grunenthalSourceExportedAt": "2026-06-30T00:00:10.802Z"
   }
 ]
 
@@ -24446,11 +24791,11 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
 export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
   "generatedAt": "2026-06-30T00:00:00.000Z",
   "sourceDirectory": "Políticas de Grünenthal (2026)/InventariosDatos Personales",
-  "canonicalInventoryCount": 16,
-  "canonicalSubInventoryCount": 39,
+  "canonicalInventoryCount": 17,
+  "canonicalSubInventoryCount": 40,
   "pdfInventoryCount": 37,
   "mappedPdfCount": 37,
-  "missingPdfCount": 2,
+  "missingPdfCount": 3,
   "unmatchedPdfCount": 0,
   "fieldMismatchCount": 0,
   "missingPdfs": [
@@ -24461,6 +24806,10 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     {
       "inventoryName": "HR",
       "subInventoryName": "Plataforma de reconocimientos empleados"
+    },
+    {
+      "inventoryName": "Compliance",
+      "subInventoryName": "Gestión de Linea de Ética (EHS)"
     }
   ],
   "unmatchedPdfs": [],
