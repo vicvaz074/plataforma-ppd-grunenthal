@@ -102,6 +102,77 @@ describe("normalización de inventarios RAT para edición", () => {
     assert.deepEqual(sub.personalData[0].purposesSecondary, ["Comunicaciones"])
   })
 
+  it("mantiene cada finalidad capturada como un solo elemento aunque incluya comas", async () => {
+    const { normalizeInventoryForForm } = await importModule("app/rat/utils/inventory-normalization.ts")
+
+    const primaryPurposes = [
+      "Identificación y registro: Identificarlo y registrarlo como colaborador de Grünenthal, darlo de alta en los sistemas internos, asignarle un correo institucional y generar su credencial de empleado.",
+      "Expediente laboral: Crear, actualizar y conservar su expediente laboral, así como administrar la información relacionada con su trayectoria en la empresa.",
+      "Gestión de nómina y prestaciones: Administrar el pago de nómina, prestaciones laborales, caja de ahorro, seguros, pensiones, vales, viáticos, viajes de negocio y demás beneficios que correspondan.",
+    ]
+    const secondaryPurposes = [
+      "Eventos corporativos: En su caso, invitarlo y gestionar su viaje, hospedaje y participación en eventos organizados por Grünenthal.",
+    ]
+
+    const normalized = normalizeInventoryForForm({
+      id: "inventory-1",
+      databaseName: "Área de prueba",
+      subInventories: [
+        {
+          id: "sub-1",
+          databaseName: "Subinventario",
+          personalData: [
+            {
+              id: "dato-1",
+              name: "Nombre",
+              purposesPrimary: primaryPurposes,
+              purposesSecondary: secondaryPurposes,
+            },
+          ],
+        },
+      ],
+    })
+
+    const personalData = normalized.subInventories[0].personalData[0]
+
+    assert.deepEqual(personalData.purposesPrimary, primaryPurposes)
+    assert.deepEqual(personalData.purposesSecondary, secondaryPurposes)
+  })
+
+  it("recompone continuaciones de finalidades etiquetadas que ya venían fragmentadas", async () => {
+    const { normalizeInventoryForForm } = await importModule("app/rat/utils/inventory-normalization.ts")
+
+    const normalized = normalizeInventoryForForm({
+      id: "inventory-1",
+      databaseName: "Área de prueba",
+      subInventories: [
+        {
+          id: "sub-1",
+          databaseName: "Subinventario",
+          personalData: [
+            {
+              id: "dato-1",
+              name: "Nombre",
+              purposesPrimary: [
+                "Finalidad alfa: Procesar datos del trámite",
+                "revisar documentación",
+                "archivar comprobantes.",
+                "Finalidad beta: Notificar avances al titular.",
+                "recordatorio independiente",
+              ],
+            },
+          ],
+        },
+      ],
+    })
+
+    assert.deepEqual(normalized.subInventories[0].personalData[0].purposesPrimary, [
+      "Finalidad alfa: Procesar datos del trámite revisar documentación archivar comprobantes.",
+      "Finalidad beta: Notificar avances al titular.",
+      "recordatorio independiente",
+    ])
+  })
+
   it("crea un inventario nuevo cuando el borrador trae un id que no existe", async () => {
     const { createDefaultInventory, prepareInventorySave } = await importModule("app/rat/utils/inventory-normalization.ts")
 

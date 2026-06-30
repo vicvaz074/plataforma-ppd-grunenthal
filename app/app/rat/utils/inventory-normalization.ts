@@ -34,12 +34,7 @@ const stripAccents = (value: string) =>
 const normalizedKey = (value: unknown) =>
   stripAccents(cleanText(value)).toLowerCase()
 
-const splitTextList = (value: unknown): string[] => {
-  const source = Array.isArray(value) ? value : [value]
-  const values = source.flatMap((item) =>
-    typeof item === "string" ? item.split(/[,;\n]/g) : [cleanText(item)],
-  )
-
+const uniqueCleanTextList = (values: unknown[]): string[] => {
   const seen = new Set<string>()
   return values.reduce<string[]>((acc, raw) => {
     const trimmed = cleanText(raw)
@@ -49,6 +44,72 @@ const splitTextList = (value: unknown): string[] => {
     acc.push(trimmed)
     return acc
   }, [])
+}
+
+const splitTextList = (value: unknown): string[] => {
+  const source = Array.isArray(value) ? value : [value]
+  const values = source.flatMap((item) =>
+    typeof item === "string" ? item.split(/[,;\n]/g) : [cleanText(item)],
+  )
+
+  return uniqueCleanTextList(values)
+}
+
+const PURPOSE_LABEL_PATTERN = /^[A-ZÁÉÍÓÚÜÑ][^:\n]{2,80}:\s+\S/u
+const PURPOSE_CONTINUATION_AFTER_PERIOD_PATTERN =
+  /^(?:asi|e|en su caso|incluyendo|mediante|o|para|u|y)\b/
+
+const looksLikeLabeledPurpose = (value: string) =>
+  PURPOSE_LABEL_PATTERN.test(value.trim())
+
+const shouldJoinPurposeFragment = (base: string, fragment: string) => {
+  const normalizedFragment = normalizedKey(fragment)
+  if (!normalizedFragment) return false
+  if (!/[.!?]$/.test(cleanText(base))) return true
+  return PURPOSE_CONTINUATION_AFTER_PERIOD_PATTERN.test(normalizedFragment)
+}
+
+const joinPurposeFragments = (base: string, fragment: string) =>
+  `${base.trimEnd()} ${fragment.trimStart()}`
+    .replace(/[ \t]+/g, " ")
+    .trim()
+
+const restorePurposeFragments = (purposes: string[]): string[] => {
+  let activeLabeledPurposeIndex = -1
+
+  return purposes.reduce<string[]>((rows, purpose) => {
+    if (looksLikeLabeledPurpose(purpose)) {
+      rows.push(purpose)
+      activeLabeledPurposeIndex = rows.length - 1
+      return rows
+    }
+
+    if (
+      activeLabeledPurposeIndex >= 0 &&
+      shouldJoinPurposeFragment(rows[activeLabeledPurposeIndex], purpose)
+    ) {
+      rows[activeLabeledPurposeIndex] = joinPurposeFragments(
+        rows[activeLabeledPurposeIndex],
+        purpose,
+      )
+      return rows
+    }
+
+    rows.push(purpose)
+    activeLabeledPurposeIndex = -1
+    return rows
+  }, [])
+}
+
+const splitPurposeList = (value: unknown): string[] => {
+  const isStoredList = Array.isArray(value)
+  const source = isStoredList ? value : [value]
+  const values = source.flatMap((item) => {
+    if (typeof item !== "string") return [cleanText(item)]
+    return isStoredList ? [item] : item.split(/[;\n]/g)
+  })
+
+  return restorePurposeFragments(uniqueCleanTextList(values))
 }
 
 const toBoolean = (value: unknown, fallback = false): boolean => {
@@ -306,8 +367,8 @@ const normalizePersonalData = (value: unknown, index: number): PersonalData => {
     category: cleanText(source.category) || "Sin categoría",
     proporcionalidad: toBoolean(source.proporcionalidad, true),
     riesgo: normalizeRisk(source.riesgo),
-    purposesPrimary: splitTextList(source.purposesPrimary),
-    purposesSecondary: splitTextList(source.purposesSecondary),
+    purposesPrimary: splitPurposeList(source.purposesPrimary),
+    purposesSecondary: splitPurposeList(source.purposesSecondary),
   }
 }
 

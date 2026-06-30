@@ -165,7 +165,7 @@ export const buildCoverInfoRows = (
   });
 };
 
-const normalizePurposes = (purposes?: string[]) =>
+const normalizePurposeEntries = (purposes?: string[]) =>
   Array.isArray(purposes)
     ? purposes
         .map((purpose) =>
@@ -176,11 +176,69 @@ const normalizePurposes = (purposes?: string[]) =>
         .filter((purpose): purpose is string => Boolean(purpose))
     : [];
 
-export const buildPurposeTableRows = (purposes: string[]): Array<[string]> =>
-  purposes
+const PURPOSE_LABEL_PATTERN = /^[A-ZÁÉÍÓÚÜÑ][^:\n]{2,80}:\s+\S/u;
+const PURPOSE_CONTINUATION_AFTER_PERIOD_PATTERN =
+  /^(?:asi|e|en su caso|incluyendo|mediante|o|para|u|y)\b/;
+
+const looksLikeLabeledPurpose = (purpose: string) =>
+  PURPOSE_LABEL_PATTERN.test(purpose.trim());
+
+const normalizePurposeFragmentKey = (purpose: string) =>
+  purpose
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .replace(/\s+/g, " ")
+    .toLocaleLowerCase("es");
+
+const shouldJoinPurposeFragment = (base: string, continuation: string) => {
+  const normalizedContinuation = normalizePurposeFragmentKey(continuation);
+  if (!normalizedContinuation) return false;
+  if (!/[.!?]$/.test(base.trim())) return true;
+  return PURPOSE_CONTINUATION_AFTER_PERIOD_PATTERN.test(normalizedContinuation);
+};
+
+const joinPurposeFragments = (base: string, continuation: string) =>
+  `${base.trimEnd()} ${continuation.trimStart()}`
+    .replace(/[ \t]+/g, " ")
+    .trim();
+
+const restorePurposeParagraphs = (purposes: string[]): string[] => {
+  const normalizedPurposes = purposes
     .map((purpose) => normalizePdfCellText(purpose))
-    .filter((purpose) => purpose.trim().length > 0)
-    .map((purpose) => [purpose]);
+    .filter((purpose) => purpose.trim().length > 0);
+
+  let activeLabeledPurposeIndex = -1;
+
+  return normalizedPurposes.reduce<string[]>((rows, purpose) => {
+    if (looksLikeLabeledPurpose(purpose)) {
+      rows.push(purpose);
+      activeLabeledPurposeIndex = rows.length - 1;
+      return rows;
+    }
+
+    if (
+      activeLabeledPurposeIndex >= 0 &&
+      shouldJoinPurposeFragment(rows[activeLabeledPurposeIndex], purpose)
+    ) {
+      rows[activeLabeledPurposeIndex] = joinPurposeFragments(
+        rows[activeLabeledPurposeIndex],
+        purpose,
+      );
+      return rows;
+    }
+
+    rows.push(purpose);
+    activeLabeledPurposeIndex = -1;
+    return rows;
+  }, []);
+};
+
+const normalizePurposes = (purposes?: string[]) =>
+  restorePurposeParagraphs(normalizePurposeEntries(purposes));
+
+export const buildPurposeTableRows = (purposes: string[]): Array<[string]> =>
+  restorePurposeParagraphs(purposes).map((purpose) => [purpose]);
 
 const normalizePurposeKey = (purpose?: string | null) => {
   if (typeof purpose !== "string") return "__EMPTY__";
@@ -222,14 +280,12 @@ const aggregatePurposesToData = (
     });
   });
 
-  return Array.from(aggregates.values())
-    .map((aggregate) => ({
-      purpose: aggregate.display,
-      dataLabels: Array.from(aggregate.labels).sort((a, b) =>
-        a.localeCompare(b, "es", { sensitivity: "base" }),
-      ),
-    }))
-    .sort((a, b) => a.purpose.localeCompare(b.purpose, "es", { sensitivity: "base" }));
+  return Array.from(aggregates.values()).map((aggregate) => ({
+    purpose: aggregate.display,
+    dataLabels: Array.from(aggregate.labels).sort((a, b) =>
+      a.localeCompare(b, "es", { sensitivity: "base" }),
+    ),
+  }));
 };
 
 const formatCategoryName = (category?: string) => {

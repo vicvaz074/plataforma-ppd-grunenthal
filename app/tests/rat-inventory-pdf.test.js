@@ -123,6 +123,49 @@ describe("generación PDF de inventarios RAT", () => {
     assert.doesNotMatch(source, /Otros datos capturados/)
   })
 
+  it("conserva el orden capturado y une continuaciones sin imponer catálogos de ejemplo", async () => {
+    const pdf = await importModule("app/rat/utils/inventory-pdf.ts")
+    const source = fs.readFileSync(
+      path.join(appDir, "app/rat/utils/inventory-pdf.ts"),
+      "utf8",
+    )
+
+    assert.deepEqual(
+      pdf.buildPurposeTableRows([
+        "Identificación y registro: Identificarlo y registrarlo como colaborador de Grünenthal,",
+        "darlo de alta en los sistemas internos,",
+        "asignarle un correo institucional y generar su credencial de empleado.",
+        "Expediente laboral: Crear,",
+        "actualizar y conservar su expediente laboral",
+        "así como administrar la información relacionada con su trayectoria en la empresa.",
+        "Acceso a instalaciones: Controlar su ingreso a las instalaciones y, en su caso,",
+        "asignarle un espacio de estacionamiento.",
+        "caja de ahorro",
+        "Comunicación interna: Mantener comunicaciones estrictamente relacionadas con asuntos laborales.",
+      ]),
+      [
+        [
+          "Identificación y registro: Identificarlo y registrarlo como colaborador de Grünenthal, darlo de alta en los sistemas internos, asignarle un correo institucional y generar su credencial de empleado.",
+        ],
+        [
+          "Expediente laboral: Crear, actualizar y conservar su expediente laboral así como administrar la información relacionada con su trayectoria en la empresa.",
+        ],
+        [
+          "Acceso a instalaciones: Controlar su ingreso a las instalaciones y, en su caso, asignarle un espacio de estacionamiento.",
+        ],
+        [
+          "caja de ahorro",
+        ],
+        [
+          "Comunicación interna: Mantener comunicaciones estrictamente relacionadas con asuntos laborales.",
+        ],
+      ],
+    )
+    assert.doesNotMatch(source, /Gestión de nómina y prestaciones: Administrar el pago de nómina/)
+    assert.doesNotMatch(source, /Uso y seguridad de sistemas: Gestionar, verificar/)
+    assert.doesNotMatch(source, /\.sort\(\(a, b\) => a\.purpose/)
+  })
+
   it("prefiere los PDFs fuente vinculados para descargar inventarios Grünenthal", async () => {
     const sourcePdfs = await importModule("app/rat/utils/inventory-source-pdfs.ts")
     const ratData = await importModule("lib/grunenthal-rat-data.ts")
