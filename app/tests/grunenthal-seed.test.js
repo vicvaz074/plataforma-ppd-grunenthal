@@ -103,10 +103,10 @@ describe("personalización Grünenthal", () => {
       grtContracts.GRUNENTHAL_GRT_CONTRACT_DOCUMENTS.length
 
     assert.equal(inventories.length, 19)
-    assert.equal(seedState.version, "2026.2.9")
+    assert.equal(seedState.version, "2026.2.10")
     assert.equal(
       inventories.reduce((total, inventory) => total + inventory.subInventories.length, 0),
-      46,
+      47,
     )
     assert.equal(storedFiles.length, assets.GRUNENTHAL_DOCUMENT_MANIFEST.length + individualDocumentCount)
     assert.equal(new Set(storedFiles.map((file) => file.id)).size, storedFiles.length)
@@ -323,10 +323,10 @@ describe("personalización Grünenthal", () => {
     const validationReport = ratData.GRUNENTHAL_RAT_VALIDATION_REPORT
 
     assert.equal(withSourcePdf.length, 38)
-    assert.equal(withoutSourcePdf.length, 8)
+    assert.equal(withoutSourcePdf.length, 9)
     assert.equal(validationReport.canonicalInventoryCount, 19)
-    assert.equal(validationReport.canonicalSubInventoryCount, 46)
-    assert.equal(validationReport.missingPdfCount, 8)
+    assert.equal(validationReport.canonicalSubInventoryCount, 47)
+    assert.equal(validationReport.missingPdfCount, 9)
     assert.equal(validationReport.unmatchedPdfCount, 0)
     assert.equal(validationReport.fieldMismatchCount, 0)
     assert.equal(
@@ -350,6 +350,61 @@ describe("personalización Grünenthal", () => {
     assert.match(
       openDataVeeva.grunenthalSourcePdfPath,
       /\/client\/grunenthal\/rat\/comex\/inventario-comex-open-data-veeva-registro-de-medicos\.pdf$/,
+    )
+
+    const medical = inventories.find((inventory) => inventory.id === "grunenthal-rat-area-medical")
+    const medicalPaymentSap = subInventories.find(
+      (subInventory) =>
+        subInventory.id === "grunenthal-rat-inventario-medical-gestion-de-pagos-persona-natural-sap",
+    )
+    assert.ok(medical, "debe existir el inventario Medical")
+    assert.equal(medical.subInventories.length, 4)
+    assert.ok(medicalPaymentSap, "debe cargar Gestión de Pagos -Persona Natural- (SAP) dentro de Medical")
+    assert.equal(medicalPaymentSap.databaseName, "Gestión de Pagos -Persona Natural- (SAP)")
+    assert.deepEqual(medicalPaymentSap.holderTypes, ["Health Care Professionals"])
+    assert.equal(medicalPaymentSap.holdersVolume, "<500")
+    assert.equal(medicalPaymentSap.obtainingMethod, "directo")
+    assert.equal(medicalPaymentSap.processingSystemName, "SAP")
+    assert.equal(medicalPaymentSap.dataTransfer, "si")
+    assert.equal(medicalPaymentSap.remissionRecipient, "SAP")
+    assert.equal(medicalPaymentSap.personalData.length, 13)
+    assert.deepEqual(
+      medicalPaymentSap.personalData.map((field) => field.name),
+      [
+        "Nombre",
+        "RFC",
+        "CURP",
+        "Domicilio fiscal",
+        "Régimen fiscal",
+        "Correo electrónico",
+        "Teléfono",
+        "Banco receptor",
+        "CLABE interbancaria",
+        "Número de cuenta bancaria",
+        "Nombre del titular de la cuenta bancaria",
+        "Identificación oficial",
+        "Constancia de situación fiscal",
+      ],
+    )
+    assert.equal(
+      medicalPaymentSap.personalData.every((field) =>
+        field.purposesPrimary.length === 7 &&
+        field.purposesSecondary.length === 0 &&
+        field.purposesPrimary.every((purpose) => !purpose.trim().startsWith("•")),
+      ),
+      true,
+      "las finalidades de Gestión de Pagos SAP deben conservarse como párrafos completos",
+    )
+    assert.equal(medicalPaymentSap.grunenthalSourcePdfStatus, "sin-pdf")
+    assert.equal(medicalPaymentSap.grunenthalValidationStatus, "pendiente-revision")
+    assert.ok(
+      validationReport.missingPdfs.some(
+        (item) =>
+          item.inventoryName === "Medical" &&
+          item.subInventoryName === "Gestión de Pagos -Persona Natural- (SAP)" &&
+          item.expectedFileName === "inventario-medical-gestion-de-pagos-persona-natural-sap.pdf",
+      ),
+      "el reporte debe marcar el subinventario Medical nuevo como pendiente de PDF fuente",
     )
 
     const masterControlPurposesPrimary = [
@@ -682,12 +737,12 @@ describe("personalización Grünenthal", () => {
     const subInventories = inventories.flatMap((inventory) => inventory.subInventories)
 
     assert.equal(inventories.length, 19)
-    assert.equal(subInventories.length, 46)
+    assert.equal(subInventories.length, 47)
     assert.equal(inventories.some((inventory) => inventory.id === "inventario-viejo"), false)
     assert.equal(global.localStorage.getItem("inventories_progress"), null)
     assert.equal(
       subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfStatus === "vinculado").length === 38 &&
-        subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfStatus === "sin-pdf").length === 8,
+        subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfStatus === "sin-pdf").length === 9,
       true,
     )
   })

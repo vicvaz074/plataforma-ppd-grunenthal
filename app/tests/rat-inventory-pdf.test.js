@@ -343,6 +343,26 @@ describe("generación PDF de inventarios RAT", () => {
     assert.doesNotMatch(pdfContent, /17 finalidades primarias/)
   })
 
+  it("planea descargas PDF para Medical, incluyendo Gestión de Pagos SAP como PDF generado", async () => {
+    const sourcePdfs = await importModule("app/rat/utils/inventory-source-pdfs.ts")
+    const ratData = await importModule("lib/grunenthal-rat-data.ts")
+    const inventory = ratData.GRUNENTHAL_RAT_INVENTORIES.find(
+      (item) => item.id === "grunenthal-rat-area-medical",
+    )
+
+    assert.ok(inventory, "debe existir el inventario Medical")
+
+    const plan = sourcePdfs.createInventoryPdfDownloadPlan(inventory)
+
+    assert.equal(plan.sourcePdfs.length, 3)
+    assert.equal(plan.generatedInventories.length, 1)
+    assert.equal(plan.totalPdfDownloads, 4)
+    assert.deepEqual(
+      plan.generatedInventories.map((item) => item.databaseName),
+      ["Gestión de Pagos -Persona Natural- (SAP)"],
+    )
+  })
+
   it("mantiene los PDF fuente RAT con solo nombres actualizados", () => {
     const pdfExpectations = [
       [
