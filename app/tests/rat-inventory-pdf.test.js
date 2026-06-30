@@ -302,7 +302,7 @@ describe("generación PDF de inventarios RAT", () => {
     }
   })
 
-  it("planea cuatro descargas PDF para COMEX, incluyendo un PDF generado por subinventario sin fuente", async () => {
+  it("planea siete descargas PDF para COMEX, incluyendo PDFs generados para subinventarios sin fuente", async () => {
     const sourcePdfs = await importModule("app/rat/utils/inventory-source-pdfs.ts")
     const ratData = await importModule("lib/grunenthal-rat-data.ts")
     const inventory = ratData.GRUNENTHAL_RAT_INVENTORIES.find(
@@ -315,13 +315,21 @@ describe("generación PDF de inventarios RAT", () => {
     const plan = sourcePdfs.createInventoryPdfDownloadPlan(inventory)
 
     assert.equal(plan.sourcePdfs.length, 4)
-    assert.equal(plan.generatedInventories.length, 0)
-    assert.equal(plan.totalPdfDownloads, 4)
+    assert.equal(plan.generatedInventories.length, 3)
+    assert.equal(plan.totalPdfDownloads, 7)
     assert.ok(
       plan.sourcePdfs.some((download) =>
         download.url.endsWith("/client/grunenthal/rat/comex/inventario-comex-open-data-veeva-registro-de-medicos.pdf"),
       ),
       "Open Data Veeva debe descargarse como PDF público vinculado",
+    )
+    assert.deepEqual(
+      plan.generatedInventories.map((item) => item.databaseName).sort(),
+      [
+        "Gestión De Registro (AgenciaEspañola)",
+        "Gestión de Proms y Materiales (Promomats)",
+        "Plataforma de Streaming Webinars (Vimeo)",
+      ].sort(),
     )
   })
 
