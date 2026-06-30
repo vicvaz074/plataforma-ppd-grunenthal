@@ -300,6 +300,49 @@ describe("generación PDF de inventarios RAT", () => {
     assert.doesNotMatch(pdfContent, /Master Evaluaciones/)
   })
 
+  it("registra el PDF fuente corregido de Casos Reportados (Argus - Oracle)", async () => {
+    const ratData = await importModule("lib/grunenthal-rat-data.ts")
+    const sourcePdfs = await importModule("app/rat/utils/inventory-source-pdfs.ts")
+    const inventory = ratData.GRUNENTHAL_RAT_INVENTORIES.find(
+      (item) => item.id === "grunenthal-rat-area-farmacovigilancia",
+    )
+
+    assert.ok(inventory, "debe existir el inventario Farmacovigilancia")
+
+    const subInventory = inventory.subInventories.find(
+      (item) => item.id === "grunenthal-rat-inventario-farmacovigilancia-casos-reportados-argus-oracle",
+    )
+    const plan = sourcePdfs.createInventoryPdfDownloadPlan(inventory)
+    const download = plan.sourcePdfs.find(
+      (item) => item.subInventoryId === "grunenthal-rat-inventario-farmacovigilancia-casos-reportados-argus-oracle",
+    )
+
+    assert.ok(subInventory, "debe existir el subinventario Argus")
+    assert.equal(subInventory.databaseName, "Casos Reportados (Argus - Oracle)")
+    assert.equal(subInventory.responsibleArea, "Farmacovigilancia")
+    assert.equal(subInventory.personalData.length, 12)
+    assert.equal(subInventory.personalData[0].purposesPrimary.length, 10)
+    assert.equal(subInventory.personalData[0].purposesSecondary.length, 0)
+    assert.ok(download, "debe exponer PDF fuente para Argus")
+    assert.equal(download.subInventoryName, "Casos Reportados (Argus - Oracle)")
+    assert.equal(download.downloadName, "inventario-farmacovigilancia-casos-reportados-argus-oracle.pdf")
+    assert.equal(plan.sourcePdfs.length, 1)
+    assert.equal(plan.generatedInventories.length, 0)
+    assert.equal(
+      fs.existsSync(path.join(appDir, "public", download.url.replace(/^\//, ""))),
+      true,
+      "el PDF público corregido de Argus debe existir",
+    )
+
+    const pdfContent = fs.readFileSync(
+      path.join(projectRoot, "app/public/client/grunenthal/rat/farmacovigilancia/inventario-farmacovigilancia-casos-reportados-argus-oracle.pdf"),
+      "latin1",
+    )
+    assert.match(pdfContent, /Casos Reportados/)
+    assert.doesNotMatch(pdfContent, /Otros datos capturados/)
+    assert.doesNotMatch(pdfContent, /17 finalidades primarias/)
+  })
+
   it("mantiene los PDF fuente RAT con solo nombres actualizados", () => {
     const pdfExpectations = [
       [

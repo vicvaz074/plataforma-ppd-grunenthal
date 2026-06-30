@@ -24499,6 +24499,457 @@ export const GRUNENTHAL_RAT_INVENTORIES: Inventory[] = [
     "updatedBy": "Sofia Jaimes",
     "status": "completado",
     "grunenthalSourceExportedAt": "2026-06-30T01:01:07.364Z"
+  },
+  {
+    "id": "grunenthal-rat-area-farmacovigilancia",
+    "databaseName": "Farmacovigilancia",
+    "responsible": "Grünenthal",
+    "companyLogoFileName": "grunenthal-logo-green.png",
+    "reportAccentColor": "#40BB6A",
+    "subInventories": [
+      {
+        "id": "grunenthal-rat-inventario-farmacovigilancia-casos-reportados-argus-oracle",
+        "databaseName": "Casos Reportados (Argus - Oracle)",
+        "otherConsentException": "",
+        "otherConsentMechanism": "",
+        "otherConsentType": "",
+        "holderTypes": [
+          "Otro"
+        ],
+        "otherHolderType": "Reportantes.",
+        "holdersVolume": "<5k",
+        "accessibility": "A1",
+        "environment": "E2",
+        "responsibleArea": "Farmacovigilancia",
+        "showOtherResponsibleArea": true,
+        "obtainingMethod": "directo",
+        "showOtherObtainingMethod": false,
+        "obtainingSource": "",
+        "privacyNoticeFiles": [],
+        "privacyNoticeFileIds": [
+          "grunenthal-rat-inventario-farmacovigilancia-casos-reportados-argus-oracle-aviso-01"
+        ],
+        "privacyNoticeFileNames": [
+          "Aviso de Privacidad Integral para Farmacovigilancia..docx"
+        ],
+        "privacyNoticeFileId": "grunenthal-rat-inventario-farmacovigilancia-casos-reportados-argus-oracle-aviso-01",
+        "privacyNoticeFileName": "Aviso de Privacidad Integral para Farmacovigilancia..docx",
+        "otherProcessingArea": "Farmacovigilancia",
+        "consentRequired": false,
+        "consentException": [
+          "Una disposición jurídica así lo disponga"
+        ],
+        "consentMechanism": "",
+        "consentType": "",
+        "tacitDescription": "",
+        "secondaryConsentType": "",
+        "secondaryConsentMechanism": "",
+        "secondaryTacitDescription": "",
+        "secondaryExpresoForm": "",
+        "secondaryExpresoEscritoForm": "",
+        "secondaryPurposesConsent": {},
+        "processingArea": [
+          "Otros"
+        ],
+        "showOtherProcessingArea": true,
+        "processingSystem": "electronico",
+        "processingSystemName": "",
+        "processingDescription": [
+          "Obtención",
+          "Uso",
+          "Divulgación",
+          "Almacenamiento",
+          "Bloqueo",
+          "Supresión"
+        ],
+        "accessDescription": [
+          "Visualización",
+          "Edición",
+          "Descarga"
+        ],
+        "otherAccessDescription": "",
+        "dataLifecyclePrivileges": "",
+        "additionalAccesses": [
+          {
+            "id": "grunenthal-rat-inventario-farmacovigilancia-casos-reportados-argus-oracle-acceso-001",
+            "area": "Legal",
+            "showOtherArea": false,
+            "privileges": [
+              "Visualización",
+              "Descarga"
+            ],
+            "otherPrivilege": "",
+            "role": "",
+            "otherRole": ""
+          }
+        ],
+        "additionalAreas": [],
+        "additionalAreasAccess": [],
+        "otherAdditionalAreasAccess": "",
+        "showOtherAdditionalAreasAccess": false,
+        "additionalAreasLegalBasis": [],
+        "otherAdditionalAreasLegalBasis": "",
+        "additionalAreasPurposes": [],
+        "otherAdditionalAreasPurposes": "",
+        "storageMethod": "Otro",
+        "otherStorageMethod": "Sistema Argus",
+        "physicalLocation": "N/A",
+        "backupPeriodicity": "N/A",
+        "isBackedUp": false,
+        "backupDescription": "",
+        "backupResponsible": "",
+        "showOtherBackupResponsible": false,
+        "conservationTerm": "6 años",
+        "showOtherConservationTerm": false,
+        "conservationJustification": [
+          "Existencia de disposición legal"
+        ],
+        "otherConservationJustification": "",
+        "conservationJustificationDetail": "",
+        "conservationLegalBasis": "NOM - 220 - SSA1 - 2016",
+        "blockingTime": "17 años contados desde que se cometió la falta en materia de Salud.",
+        "showOtherBlockingTime": false,
+        "legalPrescription": [
+          "Otros"
+        ],
+        "otherLegalPrescription": "Penal",
+        "blockingLegalDisposition": "194 y 105 del Código Penal Federal",
+        "additionalConservations": [],
+        "additionalBlockings": [],
+        "showOtherProcessingTime": false,
+        "processingTime": "",
+        "postRelationshipProcessing": "",
+        "legalConservation": [],
+        "otherLegalConservation": "",
+        "deletionMethods": [
+          "Otros"
+        ],
+        "otherDeletionMethod": "Borrado de Archivo",
+        "deletionMethod": "",
+        "dataTransfer": "si",
+        "transferRecipient": "Autoridades Competentes",
+        "transferPurposes": "Cumplimiento de obligaciones legales y/o requerimientos.",
+        "transferConsentRequired": false,
+        "transferExceptions": [
+          "Cuando lo establezca una ley o tratado internacional."
+        ],
+        "transferConsentType": "",
+        "transferTacitDescription": "",
+        "transferExpresoForm": "",
+        "transferOtherExpresoForm": "",
+        "transferExpresoEscritoForm": "",
+        "transferOtherExpresoEscritoForm": "",
+        "transferLegalInstrument": [
+          "Otro"
+        ],
+        "otherTransferLegalInstrument": "N/A",
+        "transferInAP": true,
+        "additionalTransfers": [],
+        "dataRemission": "si",
+        "remissionRecipient": "Argus",
+        "remissionPurposes": [
+          "Provisión de servicios"
+        ],
+        "otherRemissionPurpose": "",
+        "remissionLegalInstrument": [
+          "Otro"
+        ],
+        "otherRemissionLegalInstrument": "Instrumento jurídico vinculante",
+        "remissionContractFileId": "",
+        "remissionContractFileName": "",
+        "additionalRemissions": [],
+        "personalData": [
+          {
+            "id": "grunenthal-rat-inventario-farmacovigilancia-casos-reportados-argus-oracle-dato-001",
+            "name": "Nombre del Reportante",
+            "category": "Identificación",
+            "proporcionalidad": true,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Identificación y registro: Identificar y registrar internamente el evento adverso relacionado con productos de Grünenthal.",
+              "Verificación de información: Verificar la información que usted nos proporcione para comprender el caso de manera adecuada.",
+              "Comunicación con el reportante: Contactarlo en caso de requerir información adicional que permita entender mejor el evento adverso reportado.",
+              "Seguridad y vigilancia de medicamentos: Detectar, evaluar, comprender y prevenir eventos adversos u otros problemas relacionados con nuestros medicamentos, en apego a la normativa sanitaria aplicable.",
+              "Investigación y mejora continua: Realizar las investigaciones necesarias y mejorar nuestros productos, así como los procesos vinculados con su producción, distribución, transporte y/o almacenamiento.",
+              "Seguimiento del caso: Dar continuidad al reporte hasta su cierre, conforme a los procedimientos internos de farmacovigilancia.",
+              "Análisis estadístico: Generar información estadística para la mejora de los sistemas internos de seguridad de los medicamentos.",
+              "Reporte a autoridades sanitarias: Enviar las notificaciones y reportes correspondientes a la autoridad sanitaria competente dentro de los plazos establecidos.",
+              "Prevención de fraudes: Prevenir e investigar fraudes o actividades ilícitas que puedan derivarse de reportes falsos.",
+              "Cumplimiento normativo: Cumplir con las obligaciones previstas en la legislación nacional e internacional aplicable a la farmacovigilancia y atender requerimientos de autoridades competentes."
+            ],
+            "purposesSecondary": []
+          },
+          {
+            "id": "grunenthal-rat-inventario-farmacovigilancia-casos-reportados-argus-oracle-dato-002",
+            "name": "Nombre del persona con efecto adverso",
+            "category": "Identificación",
+            "proporcionalidad": true,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Identificación y registro: Identificar y registrar internamente el evento adverso relacionado con productos de Grünenthal.",
+              "Verificación de información: Verificar la información que usted nos proporcione para comprender el caso de manera adecuada.",
+              "Comunicación con el reportante: Contactarlo en caso de requerir información adicional que permita entender mejor el evento adverso reportado.",
+              "Seguridad y vigilancia de medicamentos: Detectar, evaluar, comprender y prevenir eventos adversos u otros problemas relacionados con nuestros medicamentos, en apego a la normativa sanitaria aplicable.",
+              "Investigación y mejora continua: Realizar las investigaciones necesarias y mejorar nuestros productos, así como los procesos vinculados con su producción, distribución, transporte y/o almacenamiento.",
+              "Seguimiento del caso: Dar continuidad al reporte hasta su cierre, conforme a los procedimientos internos de farmacovigilancia.",
+              "Análisis estadístico: Generar información estadística para la mejora de los sistemas internos de seguridad de los medicamentos.",
+              "Reporte a autoridades sanitarias: Enviar las notificaciones y reportes correspondientes a la autoridad sanitaria competente dentro de los plazos establecidos.",
+              "Prevención de fraudes: Prevenir e investigar fraudes o actividades ilícitas que puedan derivarse de reportes falsos.",
+              "Cumplimiento normativo: Cumplir con las obligaciones previstas en la legislación nacional e internacional aplicable a la farmacovigilancia y atender requerimientos de autoridades competentes."
+            ],
+            "purposesSecondary": []
+          },
+          {
+            "id": "grunenthal-rat-inventario-farmacovigilancia-casos-reportados-argus-oracle-dato-003",
+            "name": "Iniciales",
+            "category": "Identificación",
+            "proporcionalidad": true,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Identificación y registro: Identificar y registrar internamente el evento adverso relacionado con productos de Grünenthal.",
+              "Verificación de información: Verificar la información que usted nos proporcione para comprender el caso de manera adecuada.",
+              "Comunicación con el reportante: Contactarlo en caso de requerir información adicional que permita entender mejor el evento adverso reportado.",
+              "Seguridad y vigilancia de medicamentos: Detectar, evaluar, comprender y prevenir eventos adversos u otros problemas relacionados con nuestros medicamentos, en apego a la normativa sanitaria aplicable.",
+              "Investigación y mejora continua: Realizar las investigaciones necesarias y mejorar nuestros productos, así como los procesos vinculados con su producción, distribución, transporte y/o almacenamiento.",
+              "Seguimiento del caso: Dar continuidad al reporte hasta su cierre, conforme a los procedimientos internos de farmacovigilancia.",
+              "Análisis estadístico: Generar información estadística para la mejora de los sistemas internos de seguridad de los medicamentos.",
+              "Reporte a autoridades sanitarias: Enviar las notificaciones y reportes correspondientes a la autoridad sanitaria competente dentro de los plazos establecidos.",
+              "Prevención de fraudes: Prevenir e investigar fraudes o actividades ilícitas que puedan derivarse de reportes falsos.",
+              "Cumplimiento normativo: Cumplir con las obligaciones previstas en la legislación nacional e internacional aplicable a la farmacovigilancia y atender requerimientos de autoridades competentes."
+            ],
+            "purposesSecondary": []
+          },
+          {
+            "id": "grunenthal-rat-inventario-farmacovigilancia-casos-reportados-argus-oracle-dato-004",
+            "name": "Correo electrónico",
+            "category": "Contacto",
+            "proporcionalidad": true,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Identificación y registro: Identificar y registrar internamente el evento adverso relacionado con productos de Grünenthal.",
+              "Verificación de información: Verificar la información que usted nos proporcione para comprender el caso de manera adecuada.",
+              "Comunicación con el reportante: Contactarlo en caso de requerir información adicional que permita entender mejor el evento adverso reportado.",
+              "Seguridad y vigilancia de medicamentos: Detectar, evaluar, comprender y prevenir eventos adversos u otros problemas relacionados con nuestros medicamentos, en apego a la normativa sanitaria aplicable.",
+              "Investigación y mejora continua: Realizar las investigaciones necesarias y mejorar nuestros productos, así como los procesos vinculados con su producción, distribución, transporte y/o almacenamiento.",
+              "Seguimiento del caso: Dar continuidad al reporte hasta su cierre, conforme a los procedimientos internos de farmacovigilancia.",
+              "Análisis estadístico: Generar información estadística para la mejora de los sistemas internos de seguridad de los medicamentos.",
+              "Reporte a autoridades sanitarias: Enviar las notificaciones y reportes correspondientes a la autoridad sanitaria competente dentro de los plazos establecidos.",
+              "Prevención de fraudes: Prevenir e investigar fraudes o actividades ilícitas que puedan derivarse de reportes falsos.",
+              "Cumplimiento normativo: Cumplir con las obligaciones previstas en la legislación nacional e internacional aplicable a la farmacovigilancia y atender requerimientos de autoridades competentes."
+            ],
+            "purposesSecondary": []
+          },
+          {
+            "id": "grunenthal-rat-inventario-farmacovigilancia-casos-reportados-argus-oracle-dato-005",
+            "name": "Teléfono",
+            "category": "Contacto",
+            "proporcionalidad": true,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Identificación y registro: Identificar y registrar internamente el evento adverso relacionado con productos de Grünenthal.",
+              "Verificación de información: Verificar la información que usted nos proporcione para comprender el caso de manera adecuada.",
+              "Comunicación con el reportante: Contactarlo en caso de requerir información adicional que permita entender mejor el evento adverso reportado.",
+              "Seguridad y vigilancia de medicamentos: Detectar, evaluar, comprender y prevenir eventos adversos u otros problemas relacionados con nuestros medicamentos, en apego a la normativa sanitaria aplicable.",
+              "Investigación y mejora continua: Realizar las investigaciones necesarias y mejorar nuestros productos, así como los procesos vinculados con su producción, distribución, transporte y/o almacenamiento.",
+              "Seguimiento del caso: Dar continuidad al reporte hasta su cierre, conforme a los procedimientos internos de farmacovigilancia.",
+              "Análisis estadístico: Generar información estadística para la mejora de los sistemas internos de seguridad de los medicamentos.",
+              "Reporte a autoridades sanitarias: Enviar las notificaciones y reportes correspondientes a la autoridad sanitaria competente dentro de los plazos establecidos.",
+              "Prevención de fraudes: Prevenir e investigar fraudes o actividades ilícitas que puedan derivarse de reportes falsos.",
+              "Cumplimiento normativo: Cumplir con las obligaciones previstas en la legislación nacional e internacional aplicable a la farmacovigilancia y atender requerimientos de autoridades competentes."
+            ],
+            "purposesSecondary": []
+          },
+          {
+            "id": "grunenthal-rat-inventario-farmacovigilancia-casos-reportados-argus-oracle-dato-006",
+            "name": "Género",
+            "category": "Identificación",
+            "proporcionalidad": true,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Identificación y registro: Identificar y registrar internamente el evento adverso relacionado con productos de Grünenthal.",
+              "Verificación de información: Verificar la información que usted nos proporcione para comprender el caso de manera adecuada.",
+              "Comunicación con el reportante: Contactarlo en caso de requerir información adicional que permita entender mejor el evento adverso reportado.",
+              "Seguridad y vigilancia de medicamentos: Detectar, evaluar, comprender y prevenir eventos adversos u otros problemas relacionados con nuestros medicamentos, en apego a la normativa sanitaria aplicable.",
+              "Investigación y mejora continua: Realizar las investigaciones necesarias y mejorar nuestros productos, así como los procesos vinculados con su producción, distribución, transporte y/o almacenamiento.",
+              "Seguimiento del caso: Dar continuidad al reporte hasta su cierre, conforme a los procedimientos internos de farmacovigilancia.",
+              "Análisis estadístico: Generar información estadística para la mejora de los sistemas internos de seguridad de los medicamentos.",
+              "Reporte a autoridades sanitarias: Enviar las notificaciones y reportes correspondientes a la autoridad sanitaria competente dentro de los plazos establecidos.",
+              "Prevención de fraudes: Prevenir e investigar fraudes o actividades ilícitas que puedan derivarse de reportes falsos.",
+              "Cumplimiento normativo: Cumplir con las obligaciones previstas en la legislación nacional e internacional aplicable a la farmacovigilancia y atender requerimientos de autoridades competentes."
+            ],
+            "purposesSecondary": []
+          },
+          {
+            "id": "grunenthal-rat-inventario-farmacovigilancia-casos-reportados-argus-oracle-dato-007",
+            "name": "Edad",
+            "category": "Identificación",
+            "proporcionalidad": true,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Identificación y registro: Identificar y registrar internamente el evento adverso relacionado con productos de Grünenthal.",
+              "Verificación de información: Verificar la información que usted nos proporcione para comprender el caso de manera adecuada.",
+              "Comunicación con el reportante: Contactarlo en caso de requerir información adicional que permita entender mejor el evento adverso reportado.",
+              "Seguridad y vigilancia de medicamentos: Detectar, evaluar, comprender y prevenir eventos adversos u otros problemas relacionados con nuestros medicamentos, en apego a la normativa sanitaria aplicable.",
+              "Investigación y mejora continua: Realizar las investigaciones necesarias y mejorar nuestros productos, así como los procesos vinculados con su producción, distribución, transporte y/o almacenamiento.",
+              "Seguimiento del caso: Dar continuidad al reporte hasta su cierre, conforme a los procedimientos internos de farmacovigilancia.",
+              "Análisis estadístico: Generar información estadística para la mejora de los sistemas internos de seguridad de los medicamentos.",
+              "Reporte a autoridades sanitarias: Enviar las notificaciones y reportes correspondientes a la autoridad sanitaria competente dentro de los plazos establecidos.",
+              "Prevención de fraudes: Prevenir e investigar fraudes o actividades ilícitas que puedan derivarse de reportes falsos.",
+              "Cumplimiento normativo: Cumplir con las obligaciones previstas en la legislación nacional e internacional aplicable a la farmacovigilancia y atender requerimientos de autoridades competentes."
+            ],
+            "purposesSecondary": []
+          },
+          {
+            "id": "grunenthal-rat-inventario-farmacovigilancia-casos-reportados-argus-oracle-dato-008",
+            "name": "Producto",
+            "category": "Identificación",
+            "proporcionalidad": true,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Identificación y registro: Identificar y registrar internamente el evento adverso relacionado con productos de Grünenthal.",
+              "Verificación de información: Verificar la información que usted nos proporcione para comprender el caso de manera adecuada.",
+              "Comunicación con el reportante: Contactarlo en caso de requerir información adicional que permita entender mejor el evento adverso reportado.",
+              "Seguridad y vigilancia de medicamentos: Detectar, evaluar, comprender y prevenir eventos adversos u otros problemas relacionados con nuestros medicamentos, en apego a la normativa sanitaria aplicable.",
+              "Investigación y mejora continua: Realizar las investigaciones necesarias y mejorar nuestros productos, así como los procesos vinculados con su producción, distribución, transporte y/o almacenamiento.",
+              "Seguimiento del caso: Dar continuidad al reporte hasta su cierre, conforme a los procedimientos internos de farmacovigilancia.",
+              "Análisis estadístico: Generar información estadística para la mejora de los sistemas internos de seguridad de los medicamentos.",
+              "Reporte a autoridades sanitarias: Enviar las notificaciones y reportes correspondientes a la autoridad sanitaria competente dentro de los plazos establecidos.",
+              "Prevención de fraudes: Prevenir e investigar fraudes o actividades ilícitas que puedan derivarse de reportes falsos.",
+              "Cumplimiento normativo: Cumplir con las obligaciones previstas en la legislación nacional e internacional aplicable a la farmacovigilancia y atender requerimientos de autoridades competentes."
+            ],
+            "purposesSecondary": []
+          },
+          {
+            "id": "grunenthal-rat-inventario-farmacovigilancia-casos-reportados-argus-oracle-dato-009",
+            "name": "Descripción del efecto",
+            "category": "Salud",
+            "proporcionalidad": true,
+            "riesgo": "alto",
+            "purposesPrimary": [
+              "Identificación y registro: Identificar y registrar internamente el evento adverso relacionado con productos de Grünenthal.",
+              "Verificación de información: Verificar la información que usted nos proporcione para comprender el caso de manera adecuada.",
+              "Comunicación con el reportante: Contactarlo en caso de requerir información adicional que permita entender mejor el evento adverso reportado.",
+              "Seguridad y vigilancia de medicamentos: Detectar, evaluar, comprender y prevenir eventos adversos u otros problemas relacionados con nuestros medicamentos, en apego a la normativa sanitaria aplicable.",
+              "Investigación y mejora continua: Realizar las investigaciones necesarias y mejorar nuestros productos, así como los procesos vinculados con su producción, distribución, transporte y/o almacenamiento.",
+              "Seguimiento del caso: Dar continuidad al reporte hasta su cierre, conforme a los procedimientos internos de farmacovigilancia.",
+              "Análisis estadístico: Generar información estadística para la mejora de los sistemas internos de seguridad de los medicamentos.",
+              "Reporte a autoridades sanitarias: Enviar las notificaciones y reportes correspondientes a la autoridad sanitaria competente dentro de los plazos establecidos.",
+              "Prevención de fraudes: Prevenir e investigar fraudes o actividades ilícitas que puedan derivarse de reportes falsos.",
+              "Cumplimiento normativo: Cumplir con las obligaciones previstas en la legislación nacional e internacional aplicable a la farmacovigilancia y atender requerimientos de autoridades competentes."
+            ],
+            "purposesSecondary": []
+          },
+          {
+            "id": "grunenthal-rat-inventario-farmacovigilancia-casos-reportados-argus-oracle-dato-010",
+            "name": "Fecha de toma de medicamento",
+            "category": "Identificación",
+            "proporcionalidad": true,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Identificación y registro: Identificar y registrar internamente el evento adverso relacionado con productos de Grünenthal.",
+              "Verificación de información: Verificar la información que usted nos proporcione para comprender el caso de manera adecuada.",
+              "Comunicación con el reportante: Contactarlo en caso de requerir información adicional que permita entender mejor el evento adverso reportado.",
+              "Seguridad y vigilancia de medicamentos: Detectar, evaluar, comprender y prevenir eventos adversos u otros problemas relacionados con nuestros medicamentos, en apego a la normativa sanitaria aplicable.",
+              "Investigación y mejora continua: Realizar las investigaciones necesarias y mejorar nuestros productos, así como los procesos vinculados con su producción, distribución, transporte y/o almacenamiento.",
+              "Seguimiento del caso: Dar continuidad al reporte hasta su cierre, conforme a los procedimientos internos de farmacovigilancia.",
+              "Análisis estadístico: Generar información estadística para la mejora de los sistemas internos de seguridad de los medicamentos.",
+              "Reporte a autoridades sanitarias: Enviar las notificaciones y reportes correspondientes a la autoridad sanitaria competente dentro de los plazos establecidos.",
+              "Prevención de fraudes: Prevenir e investigar fraudes o actividades ilícitas que puedan derivarse de reportes falsos.",
+              "Cumplimiento normativo: Cumplir con las obligaciones previstas en la legislación nacional e internacional aplicable a la farmacovigilancia y atender requerimientos de autoridades competentes."
+            ],
+            "purposesSecondary": []
+          },
+          {
+            "id": "grunenthal-rat-inventario-farmacovigilancia-casos-reportados-argus-oracle-dato-011",
+            "name": "Fecha de inicio de efecto adverso",
+            "category": "Identificación",
+            "proporcionalidad": true,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Identificación y registro: Identificar y registrar internamente el evento adverso relacionado con productos de Grünenthal.",
+              "Verificación de información: Verificar la información que usted nos proporcione para comprender el caso de manera adecuada.",
+              "Comunicación con el reportante: Contactarlo en caso de requerir información adicional que permita entender mejor el evento adverso reportado.",
+              "Seguridad y vigilancia de medicamentos: Detectar, evaluar, comprender y prevenir eventos adversos u otros problemas relacionados con nuestros medicamentos, en apego a la normativa sanitaria aplicable.",
+              "Investigación y mejora continua: Realizar las investigaciones necesarias y mejorar nuestros productos, así como los procesos vinculados con su producción, distribución, transporte y/o almacenamiento.",
+              "Seguimiento del caso: Dar continuidad al reporte hasta su cierre, conforme a los procedimientos internos de farmacovigilancia.",
+              "Análisis estadístico: Generar información estadística para la mejora de los sistemas internos de seguridad de los medicamentos.",
+              "Reporte a autoridades sanitarias: Enviar las notificaciones y reportes correspondientes a la autoridad sanitaria competente dentro de los plazos establecidos.",
+              "Prevención de fraudes: Prevenir e investigar fraudes o actividades ilícitas que puedan derivarse de reportes falsos.",
+              "Cumplimiento normativo: Cumplir con las obligaciones previstas en la legislación nacional e internacional aplicable a la farmacovigilancia y atender requerimientos de autoridades competentes."
+            ],
+            "purposesSecondary": []
+          },
+          {
+            "id": "grunenthal-rat-inventario-farmacovigilancia-casos-reportados-argus-oracle-dato-012",
+            "name": "Duración del efecto adverso",
+            "category": "Identificación",
+            "proporcionalidad": true,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Identificación y registro: Identificar y registrar internamente el evento adverso relacionado con productos de Grünenthal.",
+              "Verificación de información: Verificar la información que usted nos proporcione para comprender el caso de manera adecuada.",
+              "Comunicación con el reportante: Contactarlo en caso de requerir información adicional que permita entender mejor el evento adverso reportado.",
+              "Seguridad y vigilancia de medicamentos: Detectar, evaluar, comprender y prevenir eventos adversos u otros problemas relacionados con nuestros medicamentos, en apego a la normativa sanitaria aplicable.",
+              "Investigación y mejora continua: Realizar las investigaciones necesarias y mejorar nuestros productos, así como los procesos vinculados con su producción, distribución, transporte y/o almacenamiento.",
+              "Seguimiento del caso: Dar continuidad al reporte hasta su cierre, conforme a los procedimientos internos de farmacovigilancia.",
+              "Análisis estadístico: Generar información estadística para la mejora de los sistemas internos de seguridad de los medicamentos.",
+              "Reporte a autoridades sanitarias: Enviar las notificaciones y reportes correspondientes a la autoridad sanitaria competente dentro de los plazos establecidos.",
+              "Prevención de fraudes: Prevenir e investigar fraudes o actividades ilícitas que puedan derivarse de reportes falsos.",
+              "Cumplimiento normativo: Cumplir con las obligaciones previstas en la legislación nacional e internacional aplicable a la farmacovigilancia y atender requerimientos de autoridades competentes."
+            ],
+            "purposesSecondary": []
+          }
+        ],
+        "otherLegalBasis": "",
+        "riskLevel": "alto",
+        "grunenthalSourcePdfFileId": "grunenthal-file-grunenthal-rat-inventario-farmacovigilancia-casos-reportados-argus-oracle",
+        "grunenthalSourcePdfPath": "/client/grunenthal/rat/farmacovigilancia/inventario-farmacovigilancia-casos-reportados-argus-oracle.pdf",
+        "grunenthalSourcePdfDownloadName": "inventario-farmacovigilancia-casos-reportados-argus-oracle.pdf",
+        "grunenthalSourcePdfStatus": "vinculado",
+        "grunenthalValidationStatus": "verificado",
+        "grunenthalValidationFields": [
+          "databaseName",
+          "responsible",
+          "holdersVolume",
+          "accessibility",
+          "environment",
+          "riskLevel",
+          "responsibleArea",
+          "holderTypes",
+          "obtainingMethod",
+          "privacyNoticeFileName",
+          "personalData",
+          "purposesPrimary",
+          "purposesSecondary",
+          "secondaryPurposesConsent",
+          "consentRequired",
+          "consentException",
+          "processingArea",
+          "processingSystem",
+          "processingDescription",
+          "accessDescription",
+          "additionalAccesses",
+          "storageMethod",
+          "physicalLocation",
+          "conservationTerm",
+          "blockingTime",
+          "deletionMethods",
+          "dataTransfer",
+          "additionalTransfers",
+          "dataRemission",
+          "additionalRemissions"
+        ],
+        "grunenthalValidationMismatches": []
+      }
+    ],
+    "riskLevel": "alto",
+    "createdAt": "2026-06-29T00:00:00.000Z",
+    "updatedAt": "2026-06-29T00:00:00.000Z",
+    "createdBy": "Sofia Jaimes",
+    "updatedBy": "Sofia Jaimes",
+    "status": "completado",
+    "grunenthalSeedVersion": "2026.2.9",
+    "grunenthalSourceExportedAt": "2026-06-30T01:35:00.000Z"
   }
 ]
 
@@ -26056,16 +26507,58 @@ export const GRUNENTHAL_RAT_PDF_LINKS = [
       "additionalRemissions"
     ],
     "mismatchedFields": []
+  },
+  {
+    "assetId": "grunenthal-rat-inventario-farmacovigilancia-casos-reportados-argus-oracle",
+    "inventoryId": "grunenthal-rat-area-farmacovigilancia",
+    "inventoryName": "Farmacovigilancia",
+    "subInventoryId": "grunenthal-rat-inventario-farmacovigilancia-casos-reportados-argus-oracle",
+    "subInventoryName": "Casos Reportados (Argus - Oracle)",
+    "publicPath": "/client/grunenthal/rat/farmacovigilancia/inventario-farmacovigilancia-casos-reportados-argus-oracle.pdf",
+    "matchScore": 1,
+    "validatedFields": [
+      "databaseName",
+      "responsible",
+      "holdersVolume",
+      "accessibility",
+      "environment",
+      "riskLevel",
+      "responsibleArea",
+      "holderTypes",
+      "obtainingMethod",
+      "privacyNoticeFileName",
+      "personalData",
+      "purposesPrimary",
+      "purposesSecondary",
+      "secondaryPurposesConsent",
+      "consentRequired",
+      "consentException",
+      "processingArea",
+      "processingSystem",
+      "processingDescription",
+      "accessDescription",
+      "additionalAccesses",
+      "storageMethod",
+      "physicalLocation",
+      "conservationTerm",
+      "blockingTime",
+      "deletionMethods",
+      "dataTransfer",
+      "additionalTransfers",
+      "dataRemission",
+      "additionalRemissions"
+    ],
+    "mismatchedFields": []
   }
 ] as const
 
 export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
   "generatedAt": "2026-06-30T00:00:00.000Z",
   "sourceDirectory": "Políticas de Grünenthal (2026)/InventariosDatos Personales",
-  "canonicalInventoryCount": 18,
-  "canonicalSubInventoryCount": 45,
-  "pdfInventoryCount": 37,
-  "mappedPdfCount": 37,
+  "canonicalInventoryCount": 19,
+  "canonicalSubInventoryCount": 46,
+  "pdfInventoryCount": 38,
+  "mappedPdfCount": 38,
   "missingPdfCount": 8,
   "unmatchedPdfCount": 0,
   "fieldMismatchCount": 0,
@@ -27589,6 +28082,47 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
       "pdfName": "inventario-plataformas-grunenthal-formulario-de-contacto-pagina-grt.pdf",
       "inventoryName": "Plataformas Grünenthal",
       "subInventoryName": "Formulario de Contacto Página GRT",
+      "status": "verificado",
+      "matchScore": 1,
+      "validatedFields": [
+        "databaseName",
+        "responsible",
+        "holdersVolume",
+        "accessibility",
+        "environment",
+        "riskLevel",
+        "responsibleArea",
+        "holderTypes",
+        "obtainingMethod",
+        "privacyNoticeFileName",
+        "personalData",
+        "purposesPrimary",
+        "purposesSecondary",
+        "secondaryPurposesConsent",
+        "consentRequired",
+        "consentException",
+        "processingArea",
+        "processingSystem",
+        "processingDescription",
+        "accessDescription",
+        "additionalAccesses",
+        "storageMethod",
+        "physicalLocation",
+        "conservationTerm",
+        "blockingTime",
+        "deletionMethods",
+        "dataTransfer",
+        "additionalTransfers",
+        "dataRemission",
+        "additionalRemissions"
+      ],
+      "mismatchedFields": []
+    },
+    {
+      "assetId": "grunenthal-rat-inventario-farmacovigilancia-casos-reportados-argus-oracle",
+      "pdfName": "inventario_Casos_Reportados_Argus_Oracle.pdf",
+      "inventoryName": "Farmacovigilancia",
+      "subInventoryName": "Casos Reportados (Argus - Oracle)",
       "status": "verificado",
       "matchScore": 1,
       "validatedFields": [
