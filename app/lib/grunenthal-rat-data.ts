@@ -1436,6 +1436,813 @@ export const GRUNENTHAL_RAT_INVENTORIES: Inventory[] = [
           "additionalRemissions"
         ],
         "grunenthalValidationMismatches": []
+      },
+      {
+        "id": "grunenthal-rat-inventario-comex-gestion-de-proms-y-materiales-promomats",
+        "databaseName": "Gestión de Proms y Materiales (Promomats)",
+        "holderTypes": [
+          "Health Care Professionals"
+        ],
+        "otherHolderType": "",
+        "otherLegalBasis": "",
+        "holdersVolume": "<500k",
+        "accessibility": "A1",
+        "environment": "E2",
+        "responsibleArea": "COMEX",
+        "showOtherResponsibleArea": true,
+        "obtainingMethod": "directo",
+        "showOtherObtainingMethod": false,
+        "obtainingSource": "",
+        "otherConsentException": "",
+        "otherConsentMechanism": "",
+        "otherConsentType": "",
+        "privacyNoticeFiles": [],
+        "privacyNoticeFileIds": [
+          "grunenthal-rat-inventario-comex-gestion-de-proms-y-materiales-promomats-aviso-01"
+        ],
+        "privacyNoticeFileNames": [
+          "Aviso de Privacidad Integral para HCP.docx"
+        ],
+        "privacyNoticeFileId": "grunenthal-rat-inventario-comex-gestion-de-proms-y-materiales-promomats-aviso-01",
+        "privacyNoticeFileName": "Aviso de Privacidad Integral para HCP.docx",
+        "consentRequired": true,
+        "consentException": [],
+        "consentMechanism": "casilla_de_marcado",
+        "consentType": "tacito",
+        "tacitDescription": "",
+        "secondaryConsentType": "",
+        "secondaryConsentMechanism": "",
+        "secondaryTacitDescription": "",
+        "secondaryExpresoForm": "",
+        "secondaryExpresoEscritoForm": "",
+        "secondaryPurposesConsent": {},
+        "processingArea": [
+          "Otros"
+        ],
+        "otherProcessingArea": "COMEX",
+        "showOtherProcessingArea": false,
+        "processingSystem": "electronico",
+        "processingSystemName": "Promomats",
+        "processingDescription": [
+          "Obtencion",
+          "Uso",
+          "Divulgacion",
+          "Almacenamiento",
+          "Bloqueo",
+          "Supresión"
+        ],
+        "accessDescription": [
+          "Visualización",
+          "Edición",
+          "Descarga"
+        ],
+        "otherAccessDescription": "",
+        "dataLifecyclePrivileges": "",
+        "additionalAccesses": [
+          {
+            "id": "grunenthal-rat-inventario-comex-gestion-de-proms-y-materiales-promomats-acceso-001",
+            "area": "N/A",
+            "showOtherArea": true,
+            "privileges": [
+              "Otros"
+            ],
+            "otherPrivilege": "N/A",
+            "role": "",
+            "otherRole": ""
+          }
+        ],
+        "additionalAreas": [],
+        "additionalAreasAccess": [],
+        "otherAdditionalAreasAccess": "",
+        "showOtherAdditionalAreasAccess": false,
+        "additionalAreasLegalBasis": [],
+        "otherAdditionalAreasLegalBasis": "",
+        "additionalAreasPurposes": [],
+        "otherAdditionalAreasPurposes": "",
+        "storageMethod": "Otro",
+        "otherStorageMethod": "Plataforma Promomats",
+        "physicalLocation": "N/A",
+        "backupPeriodicity": "N/A",
+        "isBackedUp": false,
+        "backupDescription": "",
+        "backupResponsible": "",
+        "showOtherBackupResponsible": false,
+        "conservationTerm": "No hay relación jurídica",
+        "showOtherConservationTerm": true,
+        "conservationJustification": [
+          "Consentimiento vigente"
+        ],
+        "otherConservationJustification": "N/A",
+        "conservationJustificationDetail": "",
+        "conservationLegalBasis": "",
+        "blockingTime": "15 días posteriores a haber revocado su consentimiento.",
+        "showOtherBlockingTime": true,
+        "legalPrescription": [
+          "Otros"
+        ],
+        "otherLegalPrescription": "Datos Personales",
+        "blockingLegalDisposition": "40 de la Ley Federal de Protección de Datos Personales en Posesión de los Particulares",
+        "additionalConservations": [],
+        "additionalBlockings": [],
+        "showOtherProcessingTime": false,
+        "processingTime": "",
+        "postRelationshipProcessing": "",
+        "legalConservation": [],
+        "otherLegalConservation": "",
+        "deletionMethods": [
+          "Otros"
+        ],
+        "otherDeletionMethod": "Borrado de Archivos",
+        "deletionMethod": "",
+        "dataTransfer": "si",
+        "transferRecipient": "Autoridades Competentes",
+        "transferPurposes": "Cumplimiento de obligaciones legales y/o requerimientos.",
+        "transferConsentRequired": false,
+        "transferExceptions": [
+          "Cuando lo establezca una ley o tratado internacional."
+        ],
+        "transferConsentType": "",
+        "transferTacitDescription": "",
+        "transferExpresoForm": "",
+        "transferOtherExpresoForm": "",
+        "transferExpresoEscritoForm": "",
+        "transferOtherExpresoEscritoForm": "",
+        "transferLegalInstrument": [
+          "Otro"
+        ],
+        "otherTransferLegalInstrument": "N/A",
+        "transferInAP": true,
+        "additionalTransfers": [],
+        "dataRemission": "si",
+        "remissionRecipient": "Promomats",
+        "remissionPurposes": [
+          "Provisión de servicios"
+        ],
+        "otherRemissionPurpose": "",
+        "remissionLegalInstrument": [
+          "Otro"
+        ],
+        "otherRemissionLegalInstrument": "Instrumento jurídico vinculante",
+        "additionalRemissions": [],
+        "personalData": [
+          {
+            "id": "grunenthal-rat-inventario-comex-gestion-de-proms-y-materiales-promomats-dato-001",
+            "name": "Nombre Médico",
+            "category": "Identificación",
+            "proporcionalidad": true,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+              "Visitas profesionales: Contactarlo y en su caso visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+              "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+              "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+              "Invitaciones y participación en eventos: Invitarlo registrar su asistencia y gestionar su participación en congresos seminarios programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+              "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal así como notificaciones o alertas de seguridad que resulten pertinentes.",
+              "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas educativas y promocionales dirigidas a profesionales de la salud con el fin de mejorar su contenido y alcance.",
+              "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+            ],
+            "purposesSecondary": []
+          },
+          {
+            "id": "grunenthal-rat-inventario-comex-gestion-de-proms-y-materiales-promomats-dato-002",
+            "name": "Especialidad",
+            "category": "Información laboral",
+            "proporcionalidad": true,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+              "Visitas profesionales: Contactarlo y en su caso visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+              "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+              "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+              "Invitaciones y participación en eventos: Invitarlo registrar su asistencia y gestionar su participación en congresos seminarios programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+              "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal así como notificaciones o alertas de seguridad que resulten pertinentes.",
+              "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas educativas y promocionales dirigidas a profesionales de la salud con el fin de mejorar su contenido y alcance.",
+              "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+            ],
+            "purposesSecondary": []
+          },
+          {
+            "id": "grunenthal-rat-inventario-comex-gestion-de-proms-y-materiales-promomats-dato-003",
+            "name": "Domicilio",
+            "category": "Ubicación",
+            "proporcionalidad": true,
+            "riesgo": "medio",
+            "purposesPrimary": [
+              "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+              "Visitas profesionales: Contactarlo y en su caso visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+              "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+              "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+              "Invitaciones y participación en eventos: Invitarlo registrar su asistencia y gestionar su participación en congresos seminarios programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+              "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal así como notificaciones o alertas de seguridad que resulten pertinentes.",
+              "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas educativas y promocionales dirigidas a profesionales de la salud con el fin de mejorar su contenido y alcance.",
+              "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+            ],
+            "purposesSecondary": []
+          },
+          {
+            "id": "grunenthal-rat-inventario-comex-gestion-de-proms-y-materiales-promomats-dato-004",
+            "name": "Promocional dado",
+            "category": "Identificación",
+            "proporcionalidad": true,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+              "Visitas profesionales: Contactarlo y en su caso visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+              "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+              "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+              "Invitaciones y participación en eventos: Invitarlo registrar su asistencia y gestionar su participación en congresos seminarios programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+              "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal así como notificaciones o alertas de seguridad que resulten pertinentes.",
+              "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas educativas y promocionales dirigidas a profesionales de la salud con el fin de mejorar su contenido y alcance.",
+              "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+            ],
+            "purposesSecondary": []
+          },
+          {
+            "id": "grunenthal-rat-inventario-comex-gestion-de-proms-y-materiales-promomats-dato-005",
+            "name": "Día de visita",
+            "category": "Identificación",
+            "proporcionalidad": true,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+              "Visitas profesionales: Contactarlo y en su caso visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+              "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+              "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+              "Invitaciones y participación en eventos: Invitarlo registrar su asistencia y gestionar su participación en congresos seminarios programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+              "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal así como notificaciones o alertas de seguridad que resulten pertinentes.",
+              "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas educativas y promocionales dirigidas a profesionales de la salud con el fin de mejorar su contenido y alcance.",
+              "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+            ],
+            "purposesSecondary": []
+          },
+          {
+            "id": "grunenthal-rat-inventario-comex-gestion-de-proms-y-materiales-promomats-dato-006",
+            "name": "Comentarios",
+            "category": "Identificación",
+            "proporcionalidad": true,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+              "Visitas profesionales: Contactarlo y en su caso visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+              "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+              "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+              "Invitaciones y participación en eventos: Invitarlo registrar su asistencia y gestionar su participación en congresos seminarios programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+              "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal así como notificaciones o alertas de seguridad que resulten pertinentes.",
+              "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas educativas y promocionales dirigidas a profesionales de la salud con el fin de mejorar su contenido y alcance.",
+              "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+            ],
+            "purposesSecondary": []
+          },
+          {
+            "id": "grunenthal-rat-inventario-comex-gestion-de-proms-y-materiales-promomats-dato-007",
+            "name": "Nombre del representante",
+            "category": "Identificación",
+            "proporcionalidad": true,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+              "Visitas profesionales: Contactarlo y en su caso visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+              "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+              "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+              "Invitaciones y participación en eventos: Invitarlo registrar su asistencia y gestionar su participación en congresos seminarios programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+              "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal así como notificaciones o alertas de seguridad que resulten pertinentes.",
+              "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas educativas y promocionales dirigidas a profesionales de la salud con el fin de mejorar su contenido y alcance.",
+              "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+            ],
+            "purposesSecondary": []
+          },
+          {
+            "id": "grunenthal-rat-inventario-comex-gestion-de-proms-y-materiales-promomats-dato-008",
+            "name": "Número de empleado de representante",
+            "category": "Identificación",
+            "proporcionalidad": true,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+              "Visitas profesionales: Contactarlo y en su caso visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+              "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+              "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+              "Invitaciones y participación en eventos: Invitarlo registrar su asistencia y gestionar su participación en congresos seminarios programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+              "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal así como notificaciones o alertas de seguridad que resulten pertinentes.",
+              "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas educativas y promocionales dirigidas a profesionales de la salud con el fin de mejorar su contenido y alcance.",
+              "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+            ],
+            "purposesSecondary": []
+          }
+        ]
+      },
+      {
+        "id": "grunenthal-rat-inventario-comex-plataforma-de-streaming-webinars-vimeo",
+        "databaseName": "Plataforma de Streaming Webinars (Vimeo)",
+        "holderTypes": [
+          "Health Care Professionals"
+        ],
+        "otherHolderType": "",
+        "otherLegalBasis": "",
+        "holdersVolume": "<500k",
+        "accessibility": "A2",
+        "environment": "E2",
+        "responsibleArea": "COMEX",
+        "showOtherResponsibleArea": true,
+        "obtainingMethod": "directo",
+        "showOtherObtainingMethod": false,
+        "obtainingSource": "",
+        "otherConsentException": "",
+        "otherConsentMechanism": "",
+        "otherConsentType": "",
+        "privacyNoticeFiles": [],
+        "privacyNoticeFileIds": [
+          "grunenthal-rat-inventario-comex-plataforma-de-streaming-webinars-vimeo-aviso-01"
+        ],
+        "privacyNoticeFileNames": [
+          "Aviso de Privacidad Integral para HCP.docx"
+        ],
+        "privacyNoticeFileId": "grunenthal-rat-inventario-comex-plataforma-de-streaming-webinars-vimeo-aviso-01",
+        "privacyNoticeFileName": "Aviso de Privacidad Integral para HCP.docx",
+        "consentRequired": true,
+        "consentException": [],
+        "consentMechanism": "casilla_de_marcado",
+        "consentType": "tacito",
+        "tacitDescription": "",
+        "secondaryConsentType": "",
+        "secondaryConsentMechanism": "",
+        "secondaryTacitDescription": "",
+        "secondaryExpresoForm": "",
+        "secondaryExpresoEscritoForm": "",
+        "secondaryPurposesConsent": {},
+        "processingArea": [
+          "Otros"
+        ],
+        "otherProcessingArea": "COMEX",
+        "showOtherProcessingArea": false,
+        "processingSystem": "electronico",
+        "processingSystemName": "VIMEO",
+        "processingDescription": [
+          "Uso",
+          "Divulgacion",
+          "Almacenamiento",
+          "Bloqueo",
+          "Supresión",
+          "Obtencion"
+        ],
+        "accessDescription": [
+          "Visualización",
+          "Edición",
+          "Descarga"
+        ],
+        "otherAccessDescription": "",
+        "dataLifecyclePrivileges": "",
+        "additionalAccesses": [
+          {
+            "id": "grunenthal-rat-inventario-comex-plataforma-de-streaming-webinars-vimeo-acceso-001",
+            "area": "N/A",
+            "showOtherArea": true,
+            "privileges": [
+              "Otros"
+            ],
+            "otherPrivilege": "N/A",
+            "role": "",
+            "otherRole": ""
+          }
+        ],
+        "additionalAreas": [],
+        "additionalAreasAccess": [],
+        "otherAdditionalAreasAccess": "",
+        "showOtherAdditionalAreasAccess": false,
+        "additionalAreasLegalBasis": [],
+        "otherAdditionalAreasLegalBasis": "",
+        "additionalAreasPurposes": [],
+        "otherAdditionalAreasPurposes": "",
+        "storageMethod": "Otro",
+        "otherStorageMethod": "Vimeo",
+        "physicalLocation": "N/A",
+        "backupPeriodicity": "N/A",
+        "isBackedUp": false,
+        "backupDescription": "",
+        "backupResponsible": "",
+        "showOtherBackupResponsible": false,
+        "conservationTerm": "No hay relación jurídica",
+        "showOtherConservationTerm": true,
+        "conservationJustification": [
+          "Consentimiento vigente"
+        ],
+        "otherConservationJustification": "No hay relación jurídica",
+        "conservationJustificationDetail": "",
+        "conservationLegalBasis": "",
+        "blockingTime": "15 días posteriores a haber revocado su consentimiento.",
+        "showOtherBlockingTime": true,
+        "legalPrescription": [
+          "Otros"
+        ],
+        "otherLegalPrescription": "Datos Personales",
+        "blockingLegalDisposition": "40 de la Ley Federal de Protección de Datos Personales en Posesión de los Particulares",
+        "additionalConservations": [],
+        "additionalBlockings": [],
+        "showOtherProcessingTime": false,
+        "processingTime": "",
+        "postRelationshipProcessing": "",
+        "legalConservation": [],
+        "otherLegalConservation": "",
+        "deletionMethods": [
+          "Otros"
+        ],
+        "otherDeletionMethod": "Borrado de Archivos",
+        "deletionMethod": "",
+        "dataTransfer": "si",
+        "transferRecipient": "VIMEO",
+        "transferPurposes": "Realización de videos promocionales y divulgación.",
+        "transferConsentRequired": false,
+        "transferExceptions": [
+          "Para la celebración o cumplimiento de un contrato en interés del titular",
+          "entre el responsable y un tercero."
+        ],
+        "transferConsentType": "",
+        "transferTacitDescription": "",
+        "transferExpresoForm": "",
+        "transferOtherExpresoForm": "",
+        "transferExpresoEscritoForm": "",
+        "transferOtherExpresoEscritoForm": "",
+        "transferLegalInstrument": [
+          "Otro"
+        ],
+        "otherTransferLegalInstrument": "Términos y Condiciones de Plataforma",
+        "transferInAP": true,
+        "additionalTransfers": [
+          {
+            "recipient": "Autoridades competentes",
+            "purposes": "Cumplimiento de obligaciones legales y/o requerimientos.",
+            "consentRequired": false,
+            "consentType": "",
+            "tacitDescription": "",
+            "expresoForm": "",
+            "expresoEscritoForm": "",
+            "exceptions": [
+              "Cuando lo establezca una ley o tratado internacional."
+            ],
+            "legalInstrument": [
+              "Otro"
+            ],
+            "otherLegalInstrument": "N/A",
+            "inAP": false
+          }
+        ],
+        "dataRemission": "no",
+        "remissionRecipient": "",
+        "remissionPurposes": [],
+        "otherRemissionPurpose": "",
+        "remissionLegalInstrument": [],
+        "otherRemissionLegalInstrument": "",
+        "additionalRemissions": [],
+        "personalData": [
+          {
+            "id": "grunenthal-rat-inventario-comex-plataforma-de-streaming-webinars-vimeo-dato-001",
+            "name": "Nombre",
+            "category": "Identificación",
+            "proporcionalidad": true,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+              "Visitas profesionales: Contactarlo y en su caso visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+              "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+              "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+              "Invitaciones y participación en eventos: Invitarlo registrar su asistencia y gestionar su participación en congresos seminarios programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+              "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal así como notificaciones o alertas de seguridad que resulten pertinentes.",
+              "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas educativas y promocionales dirigidas a profesionales de la salud con el fin de mejorar su contenido y alcance.",
+              "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+            ],
+            "purposesSecondary": []
+          },
+          {
+            "id": "grunenthal-rat-inventario-comex-plataforma-de-streaming-webinars-vimeo-dato-002",
+            "name": "Nombre de Usuario",
+            "category": "Identificación",
+            "proporcionalidad": true,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+              "Visitas profesionales: Contactarlo y en su caso visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+              "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+              "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+              "Invitaciones y participación en eventos: Invitarlo registrar su asistencia y gestionar su participación en congresos seminarios programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+              "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal así como notificaciones o alertas de seguridad que resulten pertinentes.",
+              "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas educativas y promocionales dirigidas a profesionales de la salud con el fin de mejorar su contenido y alcance.",
+              "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+            ],
+            "purposesSecondary": []
+          },
+          {
+            "id": "grunenthal-rat-inventario-comex-plataforma-de-streaming-webinars-vimeo-dato-003",
+            "name": "Correo electrónico",
+            "category": "Contacto",
+            "proporcionalidad": true,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+              "Visitas profesionales: Contactarlo y en su caso visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+              "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+              "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+              "Invitaciones y participación en eventos: Invitarlo registrar su asistencia y gestionar su participación en congresos seminarios programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+              "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal así como notificaciones o alertas de seguridad que resulten pertinentes.",
+              "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas educativas y promocionales dirigidas a profesionales de la salud con el fin de mejorar su contenido y alcance.",
+              "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+            ],
+            "purposesSecondary": []
+          },
+          {
+            "id": "grunenthal-rat-inventario-comex-plataforma-de-streaming-webinars-vimeo-dato-004",
+            "name": "Imagen",
+            "category": "Identificación",
+            "proporcionalidad": true,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+              "Visitas profesionales: Contactarlo y en su caso visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+              "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+              "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+              "Invitaciones y participación en eventos: Invitarlo registrar su asistencia y gestionar su participación en congresos seminarios programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+              "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal así como notificaciones o alertas de seguridad que resulten pertinentes.",
+              "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas educativas y promocionales dirigidas a profesionales de la salud con el fin de mejorar su contenido y alcance.",
+              "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+            ],
+            "purposesSecondary": []
+          },
+          {
+            "id": "grunenthal-rat-inventario-comex-plataforma-de-streaming-webinars-vimeo-dato-005",
+            "name": "Titulo Laboral",
+            "category": "Información laboral",
+            "proporcionalidad": true,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+              "Visitas profesionales: Contactarlo y en su caso visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+              "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+              "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+              "Invitaciones y participación en eventos: Invitarlo registrar su asistencia y gestionar su participación en congresos seminarios programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+              "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal así como notificaciones o alertas de seguridad que resulten pertinentes.",
+              "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas educativas y promocionales dirigidas a profesionales de la salud con el fin de mejorar su contenido y alcance.",
+              "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+            ],
+            "purposesSecondary": []
+          },
+          {
+            "id": "grunenthal-rat-inventario-comex-plataforma-de-streaming-webinars-vimeo-dato-006",
+            "name": "Titulo Académico",
+            "category": "Información académica",
+            "proporcionalidad": true,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+              "Visitas profesionales: Contactarlo y en su caso visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+              "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+              "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+              "Invitaciones y participación en eventos: Invitarlo registrar su asistencia y gestionar su participación en congresos seminarios programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+              "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal así como notificaciones o alertas de seguridad que resulten pertinentes.",
+              "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas educativas y promocionales dirigidas a profesionales de la salud con el fin de mejorar su contenido y alcance.",
+              "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+            ],
+            "purposesSecondary": []
+          }
+        ]
+      },
+      {
+        "id": "grunenthal-rat-inventario-comex-gestion-de-registro-agenciaespanola",
+        "databaseName": "Gestión De Registro (AgenciaEspañola)",
+        "holderTypes": [
+          "Health Care Professionals"
+        ],
+        "otherHolderType": "",
+        "otherLegalBasis": "",
+        "holdersVolume": "<500k",
+        "accessibility": "A2",
+        "environment": "E2",
+        "responsibleArea": "COMEX",
+        "showOtherResponsibleArea": true,
+        "obtainingMethod": "directo",
+        "showOtherObtainingMethod": false,
+        "obtainingSource": "",
+        "otherConsentException": "",
+        "otherConsentMechanism": "",
+        "otherConsentType": "",
+        "privacyNoticeFiles": [],
+        "privacyNoticeFileIds": [
+          "grunenthal-rat-inventario-comex-gestion-de-registro-agenciaespanola-aviso-01"
+        ],
+        "privacyNoticeFileNames": [
+          "Aviso de Privacidad Integral para HCP.docx"
+        ],
+        "privacyNoticeFileId": "grunenthal-rat-inventario-comex-gestion-de-registro-agenciaespanola-aviso-01",
+        "privacyNoticeFileName": "Aviso de Privacidad Integral para HCP.docx",
+        "consentRequired": true,
+        "consentException": [],
+        "consentMechanism": "aviso_de_privacidad",
+        "consentType": "tacito",
+        "tacitDescription": "",
+        "secondaryConsentType": "",
+        "secondaryConsentMechanism": "",
+        "secondaryTacitDescription": "",
+        "secondaryExpresoForm": "",
+        "secondaryExpresoEscritoForm": "",
+        "secondaryPurposesConsent": {},
+        "processingArea": [
+          "Otros"
+        ],
+        "otherProcessingArea": "COMEX",
+        "showOtherProcessingArea": false,
+        "processingSystem": "electronico",
+        "processingSystemName": "Plataforma de Agencia Española para Difusión",
+        "processingDescription": [
+          "Obtencion",
+          "Uso",
+          "Divulgacion",
+          "Almacenamiento",
+          "Bloqueo",
+          "Supresión"
+        ],
+        "accessDescription": [
+          "Visualización",
+          "Edición",
+          "Descarga"
+        ],
+        "otherAccessDescription": "",
+        "dataLifecyclePrivileges": "",
+        "additionalAccesses": [
+          {
+            "id": "grunenthal-rat-inventario-comex-gestion-de-registro-agenciaespanola-acceso-001",
+            "area": "N/A",
+            "showOtherArea": true,
+            "privileges": [
+              "Otros"
+            ],
+            "otherPrivilege": "N/A",
+            "role": "",
+            "otherRole": ""
+          }
+        ],
+        "additionalAreas": [],
+        "additionalAreasAccess": [],
+        "otherAdditionalAreasAccess": "",
+        "showOtherAdditionalAreasAccess": false,
+        "additionalAreasLegalBasis": [],
+        "otherAdditionalAreasLegalBasis": "",
+        "additionalAreasPurposes": [],
+        "otherAdditionalAreasPurposes": "",
+        "storageMethod": "Otro",
+        "otherStorageMethod": "Plataforma de Agencia",
+        "physicalLocation": "N/A",
+        "backupPeriodicity": "N/A",
+        "isBackedUp": false,
+        "backupDescription": "",
+        "backupResponsible": "",
+        "showOtherBackupResponsible": false,
+        "conservationTerm": "No hay relación jurídica",
+        "showOtherConservationTerm": true,
+        "conservationJustification": [
+          "Consentimiento vigente"
+        ],
+        "otherConservationJustification": "",
+        "conservationJustificationDetail": "",
+        "conservationLegalBasis": "",
+        "blockingTime": "",
+        "showOtherBlockingTime": true,
+        "legalPrescription": [
+          "Otros"
+        ],
+        "otherLegalPrescription": "Datos Personales",
+        "blockingLegalDisposition": "40 de la Ley Federal de Protección de Datos Personales en Posesión de los Particulares",
+        "additionalConservations": [],
+        "additionalBlockings": [],
+        "showOtherProcessingTime": false,
+        "processingTime": "",
+        "postRelationshipProcessing": "",
+        "legalConservation": [],
+        "otherLegalConservation": "",
+        "deletionMethods": [
+          "Otros"
+        ],
+        "otherDeletionMethod": "Borrado de Archivos",
+        "deletionMethod": "",
+        "dataTransfer": "si",
+        "transferRecipient": "Autoridades Competentes",
+        "transferPurposes": "Cumplimiento de obligaciones legales y requierimientos",
+        "transferConsentRequired": false,
+        "transferExceptions": [
+          "Cuando lo establezca una ley o tratado internacional."
+        ],
+        "transferConsentType": "",
+        "transferTacitDescription": "",
+        "transferExpresoForm": "",
+        "transferOtherExpresoForm": "",
+        "transferExpresoEscritoForm": "",
+        "transferOtherExpresoEscritoForm": "",
+        "transferLegalInstrument": [
+          "Otro"
+        ],
+        "otherTransferLegalInstrument": "N/A",
+        "transferInAP": true,
+        "additionalTransfers": [],
+        "dataRemission": "si",
+        "remissionRecipient": "Proveedor de Plataforma",
+        "remissionPurposes": [
+          "Provisión de servicios"
+        ],
+        "otherRemissionPurpose": "",
+        "remissionLegalInstrument": [
+          "Otro"
+        ],
+        "otherRemissionLegalInstrument": "Instrumento jurídico vinculante",
+        "additionalRemissions": [],
+        "personalData": [
+          {
+            "id": "grunenthal-rat-inventario-comex-gestion-de-registro-agenciaespanola-dato-001",
+            "name": "Nombre",
+            "category": "Identificación",
+            "proporcionalidad": true,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+              "Visitas profesionales: Contactarlo y en su caso visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+              "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+              "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+              "Invitaciones y participación en eventos: Invitarlo registrar su asistencia y gestionar su participación en congresos seminarios programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+              "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal así como notificaciones o alertas de seguridad que resulten pertinentes.",
+              "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas educativas y promocionales dirigidas a profesionales de la salud con el fin de mejorar su contenido y alcance.",
+              "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+            ],
+            "purposesSecondary": []
+          },
+          {
+            "id": "grunenthal-rat-inventario-comex-gestion-de-registro-agenciaespanola-dato-002",
+            "name": "Correo",
+            "category": "Contacto",
+            "proporcionalidad": true,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+              "Visitas profesionales: Contactarlo y en su caso visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+              "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+              "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+              "Invitaciones y participación en eventos: Invitarlo registrar su asistencia y gestionar su participación en congresos seminarios programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+              "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal así como notificaciones o alertas de seguridad que resulten pertinentes.",
+              "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas educativas y promocionales dirigidas a profesionales de la salud con el fin de mejorar su contenido y alcance.",
+              "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+            ],
+            "purposesSecondary": []
+          },
+          {
+            "id": "grunenthal-rat-inventario-comex-gestion-de-registro-agenciaespanola-dato-003",
+            "name": "Tipo de HCP",
+            "category": "Información laboral",
+            "proporcionalidad": true,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+              "Visitas profesionales: Contactarlo y en su caso visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+              "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+              "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+              "Invitaciones y participación en eventos: Invitarlo registrar su asistencia y gestionar su participación en congresos seminarios programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+              "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal así como notificaciones o alertas de seguridad que resulten pertinentes.",
+              "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas educativas y promocionales dirigidas a profesionales de la salud con el fin de mejorar su contenido y alcance.",
+              "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+            ],
+            "purposesSecondary": []
+          },
+          {
+            "id": "grunenthal-rat-inventario-comex-gestion-de-registro-agenciaespanola-dato-004",
+            "name": "Especialidad",
+            "category": "Sin categoría",
+            "proporcionalidad": true,
+            "riesgo": "bajo",
+            "purposesPrimary": [
+              "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+              "Visitas profesionales: Contactarlo y en su caso visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+              "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+              "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+              "Invitaciones y participación en eventos: Invitarlo registrar su asistencia y gestionar su participación en congresos seminarios programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+              "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal así como notificaciones o alertas de seguridad que resulten pertinentes.",
+              "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas educativas y promocionales dirigidas a profesionales de la salud con el fin de mejorar su contenido y alcance.",
+              "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+            ],
+            "purposesSecondary": []
+          },
+          {
+            "id": "grunenthal-rat-inventario-comex-gestion-de-registro-agenciaespanola-dato-005",
+            "name": "Domicilio",
+            "category": "Ubicación",
+            "proporcionalidad": true,
+            "riesgo": "medio",
+            "purposesPrimary": [
+              "Gestión de relaciones profesionales y científicas: Identificarlo y mantener actualizada una base de datos de profesionales de la salud con quienes Grünenthal tiene contacto para fines informativos y de colaboración médica o científica.",
+              "Visitas profesionales: Contactarlo y en su caso visitarlo en su centro de trabajo o consultorio con el fin de brindarle información científica o promocional relacionada con los productos de Grünenthal.",
+              "Intercambio de información: Proporcionarle información actualizada sobre los productos farmacéuticos de Grünenthal.",
+              "Entrega y control de materiales médicos: Registrar y dar seguimiento a la entrega de muestras médicas y/o materiales promocionales.",
+              "Invitaciones y participación en eventos: Invitarlo registrar su asistencia y gestionar su participación en congresos seminarios programas de educación médica continua u otros eventos de carácter académico o científico organizados o patrocinados por Grünenthal.",
+              "Comunicación e información relevante: Enviarle comunicaciones relacionadas con los productos de Grünenthal así como notificaciones o alertas de seguridad que resulten pertinentes.",
+              "Evaluación y mejora de estrategias de comunicación: Analizar la efectividad de nuestras actividades informativas educativas y promocionales dirigidas a profesionales de la salud con el fin de mejorar su contenido y alcance.",
+              "Fines estadísticos y de investigación: Utilizar la información de forma anonimizada o agregada para realizar análisis estadísticos o estudios internos sobre el comportamiento y necesidades de los profesionales de la salud."
+            ],
+            "purposesSecondary": []
+          }
+        ]
       }
     ],
     "riskLevel": "bajo",
@@ -24792,10 +25599,10 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
   "generatedAt": "2026-06-30T00:00:00.000Z",
   "sourceDirectory": "Políticas de Grünenthal (2026)/InventariosDatos Personales",
   "canonicalInventoryCount": 17,
-  "canonicalSubInventoryCount": 40,
+  "canonicalSubInventoryCount": 43,
   "pdfInventoryCount": 37,
   "mappedPdfCount": 37,
-  "missingPdfCount": 3,
+  "missingPdfCount": 6,
   "unmatchedPdfCount": 0,
   "fieldMismatchCount": 0,
   "missingPdfs": [
@@ -24810,6 +25617,18 @@ export const GRUNENTHAL_RAT_VALIDATION_REPORT = {
     {
       "inventoryName": "Compliance",
       "subInventoryName": "Gestión de Linea de Ética (EHS)"
+    },
+    {
+      "inventoryName": "COMEX",
+      "subInventoryName": "Gestión de Proms y Materiales (Promomats)"
+    },
+    {
+      "inventoryName": "COMEX",
+      "subInventoryName": "Plataforma de Streaming Webinars (Vimeo)"
+    },
+    {
+      "inventoryName": "COMEX",
+      "subInventoryName": "Gestión De Registro (AgenciaEspañola)"
     }
   ],
   "unmatchedPdfs": [],

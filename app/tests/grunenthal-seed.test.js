@@ -103,10 +103,10 @@ describe("personalización Grünenthal", () => {
       grtContracts.GRUNENTHAL_GRT_CONTRACT_DOCUMENTS.length
 
     assert.equal(inventories.length, 17)
-    assert.equal(seedState.version, "2026.2.5")
+    assert.equal(seedState.version, "2026.2.6")
     assert.equal(
       inventories.reduce((total, inventory) => total + inventory.subInventories.length, 0),
-      40,
+      43,
     )
     assert.equal(storedFiles.length, assets.GRUNENTHAL_DOCUMENT_MANIFEST.length + individualDocumentCount)
     assert.equal(new Set(storedFiles.map((file) => file.id)).size, storedFiles.length)
@@ -323,10 +323,10 @@ describe("personalización Grünenthal", () => {
     const validationReport = ratData.GRUNENTHAL_RAT_VALIDATION_REPORT
 
     assert.equal(withSourcePdf.length, 37)
-    assert.equal(withoutSourcePdf.length, 3)
+    assert.equal(withoutSourcePdf.length, 6)
     assert.equal(validationReport.canonicalInventoryCount, 17)
-    assert.equal(validationReport.canonicalSubInventoryCount, 40)
-    assert.equal(validationReport.missingPdfCount, 3)
+    assert.equal(validationReport.canonicalSubInventoryCount, 43)
+    assert.equal(validationReport.missingPdfCount, 6)
     assert.equal(validationReport.unmatchedPdfCount, 0)
     assert.equal(validationReport.fieldMismatchCount, 0)
     assert.equal(
@@ -350,6 +350,49 @@ describe("personalización Grünenthal", () => {
     assert.match(
       openDataVeeva.grunenthalSourcePdfPath,
       /\/client\/grunenthal\/rat\/comex\/inventario-comex-open-data-veeva-registro-de-medicos\.pdf$/,
+    )
+
+    const comex = inventories.find((inventory) => inventory.databaseName === "COMEX")
+    assert.ok(comex, "debe cargarse el área COMEX")
+    assert.equal(comex.subInventories.length, 7)
+
+    const promomats = comex.subInventories.find(
+      (subInventory) => subInventory.databaseName === "Gestión de Proms y Materiales (Promomats)",
+    )
+    assert.ok(promomats, "debe cargarse Gestión de Proms y Materiales (Promomats) dentro de COMEX")
+    assert.equal(promomats.responsibleArea, "COMEX")
+    assert.equal(promomats.processingSystemName, "Promomats")
+    assert.equal(promomats.personalData.length, 8)
+    assert.equal(promomats.grunenthalSourcePdfStatus, "sin-pdf")
+    assert.equal(promomats.grunenthalValidationStatus, "pendiente-revision")
+
+    const vimeo = comex.subInventories.find(
+      (subInventory) => subInventory.databaseName === "Plataforma de Streaming Webinars (Vimeo)",
+    )
+    assert.ok(vimeo, "debe cargarse Plataforma de Streaming Webinars (Vimeo) dentro de COMEX")
+    assert.equal(vimeo.responsibleArea, "COMEX")
+    assert.equal(vimeo.processingSystemName, "VIMEO")
+    assert.equal(vimeo.personalData.length, 6)
+    assert.equal(vimeo.grunenthalSourcePdfStatus, "sin-pdf")
+    assert.equal(vimeo.grunenthalValidationStatus, "pendiente-revision")
+
+    const spanishAgency = comex.subInventories.find(
+      (subInventory) => subInventory.databaseName === "Gestión De Registro (AgenciaEspañola)",
+    )
+    assert.ok(spanishAgency, "debe cargarse Gestión De Registro (AgenciaEspañola) dentro de COMEX")
+    assert.equal(spanishAgency.responsibleArea, "COMEX")
+    assert.equal(spanishAgency.processingSystemName, "Plataforma de Agencia Española para Difusión")
+    assert.equal(spanishAgency.personalData.length, 5)
+    assert.equal(spanishAgency.grunenthalSourcePdfStatus, "sin-pdf")
+    assert.equal(spanishAgency.grunenthalValidationStatus, "pendiente-revision")
+    assert.equal(
+      [promomats, vimeo, spanishAgency].every((subInventory) =>
+        subInventory.personalData.every((field) =>
+          field.purposesPrimary.every((purpose) => !purpose.trim().startsWith("•")),
+        ),
+      ),
+      true,
+      "las finalidades de los subinventarios nuevos de COMEX deben guardarse sin viñetas crudas para el PDF",
     )
 
     const xeomeenReport = subInventories.find((subInventory) =>
@@ -471,12 +514,12 @@ describe("personalización Grünenthal", () => {
     const subInventories = inventories.flatMap((inventory) => inventory.subInventories)
 
     assert.equal(inventories.length, 17)
-    assert.equal(subInventories.length, 40)
+    assert.equal(subInventories.length, 43)
     assert.equal(inventories.some((inventory) => inventory.id === "inventario-viejo"), false)
     assert.equal(global.localStorage.getItem("inventories_progress"), null)
     assert.equal(
       subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfStatus === "vinculado").length === 37 &&
-        subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfStatus === "sin-pdf").length === 3,
+        subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfStatus === "sin-pdf").length === 6,
       true,
     )
   })
