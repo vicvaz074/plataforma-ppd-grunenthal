@@ -36,5 +36,11 @@ module.exports = (phase) => {
     images: {
       domains: ['hebbkx1anhila5yf.public.blob.vercel-storage.com'],
     },
+
+    webpack(config) {
+      config.output = config.output || {};
+      config.output.hashFunction = 'sha256';
+      return config;
+    },
   });
 };
