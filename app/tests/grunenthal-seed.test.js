@@ -102,11 +102,11 @@ describe("personalización Grünenthal", () => {
       repository.GRUNENTHAL_LABOR_POLICY_REPOSITORY_DOCUMENTS.length +
       grtContracts.GRUNENTHAL_GRT_CONTRACT_DOCUMENTS.length
 
-    assert.equal(inventories.length, 16)
-    assert.equal(seedState.version, "2026.2.4")
+    assert.equal(inventories.length, 17)
+    assert.equal(seedState.version, "2026.2.5")
     assert.equal(
       inventories.reduce((total, inventory) => total + inventory.subInventories.length, 0),
-      39,
+      40,
     )
     assert.equal(storedFiles.length, assets.GRUNENTHAL_DOCUMENT_MANIFEST.length + individualDocumentCount)
     assert.equal(new Set(storedFiles.map((file) => file.id)).size, storedFiles.length)
@@ -323,10 +323,10 @@ describe("personalización Grünenthal", () => {
     const validationReport = ratData.GRUNENTHAL_RAT_VALIDATION_REPORT
 
     assert.equal(withSourcePdf.length, 37)
-    assert.equal(withoutSourcePdf.length, 2)
-    assert.equal(validationReport.canonicalInventoryCount, 16)
-    assert.equal(validationReport.canonicalSubInventoryCount, 39)
-    assert.equal(validationReport.missingPdfCount, 2)
+    assert.equal(withoutSourcePdf.length, 3)
+    assert.equal(validationReport.canonicalInventoryCount, 17)
+    assert.equal(validationReport.canonicalSubInventoryCount, 40)
+    assert.equal(validationReport.missingPdfCount, 3)
     assert.equal(validationReport.unmatchedPdfCount, 0)
     assert.equal(validationReport.fieldMismatchCount, 0)
     assert.equal(
@@ -426,6 +426,27 @@ describe("personalización Grünenthal", () => {
       true,
       "las finalidades de Plataformas Grünenthal deben guardarse sin viñetas crudas para el PDF",
     )
+
+    const compliance = inventories.find((inventory) => inventory.databaseName === "Compliance")
+    assert.ok(compliance, "debe cargarse el área Compliance")
+    assert.equal(compliance.subInventories.length, 1)
+
+    const ethicsLine = compliance.subInventories.find(
+      (subInventory) => subInventory.databaseName === "Gestión de Linea de Ética (EHS)",
+    )
+    assert.ok(ethicsLine, "debe cargarse Gestión de Linea de Ética (EHS) dentro de Compliance")
+    assert.equal(ethicsLine.responsibleArea, "Compliance")
+    assert.equal(ethicsLine.processingSystemName, "EHS")
+    assert.equal(ethicsLine.personalData.length, 5)
+    assert.equal(ethicsLine.grunenthalSourcePdfStatus, "sin-pdf")
+    assert.equal(ethicsLine.grunenthalValidationStatus, "pendiente-revision")
+    assert.equal(
+      ethicsLine.personalData.every((field) =>
+        field.purposesPrimary.every((purpose) => !purpose.trim().startsWith("•")),
+      ),
+      true,
+      "las finalidades de Compliance deben guardarse sin viñetas crudas para el PDF",
+    )
   })
 
   it("reemplaza inventarios locales viejos y limpia progreso RAT al migrar la versión", async () => {
@@ -449,13 +470,13 @@ describe("personalización Grünenthal", () => {
     const inventories = JSON.parse(global.localStorage.getItem("inventories") || "[]")
     const subInventories = inventories.flatMap((inventory) => inventory.subInventories)
 
-    assert.equal(inventories.length, 16)
-    assert.equal(subInventories.length, 39)
+    assert.equal(inventories.length, 17)
+    assert.equal(subInventories.length, 40)
     assert.equal(inventories.some((inventory) => inventory.id === "inventario-viejo"), false)
     assert.equal(global.localStorage.getItem("inventories_progress"), null)
     assert.equal(
       subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfStatus === "vinculado").length === 37 &&
-        subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfStatus === "sin-pdf").length === 2,
+        subInventories.filter((subInventory) => subInventory.grunenthalSourcePdfStatus === "sin-pdf").length === 3,
       true,
     )
   })
