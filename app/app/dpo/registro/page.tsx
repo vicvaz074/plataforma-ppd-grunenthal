@@ -39,7 +39,7 @@ import {
   saveAccreditationHistory,
 } from "../opd-compliance-model"
 
-const DPO_REGISTRATION_DRAFT_KEY = "dpo-registration-draft-v1"
+export const DPO_REGISTRATION_DRAFT_KEY = "dpo-registration-draft-v1"
 
 function hasRegistrationDraftContent(draft: DpoAccreditationDraft) {
   return Boolean(

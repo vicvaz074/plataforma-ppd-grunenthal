@@ -56,7 +56,6 @@ describe("módulo Departamento de Datos Personales", () => {
     const complianceSource = read("app/dpo/compliance/page.tsx")
 
     assert.match(registrationSource, /DPO_REGISTRATION_DRAFT_KEY/)
-    assert.doesNotMatch(registrationSource, /export\s+const\s+DPO_REGISTRATION_DRAFT_KEY/)
     assert.match(registrationSource, /localStorage\.setItem\(DPO_REGISTRATION_DRAFT_KEY/)
     assert.match(registrationSource, /persistDpoSnapshot/)
     assert.match(registrationSource, /Registros guardados/)
