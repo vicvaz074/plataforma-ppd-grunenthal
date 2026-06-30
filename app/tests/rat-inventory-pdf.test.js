@@ -363,6 +363,27 @@ describe("generación PDF de inventarios RAT", () => {
     )
   })
 
+  it("planea descargas PDF para IT, incluyendo Gestión de Tickets Ivanti como PDF generado", async () => {
+    const sourcePdfs = await importModule("app/rat/utils/inventory-source-pdfs.ts")
+    const ratData = await importModule("lib/grunenthal-rat-data.ts")
+    const inventory = ratData.GRUNENTHAL_RAT_INVENTORIES.find(
+      (item) => item.id === "grunenthal-rat-area-it",
+    )
+
+    assert.ok(inventory, "debe existir el inventario IT")
+
+    const plan = sourcePdfs.createInventoryPdfDownloadPlan(inventory)
+
+    assert.equal(plan.sourcePdfs.length, 1)
+    assert.equal(plan.generatedInventories.length, 1)
+    assert.equal(plan.totalPdfDownloads, 2)
+    assert.deepEqual(plan.sourcePdfs.map((item) => item.subInventoryName), ["Sistema Azure"])
+    assert.deepEqual(
+      plan.generatedInventories.map((item) => item.databaseName),
+      ["Gestión de Tickets (Ivanti)"],
+    )
+  })
+
   it("mantiene los PDF fuente RAT con solo nombres actualizados", () => {
     const pdfExpectations = [
       [
