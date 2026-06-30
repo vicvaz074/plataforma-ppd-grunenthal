@@ -37,7 +37,7 @@ import {
 import type { StoredFile } from "@/lib/fileStorage"
 import type { Inventory } from "@/app/rat/types"
 
-export const GRUNENTHAL_SEED_VERSION = "2026.2.14"
+export const GRUNENTHAL_SEED_VERSION = "2026.2.15"
 export const GRUNENTHAL_SEED_STATE_KEY = "grunenthal_seed_state_v1"
 
 const STORED_FILES_KEY = "storedFiles"
@@ -928,33 +928,130 @@ function seedThirdPartyContracts() {
 function seedDpoAccreditation() {
   const current = readJson<Array<JsonRecord & { id: string }>>(DPO_ACCREDITATION_HISTORY_KEY, [])
   const dpoAssets = assetsForModule("dpo")
-  const record = {
-    id: "grunenthal-dpo-accreditation-2026",
+  const designationDate = "2026-05-08"
+  const sharedResponses = {
+    "A-01": {
+      answer: "si",
+      notes: "Acta de designación formal de integrantes del Departamento de Datos Personales.",
+    },
+    "A-03": {
+      answer: "si",
+      notes: "Acta cargada como política interna y evidencia documental del expediente SGDP.",
+    },
+    "A-04": {
+      answer: "si",
+      notes: "El acta hace constar que las personas propuestas aceptan el encargo conferido.",
+    },
+    "A-05": {
+      answer: "si",
+      notes: "La resolución cuarta prevé la sustitución del representante del área correspondiente.",
+    },
+    "A-06": {
+      answer: "si",
+      notes: "La resolución tercera establece duración indefinida hasta modificación, sustitución, actualización o revocación.",
+    },
+    "D-05": {
+      answer: "si",
+      notes: "El acta constituye un comité multifuncional con apoyo de áreas competentes.",
+    },
+    "D-06": {
+      answer: "si",
+      notes: "Las funciones se documentan en el acta, la Política General y el Manual del Departamento de Datos Personales.",
+    },
+  }
+  const sharedAnalysis = {
+    score: 45,
+    level: "Crítico — acción inmediata",
+    qualifies: false,
+    criticalInvalidation: false,
+    blockScores: [],
+    criticalFindings: [],
+    observations: [
+      "Acta de designación fechada el 08 de mayo de 2026.",
+      "La designación documenta Recursos Humanos, Dirección General, TI, Digital, COMEX, Médica y Cumplimiento.",
+      ...dpoAssets.map((asset) => `Evidencia cargada: ${asset.name}`),
+    ],
+    actions: ["Completar evidencias adicionales de capacitación, comunicación interna, organigrama y revisiones funcionales."],
+  }
+  const representativeSeeds = [
+    {
+      id: "grunenthal-dpo-accreditation-2026",
+      dpoName: "Departamento de Datos Personales Grünenthal",
+      dpoArea: "juridico",
+      dpoAreaOther: "",
+      notes: "Acta de designación del 08 de mayo de 2026: comité multifuncional del Departamento de Datos Personales con vigencia indefinida.",
+    },
+    {
+      id: "grunenthal-dpo-representante-recursos-humanos",
+      dpoName: "Representante de Recursos Humanos",
+      dpoArea: "rh",
+      dpoAreaOther: "",
+      notes: "Acta de designación del 08 de mayo de 2026: representante del área de Recursos Humanos.",
+    },
+    {
+      id: "grunenthal-dpo-representante-direccion-general",
+      dpoName: "Representante de Dirección General",
+      dpoArea: "direccion",
+      dpoAreaOther: "",
+      notes: "Acta de designación del 08 de mayo de 2026: representante de Dirección General.",
+    },
+    {
+      id: "grunenthal-dpo-representante-ti",
+      dpoName: "Representante de TI",
+      dpoArea: "seguridad",
+      dpoAreaOther: "",
+      notes: "Acta de designación del 08 de mayo de 2026: representante del área de Tecnologías de la Información.",
+    },
+    {
+      id: "grunenthal-dpo-representante-digital",
+      dpoName: "Representante de Digital",
+      dpoArea: "otro",
+      dpoAreaOther: "Digital",
+      notes: "Acta de designación del 08 de mayo de 2026: representante del área Digital.",
+    },
+    {
+      id: "grunenthal-dpo-representante-comex",
+      dpoName: "Representante de COMEX",
+      dpoArea: "otro",
+      dpoAreaOther: "COMEX",
+      notes: "Acta de designación del 08 de mayo de 2026: representante del área de COMEX.",
+    },
+    {
+      id: "grunenthal-dpo-representante-medical",
+      dpoName: "Representante de Medical",
+      dpoArea: "otro",
+      dpoAreaOther: "Medical",
+      notes: "Acta de designación del 08 de mayo de 2026: representante del área Médica.",
+    },
+    {
+      id: "grunenthal-dpo-representante-compliance",
+      dpoName: "Representante de Compliance",
+      dpoArea: "juridico",
+      dpoAreaOther: "",
+      notes: "Acta de designación del 08 de mayo de 2026: representante del área de Cumplimiento.",
+    },
+    {
+      id: "grunenthal-dpo-representante-legal",
+      dpoName: "Representante de Legal",
+      dpoArea: "juridico",
+      dpoAreaOther: "",
+      notes: "Acta de designación del 08 de mayo de 2026: representante del Área Jurídica de Grünenthal.",
+    },
+  ]
+  const records = representativeSeeds.map((representative) => ({
+    ...representative,
     createdAt: SEEDED_AT,
     updatedAt: SEEDED_AT,
     source: "migration",
-    dpoName: "Departamento de Datos Personales Grünenthal",
     dpoRole: "oficial",
     dpoRoleOther: "",
-    dpoArea: "juridico",
-    dpoAreaOther: "",
-    designationDate: SEEDED_AT.slice(0, 10),
+    designationDate,
     plannedNextReview: "2026-12-31",
-    notes: "Acta de designación y manual del departamento cargados como evidencia documental.",
-    responses: {},
-    analysis: {
-      score: 0,
-      level: "Crítico — acción inmediata",
-      qualifies: false,
-      criticalInvalidation: false,
-      blockScores: [],
-      criticalFindings: [],
-      observations: dpoAssets.map((asset) => `Evidencia cargada pendiente de calificación: ${asset.name}`),
-      actions: ["Completar la evaluación de acreditación del Departamento de Datos Personales."],
-    },
-  }
+    responses: sharedResponses,
+    analysis: sharedAnalysis,
+  }))
 
-  writeJson(DPO_ACCREDITATION_HISTORY_KEY, upsertById(current, [record]))
+  writeJson(DPO_ACCREDITATION_HISTORY_KEY, upsertById(current, records))
 }
 
 export async function seedGrunenthalDemoData() {

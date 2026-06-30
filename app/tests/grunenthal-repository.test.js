@@ -180,11 +180,39 @@ describe("repositorio documental Grünenthal", () => {
           "Manual de Atención de Derechos ARCO de Grünenthal",
       ),
     )
+    const designationAct = mexicoPolicies.find(
+      (document) =>
+        document.title === "Acta designación de miembros del Departamento de Datos Personales de Grünenthal",
+    )
+    assert.ok(designationAct, "el acta de designación debe mostrarse en políticas internas México")
+    assert.equal(designationAct.area, "Departamento de Datos Personales")
+    assert.equal(designationAct.module, "data-policies")
+    assert.equal(designationAct.originModule, "dpo")
+    assert.equal(designationAct.originalPath, "/client/grunenthal/dpo/acta-designacion-de-miembros-del-departamento-de-datos-personales-de-grunenthal.docx")
+    assert.equal(designationAct.previewPdfPath, "/client/grunenthal/dpo/acta-designacion-de-miembros-del-departamento-de-datos-personales-de-grunenthal-preview.pdf")
     assert.ok(
       globalPolicies.some(
         (document) => document.title === "Política de Tratamiento de Datos Personales.",
       ),
     )
+  })
+
+  it("publica el acta actualizada como política interna", async () => {
+    const mammoth = await import("mammoth")
+    const document = repository.GRUNENTHAL_CURATED_POLICY_DOCUMENTS.find(
+      (item) =>
+        item.title === "Acta designación de miembros del Departamento de Datos Personales de Grünenthal",
+    )
+    assert.ok(document, "el acta debe estar curada como política interna")
+
+    const originalPath = path.join(publicDir, document.originalPath)
+    const result = await mammoth.extractRawText({ path: originalPath })
+    const text = result.value.replace(/\s+/g, " ")
+
+    assert.match(text, /08 de mayo de 2026/)
+    assert.match(text, /Tecnologías de la Información, Digital, COMEX, Médica y Cumplimiento/)
+    assert.match(text, /Representante del área de Cumplimiento/)
+    assert.match(text, /La duración de la designación .* será indefinida/)
   })
 
   it("enriquece el archivo del repositorio con el PDF de preview oficial", () => {
